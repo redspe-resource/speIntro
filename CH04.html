@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第四單元課程資料</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 紫色系風格 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F5F3FF; /* A very light purple background */
+            color: #374151; /* gray-700 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #7C3AED; /* violet-600 */
+            border-bottom-color: #7C3AED;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB; /* gray-200 */
+            border-radius: 0.75rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #6D28D9; /* violet-700 */
+        }
+        .content-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #A78BFA; /* violet-400 */
+            padding-left: 1rem;
+            color: #1F2937; /* gray-800 */
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background-color: #EDE9FE; /* violet-100 */
+            color: #6D28D9; /* violet-700 */
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .law-box {
+            background-color: #fefce8; /* yellow-50 */
+            border-left: 4px solid #facc15; /* yellow-400 */
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .interactive-tab {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .interactive-tab.active {
+            color: #6D28D9;
+            border-bottom-color: #6D28D9;
+            font-weight: 600;
+            background-color: #F5F3FF;
+        }
+        /* 神經認知洞察互動區塊樣式 */
+        .insight-button {
+            transition: all 0.3s ease;
+        }
+        .insight-button.active {
+            background-color: #6D28D9;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 14px 0 rgba(109, 40, 217, 0.3);
+        }
+        .insight-content { display: none; }
+        .insight-content.active { display: block; }
+        
+        /* 溝通迷思破解卡片樣式 */
+        .myth-buster-card { perspective: 1000px; cursor: pointer; }
+        .myth-buster-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .myth-buster-card.is-flipped .myth-buster-inner { transform: rotateY(180deg); }
+        .myth-buster-front, .myth-buster-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; border-radius: 0.5rem; text-align: center; }
+        .myth-buster-front { background-color: #fca5a5; color: #7f1d1d; }
+        .myth-buster-back { background-color: #86efac; color: #14532d; transform: rotateY(180deg); }
+        
+        /* 輔具保養幫手樣式 */
+        .tool-icon { cursor: pointer; transition: transform 0.2s; }
+        .tool-icon:hover { transform: scale(1.1); }
+
+        /* 聽損體驗按鈕樣式 */
+        .sim-button {
+            transition: all 0.2s ease-in-out;
+        }
+        .sim-button.active {
+            background-color: #7C3AED;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* 聽力圖互動體驗 */
+        .audiogram-interactive-container {
+            position: relative;
+        }
+        .audiogram-point-sim {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-family: sans-serif;
+            font-size: 16px;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s ease-in-out;
+            opacity: 0;
+        }
+        .audiogram-point-sim.visible {
+            opacity: 1;
+        }
+
+        /* 課程調整矩陣樣式 */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr repeat(4, 2fr);
+            grid-template-rows: repeat(5, auto);
+            gap: 4px;
+        }
+        .matrix-cell {
+            padding: 0.75rem;
+            text-align: center;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+        }
+        .matrix-header {
+            background-color: #5B21B6; /* violet-800 */
+            color: white;
+            font-weight: bold;
+        }
+        .matrix-label {
+            background-color: #A78BFA; /* violet-400 */
+            color: #1F2937;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .matrix-button {
+            background-color: #EDE9FE; /* violet-100 */
+            color: #5B21B6;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .matrix-button:hover {
+            background-color: #DDD6FE; /* violet-200 */
+            transform: scale(1.05);
+        }
+        
+        /* 點字體驗 */
+        .braille-cell {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            width: 60px;
+            height: 90px;
+            padding: 8px;
+            border: 2px solid #a78bfa;
+            border-radius: 8px;
+        }
+        .braille-dot {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: #ddd6fe;
+            transition: background-color 0.3s;
+        }
+        .braille-dot.active {
+            background-color: #6d28d9;
+        }
+
+        /* 視覺路徑互動 */
+        .visual-pathway-container {
+            position: relative;
+        }
+        .hotspot {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(255, 0, 0, 0.7);
+            border: 2px solid white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .hotspot:hover {
+            transform: scale(1.2);
+            background-color: rgba(255, 0, 0, 1);
+        }
+        .visual-field-display {
+            width: 120px;
+            height: 120px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        .visual-field-defect {
+            position: absolute;
+            background-color: #374151; /* gray-700 */
+            transition: all 0.5s ease;
+        }
+        
+        /* 健康計算機樣式 */
+        .calculator-card {
+            background-color: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+        }
+        .calculator-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .calculator-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 2px #c4b5fd;
+        }
+        .calculator-button {
+            background-color: #6d28d9;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+        .calculator-button:hover {
+            background-color: #5b21b6;
+        }
+        .calculator-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #f5f3ff;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            color: #5b21b6;
+            text-align: center;
+        }
+        
+        /* 解剖列車互動樣式 */
+        .train-tab {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .train-tab:hover {
+            background-color: #EDE9FE;
+        }
+        .train-tab.active {
+            background-color: #6D28D9;
+            color: white;
+            font-weight: 600;
+        }
+        #train-content-display img {
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .interactive-table tbody tr:hover {
+            background-color: #f5f3ff; /* violet-50 */
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#6D28D9]">特殊教育導論：第四單元</h1>
+            <div class="hidden md:flex flex-wrap space-x-6">
+                <a href="#framework" class="nav-link font-medium pb-1">核心概念</a>
+                <a href="#insights" class="nav-link font-medium pb-1">神經認知洞察</a>
+                <a href="#hearing-disorders" class="nav-link font-medium pb-1">聽覺障礙</a>
+                <a href="#other-disorders" class="nav-link font-medium pb-1">視、肢、病</a>
+                <a href="#anatomy-trains" class="nav-link font-medium pb-1">筋膜與運動</a>
+                <a href="#matrix-section" class="nav-link font-medium pb-1">課程調整</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+             <a href="#framework" class="block py-2 nav-link text-center">核心概念</a>
+             <a href="#insights" class="block py-2 nav-link text-center">神經認知洞察</a>
+             <a href="#hearing-disorders" class="block py-2 nav-link text-center">聽覺障礙</a>
+             <a href="#other-disorders" class="block py-2 nav-link text-center">視、肢、病</a>
+             <a href="#anatomy-trains" class="block py-2 nav-link text-center">筋膜與運動</a>
+             <a href="#matrix-section" class="block py-2 nav-link text-center">課程調整</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+        
+        <section class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800">第四單元：感官、肢體與健康障礙學生的教學實務</h2>
+            <div class="mt-4 max-w-3xl mx-auto card p-6 rounded-lg bg-[#F5F3FF]">
+                 <p class="text-slate-700 leading-relaxed">
+                本週課程將擴展師資生的視野，探討聽覺、視覺、肢體及健康障礙學生的特殊教育。我們將以<strong class="font-semibold text-violet-700">神經多樣性</strong>為基礎，運用<strong class="font-semibold text-violet-700">通用學習設計(UDL)</strong>與<strong class="font-semibold text-violet-700">認知負荷</strong>理論，深入分析學生的學習需求，並探討專業化的支持策略、輔助科技的應用與課程調整的原則。
+            </p>
+            </div>
+        </section>
+
+        <section id="framework" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">教學的核心概念框架</h2>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-violet-700 mb-3">神經多樣性</h3>
+                    <p class="text-slate-600">視角轉換：從「這個學生有什麼問題？」轉向「他的大腦如何運作？」。承認並尊重所有大腦的自然變異，將障礙視為一種差異，而非缺陷。</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-violet-700 mb-3">通用學習設計(UDL)</h3>
+                    <p class="text-slate-600">教學設計的操作手冊。提供多元的表徵、行動與表達、參與方式，從一開始就為所有學習者設計，而非事後補救。</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-bold text-violet-700 mb-3">認知負荷理論</h3>
+                    <p class="text-slate-600">心智的瓶頸管理。教學的目標是降低無關的「外在負荷」，管理必要的「內在負荷」，以釋放學生的心智資源，投入於建構知識的「增益負荷」。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="insights" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">互動式神經認知洞察</h2>
+            <div class="card p-6 md:p-8 rounded-lg">
+                <p class="text-center text-slate-600 mb-6">點擊下方按鈕，探索不同障礙特質背後的大腦可塑性與認知意涵。</p>
+                <div class="flex justify-center flex-wrap gap-4 mb-6">
+                    <button class="insight-button active text-lg font-semibold py-2 px-6 rounded-full bg-violet-100 text-violet-700" data-insight="hearing">聽覺障礙</button>
+                    <button class="insight-button text-lg font-semibold py-2 px-6 rounded-full bg-violet-100 text-violet-700" data-insight="visual">視覺障礙</button>
+                    <button class="insight-button text-lg font-semibold py-2 px-6 rounded-full bg-violet-100 text-violet-700" data-insight="physical">肢體障礙</button>
+                </div>
+                <div id="insight-display" class="mt-4 p-6 bg-violet-50 rounded-md min-h-[200px] transition-all duration-300">
+                    <div id="insight-hearing" class="insight-content active">
+                        <h4 class="font-bold text-xl mb-3 text-violet-800">聽覺障礙：跨感官重組的大腦</h4>
+                        <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                            <li><strong>神經科學洞見：</strong>在先天聽障者的大腦中，原用於處理聲音的「聽覺皮質」並不會閒置，而是會被視覺系統「徵用」，以增強周邊視覺的注意力。這稱為「跨感官可塑性」。</li>
+                            <li><strong>認知意涵：</strong>由於缺乏聽覺的「偶然學習」（如無意間聽到對話），學生對於抽象概念的「基模」（心智模型）可能是片斷或不完整的。</li>
+                            <li><strong>教學啟示：</strong>教學必須極度「具體化」與「視覺化」，透過多感官經驗幫助學生建立穩固的概念基模，這正是UDL「多元表徵」原則的體現。</li>
+                        </ul>
+                    </div>
+                    <div id="insight-visual" class="insight-content">
+                        <h4 class="font-bold text-xl mb-3 text-violet-800">視覺障礙：重塑的感官地圖</h4>
+                        <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                            <li><strong>神經科學洞見：</strong>盲人在閱讀點字時，其大腦的「視覺皮質」會被活化來處理觸覺訊息。大腦的功能地圖被重新繪製，以適應新的感官輸入。</li>
+                            <li><strong>認知意涵：</strong>可能出現「語意不合」現象（能背誦定義但無真實概念），因為其知識基模建立在語言而非具體感知經驗上。其空間概念的建立更依賴序列性處理，而非視覺的平行處理，認知負荷更高。</li>
+                            <li><strong>教學啟示：</strong>教學需強調「做中學」與「直接經驗」。擴充核心課程（ECC）之所以重要，是因為它提供了建構真實世界基模的必要工具。</li>
+                        </ul>
+                    </div>
+                    <div id="insight-physical" class="insight-content">
+                        <h4 class="font-bold text-xl mb-3 text-violet-800">肢體障礙：身體、心靈與可塑的大腦</h4>
+                        <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                            <li><strong>神經科學洞見：</strong>即使中樞神經受損，大腦的「運動皮質」仍具可塑性。透過持續、有目標的復健練習，大腦可以重組功能，由健康的腦區接管受損區域的功能。</li>
+                            <li><strong>認知心理學意涵：</strong>學生的核心挑戰常在於因身體限制而產生的負面「身體意象」與自我概念，這會直接影響學習動機與社會參與的意願。</li>
+                            <li><strong>教學啟示：</strong>支持的核心是「無障礙」，不僅是物理環境的無障礙，更是心理與社會參與的無障礙。彈性的教學與評量方式能降低外在認知負荷，讓學生能展現其真正的能力。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="hearing-disorders" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">聽覺障礙學生</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-12">
+                
+                <article data-content-target="hi-strategy-content">
+                    <h3 class="content-heading">單元十：聽覺障礙學生的學習與輔具應用</h3>
+                    <div class="space-y-12">
+                        <div>
+                            <p><strong class="tag">定義與鑑定</strong></p>
+                            <p class="mt-2 text-slate-700"><strong>學理定義：</strong> 介紹聽力損失的鑑定標準，並說明新鑑定基準納入「單側聽損」的意義。此外，特別關注常被忽略的「微聽損」。</p>
+                            <div class="law-box">
+                                <h4 class="font-semibold text-slate-800">法規依據：《特殊教育學生及幼兒鑑定辦法》第五條</h4>
+                                <p class="mt-2 text-slate-600">本法第三條第三款所稱聽覺障礙，指由於聽力損失，致使聽覺功能或以聽覺參與活動之能力受到限制，影響參與學習活動。</p>
+                                <p class="mt-2 text-slate-600">前項所定聽覺障礙，其鑑定基準依下列各款規定之一：</p>
+                                <ul class="list-decimal list-inside ml-4 mt-2 space-y-2 text-slate-600">
+                                    <li>純音聽力檢查結果，聽力損失達下列各目規定之一：
+                                        <ul class="list-[lower-alpha] list-inside ml-4 mt-1">
+                                            <li>優耳五百赫、一千赫、二千赫、四千赫聽閾平均值，未滿七歲達二十一分貝以上；七歲以上達二十五分貝以上。</li>
+                                            <li>任一耳五百赫、一千赫、二千赫、四千赫聽閾平均值達五十分貝以上。</li>
+                                        </ul>
+                                    </li>
+                                    <li>聽力無法以前款純音聽力測定時，以聽覺電生理檢查方式測定後認定。</li>
+                                </ul>
+                            </div>
+                            <div class="mt-6 p-4 bg-violet-50 rounded-lg">
+                                <h4 class="font-semibold text-lg text-violet-800 mb-2">特別關注：微聽損 (Minimal Hearing Loss)</h4>
+                                <div class="md:flex md:gap-6">
+                                    <div class="md:w-1/2">
+                                        <p class="text-slate-700">「微聽損」是指輕微、單側或高頻的聽力損失。這些孩子常被誤認為「注意力不集中」或「反應慢」，因為他們在安靜環境下似乎聽得不錯，但在噪音中或遠距離聽講時就會出現困難，導致學習和社交上的隱性障礙。及早發現與介入至關重要。</p>
+                                    </div>
+                                    <div class="md:w-1/2 mt-4 md:mt-0">
+                                        <div class="aspect-w-16 aspect-h-9">
+                                            <iframe src="https://www.youtube.com/embed/xv2H4vwmZvk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-md"></iframe>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">成因分類</strong></p>
+                             <div class="grid md:grid-cols-2 gap-6 mt-2">
+                                <div>
+                                    <h4 class="font-semibold text-violet-700">依受損部位區分</h4>
+                                    <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-slate-700">
+                                        <li><strong>傳導性聽損：</strong>外耳或中耳的聲音傳導路徑發生問題，如耳垢阻塞、中耳炎。通常可透過醫療或手術改善，聲音聽起來會變小聲，但較不失真。</li>
+                                        <li><strong>感音神經性聽損：</strong>內耳（耳蝸）或聽神經受損，導致聲音的清晰度與響度都受影響。這是最常見的聽損類型，通常是永久性的，需配戴助聽器或人工耳蝸。</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-violet-700">依發生時間區分</h4>
+                                    <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-slate-700">
+                                        <li><strong>先天性聽損：</strong>出生時即有的聽力損失，可能由遺傳、懷孕期間病毒感染等因素造成。</li>
+                                        <li><strong>後天性聽損：</strong>出生後因疾病（如腦膜炎）、噪音、藥物、外傷等因素造成的聽力損失。</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 聽覺系統的運作與評估 (更新) -->
+                        <div>
+                            <p><strong class="tag">聽覺系統的運作與評估</strong></p>
+                            <div class="mt-4 space-y-8">
+                                <div class="p-6 bg-white rounded-lg border border-violet-200">
+                                    <h4 class="font-semibold text-lg text-violet-800 mb-4">第一站：聲音的接收與傳導</h4>
+                                    <div class="md:flex md:gap-6 items-center">
+                                        <div class="md:w-1/2">
+                                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaG56tq7MAH90t_XAHGM29J4MdLq4pH_FDYQ&s" alt="耳朵結構圖" class="rounded-lg shadow-md mx-auto">
+                                        </div>
+                                        <div class="md:w-1/2 mt-4 md:mt-0">
+                                            <ul class="space-y-2 text-slate-700">
+                                                <li><strong class="text-violet-600">外耳 (Outer Ear)：</strong>包含耳廓和耳道，負責收集聲波並將其導入耳內。</li>
+                                                <li><strong class="text-violet-600">中耳 (Middle Ear)：</strong>包含耳膜和三塊聽小骨。聲波震動耳膜，帶動聽小骨將振動放大，傳遞至內耳。</li>
+                                                <li><strong class="text-violet-600">內耳 (Inner Ear)：</strong>核心是耳蝸，一個充滿液體的螺旋狀結構。聽小骨的振動在耳蝸內產生液體波動，刺激數千個微小的毛細胞，將機械能轉換為電化學訊號。</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-6 bg-white rounded-lg border border-violet-200">
+                                    <h4 class="font-semibold text-lg text-violet-800 mb-4">第二站：大腦的解讀之旅 (中樞聽覺路徑)</h4>
+                                    <div class="md:flex md:gap-6 items-start">
+                                       <div class="md:w-1/2">
+                                            <img src="https://www.researchgate.net/profile/Stanley-Graven-2/publication/223253350/figure/fig3/AS:305300264505349@1449800663515/The-central-auditory-pathways-extend-from-the-cochlear-nucleus-to-the-auditory-cortex.png" alt="中樞聽覺傳導路徑圖" class="rounded-lg shadow-md mx-auto bg-white p-2">
+                                        </div>
+                                        <div class="md:w-1/2 mt-4 md:mt-0">
+                                            <p class="text-slate-700 mb-4">從內耳毛細胞發出的神經訊號，會經過多條複雜的路徑上傳至大腦。主要路徑分為三條：</p>
+                                            <div class="space-y-3 text-sm">
+                                                <p><strong>a. 路徑一 (主要到對側)：</strong><br>毛細胞 → 脊髓神經節 → 同側腹側/背側耳蝸核 → 經背側聽紋交叉至對側 → 外側丘系 → 下丘 → 內膝狀體 → 對側大腦聽覺皮質。</p>
+                                                <p><strong>b. 路徑二 (到同側)：</strong><br>毛細胞 → 脊髓神經節 → 同側腹側耳蝸核 → 同側上橄欖核 → 同側外側丘系 → 下丘 → 內膝狀體 → 同側大腦聽覺皮質。</p>
+                                                <p><strong>c. 路徑三 (交叉路徑)：</strong><br>毛細胞 → 脊髓神經節 → 同側腹側耳蝸核 → 經斜方體交叉至對側上橄欖核 → 對側外側丘系 → 下丘 → 內膝狀體 → 對側大腦聽覺皮質。</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-6 bg-white rounded-lg border border-violet-200">
+                                    <h4 class="font-semibold text-lg text-violet-800 mb-4">第三站：互動式聽力圖 (Audiogram) 解讀</h4>
+                                    <p class="text-slate-600 mb-4">聽力圖是呈現一個人聽力狀況的圖表。請點擊下方按鈕，體驗不同聽損程度在聽力圖上的呈現，並了解其在生活中的影響。</p>
+                                    
+                                    <div class="flex justify-center flex-wrap gap-2 mb-4">
+                                        <button class="audiogram-btn text-sm py-1 px-3 rounded-full bg-gray-200" data-level="normal">正常</button>
+                                        <button class="audiogram-btn text-sm py-1 px-3 rounded-full bg-gray-200" data-level="mild">輕度</button>
+                                        <button class="audiogram-btn text-sm py-1 px-3 rounded-full bg-gray-200" data-level="moderate">中度</button>
+                                        <button class="audiogram-btn text-sm py-1 px-3 rounded-full bg-gray-200" data-level="severe">重度</button>
+                                        <button class="audiogram-btn text-sm py-1 px-3 rounded-full bg-gray-200" data-level="profound">極重度</button>
+                                    </div>
+
+                                    <div class="grid lg:grid-cols-2 gap-6 items-start">
+                                        <div class="audiogram-interactive-container">
+                                            <img src="https://www.digibionic.com/image/catalog/113-ha-subsidy/audiogram-reading/audiogram-reading-2.png" alt="聽力圖與語言香蕉圖" class="w-full h-auto rounded-lg">
+                                            <div id="point-right" class="audiogram-point-sim bg-red-500 text-white border-2 border-white">O</div>
+                                            <div id="point-left" class="audiogram-point-sim bg-blue-500 text-white border-2 border-white">X</div>
+                                        </div>
+                                        <div id="audiogram-info" class="p-4 bg-violet-50 rounded-lg min-h-[150px]">
+                                            <h5 class="font-bold text-violet-700 mb-2">正常聽力 (0-25 dB)</h5>
+                                            <p class="text-slate-700 text-sm">可以聽到如下雨聲、鳥叫聲等細微聲音，正常交談沒有問題。</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mt-6">
+                                        <h5 class="font-semibold text-violet-700 mb-2">聽力圖符號說明</h5>
+                                        <p class="text-slate-600 text-sm mb-2">聽力圖使用標準化符號來記錄不同測試的結果，幫助聽力師快速判讀。</p>
+                                        <img src="https://www.digibionic.com/image/catalog/113-ha-subsidy/audiogram-reading/audiogram-reading-3.jpg" alt="聽力圖符號說明" class="w-full h-auto rounded-lg border">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p><strong class="tag">教學策略與支持系統</strong></p>
+                            <div class="mt-4 border-b border-gray-200">
+                                <nav class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                    <button class="interactive-tab active" data-tab="hi-strategy-1">溝通與社交技巧</button>
+                                    <button class="interactive-tab" data-tab="hi-strategy-2">課程與教學設計</button>
+                                    <button class="interactive-tab" data-tab="hi-strategy-3">聽能訓練與輔助科技</button>
+                                    <button class="interactive-tab" data-tab="hi-strategy-4">全人支持系統</button>
+                                </nav>
+                            </div>
+                            <div id="hi-strategy-content" class="mt-4 p-4 bg-violet-50 rounded-md min-h-[250px]">
+                                <!-- Content will be loaded by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="simulation" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">互動式聽損體驗</h2>
+            <div class="card p-6 md:p-8 rounded-lg">
+                <p class="text-center text-slate-600 mb-2">這段影片模擬了聽損者在不同情境下聽到的聲音。</p>
+                <p class="text-center text-slate-600 mb-6">請點擊下方按鈕，影片將跳轉至指定片段，讓您親身感受他們在日常生活中需要多麼努力才能聽懂對話。</p>
+                <div class="aspect-w-16 aspect-h-9 mb-6">
+                    <!-- 更新：從 iframe 改為 div 以便 API 載入 -->
+                    <div id="player"></div>
+                </div>
+                <div class="flex justify-center flex-wrap gap-3 mb-4">
+                    <button class="sim-button text-base font-semibold py-2 px-4 rounded-full bg-violet-100 text-violet-700" data-start="0" data-end="6" data-desc="正常聽力在安靜教室中的聽覺感受。">安靜課堂 (正常)</button>
+                    <button class="sim-button text-base font-semibold py-2 px-4 rounded-full bg-violet-100 text-violet-700" data-start="7" data-end="14" data-desc="聽力障礙在安靜教室中的聽覺感受，即使安靜，聲音依然模糊。">安靜課堂 (聽損)</button>
+                    <button class="sim-button text-base font-semibold py-2 px-4 rounded-full bg-violet-100 text-violet-700" data-start="15" data-end="22" data-desc="正常聽力在吵雜餐廳中的聽覺感受。">吵雜餐廳 (正常)</button>
+                    <button class="sim-button text-base font-semibold py-2 px-4 rounded-full bg-violet-100 text-violet-700" data-start="23" data-end="30" data-desc="聽力障礙在吵雜餐廳中的聽覺感受，背景噪音與人聲混雜，難以分辨。">吵雜餐廳 (聽損)</button>
+                </div>
+                <div id="sim-desc" class="mt-4 p-4 bg-white rounded-md text-center min-h-[60px] text-slate-700 border border-violet-200">
+                    點擊上方按鈕開始體驗。
+                </div>
+            </div>
+        </section>
+
+        <section id="other-disorders" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">視覺、肢體與健康障礙</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-12">
+                <article data-content-target="vi-strategy-content">
+                    <h3 class="content-heading">單元十一：視覺障礙學生的教育需求與支持策略</h3>
+                     <div class="space-y-6 text-slate-700">
+                        <div>
+                            <p><strong class="tag">教學策略與支持系統</strong></p>
+                            <div class="mt-4 border-b border-gray-200">
+                                <nav class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                    <button class="interactive-tab active" data-tab="vi-strategy-1">視覺神經的奇幻旅程</button>
+                                    <button class="interactive-tab" data-tab="vi-strategy-2">擴充核心課程(ECC)：定向行動</button>
+                                    <button class="interactive-tab" data-tab="vi-strategy-3">擴充核心課程(ECC)：點字與輔具</button>
+                                    <button class="interactive-tab" data-tab="vi-strategy-4">視障生活體驗</button>
+                                    <button class="interactive-tab" data-tab="vi-strategy-5">教學策略與介入</button>
+                                </nav>
+                            </div>
+                            <div id="vi-strategy-content" class="mt-4 p-4 bg-violet-50 rounded-md min-h-[250px]">
+                                <!-- Content loaded by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <hr class="border-gray-200">
+                <!-- 更新：肢體障礙區塊 -->
+                <article data-content-target="pd-strategy-content">
+                    <h3 class="content-heading">單元十二：肢體障礙、腦性麻痺與身體病弱學生的各項支持</h3>
+                    <div class="space-y-6 text-slate-700">
+                         <div>
+                            <p><strong class="tag">教學策略與支持系統</strong></p>
+                            <div class="mt-4 border-b border-gray-200">
+                                <nav class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                    <button class="interactive-tab active" data-tab="pd-strategy-1">定義與成因</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-3">腦性麻痺：全面解析</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-12">腦麻成因與難產</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-4">腦性麻痺：困難與支持</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-10">新生兒常見疾病</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-11">產前檢查與常見病弱</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-2">身心特質與輔具</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-6">運動系統原理</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-7">常見肌肉疾病</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-9">筋膜與肌肉</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-8">健康與體適能互動體驗</button>
+                                    <button class="interactive-tab" data-tab="pd-strategy-5">無障礙環境與教學支持</button>
+                                </nav>
+                            </div>
+                            <div id="pd-strategy-content" class="mt-4 p-4 bg-violet-50 rounded-md min-h-[250px]">
+                                <!-- Content will be loaded by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        
+        <section id="anatomy-trains" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">身心障礙者的筋膜與運動問題</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-12">
+                <div class="text-center">
+                     <p class="max-w-3xl mx-auto text-slate-700">肌筋膜理論將人體視為一個由結締組織貫穿全身的整體網絡，而非單純肌肉與骨骼的組合。筋膜(Fascia)這層薄膜包覆著肌肉、神經、內臟，形成了多條「肌筋膜經線」，負責傳遞張力與力量。對於身心障礙者，特別是肢體障礙學生而言，理解此系統至關重要，因為局部的肌肉張力問題或活動受限，常會沿著這些筋膜路線，引發全身性的姿勢歪斜與代償問題。</p>
+                     <div class="mt-6 text-sm text-center text-slate-500 bg-gray-50 p-3 rounded-lg max-w-3xl mx-auto">
+                        <p class="mt-1">Gurtner, K. (2025). 動作中的解剖列車：身心動作探索的肌筋膜經線身體地圖 (江芳慈 譯). 台灣愛思唯爾.</p>
+                     </div>
+                     <div class="mt-6 aspect-w-16 aspect-h-9 max-w-2xl mx-auto">
+                        <iframe src="https://www.youtube.com/embed/1qnnwmDzoh4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-lg shadow-lg"></iframe>
+                     </div>
+                </div>
+                
+                <div class="grid md:grid-cols-4 gap-8">
+                    <!-- Left Column: Navigation -->
+                    <div class="md:col-span-1">
+                        <h3 class="text-lg font-semibold text-violet-800 mb-3">淺背線探索</h3>
+                        <ul class="space-y-2 sticky top-24">
+                            <li><button class="train-tab active w-full text-left p-3 rounded-lg" data-target="train-overview">概觀與功能</button></li>
+                            <li><button class="train-tab w-full text-left p-3 rounded-lg" data-target="train-toes-heel">1. 從腳趾到腳跟</button></li>
+                            <li><button class="train-tab w-full text-left p-3 rounded-lg" data-target="train-heel-knee">2. 從腳跟到膝蓋</button></li>
+                            <li><button class="train-tab w-full text-left p-3 rounded-lg" data-target="train-knee-hip">3. 從膝蓋到髖</button></li>
+                            <li><button class="train-tab w-full text-left p-3 rounded-lg" data-target="train-hip-sacrum">4. 從髖到薦椎</button></li>
+                            <li><button class="train-tab w-full text-left p-3 rounded-lg" data-target="train-sacrum-occiput">5. 從薦椎到枕骨</button></li>
+                            <li><button class="train-tab w-full text-left p-3 rounded-lg" data-target="train-occiput-ridge">6. 從枕骨到框上嵴</button></li>
+                             <li><button class="train-tab w-full text-left p-3 rounded-lg" data-target="train-stretch">整體伸展與總結</button></li>
+                        </ul>
+                    </div>
+                    <!-- Right Column: Content Display -->
+                    <div id="train-content-display" class="md:col-span-3 bg-violet-50 p-6 rounded-lg">
+                        <!-- Initial content will be loaded here by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="matrix-section" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">實證本位教學策略：課程調整矩陣</h2>
+            <div class="card p-6 md:p-8 rounded-lg">
+                <div class="space-y-6 text-slate-700">
+                    <p class="text-center">這四種核心調整策略（簡化、減量、分解、替代）可以應用於「學習內容、歷程、環境、評量」四個不同面向。下的互動矩陣能幫助您探索這些策略組合的具體應用範例。</p>
+                    <div class="mt-4 overflow-x-auto">
+                        <div class="matrix-grid min-w-[600px]">
+                            <div class="matrix-cell"></div>
+                            <div class="matrix-cell matrix-header">簡化</div>
+                            <div class="matrix-cell matrix-header">減量</div>
+                            <div class="matrix-cell matrix-header">分解</div>
+                            <div class="matrix-cell matrix-header">替代</div>
+                            <div class="matrix-cell matrix-label">學習內容</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="content-simplify">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="content-reduce">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="content-breakdown">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="content-replace">點擊</div>
+                            <div class="matrix-cell matrix-label">學習歷程</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="process-simplify">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="process-reduce">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="process-breakdown">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="process-replace">點擊</div>
+                            <div class="matrix-cell matrix-label">學習環境</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="env-simplify">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="env-reduce">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="env-breakdown">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="env-replace">點擊</div>
+                            <div class="matrix-cell matrix-label">學習評量</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="eval-simplify">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="eval-reduce">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="eval-breakdown">點擊</div>
+                            <div class="matrix-cell matrix-button" data-matrix-content="eval-replace">點擊</div>
+                        </div>
+                    </div>
+                    <div id="matrix-display" class="mt-4 p-4 bg-violet-50 rounded-md min-h-[100px]">
+                        點擊上方矩陣中的任一按鈕，查看具體的調整策略說明。
+                    </div>
+                    <div class="mt-8 aspect-w-16 aspect-h-9 max-w-2xl mx-auto">
+                        <iframe src="https://www.youtube.com/embed/3277hDcw82M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-lg shadow-lg"></iframe>
+                    </div>
+
+                    <hr class="my-12 border-gray-300">
+
+                    <div class="space-y-12">
+                        <article>
+                            <h3 class="content-heading text-center">課程調整的理念與實踐</h3>
+                            <div class="space-y-8">
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3 text-violet-800">課程調整的發展週期</h4>
+                                    <p class="text-slate-700 mb-4">課程調整皆遵循一個嚴謹且環環相扣的發展週期，此週期確保了所有教育介入措施皆基於實證且具備高度的個別化。此流程可細分為以下四個階段：</p>
+                                    <div class="space-y-4">
+                                        <div class="p-4 bg-violet-50 rounded-lg">
+                                            <h5 class="font-semibold text-violet-800">全面性的學生評估</h5>
+                                            <p class="mt-2 text-slate-600 text-sm">每個個案的起點均為一份詳盡的「個案說明」，內容涵蓋學生的認知功能、健康狀況、感官功能、學業表現及心理社會特質等多面向的資料 。此評估不僅僅是分數的羅列，而是對學生作為一個完整個體的質性描述，為後續的分析奠定基礎。</p>
+                                        </div>
+                                        <div class="p-4 bg-violet-50 rounded-lg">
+                                            <h5 class="font-semibold text-violet-800">優弱勢分析</h5>
+                                            <p class="mt-2 text-slate-600 text-sm">此階段將評估資料轉化為對學生學習特質的深入洞察。手冊強調平衡觀點，並陳學生的優勢能力與面臨的挑戰，以形成一個整全的圖像。例如，國小學習障礙個案「小芸」的分析中，其優勢（如良好的記憶背誦能力、母親的全心支持）與弱勢（如文本理解困難、缺乏自信）被並列呈現，這使得介入策略能揚長補短，而非僅僅聚焦於缺陷 。</p>
+                                        </div>
+                                        <div class="p-4 bg-violet-50 rounded-lg">
+                                            <h5 class="font-semibold text-violet-800">需求評估</h5>
+                                            <p class="mt-2 text-slate-600 text-sm">此階段是將優弱勢分析轉化為具體教育需求的關鍵橋樑。學生的弱勢被重新定義為待滿足的「學習需求」。例如，小芸的文本理解困難，對應到「提升語文能力」的需求；國中自閉症個案「葉生」的人際互動困難，則對應到「提升情緒辨識及人際互動的能力」之需求 。此轉換確保了教育目標的針對性與功能性。</p>
+                                        </div>
+                                        <div class="p-4 bg-violet-50 rounded-lg">
+                                            <h5 class="font-semibold text-violet-800">目標設定與介入規劃</h5>
+                                            <p class="mt-2 text-slate-600 text-sm">最終，評估出的需求將直接連結至具體、可測量的IEP學年與學期目標，並據此規劃相應的課程調整策略。此流程展現了一種診斷-處方的醫學模式精神。IEP的品質與成效，深刻地取決於初始評估的深度與準確性。教師在此模式中的角色，不僅是教學執行者，更是專業的教育診斷者。每一個調整決策，例如為無口語能力的重度障礙個案「阿祥」選擇「替代性」溝通系統，並非隨機選擇，而是基於其「無口語」此一診斷結果所開立的精準教育處方。這意味著，有效的特殊教育實踐，其核心在於教師基於證據進行專業判斷的能力。</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3 text-violet-800">課程調整的核心原則與三大面向</h4>
+                                    <p class="text-slate-700 mb-4">手冊提出的所有課程調整策略，皆可歸納為四個核心原則。這些原則如同一個工具箱，教育團隊可根據學生的個別需求與學習情境，靈活地選擇與組合運用。</p>
+                                    <div class="grid md:grid-cols-2 gap-6 mb-8">
+                                        <div class="p-4 bg-white border border-violet-200 rounded-lg">
+                                            <h5 class="font-semibold text-violet-700">簡化 (Simplification)</h5>
+                                            <p class="mt-2 text-sm text-slate-600">降低學習內容的認知複雜度，使其更易於理解與吸收。例如，對於葉生（輕微缺損），簡化可能意味著先從具體詞彙教學入手，再進入抽象譬喻的理解。而對於阿祥（嚴重缺損），簡化則是將總體識字量目標從1800字大幅下修至300個高頻常用字。</p>
+                                        </div>
+                                        <div class="p-4 bg-white border border-violet-200 rounded-lg">
+                                            <h5 class="font-semibold text-violet-700">減量／分解 (Reduction/Decomposition)</h5>
+                                            <p class="mt-2 text-sm text-slate-600">減少學習的份量，或將一項複雜的技能拆解成數個更小、更易於管理的步驟。例如，小芸的數學課程將「解決兩步驟應用問題」此一目標，先分解為「解決第一步驟應用問題」，待其精熟後再進入下一階段。在「夢幻全壘打」的教學示例中，寫作任務所需的語詞數量也被明確地減少，以降低學生的寫作負擔。</p>
+                                        </div>
+                                        <div class="p-4 bg-white border border-violet-200 rounded-lg">
+                                            <h5 class="font-semibold text-violet-700">替代 (Substitution)</h5>
+                                            <p class="mt-2 text-sm text-slate-600">採用不同的方法、教材或輔助科技，來達成實質等同的學習目標或評量方式。此原則在阿祥的案例中尤為突出，其口語表達完全由AAC輔助溝通系統替代，書寫由科技打字替代，複雜計算則由計算機替代。</p>
+                                        </div>
+                                        <div class="p-4 bg-white border border-violet-200 rounded-lg">
+                                            <h5 class="font-semibold text-violet-700">重整 (Reorganization)</h5>
+                                            <p class="mt-2 text-sm text-slate-600">重新組織或排序學習目標的順序，以建立更穩固的基礎概念，有時會跨越不同年級的學習重點。阿祥的數學課程是此原則的最佳體現。教學團隊並未僵化地遵循年級順序，而是將加、減、乘、除四則運算的概念，利用1至10的小數字和計算機進行「重整」，使其能同步學習，從而建立對運算關係的整體理解，而非零碎、線性的程序記憶。</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-6">
+                                        <div>
+                                            <h5 class="font-semibold text-lg text-violet-800 mb-2 border-l-4 border-violet-400 pl-3">學習歷程的調整</h5>
+                                            <p class="text-slate-700 text-sm">此面向聚焦於「如何教」的層面，透過改變教學方法與互動模式，為學生搭建通往學習目標的鷹架。</p>
+                                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-slate-600 text-sm">
+                                                <li><strong>教學鷹架 (Instructional Scaffolding)：</strong> 這是最核心的策略之一，包含小步驟教學、提供具體操作的教具（如小芸和葉生的數學課）、運用圖形組織工具（如心智圖、樹狀圖），以及在過程中給予提示與回饋 。</li>
+                                                <li><strong>同儕中介教學 (Peer-Mediated Instruction)：</strong> 系統性地安排同儕擔任學習夥伴或小老師。例如，為小芸安排學伴，不僅能在課業上提供即時協助，更能透過互動增加其語彙量與學習自信 。</li>
+                                                <li><strong>多感官與體驗式學習：</strong> 強調動手做的學習方式，例如在數學課中使用積木等操作物，或是在語文課中融入遊戲、戲劇扮演等元素，以維持學生的學習動機與參與度 。「夢幻全壘打」的教學示例中，大量運用了角色扮演與視覺提示，即是此策略的體現 。</li>
+                                                <li><strong>學習策略教導：</strong> 明確地教導學生「如何學習」的後設認知策略。例如，教導小芸閱讀理解的策略（如找主題句、做摘要）以及數學應用題的解題步驟，旨在培養其獨立學習的能力 。</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-semibold text-lg text-violet-800 mb-2 border-l-4 border-violet-400 pl-3">學習環境的調整</h5>
+                                            <p class="text-slate-700 text-sm">此面向關注「在哪裡學」的物理與社會心理情境，旨在移除環境中的障礙，創造一個安穩、支持性的學習氛圍。</p>
+                                             <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-slate-600 text-sm">
+                                                <li><strong>物理環境：</strong> 包含座位安排的巧思（如將需要提示的小芸或葉生安排在教師方便巡視的位置）、降低感官刺激（如簡潔的教室佈置以避免視覺干擾），以及建立結構化、可預測的空間佈局 。對於有肢體障礙的阿祥，則需確保教室動線的無障礙 。</li>
+                                                <li><strong>社會環境：</strong> 營造正向、友善的班級氛圍至關重要。具體作法包括安排友善的同儕擔任「小天使」、刻意創造讓學生展現優勢能力的成功機會以建立自信，以及給予具體、明確的讚美與鼓勵 。</li>
+                                                <li><strong>時間環境：</strong> 涉及時間管理與活動轉換的策略。例如，將一節課的內容分割成數個動靜交替的短活動，以維持注意力不足學生的專注；或在活動轉換前給予預告，幫助對改變較為敏感的學生（如自閉症的葉生）平穩過渡。</li>
+                                            </ul>
+                                        </div>
+                                        <div>
+                                            <h5 class="font-semibold text-lg text-violet-800 mb-2 border-l-4 border-violet-400 pl-3">學習評量的調整</h5>
+                                            <p class="text-slate-700 text-sm">此面向處理「如何評量」的問題，強調評量方式應多元化與彈性化，以真實反映學生的學習成效，而非僅僅測量其應試能力。</p>
+                                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-slate-600 text-sm">
+                                                <li><strong>多元評量 (Diverse Assessment Methods)：</strong> 這是所有個案的核心建議。評量方式應超越傳統的紙筆測驗，納入口語測驗、實作評量、檔案評量（收集學生一段時間的作品以呈現進步軌跡）與課堂觀察等多種形式 。</li>
+                                                <li><strong>形成性評量 (Formative Assessment)：</strong> 增加評量的頻率，在教學過程中進行小單元的檢核，有助於教師即時了解學生的學習狀況，並提供及時的回饋與補救，避免學習困難的累積 。</li>
+                                                <li><strong>評量調整 (Assessment Accommodations)：</strong> 在評量過程中提供必要的支持。例如，為書寫或閱讀速度較慢的葉生提供延長作答時間；為無口語的阿祥允許使用AAC輔助溝通系統作答；或簡化試題的文字敘述，確保評量的是學科能力，而非學生的障礙本身 。</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3 text-violet-800">課程調整策略比較矩陣</h4>
+                                    <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
+                                        <table class="w-full text-sm text-left text-gray-500 interactive-table">
+                                            <thead class="text-xs text-gray-700 uppercase bg-violet-100">
+                                                <tr>
+                                                    <th scope="col" class="px-6 py-3">學生概況</th>
+                                                    <th scope="col" class="px-6 py-3">學科領域</th>
+                                                    <th scope="col" class="px-6 py-3">核心挑戰</th>
+                                                    <th scope="col" class="px-6 py-3">主要調整原則</th>
+                                                    <th scope="col" class="px-6 py-3">具體教學策略</th>
+                                                    <th scope="col" class="px-6 py-3">關鍵支持服務</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr class="bg-white border-b">
+                                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" rowspan="2">小芸 (國小，輕微學障)</th>
+                                                    <td class="px-6 py-4">國語文</td>
+                                                    <td class="px-6 py-4">文本理解與寫作產出困難</td>
+                                                    <td class="px-6 py-4">分解、簡化</td>
+                                                    <td class="px-6 py-4">閱讀策略教導（如故事結構圖）、寫作鷹架（從造句開始）、分段學習</td>
+                                                    <td class="px-6 py-4" rowspan="2">外加式資源班課程、職能/物理治療</td>
+                                                </tr>
+                                                <tr class="bg-violet-50 border-b">
+                                                    <td class="px-6 py-4">數學</td>
+                                                    <td class="px-6 py-4">應用問題解題與位值概念薄弱</td>
+                                                    <td class="px-6 py-4">分解、簡化</td>
+                                                    <td class="px-6 py-4">具體-半具體-抽象(CRA)教學法、解題步驟指導、關鍵字圈選</td>
+                                                </tr>
+                                                <tr class="bg-white border-b">
+                                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" rowspan="3">葉生 (國中，輕微自閉症)</th>
+                                                    <td class="px-6 py-4">國語文</td>
+                                                    <td class="px-6 py-4">抽象詞彙理解困難、寫作內容貧乏</td>
+                                                    <td class="px-6 py-4">簡化、提供鷹架</td>
+                                                    <td class="px-6 py-4">閱讀策略（如推論、摘要）、寫作技巧指導（仿寫、改寫）、合作學習</td>
+                                                    <td class="px-6 py-4" rowspan="2">外加式資源班課程、社會技巧課</td>
+                                                </tr>
+                                                <tr class="bg-violet-50 border-b">
+                                                    <td class="px-6 py-4">數學</td>
+                                                    <td class="px-6 py-4">抽象概念與邏輯推理弱</td>
+                                                    <td class="px-6 py-4">簡化、提供鷹架</td>
+                                                    <td class="px-6 py-4">結合生活情境、具體操作（如積木）、分段教學、資訊科技輔助</td>
+                                                </tr>
+                                                 <tr class="bg-white border-b">
+                                                    <td class="px-6 py-4">英語文</td>
+                                                    <td class="px-6 py-4">閱讀理解與文法結構弱</td>
+                                                    <td class="px-6 py-4">簡化、提供鷹架</td>
+                                                    <td class="px-6 py-4">閱讀策略（如略讀、掃描）、遊戲化學習、句型架構提示、輔助工具（點讀筆）</td>
+                                                     <td class="px-6 py-4">外加式資源班課程</td>
+                                                </tr>
+                                                <tr class="bg-violet-50 border-b">
+                                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap" rowspan="2">阿祥 (國小，嚴重多重障礙)</th>
+                                                    <td class="px-6 py-4">國語文</td>
+                                                    <td class="px-6 py-4">無口語、識字與書寫極度困難</td>
+                                                    <td class="px-6 py-4">替代、重整、簡化、減量</td>
+                                                    <td class="px-6 py-4">AAC輔助溝通系統、科技輔具輸入、部件識字法（高頻字）、圖像策略</td>
+                                                    <td class="px-6 py-4" rowspan="2">集中式特教班、語言/物理/職能治療</td>
+                                                </tr>
+                                                <tr class="bg-white border-b">
+                                                    <td class="px-6 py-4">數學</td>
+                                                    <td class="px-6 py-4">抽象概念理解與計算困難</td>
+                                                    <td class="px-6 py-4">替代、重整、簡化</td>
+                                                    <td class="px-6 py-4">全面使用計算機、四則運算概念同步教學（用1-10數字）、大量實物操作</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者 pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm">©特殊教育導論課程活動第四單元，主要依據課程大綱，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+    <!-- YouTube IFrame API Script -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- 全域設定 ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            // --- 事件監聽 ---
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.getAttribute('href'));
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    if(!mobileMenu.classList.contains('hidden')){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // --- 資料定義 ---
+            const hiStrategies = {
+                'hi-strategy-1': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">溝通與社交技巧</h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">基本互動原則</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>建立視覺接觸：</strong>與聽障生說話前，先輕拍他的肩膀或揮手，確保他看著你。</li>
+                                <li><strong>清晰且正常：</strong>請用正常的語速和音量說話，保持臉部光線充足，讓他能清楚看見您的口型與表情。不需要刻意誇大嘴型或大吼。</li>
+                                <li><strong>多元線索輔助：</strong>適時搭配自然的表情、手勢、身體語言，或將關鍵字寫下來，都有助於理解。</li>
+                                <li><strong>耐心與確認：</strong>耐心等待他們回應，若溝通不順可換個方式重述，或請他簡單摘要以確認理解。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">社交能力培養</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>主動邀請：</strong>鼓勵同儕主動邀請聽障生參與活動，享受校園生活。</li>
+                                <li><strong>技巧教導：</strong>在社交場合中，他們可能會感到困難，需要特別教導如何與人互動、如何表達情感等技巧。</li>
+                                <li><strong>生活自理：</strong>教導生活自理技能，以提升其獨立性與自信心。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <h5 class="font-semibold text-center text-violet-700 mb-4">互動交流小百科：迷思破解 (點擊卡片)</h5>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="myth-buster-card h-40">
+                                <div class="myth-buster-inner">
+                                    <div class="myth-buster-front"><span class="font-bold text-lg">迷思</span><p class="mt-2">聽障者都會讀唇語和手語？</p></div>
+                                    <div class="myth-buster-back"><span class="font-bold text-lg">事實</span><p class="mt-2">不一定！每個人的溝通方式不同，有些人以口語為主，有些人以手語為主。直接詢問他習慣的方式是最好的尊重。</p></div>
+                                </div>
+                            </div>
+                            <div class="myth-buster-card h-40">
+                                <div class="myth-buster-inner">
+                                    <div class="myth-buster-front"><span class="font-bold text-lg">迷思</span><p class="mt-2">對聽障生說話要用吼的？</p></div>
+                                    <div class="myth-buster-back"><span class="font-bold text-lg">事實</span><p class="mt-2">千萬不要！大吼會讓口型扭曲，反而更難辨識。只要用正常音量、清晰的說話即可。</p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'hi-strategy-2': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">課程與教學設計</h4>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-3 text-slate-700">
+                        <li><strong>個別化教學計畫(IEP)：</strong>這是滿足學生獨特需求的關鍵。需根據學生的個別需求，制定和執行IEP，彈性調整課程內容、教學方法和評量方式。</li>
+                        <li><strong>教材調整：</strong>教材內容和呈現方式可能需要調整，例如使用大量的圖片、圖表、影片搭配字幕、放大字體等，將抽象概念具體化、視覺化，以符合學生的學習能力。</li>
+                        <li><strong>雙語教學：</strong>對於部分聽覺障礙學生，雙語教學（口語/書面語 和 手語）可以提供更全面的語言支持，有助於概念理解與溝通表達。</li>
+                        <li><strong>視覺化教學策略：</strong>
+                            <ul class="list-decimal list-inside ml-4 mt-1">
+                                <li>授課時多利用板書，將重點、關鍵字、同學發言摘要寫下來。</li>
+                                <li>指定同學發言時，先指名再提問，讓聽障生能鎖定發言者。</li>
+                                <li>安排友善的「小天使」，在聽障生不確定指令時，能即時給予提醒與協助。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                `,
+                'hi-strategy-3': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">聽能訓練與輔助科技</h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-violet-800 mb-2">聽能與口語訓練</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>聽能訓練：</strong>可能需要透過系統化的聽能訓練，來提升他們對聲音的察覺、辨識、理解等能力。</li>
+                                <li><strong>口語教學：</strong>許多聽障生仰賴口語，老師需要確保說話清晰、語速適中，並可透過示範、回饋等方式進行口語指導。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-800 mb-2">善用輔助科技</h5>
+                             <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>個人輔具：</strong>助聽器、人工電子耳(人工耳蝸)。</li>
+                                <li><strong>遠端麥克風系統(FM)：</strong>老師配戴發射器，將聲音直接傳送到學生的接收器，能有效克服教室的距離與噪音問題。</li>
+                                <li><strong>其他科技：</strong>可善用語音轉文字軟體、通訊軟體等，作為溝通與學習的輔助。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 bg-white rounded-lg shadow-inner">
+                        <h5 class="font-semibold text-center text-violet-700 mb-4">輔具日常保養幫手</h5>
+                        <p class="text-center text-sm text-slate-500 mb-4">點擊圖示查看工具用途</p>
+                        <div class="flex justify-around items-start">
+                            <div class="text-center tool-icon" data-info="<strong>空氣球:</strong><br>用來吹掉耳模或耳管中的水氣與耳垢。">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5c0-1.38 1.12-2.5 2.5-2.5h0c1.38 0 2.5 1.12 2.5 2.5v.5a2.5 2.5 0 01-5 0v-.5zm-1.5 5.5a3 3 0 01-3-3V10a3 3 0 013-3h7a3 3 0 013 3v4a3 3 0 01-3 3h-1" /></svg>
+                                <span class="text-sm font-medium">空氣球</span>
+                            </div>
+                            <div class="text-center tool-icon" data-info="<strong>測電器:</strong><br>用來檢測電池電量是否充足，建議睡前檢測，避免因回電作用產生誤判。">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                <span class="text-sm font-medium">測電器</span>
+                            </div>
+                            <div class="text-center tool-icon" data-info="<strong>乾燥罐:</strong><br>每日將助聽器（電池取出）放入乾燥罐中除濕，是保護電子零件最重要的步驟。">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" /></svg>
+                                <span class="text-sm font-medium">乾燥罐</span>
+                            </div>
+                            <div class="text-center tool-icon" data-info="<strong>監聽耳機:</strong><br>連接助聽器，用來監聽聲音品質是否有雜訊、音量是否忽大忽小等異常狀況。">
+                               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-violet-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.636 8.464a5 5 0 000 7.072m-2.828-9.9a9 9 0 000 12.728m0 0l1.414-1.414" /></svg>
+                                <span class="text-sm font-medium">監聽耳機</span>
+                            </div>
+                        </div>
+                        <div id="tool-info-display" class="mt-4 p-3 bg-violet-100 rounded-md text-center min-h-[60px] text-violet-800">
+                            點擊上方圖示，查看工具說明。
+                        </div>
+                    </div>
+                `,
+                 'hi-strategy-4': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">全人支持系統</h4>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">心理與家庭支持</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li>聽障生可能因溝通困難而面臨自卑、焦慮等心理挑戰，需要提供適當的心理支持和輔導。</li>
+                                <li>家長的支持和參與對學生的學習至關重要，需提供家長相關的資訊和支持網絡，如雅文基金會等機構。</li>
+                            </ul>
+                             <div class="mt-4 aspect-w-16 aspect-h-9">
+                                <iframe src="https://www.youtube.com/embed/G77fCuage7M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-md"></iframe>
+                            </div>
+                            <p class="text-xs text-center mt-2 text-slate-500">雅文基金會創辦人鄭雅文女士的故事</p>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">友善環境與社會議題</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li>教室環境應保持安靜，減少不必要的噪音，並提供適當的照明，方便學生讀唇。</li>
+                                <li>建立尊重與接納的班級文化，鼓勵同儕成為支持的力量。</li>
+                                <li><strong>社會溝通議題：</strong>公視新聞#主題策展 #挑戰無聲系列報導，揭示了聽障者在日常生活中，如在餐廳、銀行等場合，因店員佩戴口罩而無法讀唇，導致溝通困難的普遍困境。這提醒我們，建立無障礙溝通環境是整個社會的責任。</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            };
+            const viStrategies = {
+                'vi-strategy-1': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">視覺神經的奇幻旅程</h4>
+                    <p class="text-slate-700 mb-4">視覺障礙不僅是「看不清楚」，更涉及大腦如何處理視覺訊息。理解其定義與成因是提供有效支持的第一步。</p>
+                    <div class="law-box">
+                        <h5 class="font-semibold text-slate-800">法規依據：《特殊教育學生及幼兒鑑定辦法》第四條</h5>
+                        <p class="mt-2 text-slate-600">本法第三條第二款所稱視覺障礙，指由於先天或後天原因，導致視覺器官之構造缺損或視覺機能發生部分或全部之障礙，經矯正後其視覺辨認仍有困難，致影響參與學習活動。</p>
+                        <p class="mt-2 text-slate-600">前項所定視覺障礙，其鑑定基準依下列各款規定之一：</p>
+                        <ul class="list-decimal list-inside ml-4 mt-2 text-slate-600">
+                            <li>遠距離或近距離視力經最佳矯正後，優眼視力未達○．四。</li>
+                            <li>兩眼視野各為二十度以內。</li>
+                            <li>視力或視野無法以一般標準化工具測定時，以其他醫學專業採認之檢查，綜合研判之。</li>
+                        </ul>
+                    </div>
+                     <div class="mt-6 p-4 bg-white rounded-lg border border-violet-200">
+                        <h5 class="font-semibold text-lg text-violet-800 mb-4">互動體驗：視覺路徑損傷模擬器</h5>
+                        <p class="text-slate-600 mb-4">視覺訊息從眼睛傳到大腦的路徑相當複雜，任何一個環節損傷，都會造成特定視野缺損。請點擊下圖中的紅色數字熱點，觀察對應的視野變化。</p>
+                        <div class="grid md:grid-cols-2 gap-6 items-center">
+                            <div class="visual-pathway-container">
+                                <img src="https://lh5.googleusercontent.com/-y4oXsHuT5vw/Us6bDP8-fzI/AAAAAAAAQRQ/qAqUMtA9QgI/s640/Visual_pathway.jpg" alt="視覺傳導路徑" class="w-full h-auto rounded-lg bg-white p-1">
+                                <div class="hotspot" style="top: 53%; left: 33%;" data-defect="right-eye-blind">1</div>
+                                <div class="hotspot" style="top: 60%; left: 49%;" data-defect="bitemporal-hemianopia">2</div>
+                                <div class="hotspot" style="top: 45%; left: 63%;" data-defect="left-homonymous-hemianopia">3</div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="flex gap-4">
+                                    <div class="text-center">
+                                        <p class="font-semibold">左眼視野</p>
+                                        <div class="visual-field-display" id="vf-left">
+                                            <div class="visual-field-defect" id="vfd-left"></div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="font-semibold">右眼視野</p>
+                                        <div class="visual-field-display" id="vf-right">
+                                            <div class="visual-field-defect" id="vfd-right"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="visual-pathway-info" class="mt-4 p-3 bg-violet-50 rounded-lg text-sm text-center min-h-[80px] w-full">
+                                    <h6 class="font-bold text-violet-800">影像投射原理</h6>
+                                    <p>物體影像投射到視網膜為上下顛倒、左右相反。左側大腦負責右視野，右側大腦負責左視野。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-sm text-slate-700 space-y-3">
+                            <div>
+                                <h6 class="font-bold text-violet-800">視覺傳導路徑：</h6>
+                                <p>視野所見 (Visual Field) → 視網膜 (Retina) → 視神經 (Optic Nerve) → 視交叉 (Optic Chiasma) → 視束 (Optic Tract) → 外側膝狀體 (LGN) → 視放射 (Optic Radiation) → 視覺皮質 (Visual Cortex)。</p>
+                            </div>
+                             <div>
+                                <h6 class="font-bold text-violet-800">視野投射規則：</h6>
+                                <ul class="list-disc list-outside ml-5">
+                                    <li>位在<strong class="text-blue-600">左半視野</strong>的物體，會投射到雙眼視網膜的<strong class="text-red-600">右側</strong>，最終傳到<strong class="text-red-600">右腦</strong>視覺皮質。</li>
+                                    <li>位在<strong class="text-red-600">右半視野</strong>的物體，會投射到雙眼視網膜的<strong class="text-blue-600">左側</strong>，最終傳到<strong class="text-blue-600">左腦</strong>視覺皮質。</li>
+                                </ul>
+                            </div>
+                             <div>
+                                <h6 class="font-bold text-violet-800">上下視野的投射：</h6>
+                                <div class="flex flex-col md:flex-row items-center gap-4">
+                                    <!-- 指令1：放大圖片 -->
+                                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVf4ovrDeiiYrZ3yY20p_5bOVts_eBPaTpJJBcEt1eeWaAZovObMmVu5S5WGrvwk0R0gTe6l6PQ2QkP3_vPgPUOdUMr29ho3JtmviKLZCvwAwKesAzTmceiroQO-E4iadHJ5zefP9nsl7O/s640/001.png" class="w-80 h-auto mx-auto md:mx-0">
+                                    <p>視覺皮質以距狀裂(Calcarine sulcus)為中心，上方皮質處理<strong class="text-red-600">下半視野</strong>的訊息，下方皮質處理<strong class="text-blue-600">上半視野</strong>的訊息。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'vi-strategy-2': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">擴充核心課程(ECC)：定向行動</h4>
+                    <p class="text-slate-700 mb-4">定向行動是視障教育的基石，旨在培養學生獨立、安全、有效率地在環境中移動的能力。</p>
+                    <div class="md:flex md:gap-6 items-start">
+                        <div class="md:w-1/2">
+                            <h5 class="font-semibold text-violet-700">核心概念</h5>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-slate-700">
+                                <li><strong>定向 (Orientation)：</strong>利用剩餘感官（聽覺、觸覺、嗅覺等）與知覺線索，理解自己與周遭環境的相對位置關係，建立「心智地圖」。</li>
+                                <li><strong>行動 (Mobility)：</strong>學習使用工具（如手杖）或技巧（如人導法），安全地從A點移動到B點。</li>
+                            </ul>
+                             <h5 class="font-semibold text-violet-700 mt-4">教學主軸</h5>
+                            <p class="text-slate-700 text-sm">課程涵蓋感覺訓練、概念發展、行動技能、定向系統、求助技能、安全議題及社區資源運用等多個面向。</p>
+                        </div>
+                        <div class="md:w-1/2 mt-4 md:mt-0">
+                            <div class="aspect-w-16 aspect-h-9">
+                                <iframe src="https://www.youtube.com/embed/I1d215k3e44" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-md"></iframe>
+                            </div>
+                            <p class="text-xs text-center mt-2 text-slate-500">影片：認識視障者的白手杖</p>
+                        </div>
+                    </div>
+                `,
+                'vi-strategy-3': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">擴充核心課程(ECC)：點字與輔具</h4>
+                    <div class="grid md:grid-cols-2 gap-6 items-start">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">台灣點字的緣由</h5>
+                            <p class="text-slate-700 text-sm">台灣現行的點字系統，源於19世紀由法國人路易・布拉耶(Louis Braille)發明的六點制點字。其後，經過傳教士與國內視障教育家的努力，逐漸發展出符合國語、閩南語、客語等本土語言拼音規則的點字系統，成為視障者重要的學習與溝通工具。</p>
+                             <h5 class="font-semibold text-violet-700 mt-4 mb-2">視覺輔具</h5>
+                             <p class="text-slate-700 text-sm">除了點字，視覺輔具也是低視能學生重要的學習幫手，包含放大鏡、擴視機、望遠鏡等，能幫助他們更有效地運用剩餘視力。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg">
+                            <h5 class="font-semibold text-center text-violet-700 mb-2">互動式點字體驗</h5>
+                            <p class="text-center text-sm text-slate-500 mb-4">點擊下方按鈕，看看注音符號的點字長什麼樣子吧！</p>
+                            <div class="flex justify-center mb-4">
+                                <div id="braille-display" class="braille-cell">
+                                    <div class="braille-dot" data-dot="1"></div>
+                                    <div class="braille-dot" data-dot="4"></div>
+                                    <div class="braille-dot" data-dot="2"></div>
+                                    <div class="braille-dot" data-dot="5"></div>
+                                    <div class="braille-dot" data-dot="3"></div>
+                                    <div class="braille-dot" data-dot="6"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-center flex-wrap gap-2">
+                                <button class="braille-btn text-xs py-1 px-2 rounded bg-violet-100" data-dots="1">ㄅ</button>
+                                <button class="braille-btn text-xs py-1 px-2 rounded bg-violet-100" data-dots="1,2">ㄆ</button>
+                                <button class="braille-btn text-xs py-1 px-2 rounded bg-violet-100" data-dots="1,4">ㄇ</button>
+                                <button class="braille-btn text-xs py-1 px-2 rounded bg-violet-100" data-dots="1,4,5">ㄈ</button>
+                                <button class="braille-btn text-xs py-1 px-2 rounded bg-violet-100" data-dots="1,3,4,5">ㄧ</button>
+                                <button class="braille-btn text-xs py-1 px-2 rounded bg-violet-100" data-dots="2,4,6">ㄨ</button>
+                                <button class="braille-btn text-xs py-1 px-2 rounded bg-violet-100" data-dots="1,2,3,5">ㄩ</button>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'vi-strategy-4': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">視障生活體驗</h4>
+                    <p class="text-slate-700 mb-4">透過影片，我們可以更貼近視障朋友的日常生活，了解他們如何與世界互動，以及他們所面臨的挑戰。</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">視障者的超市購物挑戰</h5>
+                            <div class="aspect-w-16 aspect-h-9">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/vi-z9yVaSPI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="rounded-md"></iframe>
+                            </div>
+                            <p class="text-sm mt-2 text-slate-600">影片跟隨著一位視障朋友，記錄了他在校園附近超市獨立購物的過程，從尋找商品到結帳，讓我們看見日常生活中無所不在的挑戰。</p>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">視障者的外出挑戰：買蛋糕的旅程</h5>
+                             <div class="aspect-w-16 aspect-h-9">
+                                <iframe width="560" height="315" src="https://www.youtube.com/embed/ZV3lbdJ325A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="rounded-md"></iframe>
+                            </div>
+                            <p class="text-sm mt-2 text-slate-600">這部影片生動地呈現了一位視障者為了買蛋糕而外出的艱辛旅程，凸顯了定向行動、環境線索判讀與尋求協助的重要性。</p>
+                        </div>
+                    </div>
+                `,
+                'vi-strategy-5': `
+                     <h4 class="font-semibold text-lg mb-3 text-violet-800">教學策略與介入</h4>
+                     <p class="text-slate-700 mb-4">針對視覺困難學生的教學，應把握「視覺清晰化」與「多感官學習」兩大原則。</p>
+                     <ul class="list-disc list-outside ml-5 mt-2 space-y-3 text-slate-700">
+                        <li><strong>環境調整：</strong>
+                            <ul class="list-decimal list-inside ml-4 mt-1">
+                                <li>提供充足且不反光的照明。</li>
+                                <li>調整座位至能看清楚板書的最佳位置。</li>
+                                <li>保持教室動線淨空，避免學生碰撞。</li>
+                                <li>使用顏色對比鮮明的教材與環境佈置。</li>
+                            </ul>
+                        </li>
+                        <li><strong>教材提供：</strong>
+                             <ul class="list-decimal list-inside ml-4 mt-1">
+                                <li>提供放大字體或點字版的課本與講義。</li>
+                                <li>將教材數位化，方便學生使用擴視軟體或螢幕報讀軟體。</li>
+                                <li>提供具體、可觸摸的模型或教具，輔助抽象概念的學習。</li>
+                            </ul>
+                        </li>
+                         <li><strong>評量調整：</strong>
+                             <ul class="list-decimal list-inside ml-4 mt-1">
+                                <li>提供放大試卷或點字試卷。</li>
+                                <li>延長考試時間。</li>
+                                <li>允許以口頭、電腦打字等多元方式作答。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                `
+            };
+            const pdStrategies = {
+                'pd-strategy-1': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">定義與成因</h4>
+                    <p class="text-slate-700 mb-4">此類障礙主要指因生理或神經系統損傷，造成永久性的動作功能限制，進而影響學習與生活參與。</p>
+                    <div class="space-y-4">
+                        <div>
+                            <h5 class="font-semibold text-violet-700">主要類型</h5>
+                             <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-slate-700">
+                                <li><strong>神經系統異常：</strong>腦性麻痺、脊髓灰質炎（小兒麻痺）、癲癇、多發性神經硬化症等。</li>
+                                <li><strong>肌肉骨骼畸形：</strong>脊柱側彎、成骨不全（玻璃娃娃）、進行性肌肉萎縮、截肢等。</li>
+                                <li><strong>先天性畸形：</strong>先天性心臟病、先天性髖關節脫臼、脊柱裂等。</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="law-box mt-6">
+                        <h5 class="font-semibold text-slate-800">法規依據：《特殊教育學生及幼兒鑑定辦法》</h5>
+                        <ul class="list-disc list-outside ml-5 mt-2 space-y-3 text-slate-600">
+                            <li><strong>肢體障礙 (第七條)：</strong>指上肢、下肢、軀幹或平衡之機能損傷，致影響參與學習活動。其相關疾病應由專科醫師診斷；其鑑定基準依下列各款規定之一：一、先天性肢體功能障礙。二、疾病或意外導致長期持續性肢體功能障礙。</li>
+                            <li><strong>腦性麻痺 (第八條)：</strong>指因腦部早期發育中受到非進行性、非暫時性之腦部損傷，造成動作、平衡及姿勢發展障礙，經常伴隨感覺、知覺、認知、溝通及行為等障礙，致影響參與學習活動。前項所定腦性麻痺，應經由該專科醫師診斷。</li>
+                            <li><strong>身體病弱 (第九條)：</strong>指罹患疾病，且體能衰弱，需長期療養，致影響參與學習活動。前項所定身體病弱，其相關疾病應經由該專科醫師診斷。</li>
+                        </ul>
+                    </div>
+                `,
+                'pd-strategy-2': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">身心特質與輔具</h4>
+                     <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">心理與社會特質</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>心理適應挑戰：</strong>學生可能經歷休克、否認、承受、適應等心理調適階段。</li>
+                                <li><strong>自我概念：</strong>因外顯的肢體不便與生活中的挫折經驗，可能導致較低的自我概念、過度敏感、退縮或被動。</li>
+                                <li><strong>社會互動：</strong>活動範圍受限可能導致生活經驗與社交機會減少，進而影響人際關係。</li>
+                                <li><strong>大腦可塑性：</strong>即使中樞神經受損，大腦仍具可塑性。持續的復健與練習能促進大腦功能重組，由健康腦區接管受損功能。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">常見輔具</h5>
+                            <p class="text-slate-700 text-sm mb-2">輔具科技（Assistive Technology）是提升、維持或增強身心障礙者功能的關鍵。</p>
+                             <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700 text-sm">
+                                <li><strong>行動輔具：</strong>輪椅、助行器、電動代步車、支架（如踝足支架）。</li>
+                                <li><strong>擺位輔具：</strong>為幫助軀幹控制能力差的學生維持正確姿勢，如擺位椅、俯趴式/仰躺式站立架。</li>
+                                <li><strong>溝通輔具：</strong>溝通板、語音溝通器等。</li>
+                                <li><strong>電腦輔具：</strong>特殊鍵盤/滑鼠、觸控螢幕、眼控滑鼠等。</li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                'pd-strategy-3': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">腦性麻痺：全面解析</h4>
+                    <p class="text-slate-700 mb-4">腦性麻痺（Cerebral Palsy, CP）是兒童期最常見的肢體障礙，它是一群因早期腦部發育過程中的非進行性損傷所引起的症候群，主要影響動作和姿勢的發展。</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">腦麻的分類</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>依肌肉張力異常類型：</strong>
+                                    <ul class="list-decimal list-inside ml-4 mt-1 text-sm">
+                                        <li><strong>痙攣型：</strong>最常見，肌肉緊繃僵硬。</li>
+                                        <li><strong>徐動型：</strong>不自主的、緩慢扭曲的動作。</li>
+                                        <li><strong>運動失調型：</strong>平衡感與協調性差，動作笨拙。</li>
+                                        <li><strong>混合型：</strong>合併兩種以上症狀。</li>
+                                    </ul>
+                                </li>
+                                <li><strong>依影響的肢體範圍：</strong>
+                                     <ul class="list-decimal list-inside ml-4 mt-1 text-sm">
+                                        <li><strong>單肢、偏癱、雙癱、四肢癱</strong></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">常見的合併問題</h5>
+                            <p class="text-slate-700 text-sm mb-2">腦麻的影響不僅止於動作，常伴隨其他困難：</p>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700 text-sm">
+                                <li>智能障礙</li>
+                                <li>癲癇</li>
+                                <li>視覺或聽覺障礙（特別是斜視、立體感問題）</li>
+                                <li>語言溝通障礙</li>
+                                <li>學習障礙、注意力不集中</li>
+                                <li>情緒行為問題</li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                'pd-strategy-4': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">腦性麻痺：困難與支持</h4>
+                     <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">生活與學習的挑戰</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>動作協調困難：</strong>影響書寫、操作實驗器材、參與體育活動等。</li>
+                                <li><strong>視覺空間處理困難：</strong>部分腦麻學生因腦部受損，影響立體感與深度知覺，造成判斷距離、上下樓梯、拿取物品等日常活動的困難。</li>
+                                <li><strong>持續的醫療復健：</strong>需要物理治療(PT)、職能治療(OT)、語言治療(ST)等長期介入。</li>
+                                <li><strong>社會與就業困境：</strong>面臨社會的刻板印象、不友善的物理環境、交通不便以及就業機會不足等挑戰。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">課程、介入與支持</h5>
+                            <p class="text-slate-700 text-sm mb-2">支持腦麻學生的核心是建立一個跨專業的合作團隊，並採取全人發展的觀點。</p>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700 text-sm">
+                                <li><strong>課程調整：</strong>依據學生的IEP，彈性調整課程內容、歷程與評量方式（如延長作答時間、替代評量）。</li>
+                                <li><strong>輔助科技：</strong>善用擺位系統（特製輪椅/桌椅）、溝通輔具、電腦輔具（特殊滑鼠/鍵盤）等，降低學習的物理障礙。</li>
+                                <li><strong>物理環境：</strong>確保校園的無障礙環境，如無障礙坡道、電梯、廁所等。</li>
+                                <li><strong>心理支持：</strong>協助學生建立正向的自我概念與身體意象，培養社交技巧，鼓勵同儕接納與支持。</li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                'pd-strategy-5': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">無障礙環境與教學支持</h4>
+                    <p class="text-slate-700 mb-4">支持肢體障礙學生的核心是「無障礙(Access)」，不僅是物理環境，更包含資訊、課程與心理參與的無障礙。這與「通用設計」(Universal Design)的理念不謀-合。</p>
+                     <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">無障礙環境：概念與法規</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>概念：</strong>指創造一個讓所有人，無論其能力如何，都能公平、自主、有尊嚴地使用的環境。</li>
+                                <li><strong>法規演進：</strong>台灣的《身心障礙者權益保障法》明確規範了公共建築、設施及交通工具應符合無障礙標準，體現了從醫療模式轉向社會權利模式的進步。</li>
+                                <li><strong>校園實踐：</strong>包含無障礙坡道、電梯、扶手、可調整高度的桌椅、自動門、無障礙廁所等硬體設施，以及資源教室提供的輔具借用與支持服務。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">教學支持策略 (UDL)</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700 text-sm">
+                                <li><strong>多元的表徵方式 (無障礙的資訊獲取)：</strong>提供數位化教材、有聲書、放大字體講義，確保學生能順利獲取學習內容。</li>
+                                <li><strong>多元的行動與表達方式 (無障礙的學習展現)：</strong>允許電腦打字、語音輸入、口頭報告等替代書寫的評量方式。</li>
+                                <li><strong>多元的參與方式 (無障礙的心理與社會環境)：</strong>設計所有學生都能參與的合作學習活動，建立同儕支持系統，並確保物理環境的友善性。</li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                'pd-strategy-6': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">運動系統原理</h4>
+                    <div class="grid md:grid-cols-2 gap-6 items-start">
+                        <div>
+                            <p class="text-slate-700 mb-4">人體的運動系統由骨骼、關節和骨骼肌三大部份組成，它們協同工作，使我們能夠進行各種複雜的動作。</p>
+                            <ul class="list-disc list-outside ml-5 space-y-3 text-slate-700">
+                                <li><strong>骨骼 (Bones)：</strong>是身體的支架，具有支持、保護、儲存礦物質及造血功能。分為中軸骨與附肢骨。</li>
+                                <li><strong>關節 (Joints)：</strong>是骨骼之間的連接處，允許身體活動。<strong class="text-violet-600">韌帶(Ligaments)</strong>是堅韌的纖維組織，負責連接骨骼與骨骼，維持關節穩定。</li>
+                                <li><strong>骨骼肌 (Skeletal Muscles)：</strong>透過<strong class="text-violet-600">肌腱(Tendons)</strong>附著於骨骼上，收縮時牽動骨骼產生動作。肌肉通常成對作用，稱為<strong class="text-violet-600">拮抗肌群</strong>，例如，當手臂彎曲時，二頭肌收縮，三頭肌則舒張。</li>
+                            </ul>
+                        </div>
+                        <div class="mt-4 md:mt-0">
+                            <img src="https://lh3.googleusercontent.com/-JI_lifUhHKU/UtSU_lvo0WI/AAAAAAAASqY/zGJ-0UA_4Bw/s640/biol_03_img0301.jpg" alt="人體運動系統圖" class="rounded-lg shadow-md">
+                        </div>
+                    </div>
+                `,
+                'pd-strategy-7': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">常見肌肉疾病</h4>
+                    <p class="text-slate-700 mb-4">肌肉系統的疾病會直接影響個體的活動能力，以下介紹幾種常見的肌肉相關疾病：</p>
+                    <ul class="list-disc list-outside ml-5 space-y-3 text-slate-700">
+                        <li><strong>肌肉拉傷 (Muscle Strain)：</strong>指肌肉纖維過度伸展或撕裂，常發生於運動傷害中。</li>
+                        <li><strong>痙攣/抽筋 (Spasm/Cramp)：</strong>肌肉不自主地劇烈收縮，可能與脫水、電解質不平衡或過度疲勞有關。</li>
+                        <li><strong>纖維肌痛 (Fibromyalgia)：</strong>一種慢性、廣泛性的肌肉疼痛症候群，常伴隨疲勞、睡眠障礙和情緒問題。</li>
+                        <li><strong>肌肉萎縮症 (Muscular Dystrophy)：</strong>一類遺傳性疾病，特徵是進行性的肌肉無力與萎縮，影響個案的活動與呼吸功能。</li>
+                        <li><strong>重症肌無力 (Myasthenia Gravis)：</strong>一種自體免疫疾病，身體產生抗體攻擊神經與肌肉交界處，導致肌肉無力，特別是在重複活動後會加劇。</li>
+                    </ul>
+                `,
+                'pd-strategy-8': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">健康與體適能互動體驗</h4>
+                    <p class="text-slate-700 mb-4">了解自己的身體數據是健康管理的第一步。您可以使用下的工具計算您的身體質量指數(BMI)與基礎代謝率(BMR)。</p>
+                    <div class="grid md:grid-cols-2 gap-8 mt-6">
+                        <!-- BMI 計算機 -->
+                        <div class="calculator-card">
+                            <h5 class="font-semibold text-xl text-center text-violet-700 mb-4">BMI 計算機</h5>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="bmi-height" class="block text-sm font-medium text-gray-700">身高 (公分)</label>
+                                    <input type="number" id="bmi-height" class="calculator-input mt-1" placeholder="例如：170">
+                                </div>
+                                <div>
+                                    <label for="bmi-weight" class="block text-sm font-medium text-gray-700">體重 (公斤)</label>
+                                    <input type="number" id="bmi-weight" class="calculator-input mt-1" placeholder="例如：65">
+                                </div>
+                                <button id="calculate-bmi" class="w-full calculator-button">計算 BMI</button>
+                                <div id="bmi-result" class="calculator-result" style="display: none;"></div>
+                            </div>
+                        </div>
+                        <!-- BMR 計算機 -->
+                        <div class="calculator-card">
+                            <h5 class="font-semibold text-xl text-center text-violet-700 mb-4">基礎代謝率 (BMR) 計算機</h5>
+                            <div class="space-y-4">
+                                <div>
+                                    <span class="block text-sm font-medium text-gray-700">生理性別</span>
+                                    <div class="mt-1 flex gap-4">
+                                        <label><input type="radio" name="gender" value="male" checked> 男性</label>
+                                        <label><input type="radio" name="gender" value="female"> 女性</label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="bmr-age" class="block text-sm font-medium text-gray-700">年齡</label>
+                                    <input type="number" id="bmr-age" class="calculator-input mt-1" placeholder="例如：25">
+                                </div>
+                                <div>
+                                    <label for="bmr-height" class="block text-sm font-medium text-gray-700">身高 (公分)</label>
+                                    <input type="number" id="bmr-height" class="calculator-input mt-1" placeholder="例如：170">
+                                </div>
+                                <div>
+                                    <label for="bmr-weight" class="block text-sm font-medium text-gray-700">體重 (公斤)</label>
+                                    <input type="number" id="bmr-weight" class="calculator-input mt-1" placeholder="例如：65">
+                                </div>
+                                <button id="calculate-bmr" class="w-full calculator-button">計算 BMR</button>
+                                <div id="bmr-result" class="calculator-result" style="display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                 'pd-strategy-9': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">筋膜與肌肉的關係</h4>
+                    <p class="text-slate-700 mb-4">理解筋膜與肌肉的協同作用，對於促進身體健康、預防傷害至關重要。</p>
+                    <div class="space-y-4">
+                        <div>
+                            <h5 class="font-semibold text-violet-700">什麼是筋膜 (Fascia)？</h5>
+                            <p class="text-slate-700">筋膜是遍佈全身的結締組織網絡，像一件緊身衣一樣，包覆著我們的肌肉、肌群、血管、神經和內臟器官。它不僅提供支撐和保護，更是一個傳遞力量和訊息的重要系統。</p>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700">為什麼筋膜健康很重要？</h5>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>力量傳導：</strong>健康的筋膜富有彈性，能有效地傳遞肌肉產生的力量，讓動作更流暢、有力。</li>
+                                <li><strong>維持活動度：</strong>筋膜的滑動性讓我們能做出各種角度的動作。當筋膜緊繃或沾黏時，關節活動度就會受限。</li>
+                                <li><strong>本體感覺：</strong>筋膜中含有大量的感覺神經末梢，是提供大腦身體位置、動作和平衡感的重要來源。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700">如何保養我們的筋膜？</h5>
+                            <p class="text-slate-700 mb-2">現代生活型態容易導致筋膜問題，但透過簡單的方式即可進行保養：</p>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                                <li><strong>動態伸展：</strong>在運動前進行，喚醒肌肉與筋膜，增加關節活動度。</li>
+                                <li><strong>靜態伸展：</strong>在運動後進行，幫助放鬆緊繃的肌肉，恢復筋膜的彈性。</li>
+                                <li><strong>使用滾筒或按摩球：</strong>透過自我按壓，放鬆深層的筋膜緊繃點（激痛點），改善血液循環。</li>
+                                <li><strong>保持良好姿勢：</strong>避免長時間維持相同姿勢，定時起身活動，減少筋膜的壓力。</li>
+                                <li><strong>充足水分：</strong>筋膜的主要成分是水，補充足夠水分有助於維持其健康與滑動性。</li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                'pd-strategy-10': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">新生兒常見疾病</h4>
+                    <div class="space-y-6 text-slate-700">
+                        <div>
+                            <h5 class="font-semibold text-violet-700">一、先天性代謝異常疾病</h5>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-sm">
+                                <li><strong>苯酮尿症(PKU):</strong> 由於體內缺乏代謝苯丙胺酸的酵素，導致苯丙胺酸堆積，影響腦部發育。</li>
+                                <li><strong>先天性甲狀腺功能低下症:</strong> 由於甲狀腺功能不足，影響生長發育和智力發展。</li>
+                                <li><strong>蠶豆症(G-6-PD缺乏症):</strong> 缺乏葡萄糖-6-磷酸鹽去氫酶，容易因氧化壓力造成溶血性貧血。</li>
+                                <li><strong>半乳糖血症:</strong> 無法代謝半乳糖，影響肝臟、腦部等器官功能。</li>
+                                <li><strong>先天性腎上腺增生症:</strong> 影響腎上腺皮質激素的合成，可能導致性早熟、生長遲緩等問題。</li>
+                                <li><strong>中鏈醯輔酶A去氫酶缺乏症:</strong> 無法有效利用脂肪酸，導致低血糖、肝臟功能異常等。</li>
+                                <li><strong>戊二酸血症第一型:</strong> 無法有效代謝離胺酸、羥離胺酸、色胺酸，影響神經系統。</li>
+                                <li><strong>甲基丙二酸血症:</strong> 無法有效代謝甲基丙二酸，影響神經系統、肝臟功能。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700">二、先天性心臟病</h5>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-sm">
+                                <li><strong>心室中隔缺損:</strong> 心臟左右心室之間的隔膜有缺損，可能導致心臟負荷增加。</li>
+                                <li><strong>法洛氏四重症:</strong> 包含心室中隔缺損、肺動脈狹窄、主動脈跨位、右心室肥厚等四種心臟構造異常，需要手術治療。</li>
+                                <li><strong>開放性動脈導管:</strong> 動脈導管未關閉，導致血液從主動脈流向肺動脈，增加心臟負擔。</li>
+                                <li><strong>心房中隔缺損:</strong> 心臟左右心房之間的隔膜有缺損，可能導致心臟負荷增加。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700">三、其他常見疾病</h5>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-sm">
+                                <li><strong>呼吸道疾病:</strong> 像是支氣管炎、細支氣管炎、哮喘等，容易引發呼吸道感染和發炎症狀。</li>
+                                <li><strong>感染症:</strong> 包括腸病毒、呼吸道融合病毒(RSV)、肺炎鏈球菌等，可能導致嚴重併發症。</li>
+                                <li><strong>癌症:</strong> 像是血癌、神經母細胞瘤、眼癌等，雖然新生兒癌症發生率較低，但仍不可輕忽。</li>
+                            </ul>
+                        </div>
+                    </div>
+                `,
+                'pd-strategy-12': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">腦麻成因與難產知識</h4>
+                    <div class="space-y-6 text-slate-700">
+                        <div>
+                            <h5 class="font-semibold text-violet-700">一、腦性麻痺的可能原因</h5>
+                            <p class="text-sm mb-2">腦性麻痺是腦部在發育未成熟階段受到損傷或產生病變，導致運動功能障礙。損傷可能發生在產前、周產期或產後。</p>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-sm">
+                                <li><strong>產前因素 (約75%):</strong> 母親懷孕期間的感染（如德國麻疹）、子宮或胎盤功能異常、多胞胎、基因或染色體異常等。</li>
+                                <li><strong>周產期因素 (約5-10%):</strong> 生產過程中的缺氧（如難產、臍帶繞頸）、早產、新生兒體重過低、新生兒嚴重黃疸等。</li>
+                                <li><strong>產後因素 (約15%):</strong> 嬰兒時期的腦部感染（如腦膜炎）、頭部外傷、腦血管疾病、或中毒等。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700">二、難產知識</h5>
+                            <p class="text-sm mb-2">難產是可能導致周產期腦部損傷的原因之一，主要可分為肩難產與胎位不正。</p>
+                            <div class="mt-4 p-4 bg-white rounded-lg">
+                                <p class="font-semibold mb-2">肩難產</p>
+                                <p class="text-sm">指胎頭產出後，前肩卡在恥骨聯合上，為產科急症。巨嬰是主要危險因子。處理方式包含改變產婦姿勢 (McRobert’s position)、從體外按壓胎兒肩膀、或在產道內旋轉胎兒 (Wood’s maneuver) 等，情況危急時可能需行剖腹產。</p>
+                            </div>
+                            <div class="mt-4 p-4 bg-white rounded-lg">
+                                <p class="font-semibold mb-2">胎位不正</p>
+                                <p class="text-sm">指胎兒非頭位向下的姿勢，最常見為臀位。可能原因包括骨盆腔狹窄、子宮異常、羊水量異常等。處理方式優先考慮剖腹產，或在足月時嘗試體外轉位術。其他如額位、臉位、肩位等，多數情況下也需剖腹生產以確保安全。</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700">三、難產相關急症手術</h5>
+                            <p class="text-sm mb-2">當難產發生且無法透過常規方式解決時，可能需要緊急手術介入，最主要即為剖腹產 (Cesarean section)。在極端情況下，若無法進行剖腹產且母嬰危急，可能會考慮破壞性手術 (destructive operations)，但這在現代產科中已極為罕見。</p>
+                        </div>
+                    </div>
+                `,
+                'pd-strategy-11': `
+                    <h4 class="font-semibold text-lg mb-3 text-violet-800">產前檢查與常見病弱</h4>
+                    <div class="space-y-8 text-slate-700">
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">一、嬰兒產前身體病弱檢查</h5>
+                            <p class="text-sm mb-4">透過產前檢查，能及早發現胎兒可能的異常，為後續的醫療照護做準備。</p>
+                            <div class="space-y-6">
+                                <!-- 高層次超音波 -->
+                                <div class="grid md:grid-cols-2 gap-4 items-start">
+                                    <div>
+                                        <p class="font-semibold">高層次超音波</p>
+                                        <p class="text-sm mt-1">建議於懷孕20-24週進行，透過高解析度的超音波，從頭到腳詳細檢查胎兒的各項器官構造，如腦部、心臟、脊椎、四肢等，是篩檢胎兒結構異常的重要工具。</p>
+                                    </div>
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        <iframe src="https://www.youtube.com/embed/_d7tyLLP2wo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-md"></iframe>
+                                    </div>
+                                </div>
+                                <!-- 羊膜穿刺 -->
+                                <div class="grid md:grid-cols-2 gap-4 items-start">
+                                    <div>
+                                        <p class="font-semibold">羊膜穿刺 (羊水檢查)</p>
+                                        <p class="text-sm mt-1">建議於懷孕16-20週進行，抽取少量羊水分析胎兒染色體。這是診斷唐氏症等染色體數目或結構異常最準確的方法之一。</p>
+                                    </div>
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        <iframe src="https://www.youtube.com/embed/eqC4WyAD5B8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-md"></iframe>
+                                    </div>
+                                </div>
+                                <!-- 絨毛膜取樣 -->
+                                <div class="grid md:grid-cols-2 gap-4 items-start">
+                                    <div>
+                                        <p class="font-semibold">絨毛膜取樣</p>
+                                        <p class="text-sm mt-1">可於懷孕10-13週進行，透過採集胎盤的絨毛膜組織來分析染色體。相較於羊膜穿刺，能更早得知結果，但流產風險也稍高一些。</p>
+                                    </div>
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        <iframe src="https://www.youtube.com/embed/Untm3UCGW3I" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-md"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold text-violet-700 mb-2">二、常見身體病弱：法洛氏四重症 (TOF)</h5>
+                            <p class="text-sm mb-2">法洛氏四重症是最常見的發紺性（嘴唇、指甲易呈藍紫色）先天性心臟病，由四種心臟結構異常組合而成：</p>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-sm">
+                                <li><strong>心室中隔缺損 (VSD):</strong> 左右心室之間的隔板有破洞。</li>
+                                <li><strong>肺動脈狹窄:</strong> 右心室出口到肺動脈的血流通道變得狹窄。</li>
+                                <li><strong>主動脈跨位:</strong> 主動脈的位置異常，橫跨在心室中隔缺損的上方。</li>
+                                <li><strong>右心室肥厚:</strong> 因右心室需要更用力將血液送出狹窄的肺動脈，導致心肌變得肥厚。</li>
+                            </ul>
+                            <p class="text-sm mt-2 mb-4">這些問題導致缺氧血與充氧血混合，流向全身的血液氧氣濃度不足，因此造成發紺。患有此症的嬰兒通常需要接受外科手術矯正，以重建正常的心臟血流路徑。</p>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <p class="font-semibold text-center text-sm mb-2">嬰兒法洛氏四重症手術</p>
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        <iframe src="https://www.youtube.com/embed/JCTKmy73oiw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-md"></iframe>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-center text-sm mb-2">成人法洛氏四重症手術</p>
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        <iframe src="https://www.youtube.com/embed/ihYfWqT3Ko4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="rounded-md"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            };
+            const matrixContent = {
+                'content-simplify': '<strong>內容-簡化:</strong> 簡化概念，如國文課將長篇古文改為白話版。',
+                'content-reduce': '<strong>內容-減量:</strong> 減少學習份量，如數學作業從20題減為10題核心題。',
+                'content-breakdown': '<strong>內容-分解:</strong> 將複雜概念拆解成小單元，如自然科將「光合作用」分解成數個子步驟教學。',
+                'content-replace': '<strong>內容-替代:</strong> 以功能性、生活化的內容取代，如對精細動作困難的學生，美術課的捏陶土改為口頭報告藝術家生平。',
+                'process-simplify': '<strong>歷程-簡化:</strong> 提供鷹架，如提供寫作大綱、公式提示卡。',
+                'process-reduce': '<strong>歷程-減量:</strong> 減少操作步驟，如實驗課由同儕協助準備材料，學生僅操作關鍵步驟。',
+                'process-breakdown': '<strong>歷程-分解:</strong> 延長學習時間，將一節課的內容分散到兩節課完成。',
+                'process-replace': '<strong>歷程-替代:</strong> 改變參與方式，如體育課的籃球賽，無法上場的學生可擔任計分員或裁判。',
+                'env-simplify': '<strong>環境-簡化:</strong> 降低環境干擾，如安排在安靜角落或使用隔板。',
+                'env-reduce': '<strong>環境-減量:</strong> 減少走動或轉換教室的次數。',
+                'env-breakdown': '<strong>環境-分解:</strong> 允許學生在感到疲憊時至資源教室或醫療中心休息。',
+                'env-replace': '<strong>環境-替代:</strong> 安排無障礙的學習環境，如將課程移至一樓教室或使用升降桌椅。',
+                'eval-simplify': '<strong>評量-簡化:</strong> 簡化題目文字或提供圖示輔助。',
+                'eval-reduce': '<strong>評量-減量:</strong> 減少題數或只考核心概念。',
+                'eval-breakdown': '<strong>評量-分解:</strong> 延長考試時間或分次考試。',
+                'eval-replace': '<strong>評量-替代:</strong> 改變評量方式，如筆試改為口頭報告、實作評量或建立檔案。'
+            };
+
+            // --- 函數定義 ---
+            function setupTabs(containerSelector, contentData) {
+                const container = document.querySelector(containerSelector);
+                if (!container) return;
+                
+                const tabs = container.querySelectorAll('.interactive-tab');
+                const contentDiv = document.getElementById(container.dataset.contentTarget);
+
+                function updateContent(tabKey) {
+                    if (contentDiv && contentData[tabKey]) {
+                        contentDiv.innerHTML = contentData[tabKey];
+                        tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabKey));
+                        initializeDynamicContent();
+                    }
+                }
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => updateContent(tab.dataset.tab));
+                });
+
+                const activeTab = container.querySelector('.interactive-tab.active');
+                if (activeTab) updateContent(activeTab.dataset.tab);
+            }
+            
+            function initializeDynamicContent() {
+                // ... (其他互動元素的初始化)
+
+                // BMI Calculator Logic
+                const calculateBmiBtn = document.getElementById('calculate-bmi');
+                if (calculateBmiBtn) {
+                    calculateBmiBtn.addEventListener('click', () => {
+                        const height = parseFloat(document.getElementById('bmi-height').value);
+                        const weight = parseFloat(document.getElementById('bmi-weight').value);
+                        const resultDiv = document.getElementById('bmi-result');
+
+                        if (height > 0 && weight > 0) {
+                            const bmi = (weight / ((height / 100) ** 2)).toFixed(2);
+                            let category = '';
+                            if (bmi < 18.5) category = '體重過輕';
+                            else if (bmi >= 18.5 && bmi < 24) category = '正常範圍';
+                            else if (bmi >= 24 && bmi < 27) category = '過重';
+                            else if (bmi >= 27 && bmi < 30) category = '輕度肥胖';
+                            else if (bmi >= 30 && bmi < 35) category = '中度肥胖';
+                            else category = '重度肥胖';
+                            resultDiv.innerHTML = `您的BMI是 ${bmi}<br>健康狀況為：${category}`;
+                            resultDiv.style.display = 'block';
+                        } else {
+                            resultDiv.innerHTML = '請輸入有效身高和體重';
+                            resultDiv.style.display = 'block';
+                        }
+                    });
+                }
+
+                // BMR Calculator Logic
+                const calculateBmrBtn = document.getElementById('calculate-bmr');
+                if(calculateBmrBtn) {
+                    calculateBmrBtn.addEventListener('click', () => {
+                        const gender = document.querySelector('input[name="gender"]:checked').value;
+                        const age = parseFloat(document.getElementById('bmr-age').value);
+                        const height = parseFloat(document.getElementById('bmr-height').value);
+                        const weight = parseFloat(document.getElementById('bmr-weight').value);
+                        const resultDiv = document.getElementById('bmr-result');
+
+                        if (age > 0 && height > 0 && weight > 0) {
+                            let bmr = 0;
+                            if (gender === 'male') {
+                                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+                            } else {
+                                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+                            }
+                            resultDiv.innerHTML = `您的一日基礎代謝率約為：<br>${bmr.toFixed(0)} 大卡`;
+                            resultDiv.style.display = 'block';
+                        } else {
+                             resultDiv.innerHTML = '請輸入有效年齡、身高和體重';
+                             resultDiv.style.display = 'block';
+                        }
+                    });
+                }
+                
+                document.querySelectorAll('.myth-buster-card').forEach(card => {
+                    card.addEventListener('click', () => card.classList.toggle('is-flipped'));
+                });
+
+                const toolInfoDisplay = document.getElementById('tool-info-display');
+                if (toolInfoDisplay) {
+                    document.querySelectorAll('.tool-icon').forEach(icon => {
+                        icon.addEventListener('click', () => {
+                            toolInfoDisplay.innerHTML = icon.dataset.info;
+                        });
+                    });
+                }
+                
+                const brailleDisplay = document.getElementById('braille-display');
+                if (brailleDisplay) {
+                    const dots = brailleDisplay.querySelectorAll('.braille-dot');
+                    document.querySelectorAll('.braille-btn').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const activeDots = button.dataset.dots.split(',');
+                            dots.forEach(dot => {
+                                dot.classList.toggle('active', activeDots.includes(dot.dataset.dot));
+                            });
+                        });
+                    });
+                }
+                
+                const visualPathwayInfo = document.getElementById('visual-pathway-info');
+                if(visualPathwayInfo) {
+                    const vfdLeft = document.getElementById('vfd-left');
+                    const vfdRight = document.getElementById('vfd-right');
+                    const defectStyles = {
+                        'none': { left: 'width: 0; height: 100%; left: 0; top: 0;', right: 'width: 0; height: 100%; left: 0; top: 0;' },
+                        'right-eye-blind': { left: 'width: 0; height: 100%; left: 0; top: 0;', right: 'width: 100%; height: 100%; left: 0; top: 0;' },
+                        'bitemporal-hemianopia': { left: 'width: 50%; height: 100%; left: 0; top: 0;', right: 'width: 50%; height: 100%; left: 50%; top: 0;' },
+                        'left-homonymous-hemianopia': { left: 'width: 50%; height: 100%; left: 0; top: 0;', right: 'width: 50%; height: 100%; left: 0; top: 0;' }
+                    };
+                    const defectInfos = {
+                        'right-eye-blind': '<strong>1. 右側視神經損傷：</strong><br>導致右眼視覺訊號完全無法傳出，造成右眼單眼全盲。',
+                        'bitemporal-hemianopia': '<strong>2. 視交叉中央損傷：</strong><br>壓迫到來自兩眼鼻側視網膜的神經纖維，導致雙眼的外側（顳側）視野缺損，稱為「兩顳側半盲」。',
+                        'left-homonymous-hemianopia': '<strong>3. 右側視束損傷：</strong><br>影響了來自右眼鼻側與左眼顳側的視野訊息，導致兩眼的左半邊視野皆缺損，稱為「左同側半盲」。'
+                    };
+                    document.querySelectorAll('.hotspot').forEach(spot => {
+                        spot.addEventListener('click', () => {
+                            const defectType = spot.dataset.defect;
+                            visualPathwayInfo.innerHTML = defectInfos[defectType];
+                            vfdLeft.style.cssText = defectStyles[defectType].left;
+                            vfdRight.style.cssText = defectStyles[defectType].right;
+                        });
+                    });
+                }
+            }
+            
+            // --- 互動邏輯初始化 ---
+            setupTabs('article[data-content-target="hi-strategy-content"]', hiStrategies);
+            setupTabs('article[data-content-target="vi-strategy-content"]', viStrategies);
+            setupTabs('article[data-content-target="pd-strategy-content"]', pdStrategies);
+
+            const matrixSection = document.getElementById('matrix-section');
+            if (matrixSection) {
+                const matrixDisplay = document.getElementById('matrix-display');
+                matrixSection.addEventListener('click', function(event) {
+                    const button = event.target.closest('.matrix-button');
+                    if (button) {
+                        const contentKey = button.dataset.matrixContent;
+                        if (matrixContent[contentKey]) {
+                            matrixDisplay.innerHTML = matrixContent[contentKey];
+                        }
+                    }
+                });
+            }
+
+            const insightButtons = document.querySelectorAll('.insight-button');
+            if (insightButtons.length > 0) {
+                const insightContents = document.querySelectorAll('.insight-content');
+                insightButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const targetInsight = button.dataset.insight;
+                        insightButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        insightContents.forEach(content => {
+                            content.classList.toggle('active', content.id === `insight-${targetInsight}`);
+                        });
+                    });
+                });
+            }
+            
+            const audiogramBtns = document.querySelectorAll('.audiogram-btn');
+            if (audiogramBtns.length > 0) {
+                const pointRight = document.getElementById('point-right');
+                const pointLeft = document.getElementById('point-left');
+                const audiogramInfo = document.getElementById('audiogram-info');
+                const audiogramLevels = {
+                    normal: { y: 15, title: "正常聽力 (0-25 dB)", desc: "可以聽到如下雨聲、鳥叫聲等細微聲音，正常交談沒有問題。" },
+                    mild: { y: 32.5, title: "輕度聽損 (26-40 dB)", desc: "對於輕聲或遠距離的對話感到困難，在安靜環境下交談尚可，但在噪音中會很吃力。" },
+                    moderate: { y: 49, title: "中度聽損 (41-55 dB)", desc: "在一般音量的對話中會頻繁漏聽字詞，需要對方重複或提高音量才能理解。" },
+                    severe: { y: 72, title: "重度聽損 (71-90 dB)", desc: "即使大聲說話也難以聽清，需要依賴助聽器才能進行有效溝通。" },
+                    profound: { y: 89, title: "極重度聽損 (91+ dB)", desc: "幾乎聽不見聲音，主要依賴視覺（唇語、手語）或人工耳蝸進行溝通。" }
+                };
+                audiogramBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const level = this.dataset.level;
+                        const data = audiogramLevels[level];
+                        audiogramBtns.forEach(b => b.classList.remove('bg-violet-600', 'text-white'));
+                        this.classList.add('bg-violet-600', 'text-white');
+                        audiogramInfo.innerHTML = `<h5 class="font-bold text-violet-700 mb-2">${data.title}</h5><p class="text-slate-700 text-sm">${data.desc}</p>`;
+                        pointRight.style.top = `${data.y}%`;
+                        pointLeft.style.top = `${data.y + 5}%`;
+                        pointRight.style.left = '50%';
+                        pointLeft.style.left = '55%';
+                        pointRight.classList.add('visible');
+                        pointLeft.classList.add('visible');
+                    });
+                });
+                document.querySelector('.audiogram-btn[data-level="normal"]').click();
+            }
+
+            // YouTube Player API Logic
+            var player;
+            var videoTimer;
+            window.onYouTubeIframeAPIReady = function() {
+                if(document.getElementById('player')){
+                    player = new YT.Player('player', {
+                        height: '100%',
+                        width: '100%',
+                        videoId: 'hZYUcaR1QVw',
+                        playerVars: { 'playsinline': 1, 'rel': 0 }
+                    });
+                }
+            }
+
+            const simButtons = document.querySelectorAll('.sim-button');
+            if (simButtons.length > 0) {
+                const simDesc = document.getElementById('sim-desc');
+                simButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        if (!player || typeof player.seekTo !== 'function') {
+                            simDesc.textContent = "影片播放器尚未準備好，請稍候...";
+                            return;
+                        }
+                        simButtons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        simDesc.textContent = button.dataset.desc;
+                        const start = parseInt(button.dataset.start, 10);
+                        const end = parseInt(button.dataset.end, 10);
+                        player.seekTo(start, true);
+                        player.playVideo();
+                        if (videoTimer) clearInterval(videoTimer);
+                        videoTimer = setInterval(() => {
+                            if (player.getCurrentTime() >= end) {
+                                player.pauseVideo();
+                                clearInterval(videoTimer);
+                            }
+                        }, 250);
+                    });
+                });
+            }
+
+            // Anatomy Train Interactive Logic
+            const trainSection = document.getElementById('anatomy-trains');
+            if(trainSection) {
+                const trainTabs = trainSection.querySelectorAll('.train-tab');
+                const trainContentDisplay = trainSection.querySelector('#train-content-display');
+                
+                const trainContentData = {
+                    'train-overview': `
+                        <h3 class="text-xl font-bold text-violet-800 mb-4">概觀與功能</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-violet-700">姿勢功能：</h4>
+                                <p class="text-slate-600">主要功能是伸展身體以維持直立。為應對全天候的支撐需求，此路線的肌肉富含慢縮、耐力型肌纖維；筋膜部分則由特別耐重的組織構成，如阿基里斯腱、薦粗隆韌帶及胸腰筋膜等。</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-violet-700">動作功能：</h4>
+                                <p class="text-slate-600">除了在膝關節處產生屈曲動作外，淺背線在身體其他部位主要負責伸展與過度伸展。在人類發展早期，它幫助胎兒仰頭、嬰兒抬頭探索世界，並在後續的成長階段中，為站立和行走建立穩定性。</p>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                               <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724479919663.jpg" alt="淺背線姿勢功能示意圖1" class="w-full h-auto object-cover">
+                               <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724479919661.jpg" alt="淺背線姿勢功能示意圖2" class="w-full h-auto object-cover">
+                               <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724479919662.jpg" alt="淺背線姿勢功能示意圖3" class="w-full h-auto object-cover">
+                            </div>
+                        </div>
+                    `,
+                    'train-toes-heel': `
+                        <h3 class="text-xl font-bold text-violet-800 mb-4">1. 從腳趾到腳跟</h3>
+                        <p class="text-slate-600">路線始於腳趾掌面，沿著足底筋膜與屈趾短肌，匯合成腱膜並連接至跟骨，形成穩定足弓的「弓弦」結構。足底筋膜的受限會向上影響，可能導致膕旁肌緊縮或腰椎過度前凸。</p>
+                        <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724479919664.jpg" alt="足底筋膜與淺背線的關係" class="w-full h-auto">
+                    `,
+                    'train-heel-knee': `
+                        <h3 class="text-xl font-bold text-violet-800 mb-4">2. 從腳跟到膝蓋</h3>
+                        <p class="text-slate-600">路線經由阿基里斯腱向上，連接腓腸肌與比目魚肌。跟骨在此如同支點，優化了跳躍時的力矩。當此段筋膜過緊，可能導致足部支撐失衡，進而引發連鎖性的姿勢代償。</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                            <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724479919665.jpg" alt="阿基里斯腱與小腿肌群示意圖1" class="w-full h-auto object-cover">
+                            <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724479919666.jpg" alt="阿基里斯腱與小腿肌群示意圖2" class="w-full h-auto object-cover">
+                            <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724479919667.jpg" alt="阿基里斯腱與小腿肌群示意圖3" class="w-full h-auto object-cover">
+                        </div>
+                    `,
+                    'train-knee-hip': `
+                        <h3 class="text-xl font-bold text-violet-800 mb-4">3. 從膝蓋到髖</h3>
+                        <p class="text-slate-600">當膝蓋伸直時，小腿後側的腓腸肌筋膜會與大腿後側的膕旁肌群（股二頭肌、半腱肌、半膜肌）功能性地連接起來，形成一個連續的張力帶，一路向上延伸至坐骨粗隆。</p>
+                        <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724479919668.jpg" alt="膕旁肌群與坐骨粗隆的連接" class="w-full h-auto">
+                    `,
+                    'train-hip-sacrum': `
+                        <h3 class="text-xl font-bold text-violet-800 mb-4">4. 從髖到薦椎</h3>
+                        <p class="text-slate-600">路線的延續並非透過肌肉，而是經由強韌的「薦粗隆韌帶」。這條韌帶從坐骨粗隆出發，延續膕旁肌的方向，向上連接至薦椎，如同懸吊橋的纜繩般穩定骨盆。</p>
+                        <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724480071471.jpg" alt="薦粗隆韌帶的角色" class="w-full h-auto">
+                    `,
+                    'train-sacrum-occiput': `
+                        <h3 class="text-xl font-bold text-violet-800 mb-4">5. 從薦椎到枕骨</h3>
+                        <p class="text-slate-600">從薦椎筋膜層開始，路線沿著脊柱兩側的「豎脊肌群」這條長長的軌道向上。這組深淺交織的肌群，負責伸展與穩定整個脊椎，最終抵達顱骨底部的枕骨嵴。</p>
+                        <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724480071472.jpg" alt="豎脊肌群的路徑" class="w-full h-auto">
+                    `,
+                    'train-occiput-ridge': `
+                        <h3 class="text-xl font-bold text-violet-800 mb-4">6. 從枕骨到框上嵴</h3>
+                        <p class="text-slate-600">路線的最後一段越過頭頂，經由帽狀腱膜（頭皮筋膜），連接枕肌與額肌，最終錨定在眉毛上方的額骨框上嵴。頭皮筋膜的張力狀態，會影響到整條淺背線的平衡。</p>
+                        <img src="https://www.mit-machining.com/store_image/dianjie/file/D1724480071474.jpg" alt="帽狀腱膜與頭皮筋膜" class="w-full h-auto">
+                    `,
+                    'train-stretch': `
+                        <h3 class="text-xl font-bold text-violet-800 mb-4">整體伸展與總結</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-semibold text-violet-700">淺背線整體伸展</h4>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+                                    <div class="p-3 bg-white rounded-lg"><h5 class="font-semibold text-violet-800">踩球</h5><p class="text-xs text-slate-600">放鬆足底筋膜的起點。</p></div>
+                                    <div class="p-3 bg-white rounded-lg"><h5 class="font-semibold text-violet-800">嬰兒式</h5><p class="text-xs text-slate-600">溫和伸展背部及腰部筋膜。</p></div>
+                                    <div class="p-3 bg-white rounded-lg"><h5 class="font-semibold text-violet-800">下犬式</h5><p class="text-xs text-slate-600">全面伸展整條淺背線。</p></div>
+                                    <div class="p-3 bg-white rounded-lg"><h5 class="font-semibold text-violet-800">船式</h5><p class="text-xs text-slate-600">核心與淺背線協調穩定。</p></div>
+                                    <div class="p-3 bg-white rounded-lg"><h5 class="font-semibold text-violet-800">梨式</h5><p class="text-xs text-slate-600">深度拉伸頸部至下背部。</p></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-violet-700">總結與臨床意涵</h4>
+                                <p class="text-slate-600">淺背線是維持人體直立姿勢、抵抗重力的主要筋膜路線。此路線的張力失衡，是許多姿勢問題的根源，例如踝關節活動度受限、膝過度伸直、骨盆前移、腰椎前凸等。透過對整條路線的評估與介入（如伸展、放鬆、訓練），可以更有效地處理局部問題，並改善整體的姿勢與動作模式。</p>
+                            </div>
+                        </div>
+                    `
+                };
+
+                function updateTrainContent(targetId) {
+                    if (trainContentDisplay && trainContentData[targetId]) {
+                        trainContentDisplay.innerHTML = trainContentData[targetId];
+                    }
+                }
+
+                trainTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        trainTabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        const targetId = tab.dataset.target;
+                        updateTrainContent(targetId);
+                    });
+                });
+
+                // Initial load
+                updateTrainContent('train-overview');
+            }
+
+
+            initializeDynamicContent();
+        });
+    </script>
+</body>
+</html>

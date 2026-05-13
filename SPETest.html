@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育專業成長測驗</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc;
+            color: #1f2937;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #1d4ed8;
+            border-bottom-color: #1d4ed8;
+        }
+        .question-card {
+            background-color: #FFFFFF;
+            border: 1px solid #e5e7eb;
+            transition: box-shadow 0.3s;
+            border-radius: 0.75rem;
+        }
+        .question-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .answer-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            background-color: #f9fafb;
+        }
+        .answer-panel.open {
+            max-height: 1000px; /* Increased for potentially longer explanations */
+        }
+        .option-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #f3f4f6;
+        }
+        input[type="radio"]:checked + .option-label {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+        .scenario-card {
+            background-color: #fff;
+            border-left: 5px solid #1d4ed8;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#1e3a8a]">特殊教育專業成長測驗</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#scenarios" class="nav-link font-medium pb-1">教學情境</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#scenarios" class="block py-2 nav-link text-center">教學情境</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#1e3a8a]">專業知能前測</h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-12">本測驗旨在評估您對特殊教育核心概念、法規、評量與教學策略的基礎知識。共50題，請選擇您認為最合適的答案，完成後點擊最下方的按鈕查看分數。</p>
+            
+            <div id="pre-test-container" class="space-y-4">
+            </div>
+        </section>
+
+        <section id="scenarios" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#1e3a8a]">不分階段教學情境探討</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">無論是幼兒園、國小、國中或高中，特教教師都會面臨相似的挑戰。本區塊提供跨階段的教學情境，並點出在不同階段中，相同原則下的差異化應用策略，旨在培養您的實務思考與遷移能力。</p>
+            <div class="space-y-8">
+                <div class="scenario-card p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-blue-800 mb-3">情境一：處理學生的固著行為與情緒問題</h3>
+                    <p class="mb-4 text-gray-700"><strong>案例描述：</strong>一位學生（可能是幼兒園的自閉症幼兒、國小的ADHD學生、或國中的情緒行為障礙學生）在活動轉換或面對非預期事件時，會出現固著行為（如反覆說同一句話、搖晃身體）並可能伴隨強烈的情緒反應（哭鬧、尖叫）。</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">通用核心策略</h4>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-sm text-gray-600">
+                                <li><strong>建立可預測的結構化環境：</strong>使用視覺化時間表、建立清晰的活動常規。</li>
+                                <li><strong>事先預告與準備：</strong>在活動轉換前給予口頭或視覺提示。</li>
+                                <li><strong>教導情緒調節策略：</strong>設立冷靜角、教導呼吸放鬆法、使用情緒溫度計。</li>
+                                <li><strong>功能性行為評量(FBA)：</strong>分析行為背後的功能（是逃避？還是尋求安撫？），並教導適當的替代行為。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">各階段差異化應用</h4>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-sm text-gray-600">
+                                <li><strong>幼兒園：</strong>使用實物或照片時間表；冷靜角佈置大量感官安撫物件；替代行為可以是「用圖卡指『我需要抱抱』」。</li>
+                                <li><strong>國小：</strong>使用文字與圖示並存的時間表；引導學生使用情緒臉譜卡表達感受；替代行為可以是「用口語說『我需要休息一下』」。</li>
+                                <li><strong>國高中：</strong>使用行事曆APP或個人手冊規劃行程；引導學生進行認知行為思考（CBT），分析想法與情緒的關聯；替代行為可以是「主動向老師要求短暫離開現場調整情緒」。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                 <div class="scenario-card p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-blue-800 mb-3">情境二：支持有書寫困難的學生</h3>
+                    <p class="mb-4 text-gray-700"><strong>案例描述：</strong>一位學生（可能是國小的學習障礙學生、國中的肢體障礙學生、或高中的自閉症伴隨動作協調困難學生）在書寫作業或筆記時，速度緩慢、字跡潦草、且容易感到疲勞與挫折。</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">通用核心策略</h4>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-sm text-gray-600">
+                                <li><strong>提供多元的表達方式(UDL原則)：</strong>允許學生使用非書寫的方式完成任務。</li>
+                                <li><strong>善用科技輔具：</strong>導入語音輸入、打字、拍照等科技來替代或輔助書寫。</li>
+                                <li><strong>調整作業與評量：</strong>簡化或減量書寫任務，或延長作答時間。</li>
+                                <li><strong>提供書寫鷹架：</strong>給予筆順提示、重點劃記的筆記影本、或填充式的學習單。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">各階段差異化應用</h4>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-sm text-gray-600">
+                                <li><strong>國小：</strong>允許使用注音符號或圖畫輔助表達；提供特製握筆器；作業可採口頭報告或實作方式。</li>
+                                <li><strong>國中：</strong>教導使用電腦打字或平板語音輸入法完成報告；提供教師的簡報檔作為筆記基礎；考試可申請代為謄寫或電腦作答。</li>
+                                <li><strong>高中：</strong>教導使用心智圖軟體或數位筆記APP來整理重點；鼓勵使用錄音筆記錄課堂內容；書面報告可與老師協商，以口頭報告或影片製作等形式替代。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#1e3a8a]">專業知能後測</h2>
+                 <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-12">本測驗旨在評估您在學習後的知識應用與情境判斷能力。題目難度較高，測重於策略整合與差異化思考。共50題，請選擇答案，完成後點擊最下方的按鈕查看分數。</p>
+
+            <div id="post-test-container" class="space-y-4">
+            </div>
+        </section>
+        
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#1d4ed8] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#2563eb] transition-colors duration-300">
+                計算分數並比較
+            </button>
+        </div>
+
+    </main>
+    
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p class="mb-4 text-gray-200">特殊教育專業成長測驗</p>
+            <a href="mailto:pasta-layoff-1r@icloud.com" class="inline-block bg-blue-600 text-white font-bold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300">
+                聯繫製作者
+            </a>
+            <p class="text-sm text-gray-400 mt-4">©本測驗內容整合自多份特教導論課程資料與113年教師資格考試題，僅供教學與學術交流目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="modal-container bg-white w-full max-w-lg rounded-lg shadow-xl p-8 transform -translate-y-12">
+            <h3 class="text-2xl font-bold text-center mb-4 text-gray-800">測驗結果比較</h3>
+            <div class="chart-container h-64 mx-auto mb-6">
+                <canvas id="score-chart"></canvas>
+            </div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 50</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 50</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const allQuestions = [
+                // Pre-Test Questions (50) - A mix of foundational and slightly more complex questions
+                // Q1-10: Basic Concepts & Laws (from SPET01)
+                { type: 'pre', question: "1. 依據現行特殊教育法規，學校應以團隊合作方式為特殊教育學生訂定相關計畫。下列哪一項配對不適切？", options: ["(A) 學前教育階段身心障礙幼兒：個別化家庭服務計畫", "(B) 國民教育階段身心障礙學生：個別化教育計畫", "(C) 高級中等以下學校資賦優異學生：個別輔導計畫", "(D) 高等教育階段身心障礙學生：個別化支持計畫"], answer: "A", explanation: "根據《特殊教育法》第30條，學前教育階段應訂定「個別化教育計畫」(IEP)，而非個別化家庭服務計畫(IFSP)。IFSP是早期療育體系的概念，雖然精神相通，但在我國特教法規中，學前特教仍以IEP為主體，並應邀請家長參與。" },
+                { type: 'pre', question: "2. 主張「障礙是社會環境中的物理、制度與態度障礙所造成」，並將焦點從「改變學生」轉向「改變環境以支持學生」的是下列哪一種模式？", options: ["(A) 醫療模式", "(B) 社會模式", "(C) 慈善模式", "(D) 整合模式"], answer: "B", explanation: "社會模式的核心觀點是，個體的損傷本身不是問題，真正的障礙是社會未能提供適當的設施、服務與接納的態度所造成的。" },
+                { type: 'pre', question: "3. 奠定全球融合教育理念的重要里程碑，並明確指出具備融合精神的普通學校是「對抗歧視態度、創造友善社區、建立包容社會最有效的工具」的國際文件是？", options: ["(A) 身心障礙者權利公約 (CRPD)", "(B) 薩拉曼卡宣言", "(C) 融合指標", "(D) 世界人權宣言"], answer: "B", explanation: "《薩拉曼卡宣言》是1994年由聯合國教科文組織(UNESCO)發布的，是推動融合教育最具影響力的國際文件之一。" },
+                { type: 'pre', question: "4. 老師為了讓上課會出現打同學行為的小志安靜坐好，只要小志有坐在椅子上，老師就會看著他並讚美他。這位老師使用了何種策略？", options: ["(A) 消弱", "(B) 負增強", "(C) 區別性增強中的替代行為增強 (DRA)", "(D) 非後效增強"], answer: "D", explanation: "老師並非在小志「沒有」打人時才給予讚美，而是在他表現出「坐在椅子上」這個行為時就給予讚美。這種旨在降低問題行為動機的策略，稱為非後效增強。" },
+                { type: 'pre', question: "5. 在特殊教育的法律原則中，「在滿足學生特殊需求的前提下，應盡可能讓特殊需求學生與普通學生一同在普通教育環境中學習」指的是下列何者？", options: ["(A) 零拒絕", "(B) 免費適性公立教育 (FAPE)", "(C) 最少限制環境 (LRE)", "(D) 程序保障"], answer: "C", explanation: "最少限制環境 (LRE) 強調教育安置應追求最大程度的融合，並提供一個「安置連續體」以滿足個別需求。" },
+                { type: 'pre', question: "6. 有關正向行為支持(PBS)的敘述，下列何者有誤？", options: ["(A) 視行為問題具有溝通意義", "(B) 行為介入策略著重在提升個體生活品質", "(C) 視行為問題為個體和環境互動的結果", "(D) 先擬訂介入計畫，再進行功能評量"], answer: "D", explanation: "正向行為支持(PBS)的標準流程是「先」進行功能性評量(FBA)來了解行為原因，「再」根據評量結果設計介入計畫。選項(D)的順序顛倒。" },
+                { type: 'pre', question: "7. 關於個別化教育計畫(IEP)的團隊成員，下列敘述何者最為精確？", options: ["(A) 主要由特教老師和行政人員決定即可", "(B) 學生本人因為年紀小，不需參與", "(C) 家長是團隊中不可或缺的平等夥伴", "(D) 普通班老師只負責提供資料，不需參與目標擬定"], answer: "C", explanation: "IEP是團隊合作的過程，家長的角色至關重要。特教法規保障家長作為團隊平等成員的權利，並應邀請所有相關人員共同參與。" },
+                { type: 'pre', question: "8. 在專業團隊合作模式中，團隊成員各自獨立評估，彼此溝通較少，像是許多專家「平行」地為同一位學生服務。此模式稱為？", options: ["(A) 多專業合作", "(B) 專業間合作", "(C) 跨專業合作", "(D) 單一專業模式"], answer: "A", explanation: "多專業合作模式的特點是專業分工清楚，但整合性較低，容易造成服務的片段化。" },
+                { type: 'pre', question: "9. 某學習障礙學生參加學校考試時，需要試題報讀的服務。這最可能是因為他在哪方面有主要困難？", options: ["(A) 聽覺理解", "(B) 後設認知", "(C) 文字書寫", "(D) 文字識讀"], answer: "D", explanation: "試題報讀是將書面文字轉換為語音，主要目的是協助在「文字解碼」或「識讀」方面有困難的學生理解題意。" },
+                { type: 'pre', question: "10. 老師依據腦性麻痺學生小馨的肢體動作能力，調整其數學測驗的題目及延長作答時間。這符合哪些考試服務？", options: ["(A) 輔具服務、試場服務", "(B) 試場服務、作答方式調整服務", "(C) 試題調整服務、作答方式調整服務", "(D) 輔具服務、試題調整服務"], answer: "C", explanation: "調整測驗題目的形式屬於「試題調整服務」；延長作答時間則屬於「作答方式調整服務」。" },
+                // Q11-20: Learning & Cognitive Disabilities (from SPET02)
+                { type: 'pre', question: "11. 小傑是三年級的注意力缺陷過動症學生，專注時間短。下列哪一項教學措施較為適當？", options: ["(A) 忽略其分心行為", "(B) 提供分段學習及活動操作機會", "(C) 反覆教導上課規則", "(D) 安排他到教室後面獨立作業"], answer: "B", explanation: "針對ADHD學生注意力短暫的核心特質，有效的教學調整是將任務分解（分段學習），並提供動手操作的機會，以維持其學習動機與專注力。" },
+                { type: 'pre', question: "12. 多數閱讀障礙的學生在進行文字解碼的歷程中，會呈現視覺表徵(形)轉換成聲韻表徵(音)的對應困難。要求學生看圖片後快速說出一系列物品名稱的任務，主要在評量學生哪一項認知的核心缺陷？", options: ["(A) 視覺記憶", "(B) 快速唸名", "(C) 語音覺識", "(D) 口語表達"], answer: "B", explanation: "快速自動化命名(RAN)是評估閱讀障礙（特別是流暢性困難）的核心指標之一。此任務評量的是個體從長期記憶中快速提取語音訊息並表達出來的能力。" },
+                { type: 'pre', question: "13. 老師在教室安排工作角，桌上貼有時間表，小安若能依時間表完成任務，即可獲得獎勵。這最符合下列哪項教學法？", options: ["(A) 工作分析法", "(B) 直接教學模式", "(C) 建構式教學法", "(D) 結構式教學法 (TEACCH)"], answer: "D", explanation: "結構式教學法(TEACCH)是針對自閉症學生設計的教學模式，其核心要素包含：視覺化的物理環境安排、視覺化的時間表、視覺化的工作系統以及可預期的常規。" },
+                { type: 'pre', question: "14. 某位老師在進行國語文教學時，同時提供了課文的概念圖、紙本與電子形式的翻譯，並播放課文影片。此作法最符合通用設計學習(UDL)的哪一項原則？", options: ["(A) 提供多元的表徵方式", "(B) 提供多元的表達與行動方式", "(C) 提供多元的參與方式", "(D) 提供最少限制環境"], answer: "A", explanation: "UDL的第一原則是提供多元的表徵方式(Representation)，意指用不同的方式呈現相同的資訊，以適應不同學習者的感知與理解需求。" },
+                { type: 'pre', question: "15. 老師教導身心障礙學生使用口訣計算四則運算，從老師示範、學生跟著唸，到最後學生用內在語言指導自己。此教學策略稱為？", options: ["(A) 自我調整", "(B) 自我監控", "(C) 自我控制", "(D) 自我教導"], answer: "D", explanation: "自我教導(Self-instruction)的經典流程，就是將外在的示範與鷹架，逐步內化為學生自己的內在語言與思考過程。" },
+                { type: 'pre', question: "16. 智能障礙鑑定的兩大必要基準為何？", options: ["(A) 智力顯著低下、學業成就低落", "(B) 智力顯著低下、適應行為有顯著困難", "(C) 適應行為困難、人際關係不佳", "(D) 學業成就低落、需要特殊教育服務"], answer: "B", explanation: "根據鑑定辦法，智能障礙的鑑定必須同時考量「心智功能」（智力）與「適應行為」兩大層面，兩者皆須有顯著困難。" },
+                { type: 'pre', question: "17. 針對ADHD學生的「執行功能」困難，下列何者不是常見的教學支持策略？", options: ["(A) 提供視覺化的時間表與流程圖", "(B) 將複雜任務分解成小步驟", "(C) 增加口頭提醒的頻率與音量", "(D) 教導學生使用檢核表進行自我監控"], answer: "C", explanation: "ADHD學生的困難常在於處理和記憶口頭訊息，單純增加口頭提醒的頻率和音量可能效果不彰，甚至造成干擾。提供視覺化、結構化的支持才是更有效的策略。" },
+                { type: 'pre', question: "18. 學習障礙的「個人內在能力有顯著差異」指的是什麼？", options: ["(A) 學生的身高與體重有顯著差異", "(B) 學生的學業表現與其整體智力水準有預期外的顯著落差", "(C) 學生的家庭背景與學校環境有顯著差異", "(D) 學生的興趣與學業表現有顯著差異"], answer: "B", explanation: "學習障礙的核心特徵之一是「預期外的學業失敗」，即學生的智力在正常範圍，但在特定的學習領域（如閱讀、書寫）表現卻遠低於其智力所應有的水準，形成顯著的內在能力差距。" },
+                { type: 'pre', question: "19. 老師在教導智能障礙學生生活技能時，將「刷牙」這個動作分解為「拿起牙刷、擠上牙膏、刷左邊牙齒...」等數個小步驟來依序教導。此方法稱為？", options: ["(A) 工作分析法", "(B) 合作學習法", "(C) 探究式學習", "(D) 遊戲本位學習"], answer: "A", explanation: "工作分析法(Task Analysis)是教導複雜技能給智能障礙或自閉症學生的常用策略，其核心是將一個多步驟的技能，分解成數個更小、更具體、可執行的單一步驟，再逐一教導。" },
+                { type: 'pre', question: "20. 對於閱讀障礙學生，下列哪一項教學策略是針對其最核心的「聲韻處理」困難進行介入？", options: ["(A) 提供放大字體的課本", "(B) 進行部首、識字教學", "(C) 進行音素覺識、拼音解碼的教學活動", "(D) 讓學生反覆抄寫生字"], answer: "C", explanation: "研究指出，大多數閱讀障礙的核心困難源於語言系統中的「聲韻處理缺陷」。因此，直接針對音素覺識（辨識、操作語言中的最小聲音單位）、拼音、解碼等聲韻能力的教學，是最根本的介入策略。" },
+                // Q21-30: Behavioral, Social & Communication Disabilities (from SPET03)
+                { type: 'pre', question: "21. 某生為自閉症學生，在數理方面有卓越的表現，但上課時會對感興趣的內容滔滔不絕。下列哪些措施有助於改善該生在校的適應狀況？ 甲、提供區分性教學 乙、安排社會技巧課程 丙、給予視覺提示 丁、要求過度矯正", options: ["(A) 甲乙丙", "(B) 甲乙丁", "(C) 甲丙丁", "(D) 乙丙丁"], answer: "A", explanation: "此題考驗對自閉症學生的多元支持策略。甲(區分性教學)滿足其優勢能力需求；乙(社會技巧課程)和丙(視覺提示)針對其社交溝通困難提供支持，皆為實證有效的策略。丁(過度矯正)屬於懲罰策略，不符合正向行為支持的精神。" },
+                { type: 'pre', question: "22. 老師告訴小花因為他沒有完成回家作業，因此今天下課時間不能出去玩。張老師使用了何種策略？", options: ["(A) 消弱", "(B) 反應代價", "(C) 過度矯正", "(D) 後效練習"], answer: "B", explanation: "反應代價(Response Cost)是一種負向懲罰，指當個體出現不當行為時，移除他所擁有的增強物或權利。在此情境中，「下課時間出去玩」是學生擁有的權利，因為「沒有完成作業」這個行為而被剝奪。" },
+                { type: 'pre', question: "23. 針對適合泛自閉症(ASD)學生的評量方法，下列敘述何者正確？ 甲、建議多使用紙筆評量 乙、可由小團體活動中進行觀察 丙、刻板動作不能做為觀察指標 丁、需要整體且持續地進行評量", options: ["(A) 甲乙", "(B) 甲丙", "(C) 乙丁", "(D) 丙丁"], answer: "C", explanation: "乙、自閉症學生的社交困難在真實的團體互動情境中尤其明顯。丁、自閉症的核心障礙是持續且廣泛的，評量時不能只看單一時間點或情境。甲、紙筆評量未必能反映其真實能力。丙、刻板行為的「頻率、強度與場合不適切性」是重要觀察指標。" },
+                { type: 'pre', question: "24. 擴增與替代性溝通系統(AAC)中，不需任何外在工具，運用自己的身體來溝通的方式（如手語、表情）屬於下列何者？", options: ["(A) 無輔具式 (Unaided)", "(B) 低科技輔具 (Low-tech)", "(C) 高科技輔具 (High-tech)", "(D) 輔助性溝通 (Aided)"], answer: "A", explanation: "AAC系統分為無輔具式（不需工具）和輔具式（需要工具）。手語、臉部表情、肢體動作等都屬於無輔具式溝通。" },
+                { type: 'pre', question: "25. 全校性正向行為支持(SW-PBIS)的三級預防模式中，針對少數有嚴重或持續性問題行為的學生，提供個別化、密集介入的層級是？", options: ["(A) 初級預防 (Primary Prevention)", "(B) 次級預防 (Secondary Prevention)", "(C) 三級預防 (Tertiary Prevention)", "(D) 全面預防 (Universal Prevention)"], answer: "C", explanation: "三級預防是針對約5%需求最密集的學生，提供基於FBA的個別化行為支持計畫，屬於最高強度的介入。" },
+                { type: 'pre', question: "26. 老師用社交故事教導自閉症學生「如何參與下課時的遊戲」，故事中包含描述情境、他人想法以及建議的合宜行為。此策略主要在處理學生的何種核心困難？", options: ["(A) 感覺統合失調", "(B) 執行功能缺陷", "(C) 心智理論困難", "(D) 固著興趣"], answer: "C", explanation: "心智理論(Theory of Mind)是指理解他人有不同的想法、信念和意圖的能力。自閉症學生在此方面常有困難。社交故事正是透過具體的文字描述，來幫助他們理解社交情境與他人觀點。" },
+                { type: 'pre', question: "27. 某位學生因焦慮而有拔頭髮的行為，老師教導他當感到焦慮時，可以改為捏壓力球。此策略屬於？", options: ["(A) 前事控制策略", "(B) 後果處理策略", "(C) 替代行為教學", "(D) 技能缺陷補救"], answer: "C", explanation: "替代行為教學的核心是，教導一個與問題行為「功能相同」（此例中同為抒發焦慮），但「行為形式」更具適應性的新行為（捏壓力球取代拔頭髮）。" },
+                { type: 'pre', question: "28. 語言治療師在自然情境中，一邊跟學生玩，一邊示範在溝通版面上指出對應的核心詞彙。此教學模式稱為？", options: ["(A) 離散單元教學 (DTT)", "(B) 輔助語言示範 (Aided Language Stimulation)", "(C) 圖片兌換溝通系統 (PECS)", "(D) 直接教學"], answer: "B", explanation: "輔助語言示範(Aided Language Stimulation, ALS)是教導AAC的重要策略，由溝通夥伴在自然的互動中，一邊說話，一邊在學生的溝通系統上指出相應的符號，為學生示範如何使用該系統來溝通。" },
+                { type: 'pre', question: "29. 處理情緒行為障礙學生的危機行為時，下列何者是「降溫策略」(De-escalation)的首要原則？", options: ["(A) 立即給予嚴厲的口頭斥責，建立權威", "(B) 堅持要求學生服從指令，不容妥協", "(C) 保持自身冷靜，使用同理心傾聽，避免權力鬥爭", "(D) 立即將學生帶離現場，進行隔離"], answer: "C", explanation: "降溫策略的關鍵在於避免火上加油。教師自身的冷靜與同理是第一步，這有助於緩和學生的情緒，創造溝通與解決問題的空間。權力鬥爭只會讓衝突升級。" },
+                { type: 'pre', question: "30. 針對一位沒有口語能力的重度障礙學生，教育的最終目標最可能著重於什麼？", options: ["(A) 學習抽象的學科知識", "(B) 提升生活品質與社區參與能力", "(C) 訓練其獨立完成所有生活自理", "(D) 培養其成為專業運動員"], answer: "B", explanation: "對於重度障礙學生，教育的核心目標應是功能性的，旨在提升其「生活品質」，包括增進其溝通能力、自我選擇能力、社區參與及休閒娛樂等，以促進其有尊嚴、有意義的生活。" },
+                // Q31-40: Sensory, Physical & Health Disabilities (from SPET04)
+                { type: 'pre', question: "31. 針對功能性視覺評估和視覺功能評估，下列敘述何者正確？", options: ["(A) 視覺功能評估偏重教學運用", "(B) 兩者不具顯著關係", "(C) 功能性視覺評估之後可以掌握學生日常生活的視覺表現", "(D) 功能性視覺評估能針對室內和室外視覺的表現進行了解"], answer: "D", explanation: "「功能性視覺評估」是由教育人員在學生的自然生活情境中，評估他「如何運用」其視覺能力來完成任務，其結果直接用於教學與輔導，因此(D)是正確的描述。而「視覺功能評估」則較偏向醫療端，由醫師評估視力、視野等生理數據。" },
+                { type: 'pre', question: "32. 劉老師班上有一位配戴助聽器的重度聽覺障礙學生，下列哪一項是較為優先的教學調整措施？", options: ["(A) 安排低噪音的教室位置、教室加裝隔音板", "(B) 安排低噪音的教室位置、使用調頻系統", "(C) 講課時盡量誇大嘴型、教室加裝隔音板", "(D) 講課時盡量誇大嘴型、使用調頻系統"], answer: "B", explanation: "對於聽障生而言，最重要的兩件事是「降低噪音」與「提升訊號」。安排遠離噪音源的座位是降低噪音的直接方法。使用調頻(FM)系統則是將老師的聲音直接傳送到學生耳中，大幅提升訊號清晰度，這是目前最關鍵且有效的聽覺輔具策略。" },
+                { type: 'pre', question: "33. 視障教育中，除了學科外，還需學習定向行動、輔助科技、社交技巧、獨立生活技能等九大領域課程。此課程稱為？", options: ["(A) 功能性課程", "(B) 補救性課程", "(C) 擴充核心課程 (ECC)", "(D) 社區本位課程"], answer: "C", explanation: "擴充核心課程(Expanded Core Curriculum, ECC)是視障教育的獨特之處，旨在彌補視障學生因視覺限制而無法透過「偶然學習」獲得的經驗與技能。" },
+                { type: 'pre', question: "34. 針對肢體障礙與健康障礙學生，教育支持的核心需求在於？", options: ["(A) 提升學業成績", "(B) 矯正不良行為", "(C) 暢通無礙的參與(Access)", "(D) 發展特殊才藝"], answer: "C", explanation: "對於肢體與健康障礙學生，最大的挑戰往往來自環境的障礙。因此，提供無障礙的學習環境、課程、教材與活動，確保他們能「暢通無礙地參與」所有教育活動，是教育支持的首要之務。" },
+                { type: 'pre', question: "35. 老師教導肢體障礙學生使用特製的鍵盤打字來完成作文。此作法屬於課程調整矩陣中的哪一項？", options: ["(A) 學習內容-替代", "(B) 學習歷程-替代", "(C) 學習環境-替代", "(D) 學習評量-替代"], answer: "D", explanation: "此處的「作文」是一種評量方式。讓學生用打字替代手寫，是改變了「評量的方式」，因此屬於「學習評量-替代」。如果是在平時的課堂練習，則較偏向「學習歷程-替代」。" },
+                { type: 'pre', question: "36. 聽覺輔助科技(ALDs)如FM系統，其核心原理是？", options: ["(A) 將所有聲音都放大", "(B) 過濾掉老師的聲音", "(C) 提升訊號-噪音比(SNR)", "(D) 將聲音轉為文字"], answer: "C", explanation: "FM系統的核心原理是將主要聲源（如老師的聲音）透過無線麥克風直接傳送到學生的接收器，大幅減少距離、背景噪音和迴音的干擾，從而顯著提升目標聲音（訊號）相對於環境雜音（噪音）的比例。" },
+                { type: 'pre', question: "37. 定向行動訓練(O&M)中的「定向」(Orientation)指的是什麼？", options: ["(A) 學習使用手杖的技巧", "(B) 學習安全過馬路的方法", "(C) 運用剩餘感官建立心理地圖，知道「我在哪裡」", "(D) 學習搭乘大眾交通工具"], answer: "C", explanation: "定向(Orientation)是心智層面的能力，指運用聽覺、觸覺等剩餘感官來感知環境線索，並在心中建立一個空間認知地圖，了解自身與環境的相對位置。而「行動」(Mobility)才是指安全移動的技巧。" },
+                { type: 'pre', question: "38. 一位因心臟病而容易疲勞的身體病弱學生，下列哪項課程調整最為適切？", options: ["(A) 要求他所有活動都必須跟上同學", "(B) 免除他所有體育活動", "(C) 允許他在感到疲憊時至保健室休息，並提供彈性的作業繳交期限", "(D) 讓他獨自一人在教室角落上課，避免被打擾"], answer: "C", explanation: "對於身體病弱學生，最重要的支持是能量的保存與彈性的安排。允許其適度休息，並在作業、評量上給予彈性，能幫助他兼顧健康與學業。完全免除或隔離都不是理想的作法。" },
+                { type: 'pre', question: "39. 老師為低視能學生提供放大字體的課本與擴視機。這屬於哪一類支持服務？", options: ["(A) 適性教材服務", "(B) 教育輔具服務", "(C) 學習人力協助", "(D) 校園無障礙環境"], answer: "B", explanation: "擴視機、點字機、助聽器等設備，都屬於「教育輔具」，旨在協助學生克服因障礙所造成的學習困難。放大字體的課本則較偏向「適性教材」。但以選項組合來看，輔具服務是核心。" },
+                { type: 'pre', question: "40. 一位學生因腦性麻痺導致手部張力過高，無法順利握筆。下列哪項輔具最能直接協助他？", options: ["(A) 錄音筆", "(B) 特製的握筆器或加粗的筆桿", "(C) 溝通板", "(D) 傾斜的書寫板"], answer: "B", explanation: "針對手部抓握困難的問題，提供能增加穩定性、減少所需力氣的握筆器或加粗筆桿，是最直接的物理性支持策略。" },
+                // Q41-50: Gifted, Severe Disabilities & Systemic Support (from SPET05 & 06)
+                { type: 'pre', question: "41. 學生同時具有「資賦優異」與「身心障礙」兩種特質，稱為？", options: ["(A) 學習困難 (Learning Difficulty)", "(B) 雙重殊異 (Twice-exceptional, 2e)", "(C) 多重障礙 (Multiple Disabilities)", "(D) 發展遲緩 (Developmental Delay)"], answer: "B", explanation: "雙重殊異(2e)學生因其優異表現可能掩蓋障礙，或障礙過於顯著而讓天賦被忽視（遮蔽效應），是鑑定與輔導上的一大挑戰。" },
+                { type: 'pre', question: "42. 對於重度與多重障礙學生，即使無法獨立完成活動，仍應創造機會讓他參與活動的一部分。此原則稱為？", options: ["(A) 全面參與原則", "(B) 功能性原則", "(C) 社區本位原則", "(D) 部分參與原則"], answer: "D", explanation: "部分參與原則(Principle of Partial Participation)強調，參與本身即有其價值。即使學生只能完成一個複雜活動中的一兩個步驟，也應給予支持讓他參與，以增進其學習動機與社會互動。" },
+                { type: 'pre', question: "43. 依據《特殊教育法》，學校應提供的八大支持服務系統中，不包含下列何者？", options: ["(A) 復健服務", "(B) 家庭支持", "(C) 法律訴訟服務", "(D) 適應體育"], answer: "C", explanation: "特教法第28條明訂八大支持服務，包含教育輔具、適性教材、人力協助、復健服務、家庭支持、適應體育、無障礙環境及其他服務。法律訴訟服務並非法定的支持項目。" },
+                { type: 'pre', question: "44. 老師在處理親師衝突時，下列何種作法最不恰當？", options: ["(A) 保持冷靜，先傾聽家長的訴求", "(B) 堅持自己的專業權威，告訴家長老師才是對的", "(C) 尋找雙方的共同目標（都是為了孩子好）", "(D) 客觀陳述事實，避免情緒化字眼"], answer: "B", explanation: "親師溝通是合作關係，而非權力鬥爭。堅持己見、強調權威只會激化對立，無法解決問題。建立信任與合作的基礎是有效溝通的關鍵。" },
+                { type: 'pre', question: "45. 「發展遲緩」這個鑑定類別，主要適用於哪個年齡階段的兒童？", options: ["(A) 0-3歲", "(B) 未滿6歲", "(C) 6-12歲", "(D) 12-18歲"], answer: "B", explanation: "根據鑑定辦法第14條，發展遲緩指未滿六歲之兒童，在各發展領域有顯著落後，但其障礙類別尚無法確定者。滿六歲後，需重新鑑定並歸入其他更明確的障礙類別。" },
+                { type: 'pre', question: "46. 老師為一位體育課無法跑跳的肢體障礙學生，設計一套個人的上肢肌力訓練計畫。此作法最符合適應體育的哪個調整原則？", options: ["(A) 教學風格 (Teaching)", "(B) 規則 (Rules)", "(C) 環境 (Environment)", "(D) 器材 (Equipment)"], answer: "A", explanation: "此處老師調整的是「教學的內容與方法」，為學生設計了個別化的訓練計畫，這屬於教學風格與內容的調整，以確保學生仍能達成促進健康體適能的課程目標。" },
+                { type: 'pre', question: "47. 一位教師面對融合教育的挑戰，感到壓力巨大。下列何者不是有效的壓力調適與專業成長策略？", options: ["(A) 尋求同事或專業社群的支持與經驗交流", "(B) 持續參加特教相關研習，增進專業知能", "(C) 為了學生，犧牲所有個人休息時間，全心投入工作", "(D) 學習正向思考，並建立工作與生活的界線"], answer: "C", explanation: "過度的自我犧牲容易導致職業倦怠(burnout)，反而無法長期為學生提供高品質的教育。建立合理的工作界線，照顧好自己的身心健康，才是永續的專業之道。" },
+                { type: 'pre', question: "48. 2e學生的「遮蔽效應」(Masking Effect)指的是？", options: ["(A) 學生會用面具遮住自己的臉", "(B) 學校會刻意隱藏學生的特殊需求", "(C) 學生的優異表現可能掩蓋其學習困難，或其障礙也可能讓天賦被忽視", "(D) 學生喜歡在陰暗的角落學習"], answer: "C", explanation: "遮蔽效應是2e學生輔導上的核心挑戰。資優特質與障礙特質相互掩蓋，導致學生可能被誤解為「不夠努力」或「潛力不足」，使其無法獲得適當的支持。" },
+                { type: 'pre', question: "49. 學校的「特殊教育推行委員會」最主要的功能是什麼？", options: ["(A) 專門負責鑑定學生資格", "(B) 審議與推動全校的特殊教育工作與計畫", "(C) 專門處理家長申訴案件", "(D) 負責採購所有特教輔具"], answer: "B", explanation: "特推會是學校層級的特教運作核心，由校長擔任主委，負責審議全校的特教相關計畫（如IEP）、協調校內資源、處理相關行政事宜，確保特教服務的順利推行。" },
+                { type: 'pre', question: "50. 老師為學生設計的IEP目標是「能獨立完成上學準備」，並將其分解為「自己穿衣服」、「自己刷牙」、「自己整理書包」等。此作法最符合下列何種課程設計取向？", options: ["(A) 學術取向", "(B) 發展取向", "(C) 功能性取向", "(D) 補救教學取向"], answer: "C", explanation: "功能性取向的課程設計，強調教學內容應與學生的日常生活直接相關，旨在培養能實際應用於生活中的技能，以提升其獨立生活與社區適應的能力。" },
+            ];
+
+            const postTestQuestions = [
+                // Post-Test Questions (50) - More situational, integrative, and subtle distinction questions
+                // Q1-10: Advanced Concepts & Application
+                { type: 'post', question: "1. 一位國中七年級學生為語文資優伴隨自閉症(2e)。他課堂發言有深度，但分組討論時常因堅持己見而與同學衝突。下列哪一項整合性支持方案最為全面且適當？", options: ["(A) 僅提供他更艱深的閱讀材料，並讓他獨立研究以避免衝突。", "(B) 僅安排他參加社交技巧團體，改善人際關係。", "(C) 僅使用結構化教學，提供視覺提示讓他遵守規則。", "(D) 結合充實活動、社交故事與情意輔導，同時兼顧其優勢才能與弱勢需求。"], answer: "D", explanation: "對於雙重特殊需求(2e)學生，有效的支持必須是整合性的。方案應包含：(1)發展其優勢才能（如提供充實活動）；(2)針對其障礙提供具體策略（如用社交故事教導觀點取替）；(3)處理其內在的情意需求（如透過情意輔導處理其挫折感）。選項(D)是唯一涵蓋這三面向的全面方案。" },
+                { type: 'post', question: "2. 《薩拉曼卡宣言》與「社會模式」皆強調環境的重要性。此觀點如何挑戰傳統的特殊教育思維？", options: ["(A) 它強化了障礙是個人缺陷的觀點。", "(B) 它認為特殊教育應在隔離的環境中進行才最有效。", "(C) 它將問題的焦點從「學生個人的缺損」轉向「環境中的障礙」，強調應改造環境來適應人。", "(D) 它認為只要有愛心，不需要專業的教學策略。"], answer: "C", explanation: "傳統的醫療模式傾向於將障礙視為個人內在的問題。而社會模式與《薩拉曼卡宣言》的精神則帶來了典範轉移，認為真正的「障礙」是社會未能移除的物理、態度與制度性障礙。教育的重點應從改變學生，轉向移除環境障礙。" },
+                { type: 'post', question: "3. 在面對親師溝通的兩難情境時，一位教師說：「我知道我們都希望孩子好，但根據我的專業觀察和數據，我發現這個策略對他目前幫助最大。我很想聽聽您在家的觀察，看看我們如何一起合作？」這位教師的應對方式體現了哪些專業倫理原則？", options: ["(A) 僅有專業判斷，忽略家長權利。", "(B) 僅有保密原則，未進行合作。", "(C) 結合了學生最佳利益、專業責任與尊重家長參與權。", "(D) 僅是壓力調適，迴避了問題核心。"], answer: "C", explanation: "這位教師的應對展現了多層次的專業倫理：(1)以學生的需求為核心（學生最佳利益）；(2)提出專業觀察與證據（專業責任）；(3)主動邀請家長分享觀點並尋求合作（尊重家長參與權）。" },
+                { type: 'post', question: "4. 某國小高年級資優生小宇，精力旺盛、富於想像但常喊無聊。老師引導他將幻想的情節寫成科幻小說，並將多餘精力投入到製作故事道具上。此輔導策略最符合下列何種理念？", options: ["(A) 壓抑其過度激動的特質，讓他學習靜心。", "(B) 懲罰他喊無聊的行為，建立班級常規。", "(C) 運用其「想像」與「心理動作」的過度激動特質，將其引導至正向、有創造力的產出上。", "(D) 忽略他的特質，讓他自然發展。"], answer: "C", explanation: "根據Dabrowski的過度激動理論，輔導的關鍵在於「引導」而非「壓抑」。這位老師將他的「想像」過度激動引導到「寫作」，將「心理動作」過度激動引導到「製作道具」，是一種非常正向且具建設性的輔導策略。" },
+                { type: 'post', question: "5. 二十一世紀的融合教育教師被期待是一位「設計師」，這主要指的是教師應具備何種能力？", options: ["(A) 佈置美觀教室的能力。", "(B) 設計複雜教具的能力。", "(C) 運用通用設計學習(UDL)與課程調整原則，為所有不同需求的學生設計無障礙學習路徑的能力。", "(D) 設計嚴格考試以篩選學生的能力。"], answer: "C", explanation: "將教師視為「設計師」，強調的是其在課程設計上的專業性。這意味著教師不能再用「一套方法教所有學生」，而是要像建築師設計無障礙空間一樣，運用UDL和課程調整等策略，預先為班級中可能出現的各種學習差異設計多元的學習選項與支持。" },
+                { type: 'post', question: "6. 小明是三年級的腦性麻痺學生，無法自行行動且影響書寫。在「校園無障礙環境」支持服務中，下列何者最為關鍵？", options: ["(A) 提供符合人體工學的桌椅", "(B) 確保教室、廁所、專科教室間的通道平坦、設有坡道或電梯", "(C) 提供特製的握筆器或打字協助工具", "(D) 安排同儕協助他抄寫筆記"], answer: "B", explanation: "「校園無障礙環境」的核心在於「物理環境的暢通無礙(Access)」。確保學生能獨立、安全地在校園各個學習場所間移動，是參與所有教育活動的基礎。其他選項雖為重要支持，但屬於輔具或人力協助。" },
+                { type: 'post', question: "7. 老師為一位體育課無法跑跳的肢體障礙學生，安排他擔任籃球賽的計分員或裁判。此作法屬於課程調整矩陣中的哪一項？", options: ["(A) 學習內容-替代", "(B) 學習歷程-替代", "(C) 學習環境-替代", "(D) 學習評量-替代"], answer: "B", explanation: "此調整並未改變學習「內容」（趣味競賽），而是改變了學生「參與活動的方式」。從親身跑跳的參與者，轉變為擔任輔助角色，這屬於「學習歷程」的「替代」策略，確保學生仍能融入活動。" },
+                { type: 'post', question: "8. 某位需要輪椅代步的學生，其教室被安排在三樓，且該棟大樓沒有電梯。這主要違反了哪一項教育權益？", options: ["(A) 差別待遇原則", "(B) 最少限制環境原則", "(C) 無障礙環境的暢通無礙(Access)原則", "(D) 免費適性教育原則"], answer: "C", explanation: "暢通無礙(Access)是針對肢體與健康障礙學生最核心的教育需求。將需要輪椅的學生安排在沒有電梯的大樓上課，直接剝奪了他參與學習的「物理通路」，是典型的環境障礙。" },
+                { type: 'post', question: "9. 小美配戴助聽器，能力與同儕相當，但考試時常因無法有效安排作答時間而成績較差。在特殊需求領域課程中，最適合為她規劃的科目是？", options: ["(A) 社會技巧", "(B) 學習策略", "(C) 溝通訓練", "(D) 定向行動"], answer: "B", explanation: "小美的核心困難在於「執行功能」中的時間管理與計畫安排。「學習策略」這門課的內容正好涵蓋了應考策略、時間分配、題目審閱等，能精準地針對她的困難進行系統性的教學。" },
+                { type: 'post', question: "10. 在三種專業團隊合作模式中，何者最強調「角色釋放」(Role Release)與「技能分享」，並由一位主要服務提供者整合執行計畫？", options: ["(A) 多專業合作", "(B) 專業間合作", "(C) 跨專業合作", "(D) 協同教學模式"], answer: "C", explanation: "跨專業合作模式是整合程度最高的模式。其核心精神就是「角色釋放」，團隊成員會互相學習與傳授專業技能，並推舉一位最適合的成員擔任主要服務提供者，直接為家庭服務。" },
+                // Q11-50: More situational and nuanced questions based on all provided materials
+                { type: 'post', question: "11. 進行錯誤類型分析時，學生將「6 + 4 × 7」計算成「70」。此錯誤最可能的推論是？", options: ["(A) 看錯運算符號", "(B) 加法忘記進位", "(C) 不熟練九九乘法", "(D) 搞錯四則運算的程序（先乘除後加減）"], answer: "D", explanation: "學生會算出70，代表他的計算順序是 (6 + 4) × 7 = 10 × 7 = 70。這顯示他並未遵循「先乘除，後加減」的運算規則，而是由左至右直接計算。" },
+                { type: 'post', question: "12. 老師想利用課程本位測量(CBM)評估學生在閱讀「流暢性」的進步情形。下列哪一項作法最為適當？", options: ["(A) 每學期進行一次標準化閱讀測驗。", "(B) 記錄並比較學生在固定時間內（如一分鐘）朗讀課文的正確字數。", "(C) 讓學生複述一篇故事的內容。", "(D) 檢核學生是否認識課本中所有的生字。"], answer: "B", explanation: "課程本位測量(CBM)的特點是簡短、頻繁且與課程內容直接相關。評估閱讀流暢性(fluency)的標準程序，就是測量學生在一分鐘內能正確朗讀的字數(WCPM)。" },
+                { type: 'post', question: "13. 老師在教導學生四則運算時，逐步將口頭示範的口訣，轉變為學生自己默念內在語言來指導自己解題。此過程最符合下列哪一項教學策略？", options: ["(A) 工作分析法", "(B) 合作學習法", "(C) 自我教導策略", "(D) 直接教學法"], answer: "C", explanation: "自我教導策略的經典流程就是將外在的示範與鷹架，逐步內化為學生自己的內在語言與思考過程。這個從「外顯」到「內隱」的轉移過程是關鍵。" },
+                { type: 'post', question: "14. 針對認得字卻無法理解文意的學生，老師運用「心智圖」策略。此策略最主要的目的為何？", options: ["(A) 提升學生的識字速度。", "(B) 訓練學生的朗讀流暢性。", "(C) 幫助學生將文本的線性訊息，轉化為視覺化、有組織的結構，以理解概念間的關係。", "(D) 增強學生的聽覺記憶能力。"], answer: "C", explanation: "心智圖(Mind Mapping)是一種視覺化思考工具，能幫助學習者將文章中的核心概念、主要論點和支持細節，以階層化、網絡狀的圖形呈現出來，特別有助於掌握文章結構。" },
+                { type: 'post', question: "15. 資源班老師和語言治療師「共同討論」小凱的口語表達活動設計。這種合作模式最接近下列何者？", options: ["(A) 多專業合作", "(B) 專業間合作", "(C) 跨專業合作", "(D) 諮詢模式"], answer: "B", explanation: "專業間合作(inter-disciplinary)的關鍵特徵是，不同專業的成員會定期開會，分享各自的評估結果並「共同討論」以形成整合的觀點或計畫。" },
+                { type: 'post', question: "16. 老師為一位因肢體障礙而無法參與體育課跑跳活動的學生，安排他擔任籃球賽的計分員或裁判。此作法最符合課程調整中的哪一項策略？", options: ["(A) 簡化", "(B) 減量", "(C) 分解", "(D) 替代"], answer: "D", explanation: "替代策略的核心是「用不同的方式來達成相同的學習目標，或改變參與及評量的方式」。讓學生擔任裁判或計分員，雖然身體活動方式不同，但他仍然參與在體育活動中，學習團隊合作與比賽規則，這正是替代策略的應用。" },
+                { type: 'post', question: "17. 在處理親師衝突時，下列哪一項不是建立信任、促進有效溝通的合宜策略？", options: ["(A) 保持冷靜，並使用同理心傾聽家長的擔憂。", "(B) 堅持自己的專業判斷，告訴家長「老師才是對的」。", "(C) 客觀陳述學生的行為事實，避免加入個人主觀評價。", "(D) 尋找與家長的共同關切點，強調雙方都是為了孩子好。"], answer: "B", explanation: "親師溝通是合作關係，而非權力鬥爭。直接強調「老師才是對的」容易引發對立與防衛，無助於解決問題。有效的溝通應建立在相互尊重、同理傾聽與客觀事實的基礎上。" },
+                { type: 'post', question: "18. 根據「過度激動」理論，一位智能過度激動的資優生常對事物感到好奇但也容易感到無聊。下列何者是較佳的輔導策略？", options: ["(A) 要求他靜坐反思，學習控制自己的情緒。", "(B) 提供他深入探究感興趣主題的機會，滿足其求知慾。", "(C) 減少課程難度，避免他感到挫折。", "(D) 忽略他的提問，以免影響教學進度。"], answer: "B", explanation: "資優生的「過度激動」(Overexcitabilities)被視為一種內在的特質與潛能。輔導的重點在於「引導」而非「壓抑」。提供智能挑戰、滿足其強烈的求知慾，是引導其智能過度激動的正向策略。" },
+                { type: 'post', question: "19. 「適應體育」(APE) 的核心精神是什麼？", options: ["(A) 為特殊生設計一套完全不同的體育課。", "(B) 讓特殊生免修體育，以確保安全。", "(C) 透過調整與支持，讓所有學生都能安全、有意義地參與體育活動。", "(D) 主要目標是訓練特殊生成為運動員。"], answer: "C", explanation: "適應體育的核心理念是「融合」與「參與」。它不是要將學生排除在外，而是透過系統性的調整（如TREE模式），讓具有不同需求的學生都能在體育課中獲得成功經驗、促進健康並享受運動樂趣。" },
+                { type: 'post', question: "20. 一位教師在教學時，同時提供視覺化的概念圖、口語講解、影片示範以及讓學生動手操作的機會。這位教師的作法最符合下列哪一個教育理念？", options: ["(A) 直接教學法", "(B) 精熟學習", "(C) 學習通用設計 (UDL)", "(D) 行為主義"], answer: "C", explanation: "學習通用設計(UDL)的核心精神，就是在一開始設計課程時，就預先設想學習者的多樣性，並提供多元的表徵、行動與表達、參與方式。題幹中的作法完全體現了UDL的三大原則。" },
+                { type: 'post', question: "21. 鄭老師為了掌握身心障礙學生的需求，例行收集平時習作和隨堂練習單，分析學生學習成效，並據以調整教學。此評量方式最符合？ 甲、檔案評量 乙、動態評量 丙、形成性評量 丁、總結性評量", options: ["(A) 甲丙", "(B) 甲丁", "(C) 乙丙", "(D) 乙丁"], answer: "A", explanation: "收集學生的作品（習作、練習單）屬於檔案評量的一種。而其目的是為了「隨時」了解學習狀況並「調整教學」，這正是形成性評量的核心精神。" },
+                { type: 'post', question: "22. 林老師今年九月初才剛到快樂國中任教，接任特教班八年級的導師，請問林老師要如何執行該班學生的個別化教育計畫(IEP)？", options: ["(A) 檢視該班學生已擬定的IEP，與相關人員討論後微調執行", "(B) 於開學後一個月內，重新訂定全新的IEP", "(C) 依據班級課表，將學生分組進行教學", "(D) 依據自身收集的教學資源，擬定新的IEP"], answer: "A", explanation: "IEP是具有法律效力的銜接文件。新任教師應先檢視並執行現有的IEP，並在與團隊（含家長）討論後，根據學生的現況進行必要的微調，而非立即全盤推翻重來。" },
+                { type: 'post', question: "23. 吳老師運用教學提示策略教導八年級集中式特教班學生製作餅乾，下列哪一項的提示程度為由少至多的排列順序？ 甲、老師用手指出要使用的烘焙用具 乙、老師用口語詢問學生「下一個步驟應該是什麼呢？」 丙、老師示範用電子磅秤秤量食材 丁、老師的手扶著學生的手攪拌麵團", options: ["(A) 甲乙丙丁", "(B) 乙甲丙丁", "(C) 丙甲丁乙", "(D) 丁丙甲乙"], answer: "B", explanation: "教學提示的原則是由最少到最多。最少的提示是口語提示(乙)，其次是手勢提示(甲)，再來是示範(丙)，最強的提示是肢體協助(丁)。" },
+                { type: 'post', question: "24. 針對校內特殊教育學生參與普通班學習活動時，下列哪一選項的課程調整方式較為適當？ 甲、身心障礙學生有閱讀理解困難，在普通班參與定期評量時，教師提供調整後的試卷 丙、集中式特教班學生到普通班上綜合活動領域課程時，安排特教學生助理人員和班上同儕協助該生參與分組討論活動", options: ["(A) 甲丙", "(B) 甲丁", "(C) 乙丙", "(D) 乙丁"], answer: "A", explanation: "甲、提供評量調整是法定權益。丙、提供人力支持以促進參與，是融合教育的具體實踐。乙、將學生安置在角落個別指導，違反了融合精神。丁、僅讓學生在旁觀看，剝奪了其參與權。" },
+                { type: 'post', question: "25. 老師想利用課程本位測量(CBM)評估學生的學習進步情形，下列敘述何者正確？ 乙、教師和學生都繪製學生進度圖時，學習成效往往是最好的 丁、測驗結果能提供學生的學習成效，但無法提供教師該生學習成效的導因", options: ["(A) 甲乙", "(B) 甲丙", "(C) 乙丁", "(D) 丙丁"], answer: "D", explanation: "CBM的優點之一是能將結果繪製成圖表，讓師生都能清楚看到進步軌跡，這有助於提升學生動機(乙)。但CBM是測量「表現」，能看出「學得好不好」，但無法直接解釋「為什麼學不好」，需要搭配錯誤分析等其他評量(丁)。" },
+                { type: 'post', question: "26. 某位國小三年級學生朗讀一篇教過的國語課文，一分鐘朗讀的正確字數偏低。這最可能反映出他在哪一項能力的困難？", options: ["(A) 識字量不足", "(B) 構音清晰度", "(C) 閱讀理解能力", "(D) 唸名流暢性"], answer: "D", explanation: "一分鐘正確朗讀字數(WCPM)是評量「閱讀流暢性」的關鍵指標。流暢性不佳可能源於解碼速度慢、聲韻處理不熟練等，是閱讀能力的重要基礎。" },
+                { type: 'post', question: "27. 國小集中式特教班王老師想要利用語詞接龍活動了解各身心障礙學生的現況能力，除了可看出學生的詞彙能力之外，下列何者也是王老師想要了解的學生能力？ 乙、聽覺記憶 丙、共同注意力 戊、交替性注意力", options: ["(A) 甲乙丙", "(B) 甲乙戊", "(C) 乙丙戊", "(D) 丙丁戊"], answer: "C", explanation: "語詞接龍需要：聽到前一個人的詞（聽覺記憶，乙），專注於這個輪流的活動（共同注意力，丙），並在輪到自己時，將注意力從聽轉移到思考與表達（交替性注意力，戊）。" },
+                { type:- 'post', question: "28. 小恩是某技術型高中三年級資源班學生。這學期他有選修學校開設的「生涯規劃」課程。下列教學，何者最不適切？", options: ["(A) 教導學生認識職場性騷擾的類型及因應策略", "(B) 利用標準化評量結果引導學生進行生涯規劃", "(C) 參考學生高中階段的生涯發展資料進行職能評估", "(D) 近期求職詐騙事件頻傳，進行安全求職之隨機教學"], answer: "B", explanation: "生涯規劃應是個別化、以學生興趣與能力為本的過程。單純依賴標準化評量結果（如性向測驗）來引導，過於簡化，可能忽略學生的個人意願與真實潛能，是最不適切的作法。" },
+                { type: 'post', question: "29. 老師發現聽障生小齊需搭配嘴型或手勢才能理解指令，且無法聽寫。特教老師應提供班導師下列哪一項最重要的支持服務？", options: ["(A) 建議家長帶小齊去進行聽力評估", "(B) 提供小齊一對一的注音符號補救教學", "(C) 協同評估並建議使用聽覺輔助科技（如FM系統）", "(D) 訓練小齊的抄寫速度"], answer: "C", explanation: "小齊的狀況顯示他在教室的噪音環境下，無法有效接收老師的口語指令。特教老師的首要任務是與導師合作，評估如何改善其「聽取」的品質。建議並協助導入FM系統等聽覺輔具，直接提升聲音訊號的清晰度，是解決問題的根本策略。" },
+                { type: 'post', question: "30. 小月是自閉症學生，若作息改變、課程太難或聽到噪音皆會尖叫。針對「作息改變」這項前事，下列何種調整策略最有效？", options: ["(A) 增加課程難度", "(B) 使用視覺化時間表，並在改變前事先預告", "(C) 在他尖叫時給予安撫", "(D) 移除教室中所有可能發出噪音的物品"], answer: "B", explanation: "自閉症學生對可預測性的需求很高。使用視覺化時間表能讓他清楚掌握一天的流程，當有變動時，事先透過時間表進行預告與說明，能大幅降低因不確定性引發的焦慮與問題行為。" },
+                { type: 'post', question: "31. 針對上題的小月，若要處理他因「課程太難」而尖叫的行為，下列何種策略最為治本？", options: ["(A) 在他尖叫時提供他喜歡的玩具轉移注意", "(B) 進行課程調整，提供符合其能力的學習任務（如簡化、減量）", "(C) 嚴格要求他必須完成所有任務", "(D) 讓他到教室後方冷靜"], answer: "B", explanation: "行為的功能是「逃避困難的任務」。最治本的策略是從「前事」著手，透過課程調整，設計符合他能力的學習內容，讓他有成功的機會，從而降低逃避的需求。其他選項都屬於後果處理，而非預防。" },
+                { type: 'post', question: "32. 根據資優教育的過度激動理論，一位「情緒」過度激動的學生，常表現出強烈的情感、同理心與責任感。下列何者是較佳的輔導策略？", options: ["(A) 告訴他「不要想太多，放輕鬆就好」", "(B) 鼓勵他參與服務學習或社會關懷活動，將其豐沛的情感引導至利他行為", "(C) 避免讓他接觸任何可能引發強烈情緒的議題", "(D) 訓練他壓抑自己的情緒，表現得跟大家都一樣"], answer: "B", explanation: "輔導的關鍵是「引導」而非「壓抑」。讓情緒過度激動的學生參與服務學習，能為他們強烈的同理心與正義感找到正向的出口，並從中獲得成就感與自我認同。" },
+                { type: 'post', question: "33. 王老師根據自己的教學經驗，認為小平目光不注視說話者可能是自閉症，於是向特教組陳老師諮詢。陳老師接下來最專業的第一步應該是？", options: ["(A) 直接告訴王老師這就是自閉症，應立即轉介", "(B) 建議王老師多給予關愛即可", "(C) 告訴王老師這只是個案，不用太在意", "(D) 進入班級進行系統性的觀察與紀錄，以蒐集客觀資料"], answer: "D", explanation: "在特教的專業判斷中，不能僅憑單一特徵或個人經驗就下定論。專業的作法是先進行系統性的觀察（如題幹中的ABC觀察紀錄），蒐集客觀的數據與資料，再進行初步的假設與分析，這是啟動後續評估與支持的基礎。" },
+                { type: 'post', question: "34. 根據陳老師的觀察紀錄，小平在老師講解時會找同學說話，被制止後會安靜一下，但隨後又拿起筆畫課本。此行為模式最可能的解釋是？", options: ["(A) 他對同學有敵意", "(B) 他有嚴重的聽覺處理困難", "(C) 他可能因課程內容感到無聊或困難，而尋求自我刺激或逃避", "(D) 他是故意要挑戰老師的權威"], answer: "C", explanation: "從行為序列來看，小平在面對單向聽講的學術任務時，會出現分心、尋求其他刺激（找同學、畫課本）的行為。這通常不是惡意的，而是反映出他可能感到無聊（任務太簡單）或困難（聽不懂），需要透過其他活動來調節自身的狀態。" },
+                { type: 'post', question: "35. 觀察紀錄中，當老師點名小平上台寫字時，他「不停眨眼睛且一下子注視又不注視老師」，並說「我不會」。此行為最可能反映出何種內在狀態？", options: ["(A) 對老師的藐視", "(B) 視覺上有嚴重的障礙", "(C) 因預期失敗而產生的焦慮與逃避反應", "(D) 想要獲得全班的注意"], answer: "C", explanation: "眨眼睛、眼神閃躲是典型的焦慮反應。當面對一個自己沒有信心的任務時，學生可能會因害怕失敗或被嘲笑而產生強烈的焦慮感，並以「我不會」的口頭語言來表達逃避的需求。" },
+                { type: 'post', question: "36. 綜合全文，王老師認為小平可能是自閉症，但陳老師的觀察與訪談卻顯示小平喜歡和同學玩、能理解遊戲規則、且其行為與家庭教養方式高度相關。此案例最凸顯了特教評估中的哪一項重要原則？", options: ["(A) 標準化測驗至上的原則", "(B) 快速鑑定的原則", "(C) 多元評量、生態評估的原則", "(D) 僅依賴家長報告的原則"], answer: "C", explanation: "此案例清楚地顯示，不能僅憑單一特徵（如不看人）或單一來源的訊息（如導師的初步印象）就下判斷。特教鑑定必須是「多元評量」的過程，結合標準化測驗、系統性觀察、晤談、檔案分析等多種方式，並在學生的真實「生態環境」（家庭、學校）中去理解其行為，才能做出最周全的判斷。" },
+                { type: 'post', question: "37. 針對小平母親「凡事一手包辦」的教養方式，陳老師若要提供建議，下列何者最符合「增能」(Empowerment)的輔導觀點？", options: ["(A) 直接批評母親的教養方式不當", "(B) 要求母親完全放手，讓小平自己處理所有事", "(C) 與母親討論，從一個小任務（如自己整理書包）開始，教導她如何逐步放手並給予鷹架支持", "(D) 建議將小平送到安親班，由專業老師處理"], answer: "C", explanation: "增能的觀點是賦予家長解決問題的能力與信心，而非取代或批評。與家長合作，從一個可行的、具體的小目標開始，並教導她如何使用有效的策略（如任務分解、逐步引導），能讓家長在成功的經驗中建立親職效能感。" },
+                { type: 'post', question: "38. 芯芯在校接受特教服務一學期後，老師發現她學習適應困難。根據法規，下列處理方式何者正確？", options: ["(A) 等到學期末再一併檢討IEP。", "(B) 立即邀約家長與專業團隊成員共同討論並調整教學策略。", "(C) 老師自行調整教學，不需通知家長。", "(D) 直接建議家長轉學。"], answer: "B", explanation: "個別化教育計畫(IEP)是一份動態的文件，應根據學生的學習狀況隨時檢討與修正。當發現學生適應困難時，教學團隊應立即召開會議共同討論並調整策略，這是確保IEP能發揮實質功能的關鍵。" },
+                { type: 'post', question: "39. 某生在進行語詞接龍時，能正確接續，但反應速度明顯比同儕慢。這可能反映出他在哪一項認知能力上較弱？", options: ["(A) 聽覺記憶", "(B) 詞彙提取的自動化程度", "(C) 語法規則理解", "(D) 共同注意力"], answer: "B", explanation: "能正確接續代表他理解規則且有足夠的詞彙量，但反應慢則指向從長期記憶中「提取」詞彙的速度不夠快、不夠自動化。這與閱讀流暢性中的「快速唸名」是相似的核心能力。" },
+                { type: 'post', question: "40. 一位老師面對融合教育的挑戰，感到壓力巨大。下列何者不是有效的壓力調適與專業成長策略？", options: ["(A) 尋求同事或專業社群的支持與經驗交流", "(B) 持續參加特教相關研習，增進專業知能", "(C) 為了學生，犧牲所有個人休息時間，全心投入工作", "(D) 學習正向思考，並建立工作與生活的界線"], answer: "C", explanation: "過度的自我犧牲容易導致職業倦怠(burnout)，反而無法長期為學生提供高品質的教育。建立合理的工作界線，照顧好自己的身心健康，才是永續的專業之道。" },
+                { type: 'post', question: "41. 在融合班級中，特教老師與普通班老師共同規劃課程，並輪流擔任主要授課者與協助者。此合作模式稱為？", options: ["(A) 諮詢模式", "(B) 協同教學", "(C) 專業間合作", "(D) 跨專業合作"], answer: "B", explanation: "協同教學(Co-teaching)是融合教育中一種重要的實踐模式，指由普通教師與特殊教育教師共同在一個教室中，為同一群學生分擔計畫、教學與評量的責任。" },
+                { type: 'post', question: "42. 老師在教導學生一項新技能時，先給予大量的口頭與肢體提示，隨著學生越來越熟練，便逐漸減少提示的次數與強度。此策略稱為？", options: ["(A) 提示褪除 (Fading)", "(B) 連鎖 (Chaining)", "(C) 塑造 (Shaping)", "(D) 增強 (Reinforcement)"], answer: "A", explanation: "提示褪除是一種系統性地減少教學提示的過程，目標是讓學生的行為能逐漸由自然的環境線索所引發，最終達成獨立操作。" },
+                { type: 'post', question: "43. 針對一位經常在課堂上用不當言詞吸引同儕注意力的學生，老師教導他可以透過「舉手分享一個笑話」來獲得同樣的注意。此策略是應用了區別性增強中的哪一種類型？", options: ["(A) 區別性增強零反應 (DRO)", "(B) 區別性增強不相容行為 (DRI)", "(C) 區別性增強替代行為 (DRA)", "(D) 區別性增強低頻率行為 (DRL)"], answer: "C", explanation: "區別性增強替代行為(DRA)的核心是，增強一個與問題行為「功能相同」（都是為了吸引注意），但「行為形式」更具社會接受度的新行為（分享笑話取代不當言詞）。" },
+                { type: 'post', question: "44. 根據Vygotsky的社會文化理論，老師在學生現有能力與潛在能力之間提供的支持與引導，稱為？", options: ["(A) 最近發展區 (ZPD)", "(B) 鷹架 (Scaffolding)", "(C) 內化 (Internalization)", "(D) 同儕互助 (Peer Tutoring)"], answer: "B", explanation: "鷹架(Scaffolding)是指成人或能力較佳的同儕，在學習者的最近發展區(ZPD)內所提供的暫時性、支持性的協助，目的是幫助學習者最終能獨立完成任務。" },
+                { type: 'post', question: "45. 一位學生在數學應用題的解題上有困難，老師發現他並非不懂計算，而是無法理解題目中的文字敘述。此學生的困難最可能屬於？", options: ["(A) 計算障礙", "(B) 閱讀理解障礙", "(C) 注意力缺陷", "(D) 視覺空間障礙"], answer: "B", explanation: "應用題的困難根源常常不在數學計算本身，而在於語言理解。學生若無法讀懂題目、理解題意中的數量關係，即使計算能力沒問題，也無法正確解題。這凸顯了語言能力是所有學科的基礎。" },
+                { type: 'post', question: "46. 學校為一位即將畢業的特教生，召開包含家長、導師、個管老師、職業輔導員、以及社區就業服務員的會議，共同討論其未來的就業與生活安排。此會議最符合下列何種服務的精神？", options: ["(A) 個別化教育計畫 (IEP)", "(B) 轉銜服務 (Transition Services)", "(C) 課程本位評量 (CBM)", "(D) 功能性行為評量 (FBA)"], answer: "B", explanation: "轉銜服務是一個以成果為導向的過程，旨在促進學生從學校到畢業後活動（包括就業、社區生活等）的順利轉移。此過程強調跨單位、以學生為中心的合作，以擬定具體的轉銜計畫。" },
+                { type: 'post', question: "47. 一位老師在IEP會議中，不僅報告了學生的學業表現，還特別強調了學生的藝術天分與樂於助人的特質，並建議將這些優勢融入教學活動中。這位老師的作法最符合下列何種觀點？", options: ["(A) 缺陷觀點 (Deficit-based)", "(B) 醫療模式觀點", "(C) 優勢觀點 (Strength-based)", "(D) 行為主義觀點"], answer: "C", explanation: "優勢觀點強調發掘並善用學生的長處、興趣與潛能，將其作為介入的基礎。相信每個學生都有其優勢，並透過發展其優勢來帶動弱勢能力的成長，是現代特教與輔導的重要理念。" },
+                { type: 'post', question: "48. 老師發現班上一位亞斯伯格症學生對於「彈性思考」有困難，常執著於原訂計畫。老師設計了一個桌遊活動，遊戲規則會隨機改變，引導學生練習適應非預期的變化。此活動主要在訓練學生的何種能力？", options: ["(A) 工作記憶", "(B) 抑制控制", "(C) 認知彈性", "(D) 計畫組織"], answer: "C", explanation: "認知彈性(Cognitive Flexibility)是執行功能的一環，指的是個體能夠根據情境變化，靈活地轉換思考方式或調整行為策略的能力。此遊戲設計正是針對這個核心能力進行訓練。" },
+                { type: 'post', question: "49. 在進行功能性行為評量(FBA)時，下列何者是分析「行為功能」時最需要釐清的問題？", options: ["(A) 這個行為有多嚴重？", "(B) 這個行為發生了幾次？", "(C) 學生為什麼要這麼做？這個行為為他帶來了什麼好處？", "(D) 應該用什麼方法來懲罰這個行為？"], answer: "C", explanation: "FBA的核心目的不是描述行為本身，而是要去「解釋」行為，也就是找出維持該行為的「功能」或「目的」。常見的功能包括獲得想要的東西/活動、獲得注意、逃避不喜歡的人/事/物，或獲得感官刺激。" },
+                { type: 'post', question: "50. 一位普通班老師對於如何支持班上的特殊需求學生感到力不從心。特教老師除了提供教學建議外，還引薦他加入一個教師專業學習社群，並定期與他討論教學困境。特教老師在此扮演的角色最接近？", options: ["(A) 鑑定者", "(B) 補救教學者", "(C) 諮詢者與支持夥伴", "(D) 行政管理者"], answer: "C", explanation: "現代特教老師的角色已從單純的教學者，擴展為普通教育系統的支持者。透過提供諮詢、分享資源、建立支持網絡，特教老師能賦能普通班老師，共同為所有學生的成功而努力，這是落實融合教育的關鍵。" },
+            ];
+
+            function createQuestionElement(q, index, type) {
+                const card = document.createElement('div');
+                card.className = 'question-card rounded-lg overflow-hidden';
+                
+                const questionHeader = document.createElement('div');
+                questionHeader.className = 'p-6 cursor-pointer';
+                questionHeader.innerHTML = `<h4 class="font-semibold">${q.question}</h4>`;
+                
+                const optionsList = document.createElement('div');
+                optionsList.className = 'px-6 pb-6 space-y-3';
+                q.options.forEach((opt, i) => {
+                    const optionValue = opt.match(/\(([^)]+)\)/)[1];
+                    const optionWrapper = document.createElement('div');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `${type}-q${index}`;
+                    radio.id = `${type}-q${index}-opt${i}`;
+                    radio.value = optionValue;
+                    radio.className = 'hidden';
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `${type}-q${index}-opt${i}`;
+                    label.className = 'option-label';
+                    label.textContent = opt;
+                    
+                    optionWrapper.appendChild(radio);
+                    optionWrapper.appendChild(label);
+                    optionsList.appendChild(optionWrapper);
+                });
+
+                const answerPanel = document.createElement('div');
+                answerPanel.className = 'answer-panel';
+                answerPanel.innerHTML = `
+                    <div class="p-6 border-t border-gray-200">
+                        <p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p>
+                        <p class="text-gray-600">${q.explanation}</p>
+                    </div>
+                `;
+
+                card.appendChild(questionHeader);
+                card.appendChild(optionsList);
+                card.appendChild(answerPanel);
+
+                questionHeader.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    answerPanel.classList.toggle('open');
+                });
+
+                return card;
+            }
+
+            const preTestContainer = document.getElementById('pre-test-container');
+            const postTestContainer = document.getElementById('post-test-container');
+            
+            allQuestions.filter(q => q.type === 'pre').forEach((q, i) => {
+                preTestContainer.appendChild(createQuestionElement(q, i, 'pre'));
+            });
+
+            allQuestions.filter(q => q.type === 'post').forEach((q, i) => {
+                postTestContainer.appendChild(createQuestionElement(q, i, 'post'));
+            });
+
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Score Calculation and Modal Logic
+            const calculateBtn = document.getElementById('calculate-score');
+            const modal = document.getElementById('score-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const preScoreEl = document.getElementById('pre-score');
+            const postScoreEl = document.getElementById('post-score');
+            const scoreDiffEl = document.getElementById('score-diff');
+            const chartCanvas = document.getElementById('score-chart');
+            let scoreChart = null;
+
+            calculateBtn.addEventListener('click', () => {
+                let preScore = 0;
+                const preQuestions = allQuestions.filter(q => q.type === 'pre');
+                preQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="pre-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        preScore++;
+                    }
+                });
+
+                let postScore = 0;
+                const postQuestions = allQuestions.filter(q => q.type === 'post');
+                postQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="post-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        postScore++;
+                    }
+                });
+                
+                const totalQuestions = 50;
+                preScoreEl.textContent = `${preScore} / ${totalQuestions}`;
+                postScoreEl.textContent = `${postScore} / ${totalQuestions}`;
+
+                const diff = postScore - preScore;
+                if (diff > 0) {
+                    scoreDiffEl.textContent = `進步分數：+${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-green-600';
+                } else if (diff < 0) {
+                    scoreDiffEl.textContent = `退步分數：${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-red-600';
+                } else {
+                    scoreDiffEl.textContent = '分數持平';
+                    scoreDiffEl.className = 'text-lg font-semibold text-gray-600';
+                }
+
+                modal.classList.remove('hidden');
+                
+                if(scoreChart) {
+                    scoreChart.destroy();
+                }
+
+                scoreChart = new Chart(chartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['前測', '後測'],
+                        datasets: [{
+                            label: '答對題數',
+                            data: [preScore, postScore],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.6)',
+                                'rgba(22, 163, 74, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(22, 163, 74, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: totalQuestions,
+                                ticks: {
+                                    stepSize: 10
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

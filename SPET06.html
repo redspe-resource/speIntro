@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第六單元 前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        /* 採用高對比、適合投影的藍綠色系風格 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F9FAFB; /* gray-50 */
+            color: #1F2937; /* gray-800 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0F766E; /* teal-700 */
+            border-bottom-color: #0F766E;
+        }
+        .question-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB; /* gray-200 */
+            transition: box-shadow 0.3s;
+            border-radius: 0.75rem;
+        }
+        .question-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .answer-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .answer-panel.open {
+            max-height: 500px;
+        }
+        .option-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            border: 1px solid #D1D5DB; /* gray-300 */
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #F3F4F6; /* gray-100 */
+        }
+        input[type="radio"]:checked + .option-label {
+            background-color: #CCFBF1; /* teal-100 */
+            border-color: #14B8A6; /* teal-500 */
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#115E59]">特殊教育導論：第六單元測驗</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#115E59]">第六單元：前測</h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-12">本測驗旨在評估您對教學實踐、專業倫理與課程總結等核心概念的初步理解。請選擇您認為最合適的答案，完成後點擊最下方的按鈕查看分數。</p>
+            
+            <div id="pre-test-container" class="space-y-4">
+            </div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#115E59]">第六單元：後測</h2>
+                 <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-12">本測驗旨在評估您在學習本單元後的知識整合與應用能力。題目將更側重於情境分析與策略應用。請選擇答案，完成後點擊最下方的按鈕查看分數。</p>
+
+            <div id="post-test-container" class="space-y-4">
+            </div>
+        </section>
+        
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#14B8A6] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#0F766E] transition-colors duration-300">
+                計算分數並比較
+            </button>
+        </div>
+
+    </main>
+    
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者 pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm mt-4">©特殊教育導論課程活動第六單元，主要依據課程大綱與113年教檢試題改編，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+    <!-- Score Modal -->
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="modal-container bg-white w-full max-w-lg rounded-lg shadow-xl p-8 transform -translate-y-12">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="chart-container h-64 mx-auto mb-6">
+                <canvas id="score-chart"></canvas>
+            </div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 5</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 5</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const preTestQuestions = [
+                {
+                    question: "1. 老師為一位因肢體障礙而無法參與跑跳活動的學生，安排他擔任籃球賽的計分員或裁判。此作法最符合課程調整中的哪一項策略？",
+                    options: ["(A) 簡化 (Simplify)", "(B) 減量 (Reduce)", "(C) 分解 (Breakdown)", "(D) 替代 (Replace)"],
+                    answer: "D",
+                    explanation: "替代策略的核心是「用不同的方式來達成相同的學習目標，或改變參與及評量的方式」。讓學生擔任裁判或計分員，雖然身體活動方式不同，但他仍然參與在體育活動中，學習團隊合作與比賽規則，這正是替代策略的應用。"
+                },
+                {
+                    question: "2. 在處理親師衝突時，下列哪一項不是建立信任、促進有效溝通的合宜策略？",
+                    options: ["(A) 保持冷靜，並使用同理心傾聽家長的擔憂。", "(B) 堅持自己的專業判斷，告訴家長「老師才是對的」。", "(C) 客觀陳述學生的行為事實，避免加入個人主觀評價。", "(D) 尋找與家長的共同關切點，強調雙方都是為了孩子好。"],
+                    answer: "B",
+                    explanation: "親師溝通是合作關係，而非權力鬥爭。直接強調「老師才是對的」容易引發對立與防衛，無助於解決問題。有效的溝通應建立在相互尊重、同理傾聽與客觀事實的基礎上，共同尋求對學生最有利的方案。"
+                },
+                {
+                    question: "3. 根據「過度激動」理論，一位智能過度激動的資優生常對事物感到好奇但也容易感到無聊。下列何者是較佳的輔導策略？",
+                    options: ["(A) 要求他靜坐反思，學習控制自己的情緒。", "(B) 提供他深入探究感興趣主題的機會，滿足其求知慾。", "(C) 減少課程難度，避免他感到挫折。", "(D) 忽略他的提問，以免影響教學進度。"],
+                    answer: "B",
+                    explanation: "資優生的「過度激動」(Overexcitabilities)被視為一種內在的特質與潛能。輔導的重點在於「引導」而非「壓抑」。提供智能挑戰、滿足其強烈的求知慾，是引導其智能過度激動的正向策略。單純要求靜坐或壓抑，反而可能造成反效果。"
+                },
+                {
+                    question: "4. 「適應體育」(APE) 的核心精神是什麼？",
+                    options: ["(A) 為特殊生設計一套完全不同的體育課。", "(B) 讓特殊生免修體育，以確保安全。", "(C) 透過調整與支持，讓所有學生都能安全、有意義地參與體育活動。", "(D) 主要目標是訓練特殊生成為運動員。"],
+                    answer: "C",
+                    explanation: "適應體育的核心理念是「融合」與「參與」。它不是要將學生排除在外，而是透過系統性的調整（如TREE模式），讓具有不同需求的學生都能在體育課中獲得成功經驗、促進健康並享受運動樂趣。"
+                },
+                {
+                    question: "5. 一位教師在教學時，同時提供視覺化的概念圖、口語講解、影片示範以及讓學生動手操作的機會。這位教師的作法最符合下列哪一個教育理念？",
+                    options: ["(A) 直接教學法 (Direct Instruction)", "(B) 精熟學習 (Mastery Learning)", "(C) 學習通用設計 (Universal Design for Learning)", "(D) 行為主義 (Behaviorism)"],
+                    answer: "C",
+                    explanation: "學習通用設計(UDL)的核心精神，就是在一開始設計課程時，就預先設想學習者的多樣性，並提供多元的表徵、行動與表達、參與方式。題幹中的作法完全體現了UDL的三大原則，讓不同學習風格的學生都能有效獲取資訊。"
+                }
+            ];
+
+            const postTestQuestions = [
+                {
+                    question: "1. 一位國中七年級學生為語文資優伴隨自閉症(2e)。他課堂發言有深度，但分組討論時常因堅持己見而與同學衝突。下列哪一項整合性支持方案最為全面？",
+                    options: ["(A) 僅提供他更艱深的閱讀材料，並讓他獨立研究。", "(B) 僅安排他參加社交技巧團體，改善人際關係。", "(C) 僅使用結構化教學，提供視覺提示讓他遵守規則。", "(D) 結合充實活動、社交故事與情意輔導，同時兼顧其優勢才能與弱勢需求。"],
+                    answer: "D",
+                    explanation: "對於雙重特殊需求(2e)學生，有效的支持必須是整合性的。方案應包含：(1)發展其優勢才能（如提供充實活動）；(2)針對其障礙提供具體策略（如用社交故事教導觀點取替）；(3)處理其內在的情意需求（如透過情意輔導處理其挫折感）。選項(D)是唯一涵蓋這三面向的全面方案。"
+                },
+                {
+                    question: "2. 《薩拉曼卡宣言》與「社會模式」皆強調環境的重要性。此觀點如何挑戰傳統的特殊教育思維？",
+                    options: ["(A) 它強化了障礙是個人缺陷的觀點。", "(B) 它認為特殊教育應在隔離的環境中進行才最有效。", "(C) 它將問題的焦點從「學生個人的缺損」轉向「環境中的障礙」，強調應改造環境來適應人。", "(D) 它認為只要有愛心，不需要專業的教學策略。"],
+                    answer: "C",
+                    explanation: "傳統的醫療模式傾向於將障礙視為個人內在的問題，需要被「矯正」。而社會模式與《薩拉曼卡宣言》的精神則帶來了典範轉移，認為真正的「障礙」是社會未能移除的物理、態度與制度性障礙。因此，教育的重點應從改變學生，轉向移除環境障礙、提供支持，讓所有人都能參與。"
+                },
+                {
+                    question: "3. 在面對親師溝通的兩難情境時，一位教師說：「我知道我們都希望孩子好，但根據我的專業觀察和數據，我發現這個策略對他目前幫助最大。我很想聽聽您在家的觀察，看看我們如何一起合作？」這位教師的應對方式體現了哪些專業倫理原則？",
+                    options: ["(A) 僅有專業判斷，忽略家長權利。", "(B) 僅有保密原則，未進行合作。", "(C) 結合了學生最佳利益、專業責任與尊重家長參與權。", "(D) 僅是壓力調適，迴避了問題核心。"],
+                    answer: "C",
+                    explanation: "這位教師的應對展現了多層次的專業倫理：(1)以學生的需求為核心（學生最佳利益）；(2)提出專業觀察與證據（專業責任）；(3)主動邀請家長分享觀點並尋求合作（尊重家長參與權）。這是在壓力情境下，兼顧倫理與溝通的成熟表現。"
+                },
+                {
+                    question: "4. 某國小高年級資優生小宇，精力旺盛、富於想像但常喊無聊。老師引導他將幻想的情節寫成科幻小說，並將多餘精力投入到製作故事道具上。此輔導策略最符合下列何種理念？",
+                    options: ["(A) 壓抑其過度激動的特質，讓他學習靜心。", "(B) 懲罰他喊無聊的行為，建立班級常規。", "(C) 運用其「想像」與「心理動作」的過度激動特質，將其引導至正向、有創造力的產出上。", "(D) 忽略他的特質，讓他自然發展。"],
+                    answer: "C",
+                    explanation: "根據Dabrowski的過度激動理論，輔導的關鍵在於「引導」而非「壓抑」。這位老師沒有制止小宇的幻想或好動，而是將他的「想像」過度激動引導到「寫作」，將「心理動作」過度激動引導到「製作道具」，這是一種非常正向且具建設性的輔導策略，能將其天賦特質轉化為具體的成就。"
+                },
+                 {
+                    question: "5. 二十一世紀的融合教育教師被期待是一位「設計師」，這主要指的是教師應具備何種能力？",
+                    options: ["(A) 佈置美觀教室的能力。", "(B) 設計複雜教具的能力。", "(C) 運用通用設計學習(UDL)與課程調整原則，為所有不同需求的學生設計無障礙學習路徑的能力。", "(D) 設計嚴格考試以篩選學生的能力。"],
+                    answer: "C",
+                    explanation: "將教師視為「設計師」，強調的是其在課程設計上的專業性。這意味著教師不能再用「一套方法教所有學生」，而是要像建築師設計無障礙空間一樣，運用UDL和課程調整等策略，預先為班級中可能出現的各種學習差異設計多元的學習選項與支持，確保所有人都能成功學習。"
+                }
+            ];
+
+            function createQuestionElement(q, index, type) {
+                const card = document.createElement('div');
+                card.className = 'question-card rounded-lg overflow-hidden';
+                
+                const questionHeader = document.createElement('div');
+                questionHeader.className = 'p-6 cursor-pointer';
+                questionHeader.innerHTML = `<h4 class="font-semibold">${q.question}</h4>`;
+                
+                const optionsList = document.createElement('div');
+                optionsList.className = 'px-6 pb-6 space-y-3';
+                q.options.forEach((opt, i) => {
+                    const optionValue = opt.match(/\(([^)]+)\)/)[1];
+                    const optionWrapper = document.createElement('div');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `${type}-q${index}`;
+                    radio.id = `${type}-q${index}-opt${i}`;
+                    radio.value = optionValue;
+                    radio.className = 'hidden';
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `${type}-q${index}-opt${i}`;
+                    label.className = 'option-label';
+                    label.textContent = opt;
+                    
+                    optionWrapper.appendChild(radio);
+                    optionWrapper.appendChild(label);
+                    optionsList.appendChild(optionWrapper);
+                });
+
+                const answerPanel = document.createElement('div');
+                answerPanel.className = 'answer-panel bg-gray-50';
+                answerPanel.innerHTML = `
+                    <div class="p-6">
+                        <p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p>
+                        <p class="text-gray-800">${q.explanation}</p>
+                    </div>
+                `;
+
+                card.appendChild(questionHeader);
+                card.appendChild(optionsList);
+                card.appendChild(answerPanel);
+
+                questionHeader.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    answerPanel.classList.toggle('open');
+                    if (answerPanel.classList.contains('open')) {
+                        answerPanel.style.paddingTop = '1.5rem';
+                        answerPanel.style.paddingBottom = '1.5rem';
+                    } else {
+                        answerPanel.style.paddingTop = '0';
+                        answerPanel.style.paddingBottom = '0';
+                    }
+                });
+
+                return card;
+            }
+
+            const preTestContainer = document.getElementById('pre-test-container');
+            preTestQuestions.forEach((q, i) => {
+                preTestContainer.appendChild(createQuestionElement(q, i, 'pre'));
+            });
+
+            const postTestContainer = document.getElementById('post-test-container');
+            postTestQuestions.forEach((q, i) => {
+                postTestContainer.appendChild(createQuestionElement(q, i, 'post'));
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll and active state
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Score Calculation and Modal Logic
+            const calculateBtn = document.getElementById('calculate-score');
+            const modal = document.getElementById('score-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const preScoreEl = document.getElementById('pre-score');
+            const postScoreEl = document.getElementById('post-score');
+            const scoreDiffEl = document.getElementById('score-diff');
+            const chartCanvas = document.getElementById('score-chart');
+            let scoreChart = null;
+
+            calculateBtn.addEventListener('click', () => {
+                let preScore = 0;
+                preTestQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="pre-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        preScore++;
+                    }
+                });
+
+                let postScore = 0;
+                postTestQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="post-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        postScore++;
+                    }
+                });
+
+                preScoreEl.textContent = `${preScore} / ${preTestQuestions.length}`;
+                postScoreEl.textContent = `${postScore} / ${postTestQuestions.length}`;
+
+                const diff = postScore - preScore;
+                if (diff > 0) {
+                    scoreDiffEl.textContent = `進步分數：+${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-green-600';
+                } else if (diff < 0) {
+                    scoreDiffEl.textContent = `退步分數：${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-red-600';
+                } else {
+                    scoreDiffEl.textContent = '分數持平';
+                    scoreDiffEl.className = 'text-lg font-semibold text-gray-600';
+                }
+
+                modal.classList.remove('hidden');
+                
+                if(scoreChart) {
+                    scoreChart.destroy();
+                }
+
+                scoreChart = new Chart(chartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['前測', '後測'],
+                        datasets: [{
+                            label: '答對題數',
+                            data: [preScore, postScore],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.6)',
+                                'rgba(22, 163, 74, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(22, 163, 74, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: preTestQuestions.length,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

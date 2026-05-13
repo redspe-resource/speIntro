@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第二單元課程資料</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- 引入Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 引入Iconify -->
+    <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+    <style>
+        /* 藍綠色系風格 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F0F9FF; /* 淡藍色背景 */
+            color: #334155; /* slate-700 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0369A1; /* sky-700 */
+            border-bottom-color: #0369A1; /* sky-700 */
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0; /* slate-200 */
+            border-radius: 0.5rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+        }
+        .section-title {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #0284C7; /* sky-600 */
+        }
+        .content-heading {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #38BDF8; /* sky-400 */
+            padding-left: 1rem;
+            color: #1E293B; /* slate-800 */
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background-color: #E0F2FE; /* sky-100 */
+            color: #0369A1; /* sky-700 */
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .law-box {
+            background-color: #f8fafc; /* slate-50 */
+            border-left: 4px solid #fbbf24; /* amber-400 */
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .stigma-box {
+            background-color: #fff1f2; /* rose-50 */
+            border-left: 4px solid #fb7185; /* rose-400 */
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        table {
+            width: 100%;
+            margin-top: 1.5rem;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f1f5f9; /* slate-100 */
+            font-weight: 600;
+        }
+        .quiz-answer {
+            display: none;
+            background-color: #f0fdf4; /* green-50 */
+            padding: 0.75rem;
+            margin-top: 0.75rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid #4ade80; /* green-400 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 40vh;
+        }
+        #dyslexia-text {
+            line-height: 2.5;
+            font-size: 1.25rem;
+            color: #475569;
+            background-color: #f1f5f9;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            min-height: 150px;
+        }
+        #dysgraphia-canvas {
+            border: 2px dashed #94a3b8;
+            cursor: crosshair;
+            touch-action: none;
+        }
+        .brain-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            object-fit: contain;
+        }
+        .interactive-box {
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .interactive-box:hover {
+            background-color: #fde68a; /* amber-200 */
+            transform: scale(1.05);
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        /* 情緒循環圖樣式 */
+        .cycle-stage {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            border: 2px solid transparent;
+        }
+        .cycle-stage:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .cycle-stage.active {
+            border-color: #0ea5e9; /* sky-500 */
+            background-color: #e0f2fe; /* sky-100 */
+            font-weight: bold;
+            color: #0369a1; /* sky-700 */
+        }
+        /* 杏仁核劫持圖解樣式 */
+        .brain-path {
+            position: relative;
+            padding: 1rem;
+            border: 2px dashed #94a3b8;
+            border-radius: 0.5rem;
+        }
+        .brain-part {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background-color: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            min-width: 100px;
+        }
+        .arrow {
+            font-size: 2rem;
+            color: #64748b;
+            align-self: center;
+            margin: 0 0.5rem;
+        }
+        /* 響應式影片容器 */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.5rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 頂部導覽列 -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 石庭亦 redlotu@gmail.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#0284C7]">特殊教育導論：第二單元</h1>
+            <div class="hidden md:flex flex-wrap space-x-6">
+                <a href="#paradigms" class="nav-link font-medium pb-1">核心典範</a>
+                <a href="#quiz" class="nav-link font-medium pb-1">課前測驗</a>
+                <a href="#unit4-5" class="nav-link font-medium pb-1">智能障礙與學習障礙</a>
+                <a href="#unit6" class="nav-link font-medium pb-1">情緒行為障礙</a>
+                <a href="#comparison" class="nav-link font-medium pb-1">綜合比較</a>
+                <a href="#legal-resources" class="nav-link font-medium pb-1">法規資源</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#paradigms" class="block py-2 nav-link text-center">核心典範</a>
+            <a href="#quiz" class="block py-2 nav-link text-center">課前測驗</a>
+            <a href="#unit4-5" class="block py-2 nav-link text-center">智能障礙與學習障礙</a>
+            <a href="#unit6" class="block py-2 nav-link text-center">情緒行為障礙</a>
+            <a href="#comparison" class="block py-2 nav-link text-center">綜合比較</a>
+            <a href="#legal-resources" class="block py-2 nav-link text-center">法規資源</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+        
+        <!-- 主標題與簡介 -->
+        <section class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800">第二單元：認知、學習與行為需求學生的教學實務</h2>
+            <div class="mt-4 max-w-3xl mx-auto card p-6 rounded-lg bg-[#F0F9FF]">
+                 <p class="text-slate-700 leading-relaxed">
+                本週課程將系統性地探討智能障礙、學習障礙及情緒行為障礙學生。每單元將遵循「定義與鑑定」、「核心特質與需求」及「實證本位教學策略」的架構進行，並整合專業研究報告，以提供更深入的學術探討。
+            </p>
+            </div>
+        </section>
+
+        <!-- 核心典範 -->
+        <section id="paradigms" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">核心典範的轉移</h2>
+            <p class="max-w-3xl mx-auto text-slate-600 mb-8 text-center">理解當代特殊教育，需先認識其思維框架的兩大重要轉變：從「醫療模式」到「社會模式」的典範轉移，以及「神經多樣性」概念的興起。</p>
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="card p-6 text-left">
+                    <h3 class="text-xl font-bold text-sky-700 mb-3">典範轉移：問題在哪？</h3>
+                    <div class="flex items-center justify-around">
+                        <div class="text-center p-4">
+                            <p class="font-bold text-rose-600 mb-2">醫療模式</p>
+                            <p class="text-sm text-slate-500">問題在<strong class="text-rose-500">個體內部</strong></p>
+                            <div class="text-5xl mt-2">🚶</div>
+                            <p class="text-xs mt-2 p-2 bg-rose-50 rounded-md">目標：修復/矯正個體</p>
+                        </div>
+                        <div class="text-4xl text-slate-400 font-light">→</div>
+                        <div class="text-center p-4">
+                            <p class="font-bold text-teal-600 mb-2">社會模式</p>
+                            <p class="text-sm text-slate-500">問題在<strong class="text-teal-500">環境與社會</strong></p>
+                            <div class="text-5xl mt-2">♿</div>
+                            <p class="text-xs mt-2 p-2 bg-teal-50 rounded-md">目標：移除環境障礙</p>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-600 leading-relaxed">這種轉變代表著，我們不再僅僅將障礙視為需要被「治療」的個人缺陷，而是開始檢討環境、課程與社會態度如何造成了阻礙，並致力於透過提供支持與調整環境來促進參與。</p>
+                </div>
+                <div class="card p-6 text-left">
+                    <h3 class="text-xl font-bold text-sky-700 mb-3">新興思潮：神經多樣性</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">神經多樣性 (Neurodiversity) 主張，自閉症、ADHD、學習障礙等並非「異常」或「疾病」，而是人類大腦功能正常的、自然的變異。如同生物多樣性對生態系至關重要，神經功能的多樣性也對人類社會有所貢獻。</p>
+                     <div class="mt-4 p-4 bg-sky-50 rounded-lg">
+                        <p class="text-center text-sky-800 font-semibold">"特殊教育的目標，不是讓所有大腦都變得一樣，而是創造一個能讓所有不同類型的大腦都能蓬勃發展的世界。"</p>
+                    </div>
+                    <p class="mt-4 text-sm text-slate-600 leading-relaxed">此觀點挑戰了「正常化」的教育目標，強調應發掘並善用每位學生的獨特優勢，而非僅僅彌補其弱勢。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 課前預習小測驗 -->
+        <section id="quiz" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">課前預習小測驗</h2>
+            <div class="max-w-3xl mx-auto card p-8 rounded-lg">
+                <ol class="list-decimal list-inside space-y-4 text-gray-700 leading-relaxed">
+                    <li>「智能障礙」的鑑定，除了智力測驗分數外，還必須考量哪一項重要指標？</li>
+                    <li>一位智力正常的學生，如果在「寫字」方面有極大的困難，他最有可能的特殊需求類別是什麼？</li>
+                    <li>當您看到一位學生在課堂上坐不住、動個不停時，除了「過動」，還有哪些可能的潛在原因？</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- 智能障礙與學習障礙 -->
+        <section id="unit4-5" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">智能障礙與學習障礙</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                
+                <!-- 單元四 -->
+                <article>
+                    <h3 class="content-heading">單元四：智能障礙學生之特性與教育需求 <span class="text-base font-medium text-gray-400">(對應教科書第四章)</span></h3>
+                    <div class="space-y-6 text-slate-700">
+                        <div>
+                            <p><strong class="tag">定義與鑑定</strong></p>
+                            <p class="mt-2">根據《特殊教育學生與幼兒鑑定辦法》第三條，智能障礙指個人在發展階段，其心智功能、適應行為及學業學習表現，較同年齡者有顯著困難。其鑑定強調智能功能與適應行為的雙重缺損，將焦點從「分類」轉向「發展所需支持的剖面圖」。</p>
+                            <div class="law-box">
+                                <h4 class="font-semibold text-slate-800">《特殊教育學生與幼兒鑑定辦法》第三條 鑑定基準：</h4>
+                                <ol class="list-decimal list-outside ml-5 mt-2 space-y-1 text-slate-600">
+                                    <li>1.心智功能明顯低下或個別智力測驗結果未達平均數負二個標準差。</li>
+                                    <li>2.學生在生活自理、動作與行動能力、語言與溝通、社會人際與情緒行為等任一向度及學科（領域）學習之表現較同年齡者有顯著困難情形。</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div>
+                            <p><strong class="tag">核心特質、亞型與成因</strong></p>
+                            <p class="mt-2">當代分類強調以<span class="font-semibold text-[#0284C7]">「所需支持的強度」</span>（間歇性、有限性、廣泛性、全面性）取代傳統僅依IQ分數的分類。依病因學分類則有助於預防與諮詢。</p>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <caption class="text-sm text-left text-gray-600 mb-2">表1：智能障礙主要成因分類與實例</caption>
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">發生時間</th>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">類別</th>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">實例與說明</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                        <tr>
+                                            <td class="px-4 py-3 font-medium">產前因素</td>
+                                            <td class="px-4 py-3">染色體異常</td>
+                                            <td class="px-4 py-3"><strong>唐氏症</strong>：第21對染色體多一條。<br><strong>X染色體脆折症</strong>：最常見的遺傳性智能障礙。</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 font-medium">周產期因素</td>
+                                            <td class="px-4 py-3">新生兒併發症</td>
+                                            <td class="px-4 py-3">早產、低出生體重、分娩時缺氧、出生時外傷。</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 font-medium">產後因素</td>
+                                            <td class="px-4 py-3">環境與感染</td>
+                                            <td class="px-4 py-3">腦部創傷、腦膜炎、鉛中毒、嚴重營養不良。</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div>
+                            <p><strong class="tag">教學策略與轉銜服務</strong></p>
+                            <p class="mt-2">教育核心為<span class="font-semibold text-[#0284C7]">「功能性課程」</span>，強調生活自理、社區適應、職業技能等實用知能。成功的教育更需為學生的成人生活做好準備，轉銜服務應及早開始，其就業安置模式可分為以下三種：</p>
+                             <ul class="mt-2 ml-4 space-y-4 list-disc list-outside">
+                                <li><strong>競爭性就業 (Competitive Employment)：</strong>指在與一般人相同的職場環境中，從事有給薪的工作。此模式適用於能力較佳、僅需少量支持的個案。</li>
+                                <li><strong>支持性就業 (Supported Employment)：</strong>這是目前轉銜的主流模式。個案在一般職場工作，但由政府或非營利組織派任的「就業服務員」提供密集且持續的支持，包括工作媒合、技能訓練、職場適應輔導等，協助其穩定就業。</li>
+                                <li><strong>庇護性就業 (Sheltered Employment)：</strong>個案在「庇護工場」這種受保護的環境中工作。工場提供較簡單、重複性高的作業內容，並有專業人員給予長期支持。此模式適用於能力限制較重，尚難以進入一般職場的個案。</li>
+                            </ul>
+                        </div>
+                         <div class="stigma-box">
+                            <h4 class="font-semibold text-rose-800">污名化議題</h4>
+                            <p class="text-rose-700 mt-2">台灣研究指出，相較於特殊學校，在主流學校集中式特教班的學生，可能因持續的社會比較而感受到更強烈的污名。此發現警示我們，僅有物理安置而無實質融合，可能加劇社會隔離。</p>
+                        </div>
+                    </div>
+                </article>
+
+                <hr class="border-gray-200">
+
+                <!-- 單元五 -->
+                <article>
+                    <h3 class="content-heading">單元五：學習障礙學生之辨識與教學策略 <span class="text-base font-medium text-gray-400">(對應教科書第五章)</span></h3>
+                     <div class="space-y-6 text-slate-700">
+                        <div>
+                            <p><strong class="tag">定義與鑑定</strong></p>
+                            <p class="mt-2">根據《特殊教育學生與幼兒鑑定辦法》第十一條，學習障礙統稱因<span class="font-semibold text-[#0284C7]">神經心理功能異常</span>而顯現出注意、記憶、理解、知覺、知覺動作、推理等能力有問題，致在聽、說、讀、寫或算等學習上有顯著困難者；其障礙並非因感官、智能、情緒等障礙因素或文化刺激不足、教學不當等環境因素所直接造成之結果。</p>
+                             <div class="law-box">
+                                <h4 class="font-semibold text-slate-800">《特殊教育學生與幼兒鑑定辦法》第十一條 鑑定基準：</h4>
+                                <ol class="list-decimal list-outside ml-5 mt-2 space-y-1 text-slate-600">
+                                    <li>1.智力正常或在正常程度以上。</li>
+                                    <li>2.個人內在能力有顯著差異。</li>
+                                    <li>3.聽覺理解、口語表達、識字、閱讀理解、書寫、數學運算等學習表現有顯著困難，且經確定一般教育所提供之介入，仍難有效改善。</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p><strong class="tag">核心特質、亞型與共病</strong></p>
+                            <p class="mt-2">以新北市為例，學習障礙的亞型分為「學習技能類」與「神經心理歷程類」兩大範疇，以利教學診斷：</p>
+                             <ul class="mt-2 ml-4 space-y-3 list-disc list-outside">
+                                <li><strong>學習技能類：</strong>在聽、說、讀、寫、算等基本學習技能的學習出現顯著困難，對應之亞型依序為：口語理解與表達、識字（含正確性以及流暢性）、閱讀理解、書寫、數學運算等。</li>
+                                <li><strong>神經心理歷程類：</strong>為幫助教學診斷，另訂注意力缺陷、知覺動作障礙（含視知覺、視動協調以及執行速度）等二種亞型。</li>
+                                <li><strong>共病 (Comorbidity)：</strong>指個體同時具備兩種或以上的障礙。學習障礙與<span class="font-semibold text-[#0284C7]">注意力不足過動症 (ADHD)</span> 的共病率極高（約25-40%）。共病使得問題根源難以釐清，需要整合性的支持方案。</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <p><strong class="tag">閱讀障礙的神經生理學證據</strong></p>
+                            <p class="mt-2">功能性磁振造影（fMRI）研究為閱讀障礙的神經生理成因提供了有力的視覺證據。透過比較典型讀者與閱讀障礙者在執行閱讀任務時的大腦活化模式，科學家發現了系統性的差異：</p>
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                <div class="text-center">
+                                    <img src="https://www.mdpi.com/brainsci/brainsci-11-00708/article_deploy/html/images/brainsci-11-00708-g005.png" alt="典型讀者與閱讀障礙者的大腦活化比較" class="brain-img mx-auto">
+                                    <p class="text-sm mt-2 text-slate-600"><strong>圖A：</strong>典型讀者（左）在閱讀時，左腦後側的閱讀相關區域（如顳頂葉、枕顳葉）有顯著活化。而閱讀障礙者（右）在相同區域則呈現<span class="font-semibold text-red-600">活化不足 (hypoactivation)</span> 的現象。</p>
+                                </div>
+                                <div class="text-center">
+                                    <img src="https://www.mdpi.com/brainsci/brainsci-11-00708/article_deploy/html/images/brainsci-11-00708-g004.png" alt="閱讀障礙者的代償性活化" class="brain-img mx-auto">
+                                    <p class="text-sm mt-2 text-slate-600"><strong>圖B：</strong>為了彌補左腦後側閱讀系統的效能不彰，閱讀障礙者（右）會轉而過度使用較無效率的腦區，例如<span class="font-semibold text-blue-600">前額葉（與發音有關）及右腦對應區域</span>，形成一種<span class="font-semibold text-blue-600">代償性活化 (compensatory activation)</span> 模式。</p>
+                                </div>
+                                <div class="text-center">
+                                    <img src="https://www.mdpi.com/brainsci/brainsci-11-00708/article_deploy/html/images/brainsci-11-00708-g006.png" alt="介入後的大腦活化改變" class="brain-img mx-auto">
+                                    <p class="text-sm mt-2 text-slate-600"><strong>圖C：</strong>此圖展現了大腦的<span class="font-semibold text-green-600">神經可塑性</span>。經過有效的、以聲韻為基礎的閱讀介入後，閱讀障礙兒童的大腦活化模式會趨向正常化，左腦後側閱讀系統的活化程度顯著提升。</p>
+                                </div>
+                                <div class="text-center">
+                                    <img src="https://www.marcipetersonet.com/uploads/2/7/1/3/27138989/367165704.jpg" alt="閱讀時大腦活化差異示意圖" class="brain-img mx-auto">
+                                    <p class="text-sm mt-2 text-slate-600"><strong>圖D：</strong>這張示意圖總結了兩者的差異。正常讀者（Normal）主要依賴高效的後腦閱讀路徑；而閱讀障礙者（Dyslexic）則需更費力地動用前腦區域來進行代償。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">學習障礙互動體驗</strong></p>
+                            <div class="mt-4 space-y-8">
+                                <!-- 閱讀障礙體驗 -->
+                                <div class="p-4 border rounded-lg">
+                                    <h4 class="font-semibold text-lg text-sky-800 mb-2">閱讀障礙 (Dyslexia) 體驗</h4>
+                                    <p class="text-sm text-slate-600 mb-4">閱讀障礙者在辨識文字時，常需花費大量心力，且容易混淆字形或順序。請點擊「開始模擬」按鈕，試著閱讀下方經過干擾的文字，體驗他們閱讀時的感受。</p>
+                                    <div id="dyslexia-text-container">
+                                        <p id="dyslexia-text">根據研究，閱讀的本質是一種「建構」，對文本內容的理解會因人而異。學習閱讀並非自然的歷程，初學閱讀者必須覺察他所學的符號在書寫系統裡所代表的意義為何。</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <button id="simulate-dyslexia-btn" class="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600">開始模擬</button>
+                                        <button id="reset-dyslexia-btn" class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">重設文字</button>
+                                    </div>
+                                </div>
+                                <!-- 書寫障礙體驗 -->
+                                <div class="p-4 border rounded-lg">
+                                    <h4 class="font-semibold text-lg text-sky-800 mb-2">書寫障礙 (Dysgraphia) 體驗</h4>
+                                    <p class="text-sm text-slate-600 mb-4">書寫障礙者可能在視覺-動作協調上有困難，導致寫字時感覺「不聽使喚」。請用滑鼠在左邊的畫布上，試著寫出右邊的「我」字，體驗鏡像書寫的感覺。</p>
+                                    <div class="flex items-center justify-center gap-8">
+                                        <canvas id="dysgraphia-canvas" width="200" height="200" class="bg-white"></canvas>
+                                        <div class="text-8xl font-serif text-slate-400">我</div>
+                                    </div>
+                                    <div class="mt-4 text-center">
+                                        <button id="clear-canvas-btn" class="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600">清除畫布</button>
+                                    </div>
+                                </div>
+                                <!-- 數學障礙體驗 -->
+                                <div class="p-4 border rounded-lg">
+                                    <h4 class="font-semibold text-lg text-sky-800 mb-2">數學障礙 (Dyscalculia) 體驗</h4>
+                                    <p class="text-sm text-slate-600 mb-4">數學障礙者可能在辨識數學符號或在解碼、編碼之間轉換時感到困難。請試著解出下方的算式，體驗在符號混淆下的計算挑戰。</p>
+                                    <div class="text-center bg-gray-100 p-6 rounded-lg">
+                                        <div id="dyscalculia-problem" class="text-3xl font-mono tracking-widest mb-4"></div>
+                                        <button id="check-dyscalculia-btn" class="px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600">顯示答案</button>
+                                        <div id="dyscalculia-answer" class="quiz-answer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- 情緒行為障礙 -->
+        <section id="unit6" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">情緒行為障礙</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <!-- 單元六 -->
+                <article>
+                    <h3 class="content-heading">單元六：情緒行為障礙學生之特性與教育 <span class="text-base font-medium text-gray-400">(對應教科書第六章)</span></h3>
+                    <div class="space-y-6 text-slate-700">
+                        <div>
+                            <p><strong class="tag">定義與鑑定</strong></p>
+                            <p class="mt-2">根據《特殊教育學生與幼兒鑑定辦法》第十條，情緒行為障礙指長期情緒或行為表現顯著異常，致嚴重影響學校適應；其障礙非因智能、感官或健康等因素直接造成之結果。其症狀包括精神性疾患、情感性疾患、畏懼性疾患、焦慮性疾患、注意力缺陷過動症、或有其他持續性之情緒或行為問題。</p>
+                             <div class="law-box">
+                                <h4 class="font-semibold text-slate-800">《特殊教育學生與幼兒鑑定辦法》第十條 鑑定基準：</h4>
+                                <ol class="list-decimal list-outside ml-5 mt-2 space-y-1 text-slate-600">
+                                    <li>1.情緒或行為表現顯著異於其同年齡或社會文化之常態者，得參考精神科醫師之診斷認定之。</li>
+                                    <li>2.在學校顯現學業、社會、人際、生活或職業學習等適應有顯著困難。</li>
+                                    <li>3.除學校外，在家庭、社區、社會或任一情境中顯現適應困難。</li>
+                                    <li>4.前二款之困難經評估後確定一般教育及輔導所提供之介入成效有限，仍有特殊教育需求。</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p><strong class="tag">核心特質與主要類型</strong></p>
+                            <p class="mt-2">情緒行為障礙涵蓋多樣的困難，從內隱的焦慮、憂鬱到外顯的攻擊、違抗行為都屬此範疇。教育現場常依據DSM-5診斷系統及學生行為模式，將其分為以下幾種主要類型，以利理解與支持。</p>
+                            
+                            <div class="mt-6 space-y-8">
+                                <!-- 精神性疾患 -->
+                                <div class="p-4 border-l-4 border-red-400 bg-red-50 rounded-r-lg">
+                                    <h4 class="font-semibold text-lg text-red-800 mb-2">精神性疾患 (Psychotic Disorders)</h4>
+                                    <p class="text-sm text-red-700 mb-4">主要特徵為脫離現實，可能出現幻覺（看到或聽到不存在的事物）、妄想（堅信不符合事實的想法）等症狀。其中最廣為人知的是<span class="font-bold">思覺失調症 (Schizophrenia)</span>。</電影《美麗境界》主角、諾貝爾獎得主約翰·奈許的經歷，讓我們看見即使面對嚴峻挑戰，個體仍有無限潛能。</p>
+                                    <div class="video-container">
+                                        <iframe src="https://www.youtube.com/embed/ge4IVgPHjGw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+
+                                <!-- 情感性疾患 -->
+                                <div class="p-4 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
+                                    <h4 class="font-semibold text-lg text-blue-800 mb-2">情感性疾患 (Mood Disorders)</h4>
+                                    <p class="text-sm text-blue-700 mb-4">核心問題是情緒的嚴重失調。主要包括<span class="font-bold">憂鬱症</span>（持續低落、失去興趣）與<span class="font-bold">躁鬱症/雙相情緒障礙症</span>（在躁期與鬱期之間擺盪）。這些不僅是「心情不好」，而是會嚴重影響思考、感受與日常功能的疾病。</p>
+                                    <div class="video-container">
+                                        <iframe src="https://www.youtube.com/embed/hqNVUgn_zMs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+
+                                <!-- 焦慮/畏懼性疾患 -->
+                                <div class="p-4 border-l-4 border-yellow-400 bg-yellow-50 rounded-r-lg">
+                                    <h4 class="font-semibold text-lg text-yellow-800 mb-2">焦慮/畏懼性疾患 (Anxiety/Phobic Disorders)</h4>
+                                    <p class="text-sm text-yellow-700 mb-4">特徵為不成比例的恐懼、擔憂與逃避行為。常見類型包括<span class="font-bold">社交畏懼症</span>（害怕社交場合）、<span class="font-bold">強迫症(OCD)</span>（重複的想法與行為）、<span class="font-bold">選擇性緘默症</span>（在特定場合無法說話）及<span class="font-bold">創傷後壓力症(PTSD)</span>等。</p>
+                                    <div class="video-container">
+                                        <iframe src="https://www.youtube.com/embed/pOibGKxafcE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+
+                                <!-- 注意力缺陷過動症 -->
+                                <div class="p-4 border-l-4 border-green-400 bg-green-50 rounded-r-lg">
+                                    <h4 class="font-semibold text-lg text-green-800 mb-2">注意力不足/過動症 (ADHD)</h4>
+                                    <p class="text-sm text-green-700 mb-4">這是校園中最常見的神經發展障礙之一，主要特徵為與年齡不相稱的注意力不集中、活動量過高及衝動。ADHD常與學習障礙及其他情緒行為問題共病，需要多面向的支持。</p>
+                                    <div class="video-container">
+                                        <iframe src="https://www.youtube.com/embed/WuepNoqsS5Q" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                                
+                                <!-- 其他 -->
+                                <div class="p-4 border-l-4 border-gray-400 bg-gray-50 rounded-r-lg">
+                                    <h4 class="font-semibold text-lg text-gray-800 mb-2">其他持續性之情緒或行為問題</h4>
+                                    <p class="text-sm text-gray-700 mb-4">此類別包含多種狀況，例如以不自主的動作或聲音（tics）為特徵的<span class="font-bold">妥瑞症 (Tourette's Disorder)</span>，以及表現出持續違抗、敵意行為的<span class="font-bold">對立反抗性疾患 (Oppositional Defiant Disorder, ODD)</span>。</p>
+                                    <div class="video-container">
+                                        <iframe src="https://www.youtube.com/embed/DlrLl9C-UPE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-8 pt-4">
+                            <!-- 杏仁核劫持圖解 -->
+                            <div>
+                                <p><strong class="tag">情緒的生理來源：杏仁核劫持</strong></p>
+                                <p class="mt-2">要理解學生的情緒反應，我們需要先了解大腦是如何運作的。當我們情緒失控時，常常是因為大腦中的「杏仁核」過度活化，暫時「劫持」了我們的理性思考中樞「前額葉」。</p>
+                                <div class="mt-4 space-y-6">
+                                    <!-- 理性路徑 -->
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-green-700 mb-2">✅ 一般狀態：理性思考路徑</h4>
+                                        <div class="brain-path border-green-400">
+                                            <div class="flex flex-wrap items-center justify-center gap-2 md:gap-4">
+                                                <div class="brain-part bg-slate-50">刺激<br>(如：被同學碰撞)</div>
+                                                <div class="arrow text-green-600">→</div>
+                                                <div class="brain-part bg-amber-100">
+                                                    <span class="iconify text-2xl text-amber-600" data-icon="mdi:brain"></span>
+                                                    <span class="font-bold">杏仁核</span>
+                                                    <span class="text-xs">情緒警報</span>
+                                                </div>
+                                                <div class="arrow text-green-600">→</div>
+                                                <div class="brain-part bg-sky-100">
+                                                    <span class="iconify text-2xl text-sky-600" data-icon="mdi:head-cog-outline"></span>
+                                                    <span class="font-bold">前額葉</span>
+                                                    <span class="text-xs">理性思考</span>
+                                                </div>
+                                                <div class="arrow text-green-600">→</div>
+                                                <div class="brain-part bg-green-100">
+                                                    <span class="iconify text-2xl text-green-600" data-icon="mdi:hand-wave-outline"></span>
+                                                    <span class="font-bold">做出反應</span>
+                                                    <span class="text-xs">「他可能不是故意的」</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-sm mt-3 text-slate-600">在一般情況下，情緒訊號會先送到前額葉進行分析判斷，讓我們能做出理性的回應。</p>
+                                        </div>
+                                    </div>
+                                    <!-- 杏仁核劫持路徑 -->
+                                    <div>
+                                        <h4 class="font-semibold text-lg text-red-700 mb-2">❌ 杏仁核劫持：情緒短路路徑</h4>
+                                        <div class="brain-path border-red-400">
+                                            <div class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4">
+                                                <div class="brain-part bg-slate-50">威脅性刺激<br>(如：感到被挑釁)</div>
+                                                <div class="arrow text-red-600 md:transform-none">→</div>
+                                                <div class="brain-part bg-amber-100 ring-2 ring-red-500">
+                                                    <span class="iconify text-2xl text-red-600" data-icon="mdi:brain"></span>
+                                                    <span class="font-bold">杏仁核</span>
+                                                    <span class="text-xs text-red-600 font-semibold">高度活化</span>
+                                                </div>
+                                                
+                                                <div class="flex flex-col items-center my-2 md:my-0 mx-2">
+                                                    <div class="arrow text-red-600 transform rotate-90 md:rotate-0 md:transform-none">→</div>
+                                                    <div class="text-center text-red-600 font-bold text-sm px-2 py-1 bg-red-50 rounded-full whitespace-nowrap -mt-2 md:mt-0 md:-ml-16 md:absolute">繞過理性思考</div>
+                                                </div>
+
+                                                <div class="brain-part bg-red-100">
+                                                    <span class="iconify text-2xl text-red-600" data-icon="mdi:karate"></span>
+                                                    <span class="font-bold">戰鬥或逃跑反應</span>
+                                                    <span class="text-xs">「你找麻煩嗎！」</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-sm mt-3 text-slate-600">當杏仁核感受到威脅（無論是真實或想像的），它會立即觸發「戰鬥或逃跑」反應，繞過前額葉的理性分析，導致衝動行為。這時，講道理是沒有用的，因為大腦的「思考」功能暫時離線了。</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 爆發型情緒行為循環 -->
+                            <div>
+                                <p><strong class="tag">爆發型情緒行為循環</strong></p>
+                                <p class="mt-2">學生的情緒爆發並非一蹴可幾，而是一個有跡可循的循環過程。了解這七個階段的特徵與因應策略，能幫助教師在關鍵時刻介入，避免事態升級，並在事後進行有效的修復。</p>
+                                <div class="mt-4 p-4 bg-slate-50 rounded-lg">
+                                    <div class="relative mb-6 max-w-2xl mx-auto">
+                                        <img src="https://img.yamol.tw/5278433-6261f444d05b8.jpg" alt="爆發型情緒行為循環圖" class="w-full h-auto rounded-md shadow-md">
+                                    </div>
+                                    <div id="cycle-stages-container" class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6">
+                                        <!-- 階段按鈕將由JS動態生成 -->
+                                    </div>
+                                    <div id="cycle-details-container" class="p-4 bg-white rounded-md border border-slate-200 min-h-[200px] transition-all duration-300">
+                                        <!-- 階段詳細內容將由JS動態生成 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">教學與行為介入策略</strong></p>
+                            <p class="mt-2">有效的介入必須是全面且預防性的，其核心為<span class="font-semibold text-[#0284C7]">「全校性正向行為支持」(SW-PBS)</span>，與我國三級輔導體制精神相符。此系統涵蓋全校性的預防、針對高風險學生的小團體介入（如社交技巧訓練），以及為具嚴重問題學生設計的個別化行為介入方案（常基於功能性行為評量FBA）。</p>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <p><strong class="tag">情緒素養培育：RULER模式</strong></p>
+                            <p class="mt-2">除了行為支持，培育學生的「情緒素養」(Emotional Literacy) 更是治本之道。耶魯大學情緒智商中心發展的 RULER 模式是一套系統性的教學方法，旨在教導師生五項關鍵的情緒技能，讓情緒成為助力而非阻力。</p>
+                            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 text-center">
+                                <!-- R -->
+                                <div class="card p-4 flex flex-col items-center">
+                                    <div class="text-3xl font-bold text-sky-600">R</div>
+                                    <div class="font-semibold mt-1">辨識 (Recognizing)</div>
+                                    <p class="text-xs text-slate-500 mt-2">辨識自己與他人的情緒，能從臉部表情、肢體語言、聲音語調中察覺情緒線索。</p>
+                                </div>
+                                <!-- U -->
+                                <div class="card p-4 flex flex-col items-center">
+                                    <div class="text-3xl font-bold text-sky-600">U</div>
+                                    <div class="font-semibold mt-1">理解 (Understanding)</div>
+                                    <p class="text-xs text-slate-500 mt-2">理解情緒發生的前因後果，分析不同情緒可能帶來的影響。</p>
+                                </div>
+                                <!-- L -->
+                                <div class="card p-4 flex flex-col items-center">
+                                    <div class="text-3xl font-bold text-sky-600">L</div>
+                                    <div class="font-semibold mt-1">標示 (Labeling)</div>
+                                    <p class="text-xs text-slate-500 mt-2">用精確的詞彙為情緒命名，例如區分「失望」、「嫉妒」與單純的「難過」。</p>
+                                </div>
+                                <!-- E -->
+                                <div class="card p-4 flex flex-col items-center">
+                                    <div class="text-3xl font-bold text-sky-600">E</div>
+                                    <div class="font-semibold mt-1">表達 (Expressing)</div>
+                                    <p class="text-xs text-slate-500 mt-2">學習在不同場合，用符合社會文化與情境的適當方式表達情緒。</p>
+                                </div>
+                                <!-- R -->
+                                <div class="card p-4 flex flex-col items-center">
+                                    <div class="text-3xl font-bold text-sky-600">R</div>
+                                    <div class="font-semibold mt-1">調節 (Regulating)</div>
+                                    <p class="text-xs text-slate-500 mt-2">發展有效的策略來管理與調節自己的情緒，而非被情緒淹沒。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <p><strong class="tag">藥物治療的角色</strong></p>
+                            <p class="mt-2">對於部分情緒行為障礙學生，特別是ADHD或嚴重的情感性疾患，藥物治療是整體介入計畫中重要的一環。藥物無法「治癒」障礙，但能有效控制核心症狀，從而為行為治療與教育介入創造成功的可能性。教師雖非醫療專業，但了解常用藥物能有助於觀察學生反應並與家長、醫師溝通。</p>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <caption class="text-sm text-left text-gray-600 mb-2">表3：情緒行為障礙學生常用藥物類型</caption>
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">藥物類型</th>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">主要功能</th>
+                                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">常見藥物與注意事項</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200 text-sm">
+                                        <tr>
+                                            <td class="px-4 py-3 font-medium">中樞神經興奮劑</td>
+                                            <td class="px-4 py-3">提升大腦中多巴胺與正腎上腺素的濃度，改善注意力和抑制衝動。</td>
+                                            <td class="px-4 py-3"><strong>主要用於ADHD。</strong>如：利他能(Ritalin)、專思達(Concerta)。<br>常見副作用：食慾不振、失眠。需密切監控。</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 font-medium">抗憂鬱劑</td>
+                                            <td class="px-4 py-3">調節大腦中血清素等神經傳導物質，改善憂鬱、焦慮情緒。</td>
+                                            <td class="px-4 py-3"><strong>主要用於憂鬱症、焦慮症。</strong>如：百憂解(Prozac)。<br>需一段時間才能顯現效果，不可自行停藥。</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-3 font-medium">情緒穩定劑/抗精神病藥物</td>
+                                            <td class="px-4 py-3">穩定極端的情緒波動，或減緩精神病性症狀（如幻覺）。</td>
+                                            <td class="px-4 py-3"><strong>用於雙極性情感障礙症或具攻擊行為的個案。</strong>如：理思必妥(Risperdal)。<br>副作用較複雜，需嚴密醫療監控。</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+        
+        <!-- 三類障礙綜合比較 -->
+        <section id="comparison" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">三類障礙綜合比較</h2>
+            <div class="card p-6 md:p-8">
+                <p class="text-center text-slate-600 mb-6">雖然各類障礙特徵不同，但其影響層面常有重疊。此雷達圖呈現了三類障礙在不同功能領域所面臨挑戰的典型強度，以利快速比較。</p>
+                <div class="chart-container">
+                    <canvas id="comparisonRadarChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- 法規資源 -->
+        <section id="legal-resources" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">相關法規與資源</h2>
+            <div class="max-w-3xl mx-auto grid md:grid-cols-1 gap-8">
+                 <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0080065" target="_blank" class="card block p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-[#0284C7]">特殊教育學生與幼兒鑑定辦法</h3>
+                    <p class="text-gray-600">此為各類特殊需求學生鑑定的主要法源依據，詳細定義了學習障礙、情緒行為障礙等類別的鑑定基準與程序。</p>
+                </a>
+                <a href="https://www.set.edu.tw/actclass/fileshare/default.asp" target="_blank" class="card block p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-[#0284C7]">教育部特教通報網-研習講義分享區</h3>
+                    <p class="text-gray-600">提供由專家學者分享的各類特教主題研習講義，是獲取實務知識與教學策略的寶貴資源庫。</p>
+                </a>
+                <a href="https://sec.ntpc.edu.tw/var/file/4/1004/attach/63/pta_12166_4129577_67640.pdf" target="_blank" class="card block p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-[#0284C7]">新北市學習障礙鑑定實務參考手冊</h3>
+                    <p class="text-gray-600">提供地方鑑定實務的詳細指引，包含亞型分類、評估工具選用等具體建議，可作為教學診斷的重要參考。</p>
+                </a>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- 互動式定義解釋 Modal -->
+    <div id="definition-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-title" class="text-xl font-bold text-sky-700 mb-4"></h3>
+            <p id="modal-text" class="text-slate-600"></p>
+            <button id="modal-close-btn" class="mt-6 px-4 py-2 bg-sky-500 text-white rounded hover:bg-sky-600 w-full">關閉</button>
+        </div>
+    </div>
+
+    <!-- 頁腳 -->
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者 石庭亦 redlotu@gmail.com</p>
+            <p class="text-sm">©特殊教育導論課程活動第二單元，主要依據課程大綱，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.getAttribute('href'));
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // 教學策略頁籤互動
+            const strategyTabs = document.querySelectorAll('.strategy-tab');
+            const strategyContentDiv = document.getElementById('strategy-content');
+
+            const strategies = {
+                'strategy-1': {
+                    title: '聲韻覺識教學',
+                    content: '這是針對閱讀障礙核心困難的關鍵教學。目標是提升學生對語言聲音結構的覺察能力。教學活動應短暫且有趣，例如：<ul class="list-disc list-outside ml-5 mt-2 space-y-1"><li><strong>音韻遊戲：</strong>進行押韻、辨識聲母/韻母的遊戲。</li><li><strong>音素切割與混合：</strong>練習將一個音節（如「家」）分解為「ㄐ」、「ㄧ」、「ㄚ」，或將音素組合起來。</li><li><strong>Elkonin Box：</strong>利用積木或標記物代表音素，幫助學生將聲音視覺化。</li></ul>'
+                },
+                'strategy-2': {
+                    title: '部件/識字教學',
+                    content: '針對中文字特性，教導學生辨識字的組成規律，而非死記。此方法有助於系統性地擴充識字量。<ul class="list-disc list-outside ml-5 mt-2 space-y-1"><li><strong>部件分析：</strong>教導學生辨識漢字的「部件」（如「神」由「示」和「申」組成），了解部件的表音或表義功能。</li><li><strong>基本字帶字：</strong>由一個核心字（如「青」）衍生出一系列形聲字（如「清、情、請、晴」），幫助學生舉一反三。</li><li><strong>字族文教學：</strong>將有相同部件或字根的字編組成短文，在有意義的脈絡中學習。</li></ul>'
+                },
+                'strategy-3': {
+                    title: '流暢性訓練',
+                    content: '閱讀流暢性是連結解碼與理解的橋樑。目標是讓學生能正確、快速、且有適當韻律地閱讀。<ul class="list-disc list-outside ml-5 mt-2 space-y-1"><li><strong>重複閱讀 (Repeated Reading)：</strong>讓學生反覆朗讀同一篇短文，直到達到一定的速度和正確率標準。</li><li><strong>配對閱讀 (Paired Reading)：</strong>由學生與能力較好的同儕或成人一起朗讀，提供示範與支持。</li><li><strong>引導式口頭閱讀 (Guided Oral Reading)：</strong>教師提供即時回饋與修正，引導學生流暢朗讀。</li></ul>'
+                },
+                'strategy-4': {
+                    title: '理解策略教學',
+                    content: '教導學生主動監控與促進自己對文章的理解。<ul class="list-disc list-outside ml-5 mt-2 space-y-1"><li><strong>心智圖法 (Mind Mapping)：</strong>運用視覺化思考工具，協助學生組織文章架構與重點。</li><li><strong>故事結構分析：</strong>引導學生找出故事中的主角、情境、問題、解決過程與結局。</li><li><strong>交互教學法 (Reciprocal Teaching)：</strong>師生輪流扮演領導者，針對文章進行摘要、提問、澄清與預測。</li><li><strong>多感官教學法 (VAKT)：</strong>透過視、聽、動、觸多重感官連結，強化文字符號的學習。</li></ul>'
+                }
+            };
+
+            function updateStrategyContent(tabKey) {
+                if (!strategyContentDiv) return;
+                const contentData = strategies[tabKey];
+                strategyContentDiv.innerHTML = `
+                    <h4 class="font-semibold text-lg mb-2 text-sky-800">${contentData.title}</h4>
+                    <div class="text-slate-600 leading-relaxed">${contentData.content}</div>
+                `;
+                strategyTabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabKey);
+                });
+            }
+
+            strategyTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    updateStrategyContent(tab.dataset.tab);
+                });
+            });
+
+            // 初始載入第一個頁籤的內容
+            if (strategyTabs.length > 0) {
+                updateStrategyContent('strategy-1');
+            }
+
+            // Radar Chart
+            const ctxRadar = document.getElementById('comparisonRadarChart');
+            if (ctxRadar) {
+                new Chart(ctxRadar, {
+                    type: 'radar',
+                    data: {
+                        labels: ['核心智能功能', '學業學習(讀寫算)', '社會人際互動', '情緒行為調節', '生活自理能力'],
+                        datasets: [{
+                            label: '智能障礙',
+                            data: [5, 3, 4, 3, 5],
+                            fill: true,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            pointBackgroundColor: 'rgb(255, 99, 132)',
+                        }, {
+                            label: '學習障礙',
+                            data: [2, 5, 3, 2, 1],
+                            fill: true,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            pointBackgroundColor: 'rgb(54, 162, 235)',
+                        }, {
+                            label: '情緒行為障礙',
+                            data: [1, 2, 5, 5, 2],
+                            fill: true,
+                            backgroundColor: 'rgba(255, 205, 86, 0.2)',
+                            borderColor: 'rgb(255, 205, 86)',
+                            pointBackgroundColor: 'rgb(255, 205, 86)',
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        elements: { line: { borderWidth: 3 } },
+                        scales: {
+                            r: {
+                                angleLines: { display: false },
+                                suggestedMin: 0,
+                                suggestedMax: 5,
+                                pointLabels: { font: { size: 14 } },
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Dyslexia Simulation
+            const dyslexiaTextElement = document.getElementById('dyslexia-text');
+            const originalText = dyslexiaTextElement.textContent;
+            const simulateBtn = document.getElementById('simulate-dyslexia-btn');
+            const resetBtn = document.getElementById('reset-dyslexia-btn');
+
+            const similarChars = { '的': '得', '在': '再', '以': '已', '我': '找', '人': '入', '天': '夫', '土': '士' };
+
+            function simulateDyslexia(text) {
+                let chars = text.split('');
+                for (let i = 0; i < chars.length - 1; i++) {
+                    if (Math.random() < 0.2) {
+                        [chars[i], chars[i+1]] = [chars[i+1], chars[i]];
+                        i++; 
+                    }
+                    if (similarChars[chars[i]] && Math.random() < 0.15) {
+                        chars[i] = similarChars[chars[i]];
+                    }
+                }
+                return chars.join('');
+            }
+
+            simulateBtn.addEventListener('click', () => {
+                dyslexiaTextElement.textContent = simulateDyslexia(originalText);
+            });
+
+            resetBtn.addEventListener('click', () => {
+                dyslexiaTextElement.textContent = originalText;
+            });
+
+            // Dysgraphia Simulation
+            const canvas = document.getElementById('dysgraphia-canvas');
+            const ctxCanvas = canvas.getContext('2d');
+            let drawing = false;
+
+            function getMousePos(canvas, evt) {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: evt.clientX - rect.left,
+                    y: evt.clientY - rect.top
+                };
+            }
+            
+            function getTouchPos(canvas, touch) {
+                const rect = canvas.getBoundingClientRect();
+                return {
+                    x: touch.clientX - rect.left,
+                    y: touch.clientY - rect.top
+                };
+            }
+
+            function startDrawing(e) {
+                drawing = true;
+                draw(e);
+            }
+
+            function stopDrawing() {
+                drawing = false;
+                ctxCanvas.beginPath();
+            }
+
+            function draw(e) {
+                if (!drawing) return;
+                e.preventDefault();
+                
+                const pos = e.touches ? getTouchPos(canvas, e.touches[0]) : getMousePos(canvas, e);
+
+                ctxCanvas.lineWidth = 3;
+                ctxCanvas.lineCap = 'round';
+                ctxCanvas.strokeStyle = '#0284C7';
+
+                const mirroredX = canvas.width - pos.x;
+
+                ctxCanvas.lineTo(mirroredX, pos.y);
+                ctxCanvas.stroke();
+                ctxCanvas.beginPath();
+                ctxCanvas.moveTo(mirroredX, pos.y);
+            }
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            canvas.addEventListener('touchstart', startDrawing);
+            canvas.addEventListener('touchend', stopDrawing);
+            canvas.addEventListener('touchmove', draw);
+
+            document.getElementById('clear-canvas-btn').addEventListener('click', () => {
+                ctxCanvas.clearRect(0, 0, canvas.width, canvas.height);
+            });
+            
+            // Dyscalculia Simulation
+            const problemEl = document.getElementById('dyscalculia-problem');
+            const answerEl = document.getElementById('dyscalculia-answer');
+            const checkBtn = document.getElementById('check-dyscalculia-btn');
+
+            const symbolMap = { '0':'⬠', '1':'⬡', '2':'⬢', '3':'⬣', '4':'◇', '5':'◆', '6':'□', '7':'■', '8':'△', '9':'▲', '+': '⊕', '-': '⊖', '=':'≈' };
+            const num1 = 12, num2 = 5;
+            const answer = num1 + num2;
+
+            function encodeProblem(n1, n2, op) {
+                const encodedN1 = String(n1).split('').map(char => symbolMap[char]).join('');
+                const encodedN2 = String(n2).split('').map(char => symbolMap[char]).join('');
+                const encodedOp = symbolMap[op];
+                return `${encodedN1} ${encodedOp} ${encodedN2} ${symbolMap['=']} ?`;
+            }
+
+            problemEl.textContent = encodeProblem(num1, num2, '+');
+            answerEl.innerHTML = `<strong>答案：</strong>${answer}。<br><strong>解析：</strong>此處的符號 ⬡⬢ ⊕ ◆ ≈ ? 代表 12 + 5 = ?。數學障礙者可能在快速、正確地解碼這些符號並在工作記憶中進行運算時感到困難，即使他們理解加法的概念。`;
+
+            checkBtn.addEventListener('click', () => {
+                toggleAnswer('dyscalculia-answer');
+            });
+
+            // Interactive Definition Modal
+            const modal = document.getElementById('definition-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalText = document.getElementById('modal-text');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            const definitions = {
+                attention: { title: '注意困難', text: '指個體在選擇、維持、或轉移注意力至特定刺激上有困難。在學習上，可能表現為容易分心、無法專心聽講、或在多步驟任務中遺漏細節。' },
+                memory: { title: '記憶困難', text: '特別指工作記憶（在處理訊息的同時暫存訊息）與短期記憶的困難。例如，學生可能在聽寫時忘記剛聽到的句子，或在多步驟數學計算中忘記已算出的中間值。' },
+                perception: { title: '知覺困難', text: '指大腦在解釋感官訊息（視覺或聽覺）時出現問題，而非感官本身有缺陷。例如，視知覺困難者可能混淆相似的字形（如「b」和「d」）；聽知覺困難者可能難以分辨相似的語音（如/p/和/b/）。' },
+                'perceptual-motor': { title: '知覺動作困難', text: '指整合視覺訊息與肢體動作的能力有困難。在學習上，最常影響書寫能力，導致字體歪斜、結構不佳、或抄寫速度緩慢。' },
+                reasoning: { title: '推理困難', text: '指在進行邏輯思考、歸納、演繹或問題解決時有困難。例如，學生可能難以理解因果關係、從文章中做出推論，或應用數學概念解決應用題。' },
+                comprehension: { title: '理解困難', text: '指在掌握口語或書面語言的意義上有困難。這可能涉及詞彙量不足、無法理解複雜句型、或難以掌握文章的主旨與脈絡。' },
+                listen: { title: '聽覺理解困難', text: '指在處理和理解口語訊息方面有困難。學生可能有正常的聽力，但卻不易瞭解所聽到的話，對語言的覺察有困難，或是無法分辨音調，進而影響課堂學習與人際溝通。' },
+                speak: { title: '口語表達困難', text: '指在組織想法並以口語清晰表達方面有困難。學生可能語音器官發展正常，但溝通技巧不良，經常使用不成熟、不適當的詞彙、不完整的句子、文法錯誤及無法正確表達其概念與想法。' },
+                read: { title: '閱讀困難', text: '指在辨識文字、解碼（將字形轉換為讀音）以及理解文意方面有困難。學生可能會無法區辨字形、識字困難、閱讀速度緩慢、或無法掌握文章重點。' },
+                write: { title: '書寫困難', text: '指在文字書寫的各個層面有困難，可能涉及視動協調統整能力（字體歪斜）、拼字（音義連結錯誤）或書寫表達（組織文句）等障礙。' },
+                math: { title: '數學運算困難', text: '指在理解數學概念、執行計算程序或解決數學問題方面有困難。學生的特徵可能包括對數學符號認知困難、無法理解運算法則、或對應用問題無法轉換成適當算式求解。' }
+            };
+
+            document.querySelectorAll('.interactive-box').forEach(box => {
+                box.addEventListener('click', (e) => {
+                    const key = e.target.dataset.modal;
+                    if (definitions[key]) {
+                        modalTitle.textContent = definitions[key].title;
+                        modalText.textContent = definitions[key].text;
+                        modal.classList.add('visible');
+                    }
+                });
+            });
+
+            modalCloseBtn.addEventListener('click', () => {
+                modal.classList.remove('visible');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('visible');
+                }
+            });
+
+            // ==================== 互動圖表JS ====================
+            const cycleData = {
+                calm: {
+                    name: '1. 冷靜期',
+                    features: '大多數時候可以投入課堂，偶爾會小脾氣。',
+                    strategies: ['增加人際連結', '讓學生練習幫忙一些小事，增加貢獻感', '鼓勵、稱讚正向的表現', '建立班上危機反應的SOP']
+                },
+                triggers: {
+                    name: '2. 觸發期',
+                    features: '開始經歷到一些觸發情緒的內外在因素，如：大人糾正、同學挑釁等。',
+                    strategies: ['冷靜地設限', '明確指示好的正向行為', '移除觸發因素', '如果需要糾正，提供私下提醒的機會']
+                },
+                agitation: {
+                    name: '3. 焦躁期',
+                    features: '搓手、拍桌、跺腳、發出聲音、重呼吸、開始碎念。',
+                    strategies: ['表達關心', '提供轉移注意力的活動（需事前準備）', '安插學生喜歡的特別活動', '允許學生暫離、給予喘息空間', '維持其他同學冷靜、不過度反應']
+                },
+                acceleration: {
+                    name: '4. 加速期',
+                    features: '開始故意不配合、擅自離開、激怒同學、叫囂、破壞物品。',
+                    strategies: ['改為更簡短的指示', '語調及用詞保持冷靜、避免敵意姿態', '允許學生暫離活動、提供替代空間', '留意避免陷入「命令—不配合」的惡性循環']
+                },
+                peak: {
+                    name: '5. 高峰期',
+                    features: '失控、對人或物體的攻擊。',
+                    strategies: ['【首重安全】維護其他同學安全，必要時教室人員淨空', '啟動學校危機反應SOP（需行政人員支援）', '啟動學生的IEP正向行為支持計畫流程']
+                },
+                de_escalation: {
+                    name: '6. 降溫期',
+                    features: '開始會回應人、否認自己的行為、嘗試辯解。',
+                    strategies: ['【避免二度刺激】先嘗試回到原先任務，等等再要求善後', '允許學生有冷靜時間（約30-60分鐘）', '先不要質疑孩子在辯解，避免引發二次情緒循環']
+                },
+                recovery: {
+                    name: '7. 修復期',
+                    features: '開始從事非互動行為，不情願地去善後剛剛發生的事。',
+                    strategies: ['【重建關係】在大人陪伴下好好善後', '視情況陪孩子檢視事發經過', '高頻率的正增強：稱讚具體的好行為']
+                }
+            };
+
+            const stagesContainer = document.getElementById('cycle-stages-container');
+            const detailsContainer = document.getElementById('cycle-details-container');
+
+            function displayCycleDetails(stageKey) {
+                const data = cycleData[stageKey];
+                if (!data) return;
+
+                // 更新按鈕的 active 狀態
+                document.querySelectorAll('.cycle-stage').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.stage === stageKey);
+                });
+
+                // 更新詳細內容
+                let strategiesHtml = data.strategies.map(s => `<li class="flex items-start"><span class="iconify mr-2 mt-1 text-sky-500" data-icon="mdi:check-circle-outline"></span><span>${s}</span></li>`).join('');
+                detailsContainer.innerHTML = `
+                    <h4 class="font-bold text-lg text-sky-700 mb-2">${data.name}</h4>
+                    <div class="mb-4">
+                        <p class="font-semibold text-slate-600">學生特徵：</p>
+                        <p class="text-slate-500">${data.features}</p>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-slate-600">關鍵因應策略：</p>
+                        <ul class="space-y-1 text-slate-500">${strategiesHtml}</ul>
+                    </div>
+                `;
+            }
+
+            // 動態生成階段按鈕
+            Object.keys(cycleData).forEach(key => {
+                const button = document.createElement('button');
+                button.className = 'cycle-stage bg-white shadow-sm text-slate-700';
+                button.textContent = cycleData[key].name;
+                button.dataset.stage = key;
+                button.addEventListener('click', () => displayCycleDetails(key));
+                stagesContainer.appendChild(button);
+            });
+
+            // 初始顯示第一個階段
+            displayCycleDetails('calm');
+            // =======================================================
+        });
+
+        // 互動測驗答案顯示/隱藏功能
+        function toggleAnswer(answerId) {
+            const answerEl = document.getElementById(answerId);
+            if (answerEl) {
+                answerEl.style.display = answerEl.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+    </script>
+</body>
+</html>

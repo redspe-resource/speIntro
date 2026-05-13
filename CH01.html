@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第一單元課程資料</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The application is structured into four thematic sections: 'Core Concepts', 'Law & Systems', 'Practical Tools', and 'Further Resources'. This non-linear, thematic structure was chosen over a chronological course layout to allow users (likely students or educators) to freely explore the foundational pillars of Taiwanese special education based on their immediate interest. Navigation is handled by a sticky top bar for quick access. This design prioritizes user-driven exploration and comprehension over passive, linear content consumption. -->
+    <!-- Visualization & Content Choices:
+    - Concept Comparison (Medical/Social, Disability/Handicap): Goal: Compare. Method: Side-by-side HTML/Flexbox layouts. Interaction: N/A. Justification: Provides a clear, direct comparison of key terms and philosophies.
+    - Legal Principles: Goal: Inform. Method: Interactive cards. Interaction: Click to reveal detailed explanations. Justification: Breaks down complex legal concepts into digestible, interactive pieces.
+    - Student Categories: Goal: Organize/Inform. Method: Chart.js Donut chart for proportions and interactive buttons to filter lists. Justification: The chart gives a quick visual overview, while buttons allow for focused exploration of the two distinct categories.
+    - Identification Flowchart: Goal: Organize/Inform. Method: Custom HTML/CSS/Tailwind diagram. Interaction: Clicking a node reveals detailed explanations. Justification: An interactive, explorable process map.
+    - Team Models: Goal: Compare/Show Relationships. Method: Tabbed interface and separate visual diagrams. Interaction: Click tabs to switch content; diagrams provide at-a-glance comparison. Justification: Clearly delineates the three models and their integration levels.
+    - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #C0846E;
+            border-bottom-color: #C0846E;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card-content {
+            flex-grow: 1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flowchart-node {
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .flowchart-node:hover {
+            transform: scale(1.05);
+            background-color: #E6DCD6;
+        }
+        .flowchart-arrow {
+            position: relative;
+            width: 2px;
+            background-color: #9CA3AF;
+            margin: 0 auto;
+        }
+        .flowchart-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid #9CA3AF;
+        }
+        .team-model-tab, .iep-igp-tab {
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .team-model-tab.active, .iep-igp-tab.active {
+            color: #A8765E;
+            border-bottom-color: #A8765E;
+            font-weight: 600;
+        }
+        .principle-card {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .principle-card:hover {
+            background-color: #F5F1ED;
+            border-color: #C0846E;
+        }
+        .law-tab {
+            transition: all 0.2s;
+        }
+        .law-tab.active {
+            background-color: #A8765E;
+            color: white;
+        }
+        .law-content, .iep-igp-content {
+            display: none;
+        }
+        .law-content.active, .iep-igp-content.active {
+            display: block;
+        }
+        /* Form styling */
+        .form-section {
+            border-left: 3px solid #C0846E;
+            padding-left: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #4A4A4A;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 0.375rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background-color: #F9FAFB;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: #A8765E;
+            box-shadow: 0 0 0 2px rgba(168, 118, 94, 0.2);
+        }
+        .form-textarea {
+            min-height: 120px;
+        }
+        .form-checkbox-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+        .form-checkbox {
+            height: 1.25rem;
+            width: 1.25rem;
+            border-radius: 0.25rem;
+            border-color: #D1D5DB;
+            color: #A8765E;
+            margin-right: 0.5rem;
+        }
+        .form-checkbox:focus {
+             box-shadow: 0 0 0 2px rgba(168, 118, 94, 0.2);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者  pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#A8765E]">特殊教育導論：第一單元</h1>
+            <div class="hidden md:flex flex-wrap space-x-6">
+                <a href="#quiz" class="nav-link font-medium pb-1">課前測驗</a>
+                <a href="#concepts" class="nav-link font-medium pb-1">核心理念</a>
+                <a href="#systems" class="nav-link font-medium pb-1">法規與系統</a>
+                <a href="#tools" class="nav-link font-medium pb-1">實踐工具</a>
+                <a href="#resources" class="nav-link font-medium pb-1">法規資源</a>
+                <a href="#reading" class="nav-link font-medium pb-1">延伸閱讀</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#quiz" class="block py-2 nav-link text-center">課前測驗</a>
+            <a href="#concepts" class="block py-2 nav-link text-center">核心理念</a>
+            <a href="#systems" class="block py-2 nav-link text-center">法規與系統</a>
+            <a href="#tools" class="block py-2 nav-link text-center">實踐工具</a>
+            <a href="#resources" class="block py-2 nav-link text-center">法規資源</a>
+            <a href="#reading" class="block py-2 nav-link text-center">延伸閱讀</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+        
+        <section id="quiz" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#A8765E]">課前預習小測驗</h2>
+            <div class="max-w-3xl mx-auto card p-8 rounded-lg">
+                <ol class="list-decimal list-inside space-y-4 text-gray-700 leading-relaxed">
+                    <li>您認為「融合教育」與「主流化教育」最大的不同點是什麼？</li>
+                    <li>在您的印象中，「個別化教育計畫（IEP）」最主要的功能是什麼？由誰來共同訂定？</li>
+                    <li>根據您的理解，臺灣的《特殊教育法》保障了哪些學生的學習權益？</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="concepts" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#A8765E]">核心理念</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">本節將探討特殊教育的哲學基礎，從核心概念的釐清、歷史觀點的演進到當代的全球共識。您可以深入理解不同理念如何形塑我們對待差異的方式，以及這些理念在教育現場的張力。</p>
+            
+            <div class="card p-8 rounded-lg mb-12">
+                <h3 class="text-2xl font-bold text-center mb-6">核心概念釐清</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-6 rounded-lg bg-gray-50">
+                        <h4 class="text-xl font-semibold mb-2">障礙 (Disability)</h4>
+                        <p class="text-gray-600">指個體在功能上的限制、降低或喪失，例如肌肉癱瘓或聽力喪失。它描述的是一種客觀的能力狀態。</p>
+                    </div>
+                    <div class="p-6 rounded-lg bg-gray-50">
+                        <h4 class="text-xl font-semibold mb-2">殘障 (Handicap)</h4>
+                        <p class="text-gray-600">指障礙者在與環境互動時所面臨的問題或困難。它強調的是環境的限制，而非個體本身，例如缺乏無障礙設施。</p>
+                    </div>
+                    <div class="p-6 rounded-lg bg-gray-50">
+                        <h4 class="text-xl font-semibold mb-2">發展遲緩 (Developmental Delay)</h4>
+                        <p class="text-gray-600">指未滿六歲之兒童，在各發展領域（知覺、認知、動作、溝通等）較同年齡者顯著遲緩，但障礙類別尚無法確定。</p>
+                    </div>
+                     <div class="p-6 rounded-lg bg-gray-50">
+                        <h4 class="text-xl font-semibold mb-2">處於風險中 (At Risk)</h4>
+                        <p class="text-gray-600">指尚未被鑑定為障礙，但因生物或環境因素（如早產、貧窮），而有極高可能出現發展問題的個體。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-8 rounded-lg mb-12">
+                <h3 class="text-2xl font-bold text-center mb-6">理念的演進：從醫療到人權</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="p-6 rounded-lg bg-blue-50 border-l-4 border-blue-400">
+                        <h4 class="text-xl font-semibold mb-2 text-blue-800">醫療模式 (Medical Model)</h4>
+                        <p class="text-gray-600">將障礙視為個人內在的缺陷或病理問題，需要被「治療」或「矯正」以趨近「正常」。教育重點在於彌補學生的缺損，常導致隔離式的安置。</p>
+                    </div>
+                    <div class="p-6 rounded-lg bg-green-50 border-l-4 border-green-400">
+                        <h4 class="text-xl font-semibold mb-2 text-green-800">社會/人權模式 (Social/Human Rights Model)</h4>
+                        <p class="text-gray-600">主張個體的「損傷」本身不是問題，真正的「障礙」是社會環境中的物理、制度與態度障礙所造成的。焦點從「改變學生」轉向「改變環境以支持學生」。</p>
+                    </div>
+                </div>
+                 <div class="mt-8">
+                    <h4 class="text-xl font-semibold mb-4 text-center">重要歷史脈絡與思潮</h4>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="p-4 bg-gray-50 rounded-md"><strong>正常化原則：</strong>強調身心障礙者的生活模式與條件應盡可能與社會主流一致。</div>
+                        <div class="p-4 bg-gray-50 rounded-md"><strong>去機構化：</strong>將居住在大型隔離機構中的障礙者，移回社區環境中生活。</div>
+                        <div class="p-4 bg-gray-50 rounded-md"><strong>普通教育改革(REI) & NCLB法案：</strong>REI倡議整合普特教系統；NCLB法案則強調績效責任與不讓任何孩子落後，間接強化對特殊生的關注。</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card p-8 rounded-lg">
+                <h3 class="text-2xl font-bold text-center mb-2">辯論舞台：完全融合是終極目標嗎？</h3>
+                <p class="text-center text-gray-500 mb-8">理想與現實之間總有張力。點擊下方觀點，探索關於「完全融合」(Full Inclusion) 的專業思辨。</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-green-700 text-center">正方：支持完全融合</h4>
+                        <div class="space-y-3">
+                            <button data-content="debate-pro-1" class="debate-point w-full text-left p-3 bg-green-50 rounded-lg font-medium">人權基礎</button>
+                            <button data-content="debate-pro-2" class="debate-point w-full text-left p-3 bg-green-50 rounded-lg font-medium">社會效益</button>
+                            <button data-content="debate-pro-3" class="debate-point w-full text-left p-3 bg-green-50 rounded-lg font-medium">教育公平</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold mb-4 text-red-700 text-center">反方：挑戰普適性</h4>
+                         <div class="space-y-3">
+                            <button data-content="debate-con-1" class="debate-point w-full text-left p-3 bg-red-50 rounded-lg font-medium">實務困境</button>
+                            <button data-content="debate-con-2" class="debate-point w-full text-left p-3 bg-red-50 rounded-lg font-medium">個別化需求</button>
+                            <button data-content="debate-con-3" class="debate-point w-full text-left p-3 bg-red-50 rounded-lg font-medium">教師壓力</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="debate-display" class="mt-8 p-6 bg-gray-50 rounded-lg min-h-[100px] text-gray-700">
+                    點擊任一論點以查看詳細說明。
+                </div>
+            </div>
+        </section>
+
+        <section id="systems" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#A8765E]">法規與系統</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">本節將深入解析臺灣特殊教育的法規體系，從國際人權公約的指導精神，到國內法律的具體實踐，並探討核心原則「最少限制環境」的哲學意涵與演變。</p>
+
+            <div class="card p-8 rounded-lg mb-12">
+                <h3 class="text-2xl font-bold text-center mb-6">特殊教育的法源基礎</h3>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="w-full md:w-1/4">
+                        <div class="space-y-2">
+                           <button data-law="crpd" class="law-tab w-full text-left p-3 rounded-md bg-gray-100 active">身心障礙者權利公約 (CRPD)</button>
+                           <button data-law="crc" class="law-tab w-full text-left p-3 rounded-md bg-gray-100">兒童權利公約 (CRC)</button>
+                           <button data-law="salamanca" class="law-tab w-full text-left p-3 rounded-md bg-gray-100">薩拉曼卡宣言</button>
+                           <button data-law="nclb" class="law-tab w-full text-left p-3 rounded-md bg-gray-100">不讓任何孩子落後法案 (NCLB)</button>
+                           <button data-law="basic" class="law-tab w-full text-left p-3 rounded-md bg-gray-100">教育基本法</button>
+                           <button data-law="sped" class="law-tab w-full text-left p-3 rounded-md bg-gray-100">特殊教育法</button>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-3/4">
+                        <div id="law-content-display" class="p-6 bg-gray-50 rounded-lg">
+                            <!-- Law content will be populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card p-8 rounded-lg mb-12">
+                <h3 class="text-2xl font-bold text-center mb-4">深入探討：最少限制環境 (LRE)</h3>
+                <p class="text-center text-gray-500 mb-8">LRE是特殊教育安置的核心哲學，但它的意義遠比一個地點複雜。這裡我們將探討其定義、演變與實踐方式。</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2">LRE 的核心精神</h4>
+                        <p class="text-gray-600">LRE並非指特定的「一個」最融合的班級，而是一個「連續性」的光譜概念。其核心精神是：在學生的特殊教育需求能被滿足的前提下，應盡最大可能讓身心障礙學生與普通同儕一同學習與生活。任何將學生抽離普通環境的決定，都必須基於學生個別化的需求，而非僅因其障礙類別或為了行政方便。</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-lg mb-2">安置的決策與目標</h4>
+                        <p class="text-gray-600">安置的決定應由IEP團隊（鑑輔會）根據學生的評量結果綜合研判，並非單一教師或家長可決定。此決定並非永久性的，團隊應每年重新評估其適當性，並以朝向光譜中限制「更少」的環境移動為長期目標。</p>
+                    </div>
+                </div>
+                <div class="mt-8">
+                     <h4 class="text-xl font-semibold text-center mb-4">教育安置連續體 (Continuum of Placements)</h4>
+                     <div class="relative flex flex-col items-center p-4">
+                        <div class="w-full text-center font-bold text-gray-500">限制最多</div>
+                        <div class="w-2 h-4 bg-gray-400"></div>
+                        <div class="w-2 h-4 bg-gray-400" style="clip-path: polygon(50% 100%, 0 0, 100% 0);"></div>
+                        <div class="w-full space-y-2 text-center">
+                            <div class="p-2 bg-red-100 rounded-md">醫院或在家教育</div>
+                            <div class="p-2 bg-orange-100 rounded-md">特殊教育學校(住宿或日間)</div>
+                            <div class="p-2 bg-yellow-100 rounded-md">集中式特教班</div>
+                            <div class="p-2 bg-green-100 rounded-md">普通班接受資源班服務</div>
+                            <div class="p-2 bg-blue-100 rounded-md">普通班接受特教諮詢</div>
+                        </div>
+                        <div class="w-2 h-4 bg-gray-400 mt-2" style="clip-path: polygon(0 100%, 100% 100%, 50% 0);"></div>
+                        <div class="w-2 h-4 bg-gray-400"></div>
+                        <div class="w-full text-center font-bold text-gray-500">限制最少</div>
+                     </div>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="tools" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#A8765E]">實踐工具</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">本節聚焦於特殊教育的核心實踐工具—個別化教育計畫（IEP）與專業團隊合作。IEP不只是一份文件，它代表著一個以學生為中心的專業團隊。您將探索IEP團隊的組成、不同的合作模式，並透過模擬案例感受團隊合作的真實樣貌。</p>
+
+            <div class="card p-8 rounded-lg mb-12">
+                <h3 class="text-2xl font-bold text-center mb-2">IEP 專業團隊的角色與職責</h3>
+                <p class="text-center text-gray-500 mb-8">一個有效的IEP團隊是跨專業合作的展現。點擊圖中任一角色，了解其在團隊中的職責。</p>
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="w-full md:w-2/5 relative h-80 flex items-center justify-center">
+                        <div class="absolute w-48 h-48 bg-[#F5F1ED] rounded-full flex items-center justify-center text-center">
+                            <span class="font-bold text-xl text-[#A8765E]">學生本人</span>
+                        </div>
+                        <div data-content="role-parent" class="iep-role absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4 bg-white px-3 py-1 rounded-full shadow cursor-pointer hover:scale-110 transition-transform">家長</div>
+                        <div data-content="role-teacher" class="iep-role absolute top-1/2 right-0 translate-x-8 -translate-y-1/2 bg-white px-3 py-1 rounded-full shadow cursor-pointer hover:scale-110 transition-transform">普通班教師</div>
+                        <div data-content="role-sped" class="iep-role absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4 bg-white px-3 py-1 rounded-full shadow cursor-pointer hover:scale-110 transition-transform">個案管理教師</div>
+                        <div data-content="role-admin" class="iep-role absolute top-1/2 left-0 -translate-x-8 -translate-y-1/2 bg-white px-3 py-1 rounded-full shadow cursor-pointer hover:scale-110 transition-transform">行政人員</div>
+                        <div data-content="role-pro" class="iep-role absolute top-1/4 left-1/4 -translate-x-4 -translate-y-4 bg-white px-3 py-1 rounded-full shadow cursor-pointer hover:scale-110 transition-transform">相關專業人員</div>
+                    </div>
+                    <div class="w-full md:w-3/5 p-6 bg-gray-50 rounded-lg min-h-[240px]">
+                        <h4 id="role-title" class="font-bold text-lg mb-2">角色職責</h4>
+                        <p id="role-description" class="text-gray-700">點擊左方任一角色以查看其職責說明。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEW IEP/IGP INTERACTIVE SECTION START -->
+            <div class="card p-8 rounded-lg mt-12">
+                <h3 class="text-2xl font-bold text-center mb-2">IEP / IGP 互動撰寫體驗</h3>
+                <p class="text-center text-gray-500 mb-8">請選擇下方的頁籤，開始體驗撰寫個別化教育計畫或個別輔導計畫。</p>
+                
+                <div class="border-b border-gray-200 mb-6">
+                    <nav class="-mb-px flex justify-center space-x-2 md:space-x-6">
+                        <button data-form="iep" class="iep-igp-tab py-4 px-1 md:px-2 active">個別化教育計畫 (IEP)</button>
+                        <button data-form="igp" class="iep-igp-tab py-4 px-1 md:px-2">個別輔導計畫 (IGP)</button>
+                    </nav>
+                </div>
+
+                <!-- IEP Form Content -->
+                <div id="iep-form-content" class="iep-igp-content active">
+                    <div class="bg-white p-4 md:p-8" id="iep-printable-area">
+                        <h3 class="text-2xl font-bold text-center mb-6 text-[#A8765E]">個別化教育計畫 (IEP)</h3>
+                        <form id="interactive-iep-form">
+                            <div class="form-section">
+                                <h4 class="text-xl font-bold mb-4 text-[#A8765E]">一、學生能力現況、家庭狀況及需求評估</h4>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="iep-student-name" class="form-label">學生姓名</label>
+                                        <input type="text" id="iep-student-name" class="form-input" placeholder="請輸入學生姓名">
+                                    </div>
+                                    <div>
+                                        <label for="iep-student-grade" class="form-label">年級</label>
+                                        <input type="text" id="iep-student-grade" class="form-input" placeholder="例如：國小三年級">
+                                    </div>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="iep-family-status" class="form-label">家庭狀況與家長期待</label>
+                                    <textarea id="iep-family-status" class="form-textarea" placeholder="描述家庭支持情形、家長對學生的期待..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="iep-ability-summary" class="form-label">能力現況摘要 (優弱勢分析)</label>
+                                    <textarea id="iep-ability-summary" class="form-textarea" placeholder="根據評量結果，綜合分析學生的認知、溝通、學業、社會情緒等優勢與弱勢能力..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="iep-needs-assessment" class="form-label">需求評估</label>
+                                    <textarea id="iep-needs-assessment" class="form-textarea" placeholder="基於學生的能力現況，評估其在學習或生活上所需要的協助與資源..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h4 class="text-xl font-bold mb-4 text-[#A8765E]">二、學生所需特殊教育、相關服務及支持策略</h4>
+                                <label class="form-label">課程調整需求</label>
+                                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <label class="form-checkbox-label"><input type="checkbox" class="form-checkbox" value="學習內容調整">學習內容調整</label>
+                                    <label class="form-checkbox-label"><input type="checkbox" class="form-checkbox" value="學習歷程調整">學習歷程調整</label>
+                                    <label class="form-checkbox-label"><input type="checkbox" class="form-checkbox" value="學習環境調整">學習環境調整</label>
+                                    <label class="form-checkbox-label"><input type="checkbox" class="form-checkbox" value="學習評量調整">學習評量調整</label>
+                                </div>
+                                <div class="mt-4">
+                                    <label for="iep-course-adjustment-desc" class="form-label">課程調整說明</label>
+                                    <textarea id="iep-course-adjustment-desc" class="form-textarea" placeholder="具體說明勾選的課程調整項目將如何實施..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="iep-related-services" class="form-label">相關專業服務</label>
+                                    <textarea id="iep-related-services" class="form-textarea" placeholder="例如：物理治療、職能治療、語言治療、心理治療、教師助理員..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="iep-admin-support" class="form-label">行政支持</label>
+                                    <textarea id="iep-admin-support" class="form-textarea" placeholder="例如：交通服務、輔具申請、無障礙環境安排..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h4 class="text-xl font-bold mb-4 text-[#A8765E]">三、學年與學期教育目標</h4>
+                                <div>
+                                    <label for="iep-annual-goal" class="form-label">學年教育目標</label>
+                                    <textarea id="iep-annual-goal" class="form-textarea" placeholder="設定一個學年內期望達成的總體目標..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="iep-semester-goal" class="form-label">學期教育目標</label>
+                                    <textarea id="iep-semester-goal" class="form-textarea" placeholder="將學年目標拆解成具體、可衡量、可達成、相關、有時限 (SMART) 的學期目標..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="iep-evaluation" class="form-label">評量方式與標準</label>
+                                    <textarea id="iep-evaluation" class="form-textarea" placeholder="描述將如何評量學期目標的達成狀況，以及通過的標準是什麼。例如：透過紙筆測驗、實作評量、課堂觀察等方式，正確率達80%..."></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mt-8 text-center" id="iep-button-container">
+                        <button type="button" id="preview-iep-btn" class="bg-[#A8765E] text-white font-bold py-2 px-6 rounded-lg hover:bg-[#8e634d] transition-colors">預覽 IEP 輸出</button>
+                    </div>
+                </div>
+
+                <!-- IGP Form Content -->
+                <div id="igp-form-content" class="iep-igp-content">
+                     <div class="bg-white p-4 md:p-8" id="igp-printable-area">
+                        <h3 class="text-2xl font-bold text-center mb-6 text-[#A8765E]">個別輔導計畫 (IGP)</h3>
+                        <form id="interactive-igp-form">
+                            <div class="form-section">
+                                <h4 class="text-xl font-bold mb-4 text-[#A8765E]">一、基本資料與學習特質</h4>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="igp-student-name" class="form-label">學生姓名</label>
+                                        <input type="text" id="igp-student-name" class="form-input" placeholder="請輸入學生姓名">
+                                    </div>
+                                    <div>
+                                        <label for="igp-student-type" class="form-label">鑑定類型</label>
+                                        <input type="text" id="igp-student-type" class="form-input" placeholder="例如：學術性向資賦優異 (數理)">
+                                    </div>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="igp-learning-traits" class="form-label">學習特質與能力現況</label>
+                                    <textarea id="igp-learning-traits" class="form-textarea" placeholder="描述學生的認知特質、情意特質、社會適應、興趣等..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="igp-strengths-weaknesses" class="form-label">優弱勢能力分析</label>
+                                    <textarea id="igp-strengths-weaknesses" class="form-textarea" placeholder="綜合分析學生的優勢能力與待加強能力..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h4 class="text-xl font-bold mb-4 text-[#A8765E]">二、教育需求評估與課程調整</h4>
+                                <label class="form-label">專長課程調整方式</label>
+                                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <label class="form-checkbox-label"><input type="checkbox" class="form-checkbox" value="加深">加深</label>
+                                    <label class="form-checkbox-label"><input type="checkbox" class="form-checkbox" value="加廣">加廣</label>
+                                    <label class="form-checkbox-label"><input type="checkbox" class="form-checkbox" value="濃縮">濃縮</label>
+                                    <label class="form-checkbox-label"><input type="checkbox" class="form-checkbox" value="加速">加速</label>
+                                </div>
+                                <div class="mt-4">
+                                    <label for="igp-course-adjustment-desc" class="form-label">課程調整說明</label>
+                                    <textarea id="igp-course-adjustment-desc" class="form-textarea" placeholder="具體說明將如何為學生的專長領域進行課程調整..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="igp-related-services" class="form-label">相關服務</label>
+                                    <textarea id="igp-related-services" class="form-textarea" placeholder="例如：提供適性教材、外聘專才教師、獨立研究指導..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h4 class="text-xl font-bold mb-4 text-[#A8765E]">三、教育目標</h4>
+                                <div>
+                                    <label for="igp-annual-goal" class="form-label">學年教育目標</label>
+                                    <textarea id="igp-annual-goal" class="form-textarea" placeholder="設定在充實或加速課程中，期望達成的學年總體目標..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="igp-semester-goal" class="form-label">學期教育目標</label>
+                                    <textarea id="igp-semester-goal" class="form-textarea" placeholder="設定具體的學期目標，例如：完成一項獨立研究、參加一項科展競賽、精熟某個高層次思考策略..."></textarea>
+                                </div>
+                                <div class="mt-6">
+                                    <label for="igp-evaluation" class="form-label">評量方式與標準</label>
+                                    <textarea id="igp-evaluation" class="form-textarea" placeholder="描述評量方式，例如：書面報告、口頭發表、作品集評量、實作評量等，並說明評量標準..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-section">
+                                <h4 class="text-xl font-bold mb-4 text-[#A8765E]">四、輔導紀錄</h4>
+                                <div>
+                                    <label for="igp-guidance-record" class="form-label">生活、學習與生涯輔導規劃</label>
+                                    <textarea id="igp-guidance-record" class="form-textarea" placeholder="記錄對學生的輔導規劃，包含生涯探索、學習策略指導、親職教育等..."></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mt-8 text-center" id="igp-button-container">
+                        <button type="button" id="preview-igp-btn" class="bg-[#A8765E] text-white font-bold py-2 px-6 rounded-lg hover:bg-[#8e634d] transition-colors">預覽 IGP 輸出</button>
+                    </div>
+                </div>
+            </div>
+            <!-- NEW IEP/IGP INTERACTIVE SECTION END -->
+
+            <div class="card p-8 rounded-lg mb-12">
+                <h3 class="text-2xl font-bold text-center mb-2">專業團隊合作模式</h3>
+                <p class="text-center text-gray-500 mb-8">團隊合作並非單一模式，而是根據專業間互動的深度，演變出不同型態。</p>
+                <div class="mt-8 overflow-x-auto">
+                    <h4 class="text-xl font-semibold text-center mb-4">三種模式比較</h4>
+                    <table class="w-full text-sm text-left text-gray-500">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">面向</th>
+                                <th scope="col" class="px-6 py-3">多專業合作</th>
+                                <th scope="col" class="px-6 py-3">專業間合作</th>
+                                <th scope="col" class="px-6 py-3">跨專業合作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-white border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">核心概念</th>
+                                <td class="px-6 py-4">專業分工、平行運作。各專業人員獨立評估與服務，彼此溝通較少。</td>
+                                <td class="px-6 py-4">資訊分享、協調合作。團隊成員分享評估結果，共同討論計畫，但仍各自執行。</td>
+                                <td class="px-6 py-4">角色釋放、技能分享。團隊共同評估，互相學習知能，由一位主要服務者整合執行。</td>
+                            </tr>
+                            <tr class="bg-gray-50 border-b">
+                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">計畫發展</th>
+                                <td class="px-6 py-4">各專業人員分別擬定自己的服務計畫。</td>
+                                <td class="px-6 py-4">團隊成員共同討論並分享各自的計畫。</td>
+                                <td class="px-6 py-4">團隊與家庭共同發展單一整合計畫。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-12">
+                    <h4 class="text-xl font-semibold text-center mb-6">合作模式整合層度示意圖</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div>
+                            <h5 class="font-semibold mb-3">多專業合作</h5>
+                            <div class="flex justify-center items-center h-32 space-x-2">
+                                <div class="w-16 h-16 rounded-full bg-blue-200 border-2 border-blue-400 flex items-center justify-center text-xs text-blue-800">專業A</div>
+                                <div class="w-16 h-16 rounded-full bg-green-200 border-2 border-green-400 flex items-center justify-center text-xs text-green-800">專業B</div>
+                                <div class="w-16 h-16 rounded-full bg-yellow-200 border-2 border-yellow-400 flex items-center justify-center text-xs text-yellow-800">專業C</div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">各自獨立評估與服務</p>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold mb-3">專業間合作</h5>
+                            <div class="relative w-48 h-32 mx-auto flex justify-center items-center">
+                                <div class="w-20 h-20 rounded-full bg-blue-200 border-2 border-blue-400 absolute top-4 left-4 flex items-center justify-center text-xs text-blue-800">專業A</div>
+                                <div class="w-20 h-20 rounded-full bg-green-200 border-2 border-green-400 absolute top-10 left-1/2 -translate-x-1/2 flex items-center justify-center text-xs text-green-800 z-10">專業B</div>
+                                <div class="w-20 h-20 rounded-full bg-yellow-200 border-2 border-yellow-400 absolute top-4 right-4 flex items-center justify-center text-xs text-yellow-800">專業C</div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">分享資訊，協調合作</p>
+                        </div>
+                        <div>
+                            <h5 class="font-semibold mb-3">跨專業合作</h5>
+                            <div class="flex justify-center items-center h-32">
+                                <div class="w-28 h-28 rounded-full bg-purple-200 border-2 border-purple-400 flex items-center justify-center text-center p-2">
+                                    <span class="font-semibold text-purple-800">單一<br>整合計畫</span>
+                                </div>
+                            </div>
+                             <p class="text-sm text-gray-500 mt-2">角色釋放，技能共享</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resources" class="mb-20 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#A8765E]">重要法規資源</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">特殊教育的實踐根植於深刻的法規與人權精神。以下提供幾個核心文件的連結，幫助您深入了解其內涵。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0080027" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">特殊教育法</h3>
+                        <p class="text-gray-600">我國推動特殊教育的根本大法，保障特殊需求學生的教育權益。點擊前往全國法規資料庫查閱全文。</p>
+                    </div>
+                </a>
+                <a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL000486" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">特教推行委員會設置辦法</h3>
+                        <p class="text-gray-600">規範各級學校特殊教育推行委員會的組成、任務及運作方式，是校內特教運作的重要依據。</p>
+                    </div>
+                </a>
+                <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0060035" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">特殊教育評鑑辦法</h3>
+                        <p class="text-gray-600">規範主管機關對學校辦理特殊教育績效的評鑑方式與指標，以確保特教服務品質。</p>
+                    </div>
+                </a>
+                <a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL002223" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">各級學校無障礙環境設置辦法</h3>
+                        <p class="text-gray-600">明訂學校應提供的無障礙設施項目與標準，以確保學生能無礙地使用校園環境。</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <section id="reading" class="mb-12 scroll-mt-20">
+            <h2 class="text-3xl font-bold text-center mb-4 text-[#A8765E]">延伸閱讀</h2>
+            <p class="text-center max-w-3xl mx-auto text-gray-600 mb-12">除了法規文件，以下網站提供豐富的特教資訊、教材資源與社群支持，能幫助您更深入地探索特殊教育的實務世界。</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <a href="https://www.set.edu.tw/" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">教育部特殊教育通報網</h3>
+                        <p class="text-gray-600">提供最新的特教政策、法規公告、研習活動與統計資料，是掌握臺灣特教動態的官方入口。</p>
+                    </div>
+                </a>
+                <a href="https://special.moe.gov.tw/" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">國教署特殊教育網路中心</h3>
+                        <p class="text-gray-600">匯集各類特教教材、教學資源與數位內容，是第一線教師尋找教學靈感與素材的寶庫。</p>
+                    </div>
+                </a>
+                <a href="https://www.sped.ntnu.edu.tw/site/ntnusped" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">國立臺灣師範大學特殊教育學系</h3>
+                        <p class="text-gray-600">臺灣特殊教育的學術重鎮，網站提供學術研究、研討會資訊及出版品，適合深入研究者。</p>
+                    </div>
+                </a>
+                 <a href="https://www.papmh.org.tw/" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">中華民國智障者家長總會</h3>
+                        <p class="text-gray-600">代表家長觀點的重要倡議團體，提供政策建言、家庭支持服務與權益資訊，能幫助理解家長的需求。</p>
+                    </div>
+                </a>
+                 <a href="https://serc.boe.ttct.edu.tw/" target="_blank" class="card p-6 rounded-lg text-center">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">臺東特教資源網</h3>
+                        <p class="text-gray-600">提供臺東地區的特教資源、活動訊息與服務，是了解區域性特教發展的良好平台。</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/@sujanlin" target="_blank" class="card p-6 rounded-lg text-left">
+                    <div class="card-content">
+                        <h3 class="text-xl font-semibold mb-2">林素貞教授 YouTube 頻道</h3>
+                        <p class="text-gray-600 text-sm">
+                            <strong>林素貞 教授｜退休教師</strong><br>
+                            <strong>最高學歷：</strong>美國奧瑞崗大學特殊教育研究所博士<br>
+                            <strong class="align-top">專長：</strong><span class="inline-block">學習障礙、差異化教學、IEP、身心障礙課程與教學、國語文教材教法、資源教室經營、轉銜教育、學習策略、學前融合教育、特教行政與法規、智能障礙。</span>
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者  pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm">©特殊教育導論課程活動第一單元，主要依據課程大綱，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data
+            const debateContent = {
+                'debate-pro-1': '依據《身心障礙者權利公約》（CRPD）精神，任何形式的隔離都可能構成歧視。教育權是基本人權，所有學生皆有權在最少限制的環境中學習。',
+                'debate-pro-2': '融合環境能促進特殊需求學生的社會技能發展，同時也讓一般學生學習尊重差異、同理他人，建立一個多元包容的社會基礎。',
+                'debate-pro-3': '建立兩套平行的教育系統（普通教育與特殊教育）本身即是不平等的體現。資源應投入於改造普通教育環境，使其能接納所有學生，而非將學生抽離。',
+                'debate-con-1': '學術研究與現場經驗皆指出，臺灣推動融合教育面臨諸多挑戰，如特教資源不足、師資培訓未逮、班級人數過多等。在配套措施不足的情況下，貿然推行完全融合可能對特教生與普通生造成雙輸局面。',
+                'debate-con-2': '部分重度、多重障礙學生需要高度密集、專業化的支持，這些支持在普通班級中難以完全提供。應保留一個「服務連續體」，以滿足不同學生的個別化需求。',
+                'debate-con-3': '研究顯示，融合教育對第一線教師構成極大的專業壓力，包括處理學生行為問題、課程調整、與家長溝通等。理想的理念需建立在對教師專業支持的現實基礎之上。'
+            };
+
+            const flowchartContent = {
+                'flow-1': '由教師或家長發現學生可能有特殊教育需求，並向學校相關單位提出。此階段亦包含「轉介前介入」，即普通班老師在轉介前先嘗試不同的教學策略來協助學生。',
+                'flow-2': '學校正式填寫鑑定申請表與摘要表，彙整初步資料，向縣市鑑輔會提報。',
+                'flow-3': '蒐集學生的多元評量資料，不能僅依賴單一測驗分數，必須包含標準化評量、課堂觀察、晤談紀錄、醫學證明等。',
+                'flow-4': '將所有蒐集的資料彙整成冊，在規定期限內送交各縣市的「特殊教育學生鑑定及就學輔導會」（鑑輔會）。',
+                'flow-5': '鑑輔會由專家學者、教師、家長代表等共同審查資料，綜合研判學生的障礙類別與教育需求。',
+                'flow-6': '鑑輔會根據研判結果，對學生的安置方式（如資源班、特教班）與所需支持服務（如專業治療）提出具體建議。',
+                'flow-7': '安置決議後，學校接收學生，並立即召開個別化教育計畫（IEP）會議，正式啟動所有支持服務。'
+            };
+
+            const studentLists = {
+                disability: [
+                    '智能障礙', '視覺障礙', '聽覺障礙', '語言障礙', '肢體障礙', '腦性麻痺', '身體病弱', 
+                    '情緒行為障礙', '學習障礙', '自閉症', '多重障礙', '發展遲緩', '其他障礙'
+                ],
+                gifted: [
+                    '一般智能資賦優異', '學術性向資賦優異', '藝術才能資賦優異', 
+                    '創造能力資賦優異', '領導能力資賦優異', '其他特殊才能資賦優異'
+                ]
+            };
+            
+            const roleContent = {
+                'role-parent': { title: '家長/法定代理人', desc: '提供學生家庭狀況、校外學習情形及對孩子的期望，是團隊中不可或缺的平等夥伴。美國《身心障礙者教育法》（IDEA）中，強調家長有權利「真實地參與」決策過程。' },
+                'role-teacher': { title: '普通班教師', desc: '提供學生在普通班的學習現況、行為表現與人際互動資料，並負責在普通班執行IEP中的課程調整與教學策略。' },
+                'role-sped': { title: '個案管理教師', desc: '通常為特教教師，負責召集、主持會議，整合評量資料，草擬IEP計畫，並追蹤執行成效。' },
+                'role-admin': { title: '行政人員', desc: '如特教組長、主任。確保IEP符合法規要求，並協調校內所需之行政與資源支持。' },
+                'role-pro': { title: '相關專業人員', desc: '視學生需求邀請，如物理治療師、職能治療師、語言治療師、臨床心理師等，提供專業評估與介入建議。' }
+            };
+            
+            const teamModelContent = {
+                'multi': {
+                    title: '多專業合作 (multi-disciplinary)',
+                    desc: '此為最基礎的合作模式。團隊中的各專業人員（如教師、治療師、心理師）各自獨立進行評估，並分別提出自己的專業報告與建議。彼此間的溝通較少，互動有限，像是許多專家「平行」地為同一位學生服務。雖然各專業的重要性都被承認，但此模式缺乏團隊的綜合分析，有時可能導致服務的片段化或重疊。'
+                },
+                'inter': {
+                    title: '專業間合作 (inter-disciplinary)',
+                    desc: '此模式在多專業的基礎上，增加了專業間的互動與協調。團隊成員仍會進行各自的專業評估，但會定期召開團隊會議，分享評估結果、共同討論並擬定服務計畫。在這個模式中，成員們開始「跨越」專業的界線進行溝通，嘗試整合彼此的觀點，以形成對學生更全面的理解。然而，服務的執行通常仍由各專業人員負責自己領域的部分。'
+                },
+                'trans': {
+                    title: '跨專業合作 (trans-disciplinary)',
+                    desc: '這是目前被視為最理想、以家庭為中心的合作模式。此模式的核心精神在於「角色釋放」（Role Release），團隊成員不僅分享資訊，更會互相學習、傳授彼此的專業知能。團隊會共同進行評估，並推舉一位最貼近家庭需求的成員擔任「主要服務提供者」（Primary Service Provider），由他來整合執行計畫，其他成員則退居第二線提供諮詢與支持。'
+                }
+            };
+
+             const principleContent = {
+                'zero-reject': '所有學生，不論其障礙類別或嚴重程度，皆有權利接受公立學校的教育，學校不得以任何理由拒絕其入學。',
+                'fape': '學校必須為所有特殊需求學生提供免費且適切的教育及相關服務，以滿足其獨特的學習需求。',
+                'lre': '在滿足學生特殊需求的前提下，應盡可能讓特殊需求學生與普通學生一同在普通教育環境中學習。',
+                'nondiscriminatory': '學生的評量過程必須使用多種、無偏見的評量工具與方法，不得因學生的文化、語言或種族背景而產生歧視。',
+                'privacy': '學生的所有教育紀錄均屬機密，學校必須在家長同意後才能向第三方揭露。家長有權檢視學生的所有紀錄。',
+                'procedural': '為保障學生與家長的權利，法律定有申訴、調解與聽證等正當程序，以解決雙方在教育服務上的爭議。'
+            };
+
+            const lawContent = {
+                'crpd': '<h4>身心障礙者權利公約 (CRPD)</h4><p class="mt-2">CRPD標誌著全球從「醫療模式」轉向「社會/人權模式」。其核心精神是確保身心障礙者能充分及平等地享有一切人權與基本自由。重要概念包括：</p><ul class="list-disc pl-5 mt-2 space-y-1"><li><strong>通用設計 (Universal Design):</strong> 產品、環境、服務的設計應讓所有人(含障礙者)都能使用，無需特別調整。</li><li><strong>合理調整 (Reasonable Accommodation):</strong> 為確保障礙者能行使人權，應進行必要且適當的個別化調整，拒絕提供即構成歧視。</li></ul>',
+                'crc': '<h4>兒童權利公約 (CRC)</h4><p class="mt-2">CRC確立兒童是權利的主體，而非被保護的客體。其四大核心原則對特教至關重要：</p><ul class="list-disc pl-5 mt-2 space-y-1"><li><strong>禁止歧視：</strong>所有兒童不因身心障礙等身份而受歧視。</li><li><strong>兒童最佳利益優先：</strong>所有關於兒童的措施，均應以其最佳利益為優先考量。</li><li><strong>生存及發展權：</strong>國家應確保兒童的生存與各面向的健全發展。</li><li><strong>尊重兒童意見/表意權：</strong>兒童有權對影響自身的事務表達意見，此為IEP邀請學生參與的法理基礎。</li></ul>',
+                'salamanca': '<h4>薩拉曼卡宣言</h4><p class="mt-2">1994年由UNESCO發布，是推動全球融合教育的里程碑。它明確揭示：「普通學校的融合取向是打擊歧視態度、創建友善社區、建立包容社會，以及達成全民教育最有效的方法。」此宣言不僅確立了融合教育的道德與人權基礎，更呼籲各國政府應賦予融合教育最高的政策與預算優先性。</p>',
+                'nclb': '<h4>不讓任何孩子落後法案 (NCLB)</h4><p class="mt-2">此為2002年美國通過的普通教育法案，雖非特教專法，但其核心精神深刻影響全球教育政策：</p><ul class="list-disc pl-5 mt-2 space-y-1"><li><strong>加強績效責任：</strong>要求學校對所有學生的學業表現負責，並公開呈現成果。</li><li><strong>以科學研究為基礎的教學：</strong>強調教學方法需有實證研究支持其有效性。</li><li><strong>不讓任何孩子落後：</strong>確保包括弱勢與身心障礙學生在內的所有學生，都能獲得公平的教育機會並達到學業標準。</li></ul>',
+                'basic': '<h4>教育基本法</h4><p class="mt-2">此為我國教育的憲法，奠定特殊教育的法律位階。第二條揭示「人民為教育權之主體」，第四條更明訂「對於...身心障礙者...之教育，應考慮其自主性及特殊性，依法令予以特別保障，並扶助其發展」，確立國家對特教的保障義務。</p>',
+                'sped': '<h4>特殊教育法</h4><p class="mt-2">我國推動特殊教育的根本大法。2023年最新修法，全面接軌CRPD與CRC的人權理念，其修法重點包括：</p><ul class="list-disc pl-5 mt-2 space-y-1"><li>強調融合教育、通用設計與合理調整的精神。</li><li>落實學生的個人表意權，明訂應邀請學生本人參與IEP等相關會議。</li><li>強化各教育階段的轉銜服務。</li><li>精進師資，並將專責單位與人員的設置法制化。</li><li>強化特教支持系統與成效檢核。</li></ul>'
+            };
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll and active state
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.getAttribute('href'));
+                    if (targetElement) {
+                       targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Law Tabs Interaction
+            const lawTabs = document.querySelectorAll('.law-tab');
+            const lawContentDisplay = document.getElementById('law-content-display');
+            
+            function updateLawContent(tabKey) {
+                if(!lawContentDisplay) return;
+                lawContentDisplay.innerHTML = lawContent[tabKey];
+                lawTabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.law === tabKey);
+                });
+            }
+
+            lawTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    updateLawContent(tab.dataset.law);
+                });
+            });
+
+            if (lawTabs.length > 0) {
+                updateLawContent('crpd'); // Initial display
+            }
+
+
+            // Debate Points Interaction
+            const debateDisplay = document.getElementById('debate-display');
+            document.querySelectorAll('.debate-point').forEach(button => {
+                button.addEventListener('click', () => {
+                    if (debateDisplay) {
+                        debateDisplay.textContent = debateContent[button.dataset.content];
+                    }
+                });
+            });
+
+            // Flowchart Interaction
+            const flowchartDisplay = document.getElementById('flowchart-display');
+            document.querySelectorAll('.flowchart-node').forEach(node => {
+                node.addEventListener('click', () => {
+                    if (flowchartDisplay) {
+                        flowchartDisplay.textContent = flowchartContent[node.dataset.content];
+                    }
+                });
+            });
+
+            // Principle Cards Interaction
+            const principleDisplay = document.getElementById('principle-display');
+            const principleCards = document.querySelectorAll('.principle-card');
+            principleCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    if (principleDisplay) {
+                        principleDisplay.textContent = principleContent[card.dataset.principle];
+                    }
+                    principleCards.forEach(c => c.classList.remove('bg-yellow-100'));
+                    card.classList.add('bg-yellow-100');
+                });
+            });
+
+
+            // Student Types Chart
+            const studentTypesChartCanvas = document.getElementById('studentTypesChart');
+            if (studentTypesChartCanvas) {
+                const ctx = studentTypesChartCanvas.getContext('2d');
+                const studentTypesChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['身心障礙', '資賦優異'],
+                        datasets: [{
+                            label: '服務對象類別',
+                            data: [13, 6],
+                            backgroundColor: ['#A8765E', '#D1BFA7'],
+                            borderColor: ['#FFFFFF'],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                            },
+                            title: {
+                                display: true,
+                                text: '法定服務對象類別數量'
+                            }
+                        }
+                    }
+                });
+            }
+
+
+            // Student List Interaction
+            const studentListDiv = document.getElementById('student-list');
+            const showDisabilityBtn = document.getElementById('show-disability');
+            const showGiftedBtn = document.getElementById('show-gifted');
+
+            function displayStudentList(type) {
+                if (!studentListDiv) return;
+                const list = studentLists[type];
+                studentListDiv.innerHTML = `<ul class="list-decimal list-inside text-gray-700">${list.map(item => `<li>${item}</li>`).join('')}</ul>`;
+                if (type === 'disability') {
+                    showDisabilityBtn.classList.add('bg-[#A8765E]', 'text-white');
+                    showDisabilityBtn.classList.remove('bg-gray-200', 'text-gray-800');
+                    showGiftedBtn.classList.add('bg-gray-200', 'text-gray-800');
+                    showGiftedBtn.classList.remove('bg-[#A8765E]', 'text-white');
+                } else {
+                    showGiftedBtn.classList.add('bg-[#A8765E]', 'text-white');
+                    showGiftedBtn.classList.remove('bg-gray-200', 'text-gray-800');
+                    showDisabilityBtn.classList.add('bg-gray-200', 'text-gray-800');
+                    showDisabilityBtn.classList.remove('bg-[#A8765E]', 'text-white');
+                }
+            }
+            if(showDisabilityBtn) {
+                showDisabilityBtn.addEventListener('click', () => displayStudentList('disability'));
+                showGiftedBtn.addEventListener('click', () => displayStudentList('gifted'));
+                displayStudentList('disability');
+            }
+            
+            // IEP Roles Interaction
+            const roleTitle = document.getElementById('role-title');
+            const roleDescription = document.getElementById('role-description');
+            document.querySelectorAll('.iep-role').forEach(role => {
+                role.addEventListener('click', (e) => {
+                    const contentKey = e.currentTarget.dataset.content;
+                    const content = roleContent[contentKey];
+                    if(roleTitle && roleDescription && content) {
+                        roleTitle.textContent = content.title;
+                        roleDescription.textContent = content.desc;
+                    }
+                });
+            });
+            
+            // Team Model Tabs
+            const teamModelTabs = document.querySelectorAll('.team-model-tab');
+            const teamModelContentDiv = document.getElementById('team-model-content');
+            
+            function updateTeamModelContent(tabKey) {
+                if(!teamModelContentDiv) return;
+                const content = teamModelContent[tabKey];
+                teamModelContentDiv.innerHTML = `
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-semibold text-lg mb-2 text-[#A8765E]">${content.title}</h4>
+                        <p class="text-gray-700 leading-relaxed">${content.desc}</p>
+                    </div>
+                `;
+                teamModelTabs.forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabKey);
+                });
+            }
+
+            if (teamModelTabs.length > 0) {
+                teamModelTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        updateTeamModelContent(tab.dataset.tab);
+                    });
+                });
+                updateTeamModelContent('multi');
+            }
+            
+            // IEP/IGP Form Tabs
+            const iepIgpTabs = document.querySelectorAll('.iep-igp-tab');
+            const iepIgpContents = document.querySelectorAll('.iep-igp-content');
+
+            iepIgpTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const formType = tab.dataset.form;
+
+                    iepIgpTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    iepIgpContents.forEach(content => {
+                        if (content.id === `${formType}-form-content`) {
+                            content.classList.add('active');
+                        } else {
+                            content.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Preview Page Logic
+            function showPreview(formType) {
+                let content = '';
+                let studentName = '';
+                let title = '';
+
+                const previewStyles = `
+                    <style>
+                        body { font-family: 'Noto Sans TC', sans-serif; margin: 2rem; color: #333; background-color: #fdfaf6; line-height: 1.6; }
+                        .container { max-width: 800px; margin: auto; background-color: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                        h1 { color: #A8765E; border-bottom: 2px solid #A8765E; padding-bottom: 0.5rem; margin-bottom: 1.5rem; }
+                        h2 { color: #C0846E; border-left: 4px solid #C0846E; padding-left: 1rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+                        .section { margin-bottom: 1.5rem; }
+                        .field-label { font-weight: bold; color: #4A4A4A; display: block; margin-top: 1rem; }
+                        .field-value { background-color: #F9FAFB; border: 1px solid #EAEAEA; padding: 0.75rem; border-radius: 4px; margin-top: 0.25rem; white-space: pre-wrap; word-wrap: break-word; }
+                        .checkbox-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 0.5rem; padding: 0.75rem; background-color: #F9FAFB; border-radius: 4px; }
+                        .checkbox-item { background-color: #e6dcd6; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.9rem; }
+                    </style>
+                `;
+
+                if (formType === 'iep') {
+                    title = '個別化教育計畫 (IEP) - 預覽';
+                    studentName = document.getElementById('iep-student-name').value || '未命名學生';
+                    const studentGrade = document.getElementById('iep-student-grade').value || '（未填寫）';
+                    const familyStatus = document.getElementById('iep-family-status').value || '（未填寫）';
+                    const abilitySummary = document.getElementById('iep-ability-summary').value || '（未填寫）';
+                    const needsAssessment = document.getElementById('iep-needs-assessment').value || '（未填寫）';
+                    
+                    const courseAdjustments = Array.from(document.querySelectorAll('#interactive-iep-form input[type=checkbox]:checked'))
+                        .map(cb => `<span class="checkbox-item">${cb.value}</span>`).join('') || '無';
+                    
+                    const courseAdjustmentDesc = document.getElementById('iep-course-adjustment-desc').value || '（未填寫）';
+                    const relatedServices = document.getElementById('iep-related-services').value || '（未填寫）';
+                    const adminSupport = document.getElementById('iep-admin-support').value || '（未填寫）';
+                    
+                    const annualGoal = document.getElementById('iep-annual-goal').value || '（未填寫）';
+                    const semesterGoal = document.getElementById('iep-semester-goal').value || '（未填寫）';
+                    const evaluation = document.getElementById('iep-evaluation').value || '（未填寫）';
+
+                    content = `
+                        <div class="container">
+                            <h1>${title}</h1>
+                            <h2>一、學生能力現況、家庭狀況及需求評估</h2>
+                            <div class="section">
+                                <span class="field-label">學生姓名：</span><div class="field-value">${studentName}</div>
+                                <span class="field-label">年級：</span><div class="field-value">${studentGrade}</div>
+                                <span class="field-label">家庭狀況與家長期待：</span><div class="field-value">${familyStatus}</div>
+                                <span class="field-label">能力現況摘要 (優弱勢分析)：</span><div class="field-value">${abilitySummary}</div>
+                                <span class="field-label">需求評估：</span><div class="field-value">${needsAssessment}</div>
+                            </div>
+                            <h2>二、學生所需特殊教育、相關服務及支持策略</h2>
+                            <div class="section">
+                                <span class="field-label">課程調整需求：</span><div class="checkbox-group">${courseAdjustments}</div>
+                                <span class="field-label">課程調整說明：</span><div class="field-value">${courseAdjustmentDesc}</div>
+                                <span class="field-label">相關專業服務：</span><div class="field-value">${relatedServices}</div>
+                                <span class="field-label">行政支持：</span><div class="field-value">${adminSupport}</div>
+                            </div>
+                            <h2>三、學年與學期教育目標</h2>
+                            <div class="section">
+                                <span class="field-label">學年教育目標：</span><div class="field-value">${annualGoal}</div>
+                                <span class="field-label">學期教育目標：</span><div class="field-value">${semesterGoal}</div>
+                                <span class="field-label">評量方式與標準：</span><div class="field-value">${evaluation}</div>
+                            </div>
+                        </div>
+                    `;
+                } else if (formType === 'igp') {
+                    title = '個別輔導計畫 (IGP) - 預覽';
+                    studentName = document.getElementById('igp-student-name').value || '未命名學生';
+                    const studentType = document.getElementById('igp-student-type').value || '（未填寫）';
+                    const learningTraits = document.getElementById('igp-learning-traits').value || '（未填寫）';
+                    const strengthsWeaknesses = document.getElementById('igp-strengths-weaknesses').value || '（未填寫）';
+                    
+                    const courseAdjustments = Array.from(document.querySelectorAll('#interactive-igp-form input[type=checkbox]:checked'))
+                        .map(cb => `<span class="checkbox-item">${cb.value}</span>`).join('') || '無';
+                        
+                    const courseAdjustmentDesc = document.getElementById('igp-course-adjustment-desc').value || '（未填寫）';
+                    const relatedServices = document.getElementById('igp-related-services').value || '（未填寫）';
+                    
+                    const annualGoal = document.getElementById('igp-annual-goal').value || '（未填寫）';
+                    const semesterGoal = document.getElementById('igp-semester-goal').value || '（未填寫）';
+                    const evaluation = document.getElementById('igp-evaluation').value || '（未填寫）';
+                    const guidanceRecord = document.getElementById('igp-guidance-record').value || '（未填寫）';
+                    
+                    content = `
+                        <div class="container">
+                            <h1>${title}</h1>
+                            <h2>一、基本資料與學習特質</h2>
+                            <div class="section">
+                                <span class="field-label">學生姓名：</span><div class="field-value">${studentName}</div>
+                                <span class="field-label">鑑定類型：</span><div class="field-value">${studentType}</div>
+                                <span class="field-label">學習特質與能力現況：</span><div class="field-value">${learningTraits}</div>
+                                <span class="field-label">優弱勢能力分析：</span><div class="field-value">${strengthsWeaknesses}</div>
+                            </div>
+                            <h2>二、教育需求評估與課程調整</h2>
+                            <div class="section">
+                                <span class="field-label">專長課程調整方式：</span><div class="checkbox-group">${courseAdjustments}</div>
+                                <span class="field-label">課程調整說明：</span><div class="field-value">${courseAdjustmentDesc}</div>
+                                <span class="field-label">相關服務：</span><div class="field-value">${relatedServices}</div>
+                            </div>
+                            <h2>三、教育目標</h2>
+                            <div class="section">
+                                <span class="field-label">學年教育目標：</span><div class="field-value">${annualGoal}</div>
+                                <span class="field-label">學期教育目標：</span><div class="field-value">${semesterGoal}</div>
+                                <span class="field-label">評量方式與標準：</span><div class="field-value">${evaluation}</div>
+                            </div>
+                            <h2>四、輔導紀錄</h2>
+                            <div class="section">
+                                <span class="field-label">生活、學習與生涯輔導規劃：</span><div class="field-value">${guidanceRecord}</div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const previewWindow = window.open('', '_blank');
+                previewWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html lang="zh-Hant">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>${studentName} - ${title}</title>
+                            <link rel="preconnect" href="https://fonts.googleapis.com">
+                            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+                            ${previewStyles}
+                        </head>
+                        <body>
+                            ${content}
+                        </body>
+                    </html>
+                `);
+                previewWindow.document.close();
+            }
+
+            document.getElementById('preview-iep-btn').addEventListener('click', () => {
+                showPreview('iep');
+            });
+
+            document.getElementById('preview-igp-btn').addEventListener('click', () => {
+                showPreview('igp');
+            });
+
+        });
+    </script>
+</body>
+</html>

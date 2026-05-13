@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿成的分岔路：互動式預防策略模擬</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral (Stone, Slate, Sky) -->
+    <!-- Application Structure Plan: The application is designed as a choice-based narrative simulation called "Ah-Cheng's Forking Paths." This structure was chosen over a static dashboard to directly fulfill the user's request for an interactive experience where professionals can "observe what measures at what stage can reduce risk." The user progresses through three critical life stages of the boy (Ah-Cheng), making intervention choices at each "Key Node." A dynamic "Crime Risk Index" chart provides immediate visual feedback on the consequences of their choices. This narrative flow is the most effective way to demonstrate the cause-and-effect relationship between systemic intervention and youth outcomes, making the report's data and analysis tangible and memorable for the target audience of education, social, and police professionals. -->
+    <!-- Visualization & Content Choices: The primary visualization is a dynamic horizontal bar chart (Chart.js) representing the "Crime Risk Index." This was chosen for its simplicity and directness in showing risk escalation or de-escalation based on user choices. The narrative progression is visualized as a vertical timeline using structured HTML and Tailwind CSS, which is intuitive and lightweight. Key concepts from the report (e.g., "Vulnerable Family," "Revolving Door Effect") are presented in "System Analysis" callout boxes, providing context without disrupting the narrative flow. User interaction is handled through clear choice buttons. This combination of narrative, data visualization, and contextual analysis directly supports the application's goal of educating professionals on intervention strategies. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -31px;
+            top: 18px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #38bdf8;
+            border: 4px solid #f1f5f9;
+        }
+        .timeline-line {
+            position: absolute;
+            left: -22px;
+            top: 28px;
+            bottom: -28px;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 120px;
+            max-height: 150px;
+        }
+        .btn-choice {
+            transition: all 0.3s ease;
+        }
+        .btn-choice:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .outcome-box {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <header class="text-center mb-8 md:mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">阿成的分岔路</h1>
+            <p class="text-lg md:text-xl text-slate-600 mt-2">一個少年風險與介入的互動模擬</p>
+        </header>
+
+        <section id="risk-chart-section" class="mb-8 p-4 bg-white rounded-lg shadow-md sticky top-0 z-10">
+            <h2 class="text-lg font-bold text-center mb-2 text-slate-700">犯罪風險指數</h2>
+            <div class="chart-container">
+                <canvas id="riskChart"></canvas>
+            </div>
+        </section>
+
+        <main id="story-container" class="relative pl-8">
+            <!-- Stages will be injected here by JavaScript -->
+        </main>
+
+    </div>
+
+    <script>
+        const storyData = {
+            start: {
+                title: "序章：風暴之前",
+                age: "12歲",
+                narrative: "故事的主角，我們稱他為阿成。12歲的他，和許多同齡的孩子一樣，對未來有著模糊的憧憬。但他的世界，正悄悄地出現裂痕。他的家庭是單親，由父親獨力扶養。不久後，作為家中唯一支柱的父親因案入獄，家庭頓失依靠，經濟與情感的支持網絡瞬間崩塌。",
+                analysis: {
+                    title: "系統分析：脆弱家庭的浮現",
+                    content: "根據衛福部定義，阿成的家庭已符合多項『脆弱家庭』指標：家庭成員入獄、單親、經濟陷困。這是一個明確的警訊，表示這個家庭需要外部系統的立即介入與支持，以防止危機擴大。"
+                },
+                choices: [],
+                next: "stage1"
+            },
+            stage1: {
+                title: "關鍵節點一：第一次求救",
+                age: "14歲",
+                narrative: "升上國中，失去家庭功能的阿成在學校的適應出現問題。他開始偶爾逃學，與校外的朋友在外遊蕩，甚至出現攜帶危險物品的行為。學校老師發現了這些狀況，這是整個社會支持系統第一次有機會正式介入。",
+                analysis: {
+                    title: "系統分析：從『虞犯』到『曝險少年』",
+                    content: "依據2019年修正的《少年事件處理法》，阿成的行為已符合『曝險少年』的定義，即其身心處於健全成長可能受到危害的情境。新法的核心精神是『行政輔導先行』，強調應優先使用輔導與福利資源，而非直接司法處分。"
+                },
+                choices: [
+                    { text: "路徑A：懲戒導向", riskChange: 20, outcome: "學校將阿成標籤為『問題學生』，採取記過、警告等懲處，並通報警局留下紀錄。各單位各自為政，缺乏橫向溝通。阿成感覺被體制拋棄，內心的對立與疏離感加劇，更加速他向校外尋求認同。", next: "stage2_A" },
+                    { text: "路徑B：支持導向", riskChange: -15, outcome: "學校輔導室啟動機制，將阿成轉介至『少年輔導委員會』。少輔會召開跨網絡會議，連結社工資源，為阿成提供課後輔導與家庭支持，並鼓勵他參與社區NPO（如牧羊人協會）的正向休閒活動。阿成感受到關懷，開始建立穩定的支持關係。", next: "stage2_B" }
+                ]
+            },
+            stage2_A: {
+                title: "關鍵節點二：捷徑的誘惑",
+                age: "16歲",
+                narrative: "被體制烙印的阿成，已成為中輟生。他在街頭認識的朋友，向他展示了一條『成功』的捷徑——加入詐騙集團當車手，能快速賺到大錢。這對渴望證明自己、又缺乏合法機會的他，充滿了致命的吸引力。",
+                analysis: {
+                    title: "系統分析：歸屬感的爭奪",
+                    content: "青少年對歸屬感、權力感與價值感有強烈需求。當家庭與學校無法滿足時，幫派或偏差同儕團體便會乘虛而入，提供虛假的『兄弟義氣』與經濟誘因，爭奪少年的認同。"
+                },
+                choices: [
+                    { text: "路徑C：陷入泥淖", riskChange: 30, outcome: "阿成選擇了賺快錢，成為犯罪集團的一員。他獲得了短暫的物質滿足，但代價是與犯罪網絡越纏越深，價值觀嚴重扭曲，難以脫身。他的人生軌跡，已朝向更嚴重的犯罪行為加速前進。", next: "stage3_A" },
+                    { text: "路徑D：微弱的轉機(風險仍在)", riskChange: 5, outcome: "阿成雖然心動，但過去在社區中偶然接觸到的宮廟活動給了他片刻的喘息。他在陣頭練習中找到短暫的歸屬感，暫時拒絕了朋友的提議。然而，家庭的創傷與經濟壓力仍在，他依然在懸崖邊緣徘徊。", next: "stage3_B" }
+                ]
+            },
+            stage2_B: {
+                title: "關鍵節點二：責任的賦予",
+                age: "16歲",
+                narrative: "在社區NPO與少輔會的持續關懷下，阿成的生活逐漸穩定。他雖然中輟，但在機構中找到歸屬感。機構的導師看見他的成長，決定賦予他更大的責任——協助帶領比他更小的孩子，成為一位『小老師』。",
+                analysis: {
+                    title: "系統分析：社會資本的累積",
+                    content: "從『受助者』轉變為『貢獻者』，是極具療癒性的過程。這能大幅提升少年的自尊與責任感，建立正向的社會連結（Social Bonds），並累積對抗風險的『保護因子』。"
+                },
+                choices: [
+                    { text: "路徑C：昔日友人的拉扯", riskChange: 15, outcome: "儘管生活步上正軌，但昔日街頭的朋友再次出現，以金錢誘惑他。阿成內心產生動搖，支持系統面臨考驗。他偶爾會與這些朋友聯繫，犯罪風險依然存在。", next: "stage3_B" },
+                    { text: "路徑D：社群的深耕", riskChange: -20, outcome: "阿成選擇了留在機構，承擔起新的責任。在教導他人的過程中，他找到了前所未有的成就感與自我價值。導師更進一步鼓勵他學習一技之長，為未來的自立生活做準備。他的人生軌跡，轉向穩定與希望。", next: "stage3_C" }
+                ]
+            },
+            stage3_A: {
+                title: "最終章：註定的悲劇",
+                age: "17歲",
+                narrative: "在犯罪文化中浸染的阿成，價值觀已嚴重偏差。此時，他生命中最後的依靠——他的母親——因病過世。巨大的創傷與哀慟，在缺乏正向支持系統的引導下，轉化為對世界的憤怒與絕望。為了金錢，也為了在同儕中證明自己，他策劃並實施了銀樓搶劫案。",
+                analysis: {
+                    title: "系統分析：複合性創傷的爆發",
+                    content: "父親入獄的慢性壓力，疊加母親驟逝的急性創傷，形成了『複合性創傷』。在缺乏專業哀傷輔導的情況下，未被處理的悲痛極易以外化的犯罪行為呈現，成為一種絕望的吶喊。"
+                },
+                choices: [],
+                final: "阿成被逮捕，進入少年法庭。他的人生，在17歲這年，劃下了難以抹滅的傷痕。所有前期預防的機會都已錯失，社會將為此付出更高的代價。 <strong>（結局：模擬真實事件）</strong>"
+            },
+            stage3_B: {
+                title: "最終章：懸崖邊的掙扎",
+                age: "17歲",
+                narrative: "雖然有社區宮廟或機構的微弱支持，但阿成心中累積的創傷並未真正撫平。此刻，他唯一的親人母親過世，這成為壓垮他的最後一根稻草。巨大的悲痛讓他再次與昔日朋友走近，尋求慰藉。在他們的慫恿和對金錢的急迫需求下，他最終還是走上了犯罪的道路。",
+                analysis: {
+                    title: "系統分析：支持網絡的極限",
+                    content: "非正式的社區支持（如宮廟）或單一的NPO介入，雖能提供部分支持，但若缺乏與專業心理健康、家庭支持系統的深度整合，有時難以獨力承接少年所面臨的巨大複合性創傷。"
+                },
+                choices: [],
+                final: "阿成犯下了搶案，辜負了那些曾試圖幫助他的人。這顯示，單點的、非持續性的介入，可能不足以對抗根深蒂固的風險因子。一個更全面、更主動的系統性介入是必要的。 <strong>（結局：預防失敗）</strong>"
+            },
+            stage3_C: {
+                title: "最終章：轉化的生命",
+                age: "17歲",
+                narrative: "母親的過世，對阿成依然是沉重的打擊。但在他最悲痛的時刻，過去兩年建立的支持網絡發揮了關鍵作用。少輔會的社工、NPO的導師和朋友們圍繞在他身邊，陪伴他度過哀傷。他學會用正當的方式求助，而非破壞性的行為來宣洩情緒。",
+                analysis: {
+                    title: "系統分析：韌性的建立",
+                    content: "有效的預防策略，其目標並非讓少年永不遭遇困境，而是建立他們的『韌性』（Resilience）——即在遭遇逆境時，擁有復原並繼續前進的能力。這需要長期、穩定、且充滿信任的關係作為基礎。"
+                },
+                choices: [],
+                final: "阿成沒有走向犯罪。他繼續在社區學習技能，並利用自己的經驗，去幫助其他和他有類似遭遇的孩子。他的人生或許平凡，但他成功地打破了創傷與犯罪的惡性循環，找到了屬於自己的『成功』。 <strong>（結局：預防成功）</strong>"
+            }
+        };
+
+        let currentRisk = 25;
+        let riskChart;
+        const storyContainer = document.getElementById('story-container');
+
+        function initChart() {
+            const ctx = document.getElementById('riskChart').getContext('2d');
+            riskChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['風險指數'],
+                    datasets: [{
+                        label: '犯罪風險指數',
+                        data: [currentRisk],
+                        backgroundColor: ['#38bdf8'],
+                        borderColor: ['#0284c7'],
+                        borderWidth: 1,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 25
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateChart(change) {
+            currentRisk += change;
+            if (currentRisk < 0) currentRisk = 0;
+            if (currentRisk > 100) currentRisk = 100;
+            
+            riskChart.data.datasets[0].data[0] = currentRisk;
+            
+            if (currentRisk > 65) {
+                riskChart.data.datasets[0].backgroundColor[0] = '#ef4444'; // red
+                riskChart.data.datasets[0].borderColor[0] = '#b91c1c';
+            } else if (currentRisk > 40) {
+                riskChart.data.datasets[0].backgroundColor[0] = '#f97316'; // orange
+                riskChart.data.datasets[0].borderColor[0] = '#c2410c';
+            } else {
+                riskChart.data.datasets[0].backgroundColor[0] = '#38bdf8'; // sky
+                riskChart.data.datasets[0].borderColor[0] = '#0284c7';
+            }
+            
+            riskChart.update();
+        }
+
+        function renderStage(stageKey) {
+            const stage = storyData[stageKey];
+            if (!stage) return;
+
+            const stageElement = document.createElement('div');
+            stageElement.id = stageKey;
+            stageElement.className = 'timeline-item relative mb-12';
+
+            let analysisHtml = '';
+            if (stage.analysis) {
+                analysisHtml = `
+                    <div class="mt-4 p-4 bg-sky-100 border-l-4 border-sky-500 rounded-r-lg text-slate-700">
+                        <h4 class="font-bold">${stage.analysis.title}</h4>
+                        <p class="mt-1 text-sm">${stage.analysis.content}</p>
+                    </div>
+                `;
+            }
+
+            let choicesHtml = '<div class="mt-6 space-y-3 md:space-y-0 md:space-x-4 flex flex-col md:flex-row choice-container">';
+            stage.choices.forEach((choice, index) => {
+                choicesHtml += `
+                    <button class="btn-choice flex-1 text-left p-4 bg-white rounded-lg shadow-md border border-slate-200 hover:bg-sky-50" data-stage="${stageKey}" data-choice-index="${index}">
+                        <span class="font-bold text-sky-600">${choice.text.split('：')[0]}</span>
+                        <span class="block mt-1 text-sm text-slate-600">${choice.text.split('：')[1]}</span>
+                    </button>
+                `;
+            });
+            choicesHtml += '</div>';
+            
+            let finalHtml = '';
+            if (stage.final) {
+                finalHtml = `<div class="mt-6 p-4 bg-slate-200 rounded-lg outcome-box"><p class="text-slate-800">${stage.final}</p></div>`;
+            }
+
+            stageElement.innerHTML = `
+                <div class="timeline-line"></div>
+                <div>
+                    <h3 class="text-xl md:text-2xl font-bold text-slate-800">${stage.title}</h3>
+                    <span class="text-sm font-medium text-sky-600 bg-sky-100 py-1 px-2 rounded">${stage.age}</span>
+                    <p class="mt-3 text-slate-600">${stage.narrative}</p>
+                    ${analysisHtml}
+                    ${stage.choices.length > 0 ? choicesHtml : ''}
+                    ${finalHtml}
+                    <div class="outcome-container mt-6"></div>
+                </div>
+            `;
+
+            storyContainer.appendChild(stageElement);
+            stageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            if (stage.next && stage.choices.length === 0) {
+                setTimeout(() => renderStage(stage.next), 1500);
+            }
+        }
+
+        storyContainer.addEventListener('click', function(e) {
+            const button = e.target.closest('button.btn-choice');
+            if (!button) return;
+
+            const stageKey = button.dataset.stage;
+            const choiceIndex = parseInt(button.dataset.choiceIndex);
+            
+            const stage = storyData[stageKey];
+            const choice = stage.choices[choiceIndex];
+
+            updateChart(choice.riskChange);
+
+            const choiceContainer = button.parentElement;
+            choiceContainer.innerHTML = ''; 
+
+            const outcomeContainer = document.querySelector(`#${stageKey} .outcome-container`);
+            const outcomeBox = document.createElement('div');
+            outcomeBox.className = 'p-4 bg-white rounded-lg shadow-inner border border-slate-200 outcome-box';
+            outcomeBox.innerHTML = `
+                <p class="text-slate-700">${choice.outcome}</p>
+                <button class="mt-4 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors continue-btn" data-next-stage="${choice.next}">繼續 →</button>
+            `;
+            outcomeContainer.appendChild(outcomeBox);
+        });
+
+        storyContainer.addEventListener('click', function(e) {
+            const button = e.target.closest('button.continue-btn');
+            if (!button) return;
+            
+            const nextStageKey = button.dataset.nextStage;
+            renderStage(nextStageKey);
+            button.disabled = true;
+            button.classList.add('opacity-50');
+        });
+
+        window.onload = () => {
+            initChart();
+            renderStage('start');
+        };
+    </script>
+
+</body>
+</html>

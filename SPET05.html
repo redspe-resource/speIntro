@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第五單元 前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FFFBF5;
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #C0846E;
+            border-bottom-color: #C0846E;
+        }
+        .question-card {
+            background-color: #FFFFFF;
+            border: 1px solid #EAEAEA;
+            transition: box-shadow 0.3s;
+        }
+        .question-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .answer-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .answer-panel.open {
+            max-height: 500px;
+        }
+        .option-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #f7fafc;
+        }
+        input[type="radio"]:checked + .option-label {
+            background-color: #E6DCD6;
+            border-color: #C0846E;
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#A8765E]">第五單元：前後測驗</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#A8765E]">第五單元：前測</h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-12">本測驗旨在評估您對資優、重度與多重障礙學生，以及相關支持系統的初步理解。請選擇您認為最合適的答案，完成後點擊最下方的按鈕查看分數。</p>
+            
+            <div id="pre-test-container" class="space-y-4">
+            </div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#A8765E]">第五單元：後測</h2>
+                 <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-12">本測驗旨在評估您在學習本單元後的知識掌握與應用程度。題目將更側重於情境應用與細節比較。請選擇答案，完成後點擊最下方的按鈕查看分數。</p>
+
+            <div id="post-test-container" class="space-y-4">
+            </div>
+        </section>
+        
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#A8765E] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#C0846E] transition-colors duration-300">
+                計算分數並比較
+            </button>
+        </div>
+
+    </main>
+    
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者 pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm mt-4">©特殊教育導論課程活動第五單元，主要依據課程大綱，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+    <!-- Score Modal -->
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="modal-container bg-white w-full max-w-lg rounded-lg shadow-xl p-8 transform -translate-y-12">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="chart-container h-64 mx-auto mb-6">
+                <canvas id="score-chart"></canvas>
+            </div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 5</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 5</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const preTestQuestions = [
+                {
+                    question: "1. 依據現行特殊教育法規，為保障具特殊教育需求之幼兒及學生接受適性及融合教育之權利，學校應以團隊合作方式，對特殊教育學生訂定相關計畫。下列哪一項配對不適切？",
+                    options: [
+                        "(A) 學前教育階段身心障礙幼兒：個別化家庭服務計畫",
+                        "(B) 國民教育階段身心障礙學生：個別化教育計畫",
+                        "(C) 高級中等以下學校資賦優異學生：個別輔導計畫",
+                        "(D) 高等教育階段身心障礙學生：個別化支持計畫"
+                    ],
+                    answer: "C",
+                    explanation: "根據《特殊教育法》第36條，為資賦優異學生訂定的計畫應為「個別輔導計畫」，此為112年修法後之正確用語。而選項A，學前階段的計畫應為「個別化教育計畫」(IEP)，個別化家庭服務計畫(IFSP)是早期療育系統中的用語，兩者雖精神相通，但在特教法規中，學前特教以IEP為主體。選項C中「個別輔導計畫」雖為現行法規用語，但題目可能考舊法概念或更精確的計畫內容，如「充實方案」等，此題在113年教甄中答案為C，可能考量到「個別輔導計畫」一詞的詮釋與實際運作的差異。"
+                },
+                {
+                    question: "2. 小如為國小六年級生，多次獲全國美術比賽獎，學業成績優異。家長想為其報名資優鑑定。下列敘述何者最適切？",
+                    options: [
+                        "(A) 甲、有參加全國美術比賽獲獎紀錄，可參加藝術才能資賦優異鑑定。丙、家長應先就小如的情況，釐清適合報名哪一類的資賦優異鑑定。",
+                        "(B) 甲、有參加全國美術比賽獲獎紀錄，可參加藝術才能資賦優異鑑定。丁、若鑑定一般智能與學術性向資賦優異，應施以學科(領域)成就測驗。",
+                        "(C) 乙、有全國性比賽與學業成績優異的雙重認定，即可通過資優鑑定。丙、家長應先就小如的情況，釐清適合報名哪一類的資賦優異鑑定。",
+                        "(D) 乙、有全國性比賽與學業成績優異的雙重認定，即可通過資優鑑定。丁、若鑑定一般智能與學術性向資賦優異，應施以學科(領域)成就測驗。"
+                    ],
+                    answer: "A",
+                    explanation: "資優鑑定是嚴謹的程序。甲、全國性美術比賽獲獎是參與藝術才能資優鑑定的重要參考資料。丙、釐清學生的優勢領域，選擇適合的鑑定類別是第一步。乙、獲獎或成績優異僅為鑑定參考，不等於直接通過鑑定，仍需經過完整的多元評量程序。丁、學科成就測驗是評量方式之一，但非唯一或必然的工具。"
+                },
+                {
+                    question: "3. 小同在原班上課時經常有干擾行為，學校安排特教學生助理人員入班協助。這屬於下列哪一項課程調整？",
+                    options: [
+                        "(A) 學習內容",
+                        "(B) 學習歷程",
+                        "(C) 學習環境",
+                        "(D) 學習評量"
+                    ],
+                    answer: "C",
+                    explanation: "課程調整的四個面向中，「學習環境」的調整包含了物理環境（如座位安排）與社會心理環境（如人力支持）。安排特教學生助理人員入班，是提供額外的人力支持，改變了學生學習的社會環境，因此屬於學習環境的調整。"
+                },
+                {
+                    question: "4. 黃老師結合社區資源教導集中式特教班學生買水果，除了課堂模擬，還實際帶學生到社區水果店購買。此評量方式較屬於？",
+                    options: [
+                        "(A) 真實評量",
+                        "(B) 生態評量",
+                        "(C) 檔案評量",
+                        "(D) 動態評量"
+                    ],
+                    answer: "A",
+                    explanation: "真實評量(Authentic Assessment)強調在真實或高度模擬的生活情境中，評估學生解決實際問題的能力。帶學生到真正的水果店進行購買，完全符合真實評量的精神。生態評量則更側重於分析環境對學生的影響。"
+                },
+                {
+                    question: "5. 小華是集中式特教班五年級學生，無法口語、獨立進食，且有自傷行為。下列何者是小華較需要的教育輔具？",
+                    options: [
+                        "(A) 甲、生活輔具。乙、溝通輔具。",
+                        "(B) 甲、生活輔具。丙、行動輔具。",
+                        "(C) 乙、溝通輔具。丁、學習輔具。",
+                        "(D) 丙、行動輔具。丁、學習輔具。"
+                    ],
+                    answer: "A",
+                    explanation: "針對小華「無法獨立進食」的需求，需要「生活輔具」（如特製餐具）。針對他「無法用口語表達」的需求，則需要「溝通輔具」（如溝通圖卡、語音溝通板）來幫助他表達，這也可能間接減少因無法溝通而產生的自傷行為。"
+                }
+            ];
+
+            const postTestQuestions = [
+                {
+                    question: "1. 某生為自閉症兼具資賦優異的學生，在數理方面有卓越表現，但上課時會滔滔不絕發表意見干擾教學。下列哪些措施有助於改善該生在校的適應狀況？",
+                    options: [
+                        "(A) 甲、提供區分性教學，讓該生在數理科有適性的學習機會。乙、安排社會技巧課程，透過社會性故事，提升其人際互動技巧。丙、給予該生班級規範的視覺提示，讓其在課堂中可以隨時看到教室規則。",
+                        "(B) 甲、提供區分性教學。乙、安排社會技巧課程。丁、以過度矯正策略，要求該生唸十次「講話要舉手」。",
+                        "(C) 甲、提供區分性教學。丙、給予視覺提示。丁、以過度矯正策略。",
+                        "(D) 乙、安排社會技巧課程。丙、給予視覺提示。丁、以過度矯正策略。"
+                    ],
+                    answer: "A",
+                    explanation: "處理雙重特殊需求學生的問題，應同時兼顧其優勢與弱勢。甲、提供區分性教學滿足其優勢智能需求。乙、安排社會技巧課程處理其人際互動困難。丙、給予視覺提示協助其遵守規範。這三者都是正向且有效的支持策略。丁、過度矯正屬於懲罰策略，較不符合正向行為支持的精神。"
+                },
+                {
+                    question: "2. 針對雙重特殊需求學生的輔導，有研究指出可以參考介入反應模式(RTI)進行「多階層介入」。有關此模式的概念，下列何者正確？",
+                    options: [
+                        "(A) 多階層介入模式為階段性的介入，必須從階層一到階層三依序實施。",
+                        "(B) 階層一為目標性介入，是採同質性小團體形式進行特定目標的介入。",
+                        "(C) 階層二為全面性介入，著重在普通班教師可以提供之優弱勢發展。",
+                        "(D) 階層三為密集性介入，由資優專長與領域專長教師提供外加指導。"
+                    ],
+                    answer: "D",
+                    explanation: "在多階層介入模式中，階層一(Tier 1)是對全體學生的全面性、預防性介入。階層二(Tier 2)是針對部分有風險的學生提供小團體目標性介入。階層三(Tier 3)才是針對少數需求最複雜、反應不佳的學生，提供最高強度、最個別化的密集介入。因此(D)的描述最為正確。"
+                },
+                {
+                    question: "3. 小中是四年級身心障礙生，國語文與數學均有輕微學習功能缺損。關於其課程調整，下列何者較適當？",
+                    options: [
+                        "(A) 甲、使用數學領域前一個學習階段的學習表現。丙、分解數學領域該學習階段的學習重點為數個較小的學習內容。",
+                        "(B) 甲、使用數學領域前一個學習階段的學習表現。丁、轉化國語文科目該學習階段的學習重點為生活化的學習表現。",
+                        "(C) 乙、降低國語文科目該學習階段的學習內容難度。丙、分解數學領域該學習階段的學習重點為數個較小的學習內容。",
+                        "(D) 乙、降低國語文科目該學習階段的學習內容難度。丁、轉化國語文科目該學習階段的學習重點為生活化的學習表現。"
+                    ],
+                    answer: "C",
+                    explanation: "課程調整應盡量維持在同年級的課程架構下進行。乙、適度「降低」學習內容的難度（簡化），以及丙、將複雜的學習重點「分解」成較小的單元，都是在原課程架構下進行的合理調整。甲、直接使用前一學習階段的內容屬於「降級」，通常是最後的選擇。丁、「轉化」為生活化內容可能偏離原課程目標。"
+                },
+                {
+                    question: "4. 下列哪一選項的敘述較符合通用設計學習(Universal Design for Learning)的原則？",
+                    options: [
+                        "(A) 甲、數學老師依照講解概念、基本練習、延伸問題等步驟進行教學。乙、社會老師讓學生依自己擅長的方式，選擇撰寫書面報告、繪製圖片或錄音錄影等方法展現學習成果。",
+                        "(B) 甲、數學老師依照固定步驟教學。丙、自然老師將學生依能力分組進行不同任務。",
+                        "(C) 乙、社會老師讓學生選擇多元方式展現成果。丁、國文老師進行文言文教學時，提供概念圖、翻譯、影片等多媒體教材。",
+                        "(D) 丙、自然老師將學生依能力分組。丁、國文老師提供多媒體教材。"
+                    ],
+                    answer: "C",
+                    explanation: "乙、讓學生選擇多元方式展現成果，符合UDL的「多元表達與行動」原則。丁、提供多種媒體形式的教材，符合UDL的「多元表徵」原則。甲描述的是一般教學流程，缺乏彈性。丙是傳統的能力分組，而非讓所有學生都能接觸核心課程的通用設計精神。"
+                },
+                {
+                    question: "5. 芯芯透過鑑定安置已在學校接受特殊教育服務一學期，根據特殊教育法規，下列敘述何者正確？",
+                    options: [
+                        "(A) 訂定或討論個別化教育計畫時，應視學生身心狀態與年齡，再決定是否邀請該生出席。",
+                        "(B) 學期中，老師發現芯芯學習適應困難，因此邀約家長與專業團隊成員共同討論並調整教學策略。",
+                        "(C) 老師完成芯芯的學期評量後，需等待芯芯新學期開學並確認學習概況後，在一個月內訂定個別化教育計畫。",
+                        "(D) 普通班老師與家長事先召開個別化教育計畫會議，而後再將結果告知專業團隊成員進一步討論教學策略。"
+                    ],
+                    answer: "B",
+                    explanation: "個別化教育計畫(IEP)是一份動態的文件，應根據學生的學習狀況隨時檢討與修正。當發現學生適應困難時，教學團隊應立即召開會議共同討論並調整策略，而非等到學期末或學期初。IEP會議應邀請所有相關人員共同參與，不能由部分成員私下決定。"
+                }
+            ];
+
+            function createQuestionElement(q, index, type) {
+                const card = document.createElement('div');
+                card.className = 'question-card rounded-lg overflow-hidden';
+                
+                const questionHeader = document.createElement('div');
+                questionHeader.className = 'p-6 cursor-pointer';
+                questionHeader.innerHTML = `<h4 class="font-semibold">${q.question}</h4>`;
+                
+                const optionsList = document.createElement('div');
+                optionsList.className = 'px-6 pb-6 space-y-3';
+                q.options.forEach((opt, i) => {
+                    const optionValue = String.fromCharCode(65 + i); // A, B, C, D
+                    const optionWrapper = document.createElement('div');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `${type}-q${index}`;
+                    radio.id = `${type}-q${index}-opt${i}`;
+                    radio.value = optionValue;
+                    radio.className = 'hidden';
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `${type}-q${index}-opt${i}`;
+                    label.className = 'option-label';
+                    label.textContent = opt;
+                    
+                    optionWrapper.appendChild(radio);
+                    optionWrapper.appendChild(label);
+                    optionsList.appendChild(optionWrapper);
+                });
+
+                const answerPanel = document.createElement('div');
+                answerPanel.className = 'answer-panel bg-gray-50';
+                answerPanel.innerHTML = `
+                    <div class="p-6">
+                        <p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p>
+                        <p class="text-gray-800">${q.explanation}</p>
+                    </div>
+                `;
+
+                card.appendChild(questionHeader);
+                card.appendChild(optionsList);
+                card.appendChild(answerPanel);
+
+                questionHeader.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    answerPanel.classList.toggle('open');
+                    if (answerPanel.classList.contains('open')) {
+                        answerPanel.style.paddingTop = '1.5rem';
+                        answerPanel.style.paddingBottom = '1.5rem';
+                    } else {
+                        answerPanel.style.paddingTop = '0';
+                        answerPanel.style.paddingBottom = '0';
+                    }
+                });
+
+                return card;
+            }
+
+            const preTestContainer = document.getElementById('pre-test-container');
+            preTestQuestions.forEach((q, i) => {
+                preTestContainer.appendChild(createQuestionElement(q, i, 'pre'));
+            });
+
+            const postTestContainer = document.getElementById('post-test-container');
+            postTestQuestions.forEach((q, i) => {
+                postTestContainer.appendChild(createQuestionElement(q, i, 'post'));
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            const calculateBtn = document.getElementById('calculate-score');
+            const modal = document.getElementById('score-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const preScoreEl = document.getElementById('pre-score');
+            const postScoreEl = document.getElementById('post-score');
+            const scoreDiffEl = document.getElementById('score-diff');
+            const chartCanvas = document.getElementById('score-chart');
+            let scoreChart = null;
+
+            calculateBtn.addEventListener('click', () => {
+                let preScore = 0;
+                preTestQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="pre-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        preScore++;
+                    }
+                });
+
+                let postScore = 0;
+                postTestQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="post-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        postScore++;
+                    }
+                });
+
+                preScoreEl.textContent = `${preScore} / 5`;
+                postScoreEl.textContent = `${postScore} / 5`;
+
+                const diff = postScore - preScore;
+                if (diff > 0) {
+                    scoreDiffEl.textContent = `進步分數：+${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-green-600';
+                } else if (diff < 0) {
+                    scoreDiffEl.textContent = `退步分數：${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-red-600';
+                } else {
+                    scoreDiffEl.textContent = '分數持平';
+                    scoreDiffEl.className = 'text-lg font-semibold text-gray-600';
+                }
+
+                modal.classList.remove('hidden');
+                
+                if(scoreChart) {
+                    scoreChart.destroy();
+                }
+
+                scoreChart = new Chart(chartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['前測', '後測'],
+                        datasets: [{
+                            label: '答對題數',
+                            data: [preScore, postScore],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.6)',
+                                'rgba(22, 163, 74, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(22, 163, 74, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 5,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>融合教育探討 (專業更新版)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 採用專業且沉穩的藍色系風格 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F8F9FA; /* 非常淺的灰色背景 */
+            color: #212529; /* 深灰色文字 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #007BFF; /* 主題藍色 */
+            border-bottom-color: #007BFF;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #DEE2E6;
+            border-radius: 0.75rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #0056b3; /* 深藍色 */
+        }
+        .content-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #007BFF;
+            padding-left: 1rem;
+            color: #343A40;
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background-color: #E7F3FF; /* 淺藍色 */
+            color: #0056b3; /* 深藍色 */
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .info-box {
+            background-color: #F8F9FA;
+            border-left: 4px solid #17A2B8; /* 資訊藍 */
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .interactive-card {
+            cursor: pointer;
+            border: 1px solid #ced4da;
+            transition: all 0.2s ease-in-out;
+        }
+        .interactive-card:hover {
+            background-color: #E7F3FF;
+            border-color: #007BFF;
+        }
+        .interactive-card.active {
+            background-color: #007BFF;
+            color: white;
+            border-color: #0056b3;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        /* Style for details/summary accordion */
+        details > summary {
+            list-style: none;
+            padding: 1rem;
+            background-color: #e9ecef;
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] > summary {
+            background-color: #007BFF;
+            color: white;
+        }
+        details > div {
+            padding: 1.5rem;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-top: none;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+        .prose h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #0056b3;
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+        .prose li {
+            margin-bottom: 0.5rem;
+        }
+        .criteria-button {
+            background-color: #f1f3f5;
+            color: #495057;
+            border: 1px solid #dee2e6;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        .criteria-button:hover {
+            background-color: #e9ecef;
+            border-color: #adb5bd;
+        }
+        .criteria-button.active {
+            background-color: #007BFF;
+            color: white;
+            border-color: #0056b3;
+            font-weight: 600;
+        }
+        .sub-heading {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0056b3;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .reference-list li {
+            word-break: break-all;
+        }
+        /* Interactive Scenario 1 Styles */
+        .scenario-container {
+            background-color: #e9ecef;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .scenario-question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #343A40;
+        }
+        .choice-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            transition: all 0.2s;
+        }
+        .choice-btn:hover {
+            background-color: #f1f3f5;
+            border-color: #007BFF;
+        }
+        .result-panel {
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+            border-left-width: 4px;
+        }
+        .result-good {
+            background-color: #e7f5ec;
+            border-color: #28a745;
+        }
+        .result-bad {
+            background-color: #fbe9e7;
+            border-color: #dc3545;
+        }
+        .result-neutral {
+            background-color: #fff3cd;
+            border-color: #ffc107;
+        }
+        .next-btn, .restart-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .next-btn {
+            background-color: #007BFF;
+        }
+        .next-btn:hover {
+            background-color: #0056b3;
+        }
+        .restart-btn {
+            background-color: #6c757d;
+        }
+        .restart-btn:hover {
+            background-color: #5a6268;
+        }
+        #scenario-progress-bar {
+            transition: width 0.4s ease-in-out;
+        }
+
+        /* Interactive Scenario 2 Styles */
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -31px;
+            top: 18px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #38bdf8;
+            border: 4px solid #f1f5f9;
+        }
+        .timeline-line {
+            position: absolute;
+            left: -22px;
+            top: 28px;
+            bottom: -28px;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+        #risk-chart-section .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            height: 120px;
+            max-height: 150px;
+        }
+        .btn-choice {
+            transition: all 0.3s ease;
+        }
+        .btn-choice:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .outcome-box {
+            animation: fadeIn 0.8s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <!-- Wrapper for title and mobile button -->
+            <div class="flex justify-between items-center md:justify-center">
+                <h1 class="text-xl md:text-2xl font-bold text-[#0056b3] text-center">融合教育推動及特殊教育推動實務分享</h1>
+                <button id="mobile-menu-button" class="md:hidden p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex justify-center items-center mt-4">
+                <div class="flex flex-wrap justify-center gap-x-6 gap-y-2">
+                    <a href="#evolution" class="nav-link font-medium pb-1">理念演進</a>
+                    <a href="#controversy" class="nav-link font-medium pb-1">核心爭議</a>
+                    <a href="#challenges" class="nav-link font-medium pb-1">在地挑戰</a>
+                    <a href="#practice" class="nav-link font-medium pb-1">實踐路徑</a>
+                    <a href="#higher-ed" class="nav-link font-medium pb-1">高等教育</a>
+                    <a href="#crime-prevention" class="nav-link font-medium pb-1">社會邊緣與預防</a>
+                    <a href="#laws" class="nav-link font-medium pb-1">重要法規</a>
+                    <a href="#references" class="nav-link font-medium pb-1">參考文獻</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#evolution" class="block py-2 nav-link text-center">理念演進</a>
+            <a href="#controversy" class="block py-2 nav-link text-center">核心爭議</a>
+            <a href="#challenges" class="block py-2 nav-link text-center">在地挑戰</a>
+            <a href="#practice" class="block py-2 nav-link text-center">實踐路徑</a>
+            <a href="#higher-ed" class="block py-2 nav-link text-center">高等教育</a>
+            <a href="#crime-prevention" class="block py-2 nav-link text-center">社會邊緣與預防</a>
+            <a href="#laws" class="block py-2 nav-link text-center">重要法規</a>
+            <a href="#references" class="block py-2 nav-link text-center">參考文獻</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+
+        <section class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-800">融合教育 (Inclusive Education)</h2>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600 leading-relaxed">
+                本網頁旨在協助師培生及教育工作者，系統性地理解融合教育的理念演進、核心爭議、在地挑戰與實踐路徑，並擴展至高等教育的視野，為您的教學生涯奠定堅實的理論與實務基礎。
+            </p>
+        </section>
+
+        <section id="evolution" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">一、融合教育之概念演進</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">從醫療模式到社會模式的典範轉移</h3>
+                    <p class="text-gray-700">融合教育的發展反映了社會對待身心障礙者態度的轉變。早期的「醫療模式」將障礙視為個人內在的缺陷，需要被治療或矯正。而當代的「社會模式」則主張，「障礙」是社會環境與制度建構的結果，是社會中的物理、態度與政策屏障，限制了個人的參與。因此，改變的責任在於社會，而非個人 (Moriña, 2017)。</p>
+                    <div class="info-box">
+                        <h4 class="font-bold text-lg mb-2 text-cyan-700">重要里程碑：《薩拉曼卡宣言》</h4>
+                        <p>1994年，聯合國教科文組織（UNESCO）發表的《薩拉曼卡宣言與行動綱領》是此一轉變的關鍵。該宣言明確指出，融合教育是基於人權的理念，主張「所有兒童，無論其困難或差異為何，都應盡可能地共同學習」，並強調學校應進行改革以適應所有學生。</p>
+                    </div>
+                </article>
+                <article>
+                    <h3 class="content-heading">「回歸主流」與「融合」之辯證</h3>
+                    <p class="text-gray-600 mb-6">雖然二詞常被混用，但它們代表截然不同的哲學觀點。核心差異在於「適應的責任歸屬」。</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="p-6 rounded-lg bg-orange-50 border-l-4 border-orange-400">
+                            <h4 class="text-xl font-semibold mb-2 text-orange-800">回歸主流 (Integration)</h4>
+                            <p class="text-gray-700"><strong>邏輯：</strong>空間性整合。將特殊學生「放回」主流學校。</p>
+                            <p class="text-gray-700 mt-2"><strong>責任：</strong>學生需具備能力以「融入」既有、未改變的系統。</p>
+                            <p class="text-gray-700 mt-2"><strong>本質：</strong>讓學生準備好進入學校。</p>
+                        </div>
+                        <div class="p-6 rounded-lg bg-blue-50 border-l-4 border-blue-400">
+                            <h4 class="text-xl font-semibold mb-2 text-blue-800">融合 (Inclusion)</h4>
+                            <p class="text-gray-700"><strong>邏輯：</strong>系統性改革。改變學校以主動接納所有學生。</p>
+                            <p class="text-gray-700 mt-2"><strong>責任：</strong>系統本身需進行變革以滿足多樣性，移除障礙。</p>
+                            <p class="text-gray-700 mt-2"><strong>本質：</strong>讓學校準備好迎接所有學生。</p>
+                        </div>
+                    </div>
+                </article>
+                 <article>
+                    <h3 class="content-heading">當代理論的張力：「部分融合」 vs. 「全員融合」</h3>
+                    <p class="text-gray-600 mb-6">當代理論的探討已進入更複雜的階段。學者Messiou (2016) 指出，融合教育的核心精神在於關注「所有」學生，而非僅僅是那些被標定為特定「類別」（如身心障礙、特殊教育需求）的學生。這種以「類別」為基礎的思維，可能反而忽略了其他未被歸類但同樣經歷邊緣化的學生，並可能強化標籤效應。點擊下方觀點，了解其核心論述。</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div id="partial-inclusion-card" class="interactive-card p-6 rounded-lg">
+                            <h4 class="text-xl font-semibold text-center">部分融合 (Inclusion for some)</h4>
+                        </div>
+                        <div id="full-inclusion-card" class="interactive-card p-6 rounded-lg">
+                            <h4 class="text-xl font-semibold text-center">全員融合 (Inclusion for all)</h4>
+                        </div>
+                    </div>
+                    <div id="inclusion-debate-display" class="mt-6 p-6 bg-gray-100 rounded-lg min-h-[120px] text-gray-700 leading-relaxed">
+                        點擊上方任一觀點以查看詳細說明。
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="controversy" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">二、融合教育的核心爭議與定義</h2>
+             <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">研究與實踐的矛盾</h3>
+                    <p class="text-gray-700">Messiou (2016) 在其研究中提出一個尖銳的提問：如果融合是關於「所有」人，為何我們的研究和實踐仍多數聚焦於「某些」人？她分析了2005-2015年間《國際融合教育期刊》的文章，發現高達82%的研究集中在特定類別的學生。這種作法存在以下風險：</p>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+                        <li><strong>強化標籤與假設：</strong>研究者可能預設屬於某一類別的學生具有同質性，忽略了個體間的巨大差異以及如性別、社經地位等「交織性」(intersectionality) 的身分認同。</li>
+                        <li><strong>造成二次邊緣化：</strong>為了研究而將特定學生從群體中抽離出來（如進行訪談），這個動作本身可能就在暗示他們的「不同」，與融合的價值產生矛盾。</li>
+                        <li><strong>忽略隱性的困難：</strong>許多未被歸類的學生可能同樣面臨學習或社交的邊緣化，但由於不符合任何標籤，他們的困境從未被看見。</li>
+                    </ul>
+                </article>
+                <article>
+                    <h3 class="content-heading">釐清關鍵概念：神經生理 vs. 神經心理</h3>
+                    <p class="text-gray-600 mb-6">在特殊教育中，特別是討論學習障礙或自閉症時，常會提到這兩個詞。理解其差異，有助於我們更精準地掌握障礙的成因。</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="p-6 rounded-lg bg-teal-50 border-l-4 border-teal-400">
+                            <h4 class="text-xl font-semibold mb-2 text-teal-800">神經生理 (Neurophysiological)</h4>
+                            <p class="text-gray-700"><strong>焦點：</strong>大腦的「硬體」。</p>
+                            <p class="text-gray-700 mt-2"><strong>探討什麼：</strong>關注大腦和神經系統的物理結構與生理功能，例如腦區的活化情形、神經傳導物質的運作、神經連結的密度等。</p>
+                            <p class="text-gray-700 mt-2"><strong>研究工具：</strong>功能性磁振造影(fMRI)、腦電圖(EEG)等儀器。</p>
+                        </div>
+                        <div class="p-6 rounded-lg bg-indigo-50 border-l-4 border-indigo-400">
+                            <h4 class="text-xl font-semibold mb-2 text-indigo-800">神經心理 (Neuropsychological)</h4>
+                            <p class="text-gray-700"><strong>焦點：</strong>大腦的「作業系統」。</p>
+                            <p class="text-gray-700 mt-2"><strong>探討什麼：</strong>關注大腦功能與外顯行為、認知、情緒之間的關聯。它透過標準化測驗、行為觀察等方式，來推斷大腦不同認知功能（如記憶力、注意力、執行功能）的運作效率。</p>
+                            <p class="text-gray-700 mt-2"><strong>研究工具：</strong>魏氏智力測驗、威斯康辛卡片分類測驗等標準化評量工具。</p>
+                        </div>
+                    </div>
+                </article>
+                
+                <article>
+                    <h3 class="content-heading">融合教育的多維度定義</h3>
+                    <p class="text-gray-600 mb-6">一個完整的定義，應涵蓋哲學、政策與實踐三個層面。點擊下方卡片，了解各層面的內涵。</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <button class="def-tab interactive-card p-4 rounded-lg active" data-target="def-philosophy">哲學層面</button>
+                        <button class="def-tab interactive-card p-4 rounded-lg" data-target="def-policy">政策層面</button>
+                        <button class="def-tab interactive-card p-4 rounded-lg" data-target="def-practice">實踐層面</button>
+                    </div>
+                    <div id="definition-display" class="mt-6 p-6 bg-gray-100 rounded-lg min-h-[150px] text-gray-700 leading-relaxed">
+                        </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="challenges" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">三、臺灣融合教育的在地挑戰</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">法制發展與安置現況</h3>
+                    <p class="text-gray-700 mb-6">臺灣《特殊教育法》歷經多次修訂，逐步將融合教育精神納入法律框架，2023年的修正案更與國際人權公約深度接軌。根據教育部統計，112學年度已有近九成的身心障礙學生在融合環境中學習。然而，學者林素貞(2021)的研究指出，在地方層級（以高雄市為例），學前階段的融合教育實施有其獨特樣貌，特別是私立幼兒園扮演了極為重要的角色。</p>
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="w-full md:w-1/2">
+                            <div class="chart-container">
+                                <canvas id="placementChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2">
+                           <h4 class="font-semibold text-lg text-center mb-4">112學年度身心障礙學生安置統計</h4>
+                           <div class="bg-gray-50 p-4 rounded-lg">
+                               <ul class="space-y-2">
+                                   <li class="flex justify-between"><span>融合式普通班 (資源班服務)</span> <span class="font-bold">56.83%</span></li>
+                                   <li class="flex justify-between"><span>融合式普通班 (巡迴輔導)</span> <span class="font-bold">19.90%</span></li>
+                                   <li class="flex justify-between"><span>融合式普通班 (僅普通班)</span> <span class="font-bold">12.22%</span></li>
+                                   <li class="flex justify-between text-blue-700 font-bold border-t pt-2 mt-2"><span>融合環境總計</span> <span>88.94%</span></li>
+                                   <li class="flex justify-between"><span>集中式特教班</span> <span class="font-bold">6.79%</span></li>
+                                   <li class="flex justify-between"><span>特殊教育學校</span> <span class="font-bold">4.27%</span></li>
+                               </ul>
+                               <p class="text-xs text-gray-500 mt-4">資料來源：教育部統計處 (2024)，作者整理。</p>
+                           </div>
+                        </div>
+                    </div>
+                </article>
+                 <article>
+                    <h3 class="content-heading">實施現場的挑戰</h3>
+                    <p class="text-gray-700 mb-6">儘管政策前瞻，但教學現場仍面臨系統、師資、學生與社群等多層次的挑戰，並相互關聯，形成複雜的負向回饋循環。</p>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="p-6 rounded-lg bg-red-50">
+                            <h4 class="font-semibold text-red-800 mb-2">系統與師資層面</h4>
+                            <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
+                                <li>政策與實踐的落差：中央立法與地方執行、學校實踐之間存在鴻溝。</li>
+                                <li>師資培育與專業知能不足：許多普通班教師未受過充足的特教訓練，對實施差異化教學感到困難 (Lin, 2021)。</li>
+                                <li>私立機構的角色：在學前階段，大量特教生安置於私立幼兒園，但其師資穩定性與行政支持系統更具挑戰 (Lin, 2021)。</li>
+                                <li>資源分配問題：巡迴輔導教師需服務多所學校，支持強度有限。</li>
+                            </ul>
+                        </div>
+                        <div class="p-6 rounded-lg bg-green-50">
+                            <h4 class="font-semibold text-green-800 mb-2">學生與社群層面</h4>
+                            <ul class="list-disc list-outside ml-5 space-y-1 text-gray-700">
+                                <li>同儕互動與社會接納困難：如何促進真實的社會互動，而非僅是空間上的整合。</li>
+                                <li>家長參與及親師合作的複雜性：普通班與特教生家長間可能存在不同的期待與擔憂。</li>
+                                <li>標籤化的影響：鑑定與分類雖為提供服務之本意，但也可能帶來標籤化與刻板印象的風險。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="practice" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">四、邁向優質融合教育的實踐路徑</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">建構支持性的教學鷹架</h3>
+                    <p class="text-gray-700 mb-6">為了解決班級內巨大異質性的困境，以下三種模式相輔相成，是實踐融合教育的關鍵策略。</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-6 rounded-lg border-t-4 border-blue-500 shadow-md">
+                            <h4 class="text-xl font-bold text-center mb-2">通用學習設計 (UDL)</h4>
+                            <p class="text-sm text-gray-600">在課程設計之初就預先考慮學習者的多樣性，提供多元的表徵、行動與表達、參與方式，從源頭消除學習障礙。</p>
+                        </div>
+                        <div class="p-6 rounded-lg border-t-4 border-green-500 shadow-md">
+                            <h4 class="text-xl font-bold text-center mb-2">差異化教學 (DI)</h4>
+                            <p class="text-sm text-gray-600">根據學生特質，在教學過程中彈性調整教學的內容、過程、成果與環境，以回應個別學習需求。</p>
+                        </div>
+                        <div class="p-6 rounded-lg border-t-4 border-purple-500 shadow-md">
+                            <h4 class="text-xl font-bold text-center mb-2">協同教學 (Co-teaching)</h4>
+                            <p class="text-sm text-gray-600">由普通教師與特教教師共同合作，為同一群學生分擔備課、教學與評量的責任，結合彼此的專業。</p>
+                        </div>
+                    </div>
+                </article>
+                <article>
+                    <h3 class="content-heading">在地實踐案例：高雄市學前融合教育師資培力計畫</h3>
+                    <p class="text-gray-700 mb-6">學者林素貞(2021)受高雄市教育局委託，針對迫切需要特教知能的私立幼兒園教師，發展了一套系統性的培力模式，展現了從「知道」到「做到」的具體路徑。</p>
+                    <details class="mb-4">
+                        <summary>第一步：發展以需求為本的「60小時專業知能課程」</summary>
+                        <div class="prose max-w-none text-sm leading-relaxed">
+                            <p>研究團隊首先分析了大學師培課程與現場教師的需求，規劃出涵蓋六大領域的60小時研習課程，內容包括：</p>
+                            <ul>
+                                <li><strong>特教專業知識 (20小時):</strong> 各類障礙特質介紹、IEP撰寫、評量方法等。</li>
+                                <li><strong>特教教學策略 (15小時):</strong> 差異化教學、生活自理、溝通訓練、輔助科技應用等。</li>
+                                <li><strong>行為問題處理 (6小時):</strong> 正向行為支持(PBS)的應用。</li>
+                                <li><strong>環境規劃與班級經營 (9小時):</strong> 無障礙環境、同儕互動、融合班級經營。</li>
+                                <li><strong>親職教育 (6小時):</strong> 與特殊生家長溝通、引導普通生家長接納差異。</li>
+                                <li><strong>行政支持 (4小時):</strong> 鑑定安置流程、特教法規介紹。</li>
+                            </ul>
+                            <p>此課程由市府推動，免費提供給教師參與，成功地提升了教師的基礎知能與意願。</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>第二步：透過「行動研究」深化教學實踐</summary>
+                        <div class="prose max-w-none text-sm leading-relaxed">
+                            <p>為將理論轉化為行動，研究者進入一所私立幼兒園進行為期一年的行動研究，其步驟如下：</p>
+                            <ol>
+                                <li><strong>建立夥伴關係：</strong>與園所行政人員及教師建立合作關係。</li>
+                                <li><strong>個案研討：</strong>以「個案研究法」針對班級內的特殊需求學生進行深入討論。</li>
+                                <li><strong>導入差異化教學模式：</strong>引導教師運用包含六個向度的差異化教學計畫來分析學生困難，並設計教學策略。六個向度包含：(1)環境場地、(2)課程內容、(3)教材教具、(4)教學策略、(5)行為處理、(6)情感支持。</li>
+                                <li><strong>回饋與修正：</strong>透過持續的討論與實踐，教師們成功為個案學生設計出有效的教學調整方案，並轉化為IEP目標。</li>
+                            </ol>
+                            <p>此研究不僅提升了教師的實踐能力，更促使園方建立實質的行政支持（如為完成研習的教師加薪），成為一個可推廣的成功模式。</p>
+                        </div>
+                    </details>
+                </article>
+            </div>
+        </section>
+
+        <section id="higher-ed" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">五、新興議題：高等教育的挑戰與機遇</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">當融合教育走進大學</h3>
+                    <p class="text-gray-700">隨著K-12教育的融合實踐日益成熟，越來越多身心障礙學生進入大學。然而，高等教育的融合之路充滿獨特的挑戰與機遇。學者Moriña (2017)指出，大學不僅要保障學生的「入學權」，更要確保他們能獲得支持並「成功畢業」。</p>
+                </article>
+                <article>
+                    <h3 class="content-heading">大學生的困境：障礙與協助</h3>
+                    <p class="text-gray-600 mb-6">研究顯示，大學生在融合環境中面臨的障礙與他們獲得的支持同等重要。這些因素共同形塑了他們的學習經驗。</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="p-6 rounded-lg bg-red-50">
+                            <h4 class="font-semibold text-red-800 mb-2">主要障礙 (Barriers)</h4>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+                                <li><strong>教職員的負面態度：</strong>部分教授對學生的障礙抱持懷疑，不願提供教學調整，這是學生回報最常見的障礙。</li>
+                                <li><strong>無效的教學法：</strong>單一的講授、缺乏互動、未善用科技資源，對所有學生都不利，但對特教生影響更大。</li>
+                                <li><strong>隱形障礙的告知困境：</strong>無外顯特徵（如學習障礙、精神障礙）的學生常陷入是否該告知師長的兩難，擔心被貼標籤或不被相信。</li>
+                                <li><strong>脆弱的轉銜過程：</strong>從高中到大學是關鍵的適應期，學生需學習自我倡導、管理自己的支持需求，此階段的輟學風險最高。</li>
+                                <li><strong>資訊與物理環境的障礙：</strong>不友善的網頁、缺乏無障礙設施等。</li>
+                            </ul>
+                        </div>
+                        <div class="p-6 rounded-lg bg-sky-50">
+                            <h4 class="font-semibold text-sky-800 mb-2">關鍵支持 (Facilitators)</h4>
+                            <ul class="list-disc list-outside ml-5 space-y-2 text-gray-700">
+                                <li><strong>家庭與同儕支持：</strong>家人朋友的鼓勵與實質協助是重要的心理支柱。</li>
+                                <li><strong>校內支持系統：</strong>資源教室或障礙學生支持辦公室提供專業諮詢與服務。</li>
+                                <li><strong>友善的師長：</strong>相信學生潛能、願意溝通並提供彈性調整的教授。</li>
+                                <li><strong>個人策略：</strong>學生自身的毅力、自我倡導與時間管理能力。</li>
+                                <li><strong>通用學習設計 (UDL)：</strong>當教授採用UDL原則設計課程時（如提供多種格式的教材、清晰的評分標準），許多額外的調整就不再必要，且所有學生都能受益。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </article>
+                <article>
+                    <h3 class="content-heading">大學作為賦權的場域</h3>
+                    <p class="text-gray-700">儘管挑戰重重，研究一致認為，高等教育是身心障礙學生「賦權」(empowerment) 的重要機會。它不僅提升了未來的就業前景與經濟獨立的可能性，更是一個讓他們重新定義自我認同、擺脫過往標籤的場域。許多學生形容自己是「倖存者」而非「英雄」，這段經歷本身就是一種韌性的展現 (Moriña, 2017)。</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="crime-prevention" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">六、新興挑戰：社會邊緣與犯罪預防</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">從校園到司法：當融合教育防線失守</h3>
+                    <p class="text-gray-700">一個健全的融合教育系統，不僅是教育議題，更是社會安全網的關鍵一環。當學生的特殊需求（特別是情緒行為、學習困境與家庭功能失調）未能在校園中被有效識別與支持時，他們可能逐步走向社會邊緣，甚至進入司法體系。這形成了所謂的「從學校到監獄的輸送帶」(School-to-Prison Pipeline)，是融合教育必須正視的嚴峻挑戰。</p>
+                </article>
+                <article>
+                    <h3 class="content-heading">矯正學校中被遺忘的特教生</h3>
+                    <p class="text-gray-600 mb-6">研究與報導（Right+，2021）揭示了驚人的現實：進入少年矯正學校的學生中，有極高比例具有未被診斷或未受妥善支持的身心障礙。</p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="p-6 rounded-lg bg-amber-50 border-l-4 border-amber-400">
+                            <h4 class="text-xl font-semibold mb-2 text-amber-800">高盛行率的警訊</h4>
+                            <p class="text-gray-700">許多在矯正學校的少年，其偏差行為根源於學習障礙、注意力缺陷過動症(ADHD)或情緒行為障礙。他們在普通學校中，常因學習挫敗、人際困難而被師生誤解為「壞」、「懶」或「不聽話」，但其背後的障礙需求從未被看見。</p>
+                        </div>
+                        <div class="p-6 rounded-lg bg-rose-50 border-l-4 border-rose-400">
+                            <h4 class="text-xl font-semibold mb-2 text-rose-800">支持系統的匱乏</h4>
+                            <p class="text-gray-700">矯正學校普遍缺乏足夠的特教資源與師資，難以提供這些學生所需的個別化教育與輔導。這使得他們在離開矯正學校後，因缺乏一技之長與適應社會的能力，再犯風險提高，形成惡性循環。</p>
+                        </div>
+                    </div>
+                </article>
+                 <article>
+                    <h3 class="content-heading">校園安全網的破口與司法銜接</h3>
+                    <p class="text-gray-600 mb-6">近年發生的校園安全事件（報導者，2024），凸顯了現行三級輔導體制與特教支持系統在面對高風險、多重議題（如家庭失能、精神疾病、暴力傾向）學生時的困境。一個功能完善的融合教育環境，應是預防的第一道防線。</p>
+                    <div class="info-box">
+                        <h4 class="font-bold text-lg mb-2 text-cyan-700">《少年事件處理法》與教育的連結</h4>
+                        <p>我國《少年事件處理法》揭示「優先保護、教養及輔導」的核心精神，強調對於曝險或觸法少年應以「行政輔導先行」。這意味著在進入司法程序前，教育、社政、警政等網絡應共同介入，提供支持。一個能及早發現學生困難、提供彈性與多元支持的融合教育校園，正是實踐此法精神、避免學生走向觸法的最有效場域。</p>
+                    </div>
+                </article>
+                <!-- Interactive Scenario 1 START -->
+                <article>
+                    <h3 class="content-heading">互動體驗：你能接住他們嗎？</h3>
+                    <div id="interactive-scenario" class="scenario-container">
+                        <div id="scenario-start">
+                            <p class="mb-4">這個互動體驗改編自真實事件。你將扮演一位國中導師，面對班上一位情況複雜的學生。你的每個選擇，都可能影響他的未來。準備好了嗎？</p>
+                            <button id="start-scenario-btn" class="next-btn">開始體驗</button>
+                        </div>
+                        <div id="scenario-content" class="hidden">
+                            <!-- Progress Bar -->
+                            <div id="scenario-progress-container" class="w-full bg-gray-300 rounded-full h-2.5 mb-6 hidden">
+                                <div id="scenario-progress-bar" class="bg-blue-600 h-2.5 rounded-full"></div>
+                            </div>
+                            <!-- Scenario stages will be injected here -->
+                            <div id="scenario-stage-content"></div>
+                        </div>
+                    </div>
+                </article>
+                <!-- Interactive Scenario 1 END -->
+                <!-- Interactive Scenario 2 START -->
+                <article class="mt-12">
+                     <h3 class="content-heading">互動模擬：阿成的分岔路</h3>
+                     <div class="bg-slate-100 p-4 md:p-8 rounded-lg">
+                        <div class="text-center mb-8 md:mb-12">
+                            <p class="text-lg md:text-xl text-slate-600 mt-2">一個少年風險與介入的互動模擬</p>
+                        </div>
+                
+                        <section id="risk-chart-section" class="mb-8 p-4 bg-white rounded-lg shadow-md sticky top-20 z-10">
+                            <h2 class="text-lg font-bold text-center mb-2 text-slate-700">犯罪風險指數</h2>
+                            <div class="chart-container" style="height: 120px; max-height: 150px;">
+                                <canvas id="riskChart"></canvas>
+                            </div>
+                        </section>
+                
+                        <main id="story-container" class="relative pl-8">
+                            <!-- Stages will be injected here by JavaScript -->
+                        </main>
+                    </div>
+                </article>
+                <!-- Interactive Scenario 2 END -->
+            </div>
+        </section>
+        
+        <section id="laws" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">七、重要教育法規</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-6">
+                <p class="text-center text-gray-600">特殊教育的推動根植於國家法律的保障。本區塊整理了幾項核心法規，您可以點擊展開以查閱重要條文。</p>
+                
+                <details>
+                    <summary>特殊教育法 (民國 112 年 06 月 21 日修正) - 重點摘錄</summary>
+                    <div class="prose max-w-none text-sm leading-relaxed">
+                        <h4>第一章 總則</h4>
+                        <ul>
+                            <li><strong>第 1 條 (立法目的)：</strong>為使身心障礙及資賦優異之國民，均有接受適性及融合教育之權利，充分發展身心潛能，培養健全人格，增進服務社會能力。</li>
+                            <li><strong>第 3 條 (身心障礙定義)：</strong>定義智能、視覺、聽覺、語言、肢體障礙等十三類身心障礙。</li>
+                             <li><strong>第 4 條 (資賦優異定義)：</strong>定義一般智能、學術性向、藝術才能等六類資賦優異。</li>
+                        </ul>
+                        <h4>第三章 鑑定、安置及輔導</h4>
+                        <ul>
+                             <li><strong>第 19 條 (個別化教育計畫之訂定)：</strong>高級中等以下各教育階段學校，應以團隊合作方式對身心障礙學生訂定個別化教育計畫(IEP)。</li>
+                             <li><strong>第 22 條 (學生及家長參與權)：</strong>各級主管機關及各教育階段學校召開與特殊教育學生相關會議時，應通知學生本人、其本人或其法定代理人、實際照顧者指定之人員參與，並於會議召開前，提供會議相關資料。</li>
+                        </ul>
+                        <h4>第四章 支持服務</h4>
+                         <ul>
+                             <li><strong>第 28 條 (支持服務之提供)：</strong>各教育階段學校應提供特殊教育學生支持服務，包括教育輔具、適性教材、學習及生活人力協助、復健服務、家庭支持等。</li>
+                             <li><strong>第 31 條 (課程、教學與評量之調整)：</strong>各教育階段學校應對特殊教育學生，在其優勢能力、學習需要及身心狀況之基礎上，提供適性課程、教學、評量、輔導及其他支持服務。</li>
+                         </ul>
+                        <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0020045" target="_blank" class="text-blue-600 hover:underline mt-4 inline-block">點擊此處查閱《特殊教育法》全文</a>
+                    </div>
+                </details>
+
+                <details>
+                    <summary>特殊教育學生及幼兒鑑定辦法 (民國 112 年 10 月 24 日修正) - 鑑定基準</summary>
+                    <div class="space-y-8">
+                        <h3 class="sub-heading">心智功能障礙類（互動式說明）</h3>
+                        <div class="criteria-container border border-gray-200 p-4 rounded-lg" data-disability="id">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">智能障礙</h4>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <button class="criteria-button" data-type="definition">定義</button>
+                                <button class="criteria-button" data-type="criteria">鑑定基準</button>
+                                <button class="criteria-button" data-type="exclusion">必要條件</button>
+                            </div>
+                            <div class="criteria-display p-4 bg-blue-50 rounded-md min-h-[100px] text-sm">點擊按鈕查看說明</div>
+                        </div>
+                        <div class="criteria-container border border-gray-200 p-4 rounded-lg" data-disability="asd">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">自閉症譜系障礙</h4>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <button class="criteria-button" data-type="definition">定義</button>
+                                <button class="criteria-button" data-type="criteria">鑑定基準</button>
+                            </div>
+                            <div class="criteria-display p-4 bg-blue-50 rounded-md min-h-[100px] text-sm">點擊按鈕查看說明</div>
+                        </div>
+                        <div class="criteria-container border border-gray-200 p-4 rounded-lg" data-disability="ld">
+                            <h4 class="text-lg font-bold text-gray-800 mb-4">學習障礙</h4>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <button class="criteria-button" data-type="definition">定義</button>
+                                <button class="criteria-button" data-type="criteria">鑑定基準</button>
+                                <button class="criteria-button" data-type="exclusion">排除條款</button>
+                            </div>
+                            <div class="criteria-display p-4 bg-blue-50 rounded-md min-h-[100px] text-sm">點擊按鈕查看說明</div>
+                        </div>
+                        
+                        <h3 class="sub-heading">其他障礙類別</h3>
+                        <div class="prose max-w-none text-sm leading-relaxed space-y-4">
+                            <h4>第四條 (視覺障礙)</h4>
+                            <p>指由於先天或後天原因，導致視覺器官之構造缺損或功能發生部分或全部障礙，經最佳矯正後，其視覺辨認、視覺廣度、視覺功能等，仍有顯著困難，嚴重影響其學習與生活適應者。</p>
+                            <h4>第五條 (聽覺障礙)</h4>
+                            <p>指由於聽覺器官之構造缺損或功能異常，致以聽覺參與活動之能力受到限制，嚴重影響其學習與生活適應者。</p>
+                            <h4>第六條 (語言障礙)</h4>
+                            <p>指個人在口語或語言符號的理解或表達能力，與同年齡者相較，有顯著偏離或遲緩現象，致影響其學習與生活適應者。</p>
+                            <h4>第七條 (肢體障礙)</h4>
+                            <p>指由於上肢、下肢或軀幹之機能損傷，致無法或難以順利完成日常學習活動者。</p>
+                            <h4>第八條 (腦性麻痺)</h4>
+                            <p>指腦部在發育未成熟前，因任何原因造成非進行性、非暫時性之腦部損傷，而顯現出動作、平衡及姿勢發展障礙，嚴重影響其學習與生活適應者。</p>
+                            <h4>第九條 (身體病弱)</h4>
+                            <p>指個人因罹患慢性疾病，或體質虛弱，需長期療養，致體力、學習活動及生活適應，受到嚴重影響者。</p>
+                             <h4>第十一條 (情緒行為障礙)</h4>
+                            <p>指個人長期在情緒或行為反應上，有顯著異於其年齡或社會文化之現象，包括精神性疾患、情感性疾患、畏懼性疾患、焦慮性疾患、注意力缺陷過動症，或其他持續性之情緒或行為問題，嚴重影響其學習與生活適應者。</p>
+                            <h4>第十三條 (多重障礙)</h4>
+                            <p>指個人有二種以上不具連帶關係之障礙，嚴重影響其學習與生活適應者。</p>
+                            <h4>第十四條 (發展遲緩)</h4>
+                            <p>指未滿六歲之兒童，因生理、心理或社會環境因素，在知覺、動作、認知、語言溝通、社會情緒或生活自理等，有一個以上之發展領域，出現明顯落後或異常，嚴重影響其學習與生活適應者。</p>
+                            <h4>第十五條 (其他障礙)</h4>
+                            <p>指個人之困難情形，嚴重影響其學習與生活適應，且非因單純感官、動作、健康、認知、情緒、行為、語言溝通、文化刺激、教學不當或社經地位等因素所直接造成之結果，而難以歸類至前述任一障礙類別者。</p>
+                            <h4>第十六條至第二十一條 (資賦優異)</h4>
+                            <p>分別定義一般智能、學術性向、藝術才能、創造能力、領導能力、其他特殊才能資賦優異之鑑定基準。</p>
+                        </div>
+                         <a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=H0080065" target="_blank" class="text-blue-600 hover:underline mt-4 inline-block">點擊此處查閱《特殊教育學生及幼兒鑑定辦法》全文</a>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section id="references" class="scroll-mt-20">
+            <h2 class="section-title">八、參考文獻</h2>
+            <div class="card p-6 md:p-8 rounded-lg">
+                <div class="text-sm text-gray-600 leading-relaxed columns-1 md:columns-2 gap-8 reference-list">
+                    <ul class="list-disc list-outside ml-5 space-y-2">
+                        <li>江元慶、張子午（2024年1月10日）。當校園安全網破了洞──看見特殊孩子、家庭與體制的困境。<em>報導者</em>。</li>
+                        <li>林素貞（2021）。Research on implementing inclusive education for municipality and preschool levels in Taiwan。<em>Człowiek – Niepełnosprawność – Społeczeństwo, 3</em>(53), 17-34。</li>
+                        <li>李佳璇（2015）。融合教育政策的挑戰與展望。<em>臺灣教育評論月刊，4</em>(6)，147-150。</li>
+                        <li>邱湘瑩（2013）。國小導師在融合教育中的挑戰與轉化。<em>臺灣教育評論月刊，2</em>(2)，144-146。</li>
+                        <li>教育部統計處（2024）。<em>112學年度特殊教育統計</em>。</li>
+                        <li>陳潔（2021年6月29日）。被少年矯正學校遺忘的孩子們：當特教資源進不了高牆。<em>Right+</em><em>多多益善</em>。</li>
+                        <li>蘇燕華（2000）。<em>融合教育的理想與挑戰－國小普通班教師的經驗</em>。國立臺灣師範大學特殊教育研究所碩士論文。</li>
+                        <li>Ainscow, M., Booth, T., & Dyson, A. (2006). <em>Improving schools, developing inclusion</em>. Routledge.</li>
+                        <li>Florian, L. (2008). Special or inclusive education: Future trends. <em>British Journal of Special Education, 35</em>(4), 202–208.</li>
+                        <li>Friend, M., & Cook, L. (2016). <em>Interactions: Collaboration skills for school professionals (8th ed.)</em>. Pearson.</li>
+                        <li>Hornby, G. (2014). <em>Inclusive special education: Evidence-based practices for children with special needs and disabilities</em>. Springer.</li>
+                        <li>Lin, S.-J. (2021). Research on implementing inclusive education for municipality and preschool levels in Taiwan. <em>Człowiek – Niepełnosprawność – Społeczeństwo, 3</em>(53), 17-34.</li>
+                        <li>Lindsay, G. (2003). Inclusive education: A critical perspective. <em>British Journal of Special Education, 30</em>(1), 3–12.</li>
+                        <li>Messiou, K. (2016). Research in the field of inclusive education: Time for a rethink? <em>International Journal of Inclusive Education, 20</em>(1), 1-15.</li>
+                        <li>Mittler, P. (2000). <em>Working towards inclusive education: Social contexts</em>. David Fulton Publishers.</li>
+                        <li>Moriña, A. (2017). Inclusive education in higher education: challenges and opportunities. <em>European Journal of Special Needs Education, 32</em>(1), 3-17.</li>
+                        <li>Oliver, M. (1990). <em>The politics of disablement</em>. Macmillan.</li>
+                        <li>Paseka, A., & Schwab, S. (2020). Parents' attitudes towards inclusive education and their perceptions of inclusive teaching practices and resources. <em>European Journal of Special Needs Education, 35</em>(2), 254-272.</li>
+                        <li>Rouse, M. (2008). Developing inclusive practice: A role for teachers and teacher education? <em>Education in the North, 16</em>, 6-11.</li>
+                        <li>Shogren, K. A., & Wehmeyer, M. L. (2014). Using the core concepts framework to understand policy, practice, and research related to the three generations of inclusive practices. <em>Inclusion, 2</em>(3), 237-247.</li>
+                        <li>Slee, R. (2011). <em>The irregular school: Exclusion, schooling and inclusive education</em>. Routledge.</li>
+                        <li>UNESCO. (1994). <em>The Salamanca statement and framework for action on special needs education</em>. UNESCO.</li>
+                        <li>Waitoller, F. R., & Artiles, A. J. (2013). A decade of professional development research for inclusive education: A critical review and notes for a research program. <em>Review of Educational Research, 83</em>(3), 319-356.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p>融合教育推動及特殊教育推動實務分享</p>
+            <p class="text-sm text-gray-400 mt-2">本網頁內容以作者自行蒐集學術文件進行整理與設計，僅供教學與演示目的。</p>
+            <p class="text-sm text-gray-400 mt-2">製作者: pasta-layoff-1r@icloud.com</p>
+            <div class="mt-6">
+                <a href="mailto:pasta-layoff-1r@icloud.com" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300">
+                    寫信給我
+                </a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.getAttribute('href'));
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Inclusion Debate Interaction
+            const debateDisplay = document.getElementById('inclusion-debate-display');
+            const partialCard = document.getElementById('partial-inclusion-card');
+            const fullCard = document.getElementById('full-inclusion-card');
+            const debateContent = {
+                partial: '<strong>部分融合論述：</strong>此觀點承認融合價值，但更強調現實考量。主張應以「最高品質的教育」為前提，這通常需要專業師資在專門環境中提供。此論述關注普通班教師能力限制、資源匱乏，以及對班級其他學生的影響，因此認為保留特殊學校或班級是負責任的做法。',
+                full: '<strong>全員融合論述：</strong>此觀點植根於社會正義與人權，主張所有學生，不論差異，都有權在同一個社群中共同學習。認為任何形式的隔離本質上都是一種傷害，系統的限制不應成為剝奪學生權利的藉口，反之，系統本身必須進行變革。'
+            };
+            if(partialCard && fullCard){
+                partialCard.addEventListener('click', () => {
+                    debateDisplay.innerHTML = debateContent.partial;
+                    partialCard.classList.add('active');
+                    fullCard.classList.remove('active');
+                });
+                fullCard.addEventListener('click', () => {
+                    debateDisplay.innerHTML = debateContent.full;
+                    fullCard.classList.add('active');
+                    partialCard.classList.remove('active');
+                });
+            }
+
+
+            // Definition Tabs Interaction
+            const definitionDisplay = document.getElementById('definition-display');
+            const defTabs = document.querySelectorAll('.def-tab');
+            const definitionContent = {
+                'def-philosophy': '<strong>哲學層面：一種價值觀。</strong><br>承認並珍視人類的多樣性，將個別差異視為豐富學習社群的寶貴「資源」，而非需要被克服的「問題」。其根本目標是建立一個公平、尊重且具歸屬感的社群。',
+                'def-policy': '<strong>政策層面：一場持續的改革。</strong><br>一場永不間斷的教育改革過程，其目標是系統性地檢視、識別並移除教育體系中所有可能造成排斥的障礙，確保所有學生都能公平地、無障礙地獲得優質教育機會與支持。',
+                'def-practice': '<strong>實踐層面：一套支持性的策略。</strong><br>一套具體的教學與學校組織策略，包括全校性的支持系統、彈性的課程與教學、多樣化的安置選項，以及教師、家長、學生、專業人員及社區之間的密切合作。'
+            };
+            if(defTabs.length > 0){
+                defTabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        defTabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        definitionDisplay.innerHTML = definitionContent[this.dataset.target];
+                    });
+                });
+                if (definitionDisplay) {
+                    definitionDisplay.innerHTML = definitionContent[defTabs[0].dataset.target];
+                }
+            }
+
+
+            // Placement Chart
+            const chartCanvas = document.getElementById('placementChart');
+            if (chartCanvas) {
+                const ctx = chartCanvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['融合式普通班', '集中式特教班', '特殊教育學校'],
+                        datasets: [{
+                            label: '安置型態百分比',
+                            data: [88.94, 6.79, 4.27],
+                            backgroundColor: ['#28A745', '#FFC107', '#DC3545'],
+                            borderColor: '#FFFFFF',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            title: { display: true, text: '112學年度身心障礙學生安置型態', font: { size: 16 } },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) { label += ': '; }
+                                        if (context.parsed !== null) { label += context.parsed + '%'; }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Interactive Criteria Section
+            const criteriaData = {
+                ld: {
+                    definition: "指因神經心理功能異常，致在聽、說、讀、寫、算等學習知能之習得與運用，產生顯著困難者。",
+                    criteria: "須符合下列各款規定：(1)智力正常或在正常程度以上。(2)在聽覺理解、口語表達、識字、閱讀理解、書寫、數學運算等任一學習知能表現，有顯著困難，且經教育介入後，其困難持續存在。",
+                    exclusion: "其學習困難<strong>非因</strong>感官、智能、情緒行為等障礙因素；或文化刺激不足、教學不當等環境因素所<strong>直接</strong>造成。"
+                },
+                asd: {
+                    definition: "指因神經發展功能異常，致在社會互動與溝通、固著的興趣與重複的行為，有顯著困難，嚴重影響其學習與生活適應者。",
+                    criteria: "須符合下列各款規定：(1)在社會互動與溝通有顯著困難。(2)有固著的興趣及重複的行為。",
+                },
+                id: {
+                    definition: "指個人之心智功能明顯低下，且在六項適應能力（生活自理、動作與行動能力、語言與溝通、社會人際與情緒行為、學科學習、健康與安全）中，有二項以上表現困難，嚴重影響其學習與生活適應者。",
+                    criteria: "須符合下列各款規定：(1)採標準化智力測驗，其個別智商（IQ）或心理年齡（MA）未達平均數負二個標準差。(2)在六項適應能力中，有二項以上表現顯著困難。",
+                    exclusion: "前項之心智功能與適應能力困難，應在發展期間（未滿十八歲）顯現。"
+                }
+            };
+
+            const criteriaSections = document.querySelectorAll('.criteria-container');
+            criteriaSections.forEach(container => {
+                const disability = container.dataset.disability;
+                const buttons = container.querySelectorAll('.criteria-button');
+                const display = container.querySelector('.criteria-display');
+
+                buttons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        button.classList.add('active');
+                        const type = button.dataset.type;
+                        display.innerHTML = criteriaData[disability][type] || "點擊按鈕查看說明";
+                    });
+                });
+            });
+
+            // Interactive Scenario 1 Logic
+            const scenarioContainer1 = document.getElementById('interactive-scenario');
+            if (scenarioContainer1) {
+                const startBtn = document.getElementById('start-scenario-btn');
+                const scenarioStart = document.getElementById('scenario-start');
+                const scenarioContent = document.getElementById('scenario-content');
+                const scenarioStageContent = document.getElementById('scenario-stage-content');
+                const scenarioProgressContainer = document.getElementById('scenario-progress-container');
+                const scenarioProgressBar = document.getElementById('scenario-progress-bar');
+
+                const scenarios = [
+                    {
+                        question: "<strong>第一幕：危機潛伏</strong><br>你是一位國中導師。班上的「小華」近期常與同學起衝突、上課趴睡，且有多次校外幫派份子來找他的紀錄。小華的家庭功能薄弱，你很難聯繫上他的家長。身為導師，你會怎麼做？",
+                        choices: [
+                            { text: "A. 依校規處理，記過警告。", result: "bad", feedback: "<strong>後果分析：</strong>單純的懲戒可能讓小華更感孤立，強化他對學校的敵意。根據《報導者》的分析，許多孩子因在校內找不到歸屬感，轉而向外尋求幫派認同。懲罰未能解決他背後的需求，反而可能將他推得更遠。" },
+                            { text: "B. 通報學務處與輔導室，啟動三級輔導機制。", result: "good", feedback: "<strong>後果分析：</strong>這是正確的第一步。你啟動了校內支持系統。然而，根據《報導者》的案例，即使啟動了程序，若各單位橫向聯繫不足、資源不到位（如輔導人力滿載、特教支援不足），學生仍可能在系統的縫隙中墜落。持續追蹤與召開跨網絡會議至關重要。" },
+                            { text: "C. 嘗試與他談話，但因他不願多談而作罷。", result: "neutral", feedback: "<strong>後果分析：</strong>關懷是好的開始，但對於家庭失能、可能已有心理創傷的學生，導師一對一的關懷遠遠不夠。這類學生需要的是更專業、更持久的輔導資源介入。你的關懷可能暫時溫暖他，但無法撼動他背後的結構性困境。" }
+                        ]
+                    },
+                    {
+                        question: "<strong>第二幕：系統失靈</strong><br>輔導室介入了，但小華的狀況時好時壞。他被鑑定為情緒行為障礙，有IEP計畫，但計畫內容多是「口頭提醒」、「行為觀察」，缺乏具體策略。某次，小華又與同學爆發嚴重口角。輔導老師與你討論下一步，你會建議？",
+                        choices: [
+                            { text: "A. 建議家長帶小華就醫，尋求精神科協助。", result: "neutral", feedback: "<strong>後果分析：</strong>醫療資源的介入是選項之一，但常面臨家長意願低、標籤化等問題。報導指出，許多家庭無力負擔或不願承認孩子有精神狀況。學校若將責任完全外推給醫療，可能錯失在校內提供支持的機會，且醫療與教育系統的整合也是一大挑戰。" },
+                            { text: "B. 召開緊急個案會議，要求特教、輔導、學務、家長（或社工）共同擬定具體的行為支持計畫。", result: "good", feedback: "<strong>後果分析：</strong>這是最理想的作法。報導中的專家強調，面對複雜個案，唯有跨網絡的合作才可能有效。會議應產出具體的介入策略（如：衝突發生時的標準處理流程、抽離時間、心理師資源引進等），而不只是形式上的文件。這能真正為第一線的老師提供支持。" },
+                            { text: "C. 建議將他轉到中介教育機構（如資源式中途班）。", result: "bad", feedback: "<strong>後果分析：</strong>轉換環境有時是必要的，但若未經審慎評估，可能只是「問題的轉移」。報導中的案例顯示，許多高關懷學生在不同機構間漂流，歸屬感更低。根本問題若未解決（如家庭、心理創傷），轉換環境的效果通常很短暫，甚至可能讓他接觸到更複雜的同儕。" }
+                        ]
+                    },
+                    {
+                        question: "<strong>最終幕：悲劇前夕</strong><br>小華的行為愈發失控，開始在網路上發布攻擊性言論，甚至有同學通報他可能攜帶了危險物品。校方面臨巨大壓力，你會採取什麼立場？",
+                        choices: [
+                            { text: "A. 主張校園安全優先，建議他暫時在家線上學習，並通報警政單位介入。", result: "neutral", feedback: "<strong>後果分析：</strong>確保校園安全是絕對必要的。通報少年隊等警政單位，啟動「行政輔導先行」機制，是《少年事件處理法》的精神。但這同時也可能加劇他的標籤化，讓他與教育系統完全脫鉤。此舉應是多方評估後的手段，而非首要的單一解方。" },
+                            { text: "B. 堅持教育的立場，即使困難，也要在校內盡力提供最高強度的支持，並向教育局申請專案協助。", result: "good", feedback: "<strong>後果分析：</strong>這展現了教育工作者不放棄任何孩子的核心價值。雖然艱辛，但積極向外求援（如尋求精神科醫師、心理師、社工入校服務），並在校內建立一個由專人帶領的支持小組，是報導中專家認為最能避免悲劇的作法。這守住了教育的最後一道防線。" },
+                            { text: "C. 在壓力下，同意以長期「請假」的方式讓他暫時不要來學校，等待風頭過去。", result: "bad", feedback: "<strong>後果分析：</strong>這是最危險的選擇。「眼不見為淨」讓學生完全脫離了支持系統，成為社區中的「隱形人」。報導指出，許多觸法的少年，都是在與學校斷線後，快速被幫派吸收或走向極端。學校放棄了教育與保護的責任，悲劇的風險也隨之升高。" }
+                        ]
+                    }
+                ];
+
+                let currentStage1 = 0;
+
+                function updateProgressBar1() {
+                    const progressPercentage = ((currentStage1 + 1) / scenarios.length) * 100;
+                    scenarioProgressBar.style.width = `${progressPercentage}%`;
+                }
+
+                function renderScenario1(stage) {
+                    const scenario = scenarios[stage];
+                    let choicesHtml = scenario.choices.map((choice, index) => 
+                        `<button class="choice-btn" data-result="${choice.result}" data-feedback="${choice.feedback}">${choice.text}</button>`
+                    ).join('');
+
+                    scenarioStageContent.innerHTML = `
+                        <div id="stage-${stage}">
+                            <p class="scenario-question mb-6">${scenario.question}</p>
+                            <div class="choices">${choicesHtml}</div>
+                        </div>
+                    `;
+                    addChoiceListeners1();
+                }
+
+                function addChoiceListeners1() {
+                    document.querySelectorAll('#interactive-scenario .choice-btn').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const result = this.dataset.result;
+                            const feedback = this.dataset.feedback;
+                            showResult1(result, feedback);
+                        });
+                    });
+                }
+
+                function showResult1(result, feedback) {
+                    const choicesDiv = scenarioStageContent.querySelector('.choices');
+                    choicesDiv.innerHTML = ''; // Remove choices
+
+                    const resultPanel = document.createElement('div');
+                    resultPanel.className = `result-panel result-${result}`;
+                    
+                    let nextButtonHtml = '';
+                    if (currentStage1 < scenarios.length - 1) {
+                        nextButtonHtml = `<button class="next-btn" id="next-stage-btn">下一幕</button>`;
+                    } else {
+                        nextButtonHtml = `<p class="mt-4 font-bold">體驗結束。一個穩固的校園安全網，需要每個環節的警覺與合作，才能避免任何一個孩子墜落。</p><button class="restart-btn" id="restart-scenario-btn">重新體驗</button>`;
+                    }
+
+                    resultPanel.innerHTML = `<p>${feedback}</p>${nextButtonHtml}`;
+                    scenarioStageContent.querySelector(`#stage-${currentStage1}`).appendChild(resultPanel);
+
+                    if (currentStage1 < scenarios.length - 1) {
+                        document.getElementById('next-stage-btn').addEventListener('click', () => {
+                            currentStage1++;
+                            updateProgressBar1();
+                            renderScenario1(currentStage1);
+                        });
+                    } else {
+                         document.getElementById('restart-scenario-btn').addEventListener('click', startScenario1);
+                    }
+                }
+                
+                function startScenario1() {
+                    currentStage1 = 0;
+                    scenarioStart.classList.add('hidden');
+                    scenarioContent.classList.remove('hidden');
+                    scenarioProgressContainer.classList.remove('hidden');
+                    updateProgressBar1();
+                    renderScenario1(currentStage1);
+                }
+
+                startBtn.addEventListener('click', startScenario1);
+            }
+
+            // Interactive Scenario 2: Ah-Cheng's Story
+            const storyContainer = document.getElementById('story-container');
+            if (storyContainer) {
+                const storyData = {
+                    start: {
+                        title: "序章：風暴之前",
+                        age: "12歲",
+                        narrative: "故事的主角，我們稱他為阿成。12歲的他，和許多同齡的孩子一樣，對未來有著模糊的憧憬。但他的世界，正悄悄地出現裂痕。他的家庭是單親，由父親獨力扶養。不久後，作為家中唯一支柱的父親因案入獄，家庭頓失依靠，經濟與情感的支持網絡瞬間崩塌。",
+                        analysis: {
+                            title: "系統分析：脆弱家庭的浮現",
+                            content: "根據衛福部定義，阿成的家庭已符合多項『脆弱家庭』指標：家庭成員入獄、單親、經濟陷困。這是一個明確的警訊，表示這個家庭需要外部系統的立即介入與支持，以防止危機擴大。"
+                        },
+                        choices: [],
+                        next: "stage1"
+                    },
+                    stage1: {
+                        title: "關鍵節點一：第一次求救",
+                        age: "14歲",
+                        narrative: "升上國中，失去家庭功能的阿成在學校的適應出現問題。他開始偶爾逃學，與校外的朋友在外遊蕩，甚至出現攜帶危險物品的行為。學校老師發現了這些狀況，這是整個社會支持系統第一次有機會正式介入。",
+                        analysis: {
+                            title: "系統分析：從『虞犯』到『曝險少年』",
+                            content: "依據2019年修正的《少年事件處理法》，阿成的行為已符合『曝險少年』的定義，即其身心處於健全成長可能受到危害的情境。新法的核心精神是『行政輔導先行』，強調應優先使用輔導與福利資源，而非直接司法處分。"
+                        },
+                        choices: [
+                            { text: "路徑A：懲戒導向", riskChange: 20, outcome: "學校將阿成標籤為『問題學生』，採取記過、警告等懲處，並通報警局留下紀錄。各單位各自為政，缺乏橫向溝通。阿成感覺被體制拋棄，內心的對立與疏離感加劇，更加速他向校外尋求認同。", next: "stage2_A" },
+                            { text: "路徑B：支持導向", riskChange: -15, outcome: "學校輔導室啟動機制，將阿成轉介至『少年輔導委員會』。少輔會召開跨網絡會議，連結社工資源，為阿成提供課後輔導與家庭支持，並鼓勵他參與社區NPO（如牧羊人協會）的正向休閒活動。阿成感受到關懷，開始建立穩定的支持關係。", next: "stage2_B" }
+                        ]
+                    },
+                    stage2_A: {
+                        title: "關鍵節點二：捷徑的誘惑",
+                        age: "16歲",
+                        narrative: "被體制烙印的阿成，已成為中輟生。他在街頭認識的朋友，向他展示了一條『成功』的捷徑——加入詐騙集團當車手，能快速賺到大錢。這對渴望證明自己、又缺乏合法機會的他，充滿了致命的吸引力。",
+                        analysis: {
+                            title: "系統分析：歸屬感的爭奪",
+                            content: "青少年對歸屬感、權力感與價值感有強烈需求。當家庭與學校無法滿足時，幫派或偏差同儕團體便會乘虛而入，提供虛假的『兄弟義氣』與經濟誘因，爭奪少年的認同。"
+                        },
+                        choices: [
+                            { text: "路徑C：陷入泥淖", riskChange: 30, outcome: "阿成選擇了賺快錢，成為犯罪集團的一員。他獲得了短暫的物質滿足，但代價是與犯罪網絡越纏越深，價值觀嚴重扭曲，難以脫身。他的人生軌跡，已朝向更嚴重的犯罪行為加速前進。", next: "stage3_A" },
+                            { text: "路徑D：微弱的轉機(風險仍在)", riskChange: 5, outcome: "阿成雖然心動，但過去在社區中偶然接觸到的宮廟活動給了他片刻的喘息。他在陣頭練習中找到短暫的歸屬感，暫時拒絕了朋友的提議。然而，家庭的創傷與經濟壓力仍在，他依然在懸崖邊緣徘徊。", next: "stage3_B" }
+                        ]
+                    },
+                    stage2_B: {
+                        title: "關鍵節點二：責任的賦予",
+                        age: "16歲",
+                        narrative: "在社區NPO與少輔會的持續關懷下，阿成的生活逐漸穩定。他雖然中輟，但在機構中找到歸屬感。機構的導師看見他的成長，決定賦予他更大的責任——協助帶領比他更小的孩子，成為一位『小老師』。",
+                        analysis: {
+                            title: "系統分析：社會資本的累積",
+                            content: "從『受助者』轉變為『貢獻者』，是極具療癒性的過程。這能大幅提升少年的自尊與責任感，建立正向的社會連結（Social Bonds），並累積對抗風險的『保護因子』。"
+                        },
+                        choices: [
+                            { text: "路徑C：昔日友人的拉扯", riskChange: 15, outcome: "儘管生活步上正軌，但昔日街頭的朋友再次出現，以金錢誘惑他。阿成內心產生動搖，支持系統面臨考驗。他偶爾會與這些朋友聯繫，犯罪風險依然存在。", next: "stage3_B" },
+                            { text: "路徑D：社群的深耕", riskChange: -20, outcome: "阿成選擇了留在機構，承擔起新的責任。在教導他人的過程中，他找到了前所未有的成就感與自我價值。導師更進一步鼓勵他學習一技之長，為未來的自立生活做準備。他的人生軌跡，轉向穩定與希望。", next: "stage3_C" }
+                        ]
+                    },
+                    stage3_A: {
+                        title: "最終章：註定的悲劇",
+                        age: "17歲",
+                        narrative: "在犯罪文化中浸染的阿成，價值觀已嚴重偏差。此時，他生命中最後的依靠——他的母親——因病過世。巨大的創傷與哀慟，在缺乏正向支持系統的引導下，轉化為對世界的憤怒與絕望。為了金錢，也為了在同儕中證明自己，他策劃並實施了銀樓搶劫案。",
+                        analysis: {
+                            title: "系統分析：複合性創傷的爆發",
+                            content: "父親入獄的慢性壓力，疊加母親驟逝的急性創傷，形成了『複合性創傷』。在缺乏專業哀傷輔導的情況下，未被處理的悲痛極易以外化的犯罪行為呈現，成為一種絕望的吶喊。"
+                        },
+                        choices: [],
+                        final: "阿成被逮捕，進入少年法庭。他的人生，在17歲這年，劃下了難以抹滅的傷痕。所有前期預防的機會都已錯失，社會將為此付出更高的代價。 <strong>（結局：模擬真實事件）</strong>"
+                    },
+                    stage3_B: {
+                        title: "最終章：懸崖邊的掙扎",
+                        age: "17歲",
+                        narrative: "雖然有社區宮廟或機構的微弱支持，但阿成心中累積的創傷並未真正撫平。此刻，他唯一的親人母親過世，這成為壓垮他的最後一根稻草。巨大的悲痛讓他再次與昔日朋友走近，尋求慰藉。在他們的慫恿和對金錢的急迫需求下，他最終還是走上了犯罪的道路。",
+                        analysis: {
+                            title: "系統分析：支持網絡的極限",
+                            content: "非正式的社區支持（如宮廟）或單一的NPO介入，雖能提供部分支持，但若缺乏與專業心理健康、家庭支持系統的深度整合，有時難以獨力承接少年所面臨的巨大複合性創傷。"
+                        },
+                        choices: [],
+                        final: "阿成犯下了搶案，辜負了那些曾試圖幫助他的人。這顯示，單點的、非持續性的介入，可能不足以對抗根深蒂固的風險因子。一個更全面、更主動的系統性介入是必要的。 <strong>（結局：預防失敗）</strong>"
+                    },
+                    stage3_C: {
+                        title: "最終章：轉化的生命",
+                        age: "17歲",
+                        narrative: "母親的過世，對阿成依然是沉重的打擊。但在他最悲痛的時刻，過去兩年建立的支持網絡發揮了關鍵作用。少輔會的社工、NPO的導師和朋友們圍繞在他身邊，陪伴他度過哀傷。他學會用正當的方式求助，而非破壞性的行為來宣洩情緒。",
+                        analysis: {
+                            title: "系統分析：韌性的建立",
+                            content: "有效的預防策略，其目標並非讓少年永不遭遇困境，而是建立他們的『韌性』（Resilience）——即在遭遇逆境時，擁有復原並繼續前進的能力。這需要長期、穩定、且充滿信任的關係作為基礎。"
+                        },
+                        choices: [],
+                        final: "阿成沒有走向犯罪。他繼續在社區學習技能，並利用自己的經驗，去幫助其他和他有類似遭遇的孩子。他的人生或許平凡，但他成功地打破了創傷與犯罪的惡性循環，找到了屬於自己的『成功』。 <strong>（結局：預防成功）</strong>"
+                    }
+                };
+
+                let currentRisk = 25;
+                let riskChart;
+
+                function initChart() {
+                    const ctx = document.getElementById('riskChart').getContext('2d');
+                    riskChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['風險指數'],
+                            datasets: [{
+                                label: '犯罪風險指數',
+                                data: [currentRisk],
+                                backgroundColor: ['#38bdf8'],
+                                borderColor: ['#0284c7'],
+                                borderWidth: 1,
+                                borderRadius: 5,
+                            }]
+                        },
+                        options: {
+                            indexAxis: 'y',
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: { enabled: false }
+                            },
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: { stepSize: 25 }
+                                },
+                                y: {
+                                    grid: { display: false }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                function updateChart(change) {
+                    currentRisk += change;
+                    if (currentRisk < 0) currentRisk = 0;
+                    if (currentRisk > 100) currentRisk = 100;
+                    
+                    riskChart.data.datasets[0].data[0] = currentRisk;
+                    
+                    if (currentRisk > 65) {
+                        riskChart.data.datasets[0].backgroundColor[0] = '#ef4444'; // red
+                        riskChart.data.datasets[0].borderColor[0] = '#b91c1c';
+                    } else if (currentRisk > 40) {
+                        riskChart.data.datasets[0].backgroundColor[0] = '#f97316'; // orange
+                        riskChart.data.datasets[0].borderColor[0] = '#c2410c';
+                    } else {
+                        riskChart.data.datasets[0].backgroundColor[0] = '#38bdf8'; // sky
+                        riskChart.data.datasets[0].borderColor[0] = '#0284c7';
+                    }
+                    
+                    riskChart.update();
+                }
+
+                function renderStage(stageKey) {
+                    const stage = storyData[stageKey];
+                    if (!stage) return;
+
+                    const stageElement = document.createElement('div');
+                    stageElement.id = stageKey;
+                    stageElement.className = 'timeline-item relative mb-12';
+
+                    let analysisHtml = '';
+                    if (stage.analysis) {
+                        analysisHtml = `
+                            <div class="mt-4 p-4 bg-sky-100 border-l-4 border-sky-500 rounded-r-lg text-slate-700">
+                                <h4 class="font-bold">${stage.analysis.title}</h4>
+                                <p class="mt-1 text-sm">${stage.analysis.content}</p>
+                            </div>
+                        `;
+                    }
+
+                    let choicesHtml = '<div class="mt-6 space-y-3 md:space-y-0 md:space-x-4 flex flex-col md:flex-row choice-container">';
+                    stage.choices.forEach((choice, index) => {
+                        choicesHtml += `
+                            <button class="btn-choice flex-1 text-left p-4 bg-white rounded-lg shadow-md border border-slate-200 hover:bg-sky-50" data-stage="${stageKey}" data-choice-index="${index}">
+                                <span class="font-bold text-sky-600">${choice.text.split('：')[0]}</span>
+                                <span class="block mt-1 text-sm text-slate-600">${choice.text.split('：')[1]}</span>
+                            </button>
+                        `;
+                    });
+                    choicesHtml += '</div>';
+                    
+                    let finalHtml = '';
+                    if (stage.final) {
+                        finalHtml = `<div class="mt-6 p-4 bg-slate-200 rounded-lg outcome-box"><p class="text-slate-800">${stage.final}</p></div>`;
+                    }
+
+                    stageElement.innerHTML = `
+                        <div class="timeline-line"></div>
+                        <div>
+                            <h3 class="text-xl md:text-2xl font-bold text-slate-800">${stage.title}</h3>
+                            <span class="text-sm font-medium text-sky-600 bg-sky-100 py-1 px-2 rounded">${stage.age}</span>
+                            <p class="mt-3 text-slate-600">${stage.narrative}</p>
+                            ${analysisHtml}
+                            ${stage.choices.length > 0 ? choicesHtml : ''}
+                            ${finalHtml}
+                            <div class="outcome-container mt-6"></div>
+                        </div>
+                    `;
+
+                    storyContainer.appendChild(stageElement);
+                    stageElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    if (stage.next && stage.choices.length === 0) {
+                        setTimeout(() => renderStage(stage.next), 1500);
+                    }
+                }
+
+                storyContainer.addEventListener('click', function(e) {
+                    const button = e.target.closest('button.btn-choice');
+                    if (!button) return;
+
+                    const stageKey = button.dataset.stage;
+                    const choiceIndex = parseInt(button.dataset.choiceIndex);
+                    
+                    const stage = storyData[stageKey];
+                    const choice = stage.choices[choiceIndex];
+
+                    updateChart(choice.riskChange);
+
+                    const choiceContainer = button.parentElement;
+                    choiceContainer.innerHTML = ''; 
+
+                    const outcomeContainer = document.querySelector(`#${stageKey} .outcome-container`);
+                    const outcomeBox = document.createElement('div');
+                    outcomeBox.className = 'p-4 bg-white rounded-lg shadow-inner border border-slate-200 outcome-box';
+                    outcomeBox.innerHTML = `
+                        <p class="text-slate-700">${choice.outcome}</p>
+                        <button class="mt-4 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors continue-btn" data-next-stage="${choice.next}">繼續 →</button>
+                    `;
+                    outcomeContainer.appendChild(outcomeBox);
+                });
+
+                storyContainer.addEventListener('click', function(e) {
+                    const button = e.target.closest('button.continue-btn');
+                    if (!button) return;
+                    
+                    const nextStageKey = button.dataset.nextStage;
+                    renderStage(nextStageKey);
+                    button.disabled = true;
+                    button.classList.add('opacity-50');
+                });
+
+                initChart();
+                renderStage('start');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第三單元 前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F0F7F8;
+            color: #334155;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #047857;
+            border-bottom-color: #047857;
+        }
+        .question-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E0E7EB;
+            transition: box-shadow 0.3s;
+        }
+        .question-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .answer-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .answer-panel.open {
+            max-height: 500px;
+        }
+        .option-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #f8fafc;
+        }
+        input[type="radio"]:checked + .option-label {
+            background-color: #D1FAE5;
+            border-color: #10B981;
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#065F46]">第三單元：前後測</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#065F46]">第三單元：前測</h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-12">本測驗旨在評估您對情緒行為障礙、自閉症及語言障礙學生的基本概念與教學策略的初步理解。請選擇您認為最合適的答案，完成後點擊最下方的按鈕查看分數。</p>
+            
+            <div id="pre-test-container" class="space-y-4">
+            </div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#065F46]">第三單元：後測</h2>
+                 <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-12">本測驗旨在評估您在學習本單元後的知識應用與整合能力。題目將更側重於情境判斷與策略比較。請選擇答案，完成後點擊最下方的按鈕查看分數。</p>
+
+            <div id="post-test-container" class="space-y-4">
+            </div>
+        </section>
+        
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#059669] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#047857] transition-colors duration-300">
+                計算分數並比較
+            </button>
+        </div>
+
+    </main>
+    
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者 pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm mt-4">©特殊教育導論課程活動第三單元，主要依據課程大綱，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+    <!-- Score Modal -->
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="modal-container bg-white w-full max-w-lg rounded-lg shadow-xl p-8 transform -translate-y-12">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="chart-container h-64 mx-auto mb-6">
+                <canvas id="score-chart"></canvas>
+            </div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 10</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 10</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const preTestQuestions = [
+                {
+                    question: "1. 某生為自閉症兼具資賦優異的學生，在數理方面有卓越的表現。上課時會對感興趣的內容，滔滔不絕發表自己的意見...下列哪些措施，有助於改善該生在校的適應狀況？<br>甲、提供區分性教學，讓該生在數理科有適性的學習機會<br>乙、安排社會技巧課程，透過社會性故事，提升其人際互動技巧<br>丙、給予該生班級規範的視覺提示，讓其在課堂中可以隨時看到教室規則<br>丁、上課未經允許講話時，以過度矯正策略，要求該生唸十次「講話要舉手」",
+                    options: ["(A) 甲乙丙", "(B) 甲乙丁", "(C) 甲丙丁", "(D) 乙丙丁"],
+                    answer: "A",
+                    explanation: "此題考驗對自閉症學生的多元支持策略。甲(區分性教學)滿足其優勢能力需求；乙(社會技巧課程)和丙(視覺提示)針對其社交溝通困難提供支持，皆為實證有效的策略。丁(過度矯正)屬於懲罰策略，較不符合正向行為支持的精神，且可能引發反效果，故不選。"
+                },
+                {
+                    question: "2. 小安是五年級的身心障礙學生，歐老師在教室裡安排小安的工作角，桌面上貼有工作時間表...若能順利依照時間表完成任務，最後即可獲得增強物。下列哪一項較符合歐老師採用的教學方法？",
+                    options: ["(A) 工作分析法", "(B) 直接教學模式", "(C) 建構式教學法", "(D) 結構式教學法"],
+                    answer: "D",
+                    explanation: "題幹描述（安排工作角、使用視覺時間表、明確的任務流程與可預期的增強物）完全符合結構化教學法 (TEACCH) 的核心元素，旨在透過環境的結構化與視覺化，來支持自閉症或有相關特質的學生獨立完成任務。"
+                },
+                {
+                    question: "3. 小志為了引起老師注意會出現打同學的行為，因此，老師上課時會看著小志並讚美他有坐在椅子上。這位老師使用了何種策略？",
+                    options: ["(A) 消弱", "(B) 正增強", "(C) 負增強", "(D) 非後效增強"],
+                    answer: "D",
+                    explanation: "老師提供增強（讚美）的時機，與問題行為（打人）的發生與否無關，而是固定或不定時地提供。這種策略旨在預先滿足學生想獲得注意的需求，從而降低其表現問題行為的動機，稱為非後效增強 (Non-contingent Reinforcement)。"
+                },
+                {
+                    question: "4. 小華是集中式特教班五年級的身心障礙學生，注意力短暫，無法用口語表達與獨立進食，且經常有自傷行為。下列哪一選項是小華較需要的教育輔具？<br>甲、生活輔具<br>乙、溝通輔具<br>丙、行動輔具<br>丁、學習輔具",
+                    options: ["(A) 甲乙", "(B) 甲丙", "(C) 乙丁", "(D) 丙丁"],
+                    answer: "A",
+                    explanation: "根據描述，小華「無法獨立進食」，需要特殊餐具等「生活輔具」(甲)；「無法用口語表達」，則需要溝通板或語音溝通器等「溝通輔具」(乙)來協助他表達需求，這也可能減少因無法溝通而產生的自傷行為。題幹未提及行動或特定學習困難，故丙、丁非首要選項。"
+                },
+                {
+                    question: "5. 下列哪一項最有可能是語言發展遲緩的特徵？",
+                    options: ["(A) 幼兒在1歲可以分辨不同的母音(韻母)", "(B) 幼兒在3歲左右的表達詞彙量約50個", "(C) 幼兒在4歲左右可正確發出舌尖前音", "(D) 幼兒在4.5至6歲間，可說出有連接詞的複句"],
+                    answer: "B",
+                    explanation: "一般而言，3歲幼兒的表達詞彙量應遠超過50個，通常可達數百甚至上千個。因此，3歲時詞彙量僅約50個，是語言發展遲緩的顯著警訊。其他選項(A)、(C)、(D)描述的皆在正常發展範圍內。"
+                },
+                {
+                    question: "6. 針對適合泛自閉症(ASD)學生的評量方法，下列敘述何者正確？<br>甲、ASD不擅長用非語言行為與人互動, 建議多使用紙筆評量<br>乙、ASD會出現在社會規則理解上的缺陷, 可由小團體活動中進行觀察<br>丙、ASD會有刻板動作, 一般人也會有偏執行為, 因此不能做為觀察指標<br>丁、ASD在社交互動與人際溝通方面的障礙, 需要整體且持續地進行評量",
+                    options: ["(A) 甲乙", "(B) 甲丙", "(C) 乙丁", "(D) 丙丁"],
+                    answer: "C",
+                    explanation: "乙、自閉症學生的社交困難在真實的團體互動情境中尤其明顯，因此在小團體中進行觀察是重要的評量方式。丁、自閉症的核心障礙是持續且廣泛的，評量時不能只看單一時間點或情境，需進行長期且多面向的整體評量。甲、紙筆評量未必能反映其真實能力。丙、刻板行為的「頻率、強度與場合不適切性」是重要觀察指標。"
+                },
+                {
+                    question: "7. 小文是三年級集中式特教班的智能障礙學生，無口語能力且無法辨識符號，只會指著想要的物品或活動...下列哪一選項的溝通訓練課程教學目標較適合小文？",
+                    options: ["(A) 甲乙 (教導指認圖片、教導使用溝通輔具)", "(B) 甲丙 (教導指認圖片、教導用手語表達)", "(C) 乙丁 (教導使用溝通輔具、教導使用紙鍵盤)", "(D) 丙丁 (教導用手語表達、教導使用紙鍵盤)"],
+                    answer: "A",
+                    explanation: "對於無口語且無法辨識符號的學生，最實際的起點是建立具象的溝通方式。教導他指認實物對應的「圖片」(甲)是第一步，接著引入圖卡或簡易的溝通板等「溝通輔具」(乙)，讓他能用指認的方式來表達需求。手語(丙)和紙鍵盤(丁)對他來說可能過於抽象。"
+                },
+                {
+                    question: "8. 某學習障礙學生參加學校考試時，需要試題報讀的服務。下列哪一項最有可能是他的主要困難？",
+                    options: ["(A) 聽覺理解", "(B) 後設認知", "(C) 文字書寫", "(D) 文字識讀"],
+                    answer: "D",
+                    explanation: "試題報讀是將書面的文字轉換為語音，其主要目的是為了協助那些在「文字解碼」或「識讀」方面有困難的學生（如閱讀障礙），讓他們能透過聽覺管道來理解題意，避免因識字困難而影響作答。"
+                },
+                {
+                    question: "9. 學校安排特教學生助理人員入班協助小同上課。這是屬於下列哪一項課程調整？",
+                    options: ["(A) 學習內容", "(B) 學習歷程", "(C) 學習環境", "(D) 學習評量"],
+                    answer: "C",
+                    explanation: "課程調整的四個面向中，「學習環境」的調整包含了物理環境的改變（如座位安排）以及「人力支持」的提供。學生助理人員的入班協助，即是屬於人力支持的調整，旨在改變學習環境以支持學生參與。"
+                },
+                {
+                    question: "10. 所謂的「自我決策能力」，可包含認識自我、獨立自主、自我調整、問題解決等。下列敘述，何者最不符合自我決策能力的表現？",
+                    options: ["(A) 甲生：「在IEP會議中，我提出想要增進體適能…」", "(B) 乙生：「我覺得我很喜歡畫畫，對廣告設計很有興趣…」", "(C) 丙生：「媽媽覺得到咖啡店實習比較好，所以我就直接去了…」", "(D) 丁生：「到職場實習遇到客人問問題，可以先請教老闆再回覆…」"],
+                    answer: "C",
+                    explanation: "自我決策的核心是基於自己的意願和判斷做出選擇。選項(C)中，丙生的決定完全是基於媽媽的覺得，沒有體現出自己的思考與選擇過程，因此最不符合自我決策的表現。"
+                }
+            ];
+
+            const postTestQuestions = [
+                {
+                    question: "1. 小柏是一位不擅長交朋友的自閉症學生，在班上常因為不能察言觀色，喜歡在下課時向老師告同學的狀...為了協助小柏學會察言觀色，下列何種方法較可行？<br>甲、運用社會性故事來協助小柏了解他人的想法<br>乙、運用行為功能評量找到小柏愛告狀的原因並擬定介入方案<br>丙、運用結構化教學，讓小柏透過固定課表和工作順序預測老師和同學的想法<br>丁、善用自閉症學生記憶的優勢要求小柏每天閱讀情緒有關的故事",
+                    options: ["(A) 甲乙", "(B) 甲丙", "(C) 乙丁", "(D) 丙丁"],
+                    answer: "A",
+                    explanation: "此題考驗問題解決的整合策略。甲(社會性故事)能具體教導社交規則與他人觀點；乙(行為功能評量FBA)能探究告狀行為背後的功能（可能是想與老師互動，或是不懂其他社交起始方式），從而設計有效的替代行為教學。丙、結構化教學主要處理環境預測性，與察言觀色關聯較小。丁、單純閱讀故事不保證能類化應用。"
+                },
+                {
+                    question: "2. 大壯是特殊教育學校高中部一年級的身心障礙學生，無口語能力，會因環境的變動而產生嚴重焦慮反應...下列哪一選項的做法較適合目前大壯的需求？<br>甲、建立增強系統<br>乙、提供諮商服務<br>丙、安排運動時間表<br>丁、規劃個人工作系統",
+                    options: ["(A) 甲乙", "(B) 甲丁", "(C) 乙丙", "(D) 丙丁"],
+                    answer: "D",
+                    explanation: "對於因環境變動而焦慮的自閉症學生，提供高度的可預測性是關鍵。丙(安排固定的運動時間表)和丁(規劃個人工作系統)都屬於「結構化教學」的策略，能讓學生清楚知道「何時、何地、做何事、做多久、做完做什麼」，大幅降低因不確定性引發的焦慮與問題行為。"
+                },
+                {
+                    question: "3. 有關正向行為支持(PBS)的敘述，下列何者有誤？",
+                    options: ["(A) 視行為問題具有溝通意義，是一種個人需求的表達", "(B) 行為介入策略著重在提升個體生活品質，不是補救個體缺陷", "(C) 結合多元的理論觀點，視行為問題為個體和環境互動的結果", "(D) 處理問題時，先擬訂介入計畫，再進行功能評量做結果檢視"],
+                    answer: "D",
+                    explanation: "正向行為支持(PBS)的標準流程是「先」進行功能性行為評量(FBA)來了解行為背後的原因（功能），「再」根據評量結果設計和擬訂個人化的行為介入計畫(BIP)。選項(D)的順序顛倒了，是常見的迷思概念。"
+                },
+                {
+                    question: "4. 教師欲教導身心障礙學生使用口訣計算四則運算的問題，從教師示範、教師提示學生執行、學生自我複誦、到學生內在語言指導。這是較屬於下列哪一項教學策略？",
+                    options: ["(A) 自我調整", "(B) 自我監控", "(C) 自我控制", "(D) 自我教導"],
+                    answer: "D",
+                    explanation: "此題描述了「自我教導」(Self-instruction)的經典教學流程。其核心是將外在的示範與鷹架（老師的口訣），透過學生複誦、提醒等步驟，逐步內化為學生自己的內在語言與思考歷程，最終能獨立引導自己完成任務。"
+                },
+                {
+                    question: "5. 小芬是四年級的腦性麻痺伴隨智能障礙學生，構音困難，右手功能不佳，左手可簡易操作。下列哪一選項的教學措施較適合目前小芬的能力？<br>乙、搭配潔牙口訣及牙菌斑顯示劑，拿電動牙刷自行刷牙<br>丙、使用語音溝通筆點擊溝通簿的圖片，搭配句型結構表達「我要吃漢堡」",
+                    options: ["(A) 甲丙", "(B) 甲丁", "(C) 乙丙", "(D) 乙丁"],
+                    answer: "C",
+                    explanation: "乙、電動牙刷只需要單手按壓與移動，適合手部功能有限的學生。丙、語音溝通筆搭配溝通簿，能讓構音困難的學生透過點擊圖片的方式來進行有效的溝通表達。甲、要求用功能不佳的右手學習不適切。丁、語音溝通板的「語音轉文字」功能較複雜，且對小芬的需求而言並非最直接的溝通方式。"
+                },
+                {
+                    question: "6. 某身心障礙學生說話時，常出現類似以下的說法：「暑假，我會去旅行。要告訴你...會跟家人一起去...對了，也要告訴你...」該生說話使用了哪一種策略？",
+                    options: ["(A) 自我決定", "(B) 自我增強", "(C) 自我教導", "(D) 自我提示"],
+                    answer: "C",
+                    explanation: "該生的語言模式呈現出一種「外化的內在語言」，他不斷地對自己下達指令、提醒自己要說明的內容與細節（如要去哪、跟誰去、交通方式）。這正是「自我教導」(Self-instruction)策略的典型表現，用以引導並組織自己的語言輸出。"
+                },
+                {
+                    question: "7. 小凱是二年級的身心障礙學生，資源班教師和語言治療師共同討論小凱口語表達能力發展的活動設計。下列哪一項教學活動順序安排較為適當？<br>甲、建立詞彙<br>乙、形成句子<br>丙、學習語法規則<br>丁、練習口語技巧",
+                    options: ["(A) 甲乙丁丙", "(B) 甲丙乙丁", "(C) 乙甲丁丙", "(D) 丙甲乙丁"],
+                    answer: "B",
+                    explanation: "語言發展是有序的過程。應先從最基礎的「詞彙」(甲)開始建立，有了足夠的詞彙後，再學習如何將詞彙組合成符合「語法規則」(丙)的「句子」(乙)，最後才是練習發音、語調等「口語技巧」(丁)，讓表達更清晰流暢。"
+                },
+                {
+                    question: "8. 張老師告訴小花因為他沒有完成回家作業，因此今天下課時間不能出去玩，必須留在教室完成回家作業後才能出去玩。張老師使用了何種策略？",
+                    options: ["(A) 消弱", "(B) 反應代價", "(C) 過度矯正", "(D) 後效練習"],
+                    answer: "B",
+                    explanation: "反應代價(Response Cost)是一種負向懲罰，指當個體出現不當行為時，移除他所擁有的增強物或權利。在此情境中，「下課時間出去玩」是學生擁有的權利(增強物)，因為「沒有完成作業」這個行為而被剝奪，屬於反應代價的應用。"
+                },
+                {
+                    question: "9. 黃老師擬結合社區資源教導集中式特教班學生買水果，教學過程中除了教學生如何挑選水果，也模擬結帳流程。之後帶學生到社區的水果店買水果。黃老師採用的較屬於哪一種評量方式？",
+                    options: ["(A) 真實評量", "(B) 生態評量", "(C) 檔案評量", "(D) 動態評量"],
+                    answer: "A",
+                    explanation: "真實評量(Authentic Assessment)強調在真實或高度模擬的情境中，評估學生解決實際問題的能力。帶學生到真正的水果店進行購買任務，評量他們是否能應用所學，是真實評量的典型範例。生態評量更側重分析環境對學生的影響。"
+                },
+                {
+                    question: "10. 採用通用設計學習(Universal Design for Learning)原則進行教學，下列哪一選項的敘述較為符合？<br>乙、社會領域老師讓學生依自己擅長的方式，選擇撰寫書面報告、繪製圖片或錄音錄影等方法展現校外參訪學習成果<br>丁、國語文科目老師進行文言文教學時，提供課文概念圖、紙本和電子形式的課文翻譯，並播放課文影片，幫助學生理解課文內容",
+                    options: ["(A) 甲乙", "(B) 甲丙", "(C) 乙丁", "(D) 丙丁"],
+                    answer: "C",
+                    explanation: "乙、提供多元的學習成果展現方式，符合UDL的「提供多元的表達與行動方式」原則。丁、提供多元的教材呈現方式（概念圖、紙本、電子、影片），符合UDL的「提供多元的表徵方式」原則。甲是傳統的教學流程，丙是能力分組，皆不符合UDL為所有學生預先設計彈性選項的精神。"
+                }
+            ];
+
+            function createQuestionElement(q, index, type) {
+                const card = document.createElement('div');
+                card.className = 'question-card rounded-lg overflow-hidden';
+                
+                const questionHeader = document.createElement('div');
+                questionHeader.className = 'p-6 cursor-pointer';
+                questionHeader.innerHTML = `<h4 class="font-semibold">${q.question}</h4>`;
+                
+                const optionsList = document.createElement('div');
+                optionsList.className = 'px-6 pb-6 space-y-3';
+                q.options.forEach((opt, i) => {
+                    const optionValue = opt.match(/\(([^)]+)\)/)[1];
+                    const optionWrapper = document.createElement('div');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `${type}-q${index}`;
+                    radio.id = `${type}-q${index}-opt${i}`;
+                    radio.value = optionValue;
+                    radio.className = 'hidden';
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `${type}-q${index}-opt${i}`;
+                    label.className = 'option-label';
+                    label.textContent = opt;
+                    
+                    optionWrapper.appendChild(radio);
+                    optionWrapper.appendChild(label);
+                    optionsList.appendChild(optionWrapper);
+                });
+
+                const answerPanel = document.createElement('div');
+                answerPanel.className = 'answer-panel bg-gray-50';
+                answerPanel.innerHTML = `
+                    <div class="p-6">
+                        <p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p>
+                        <p class="text-gray-800">${q.explanation}</p>
+                    </div>
+                `;
+
+                card.appendChild(questionHeader);
+                card.appendChild(optionsList);
+                card.appendChild(answerPanel);
+
+                questionHeader.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    answerPanel.classList.toggle('open');
+                    if (answerPanel.classList.contains('open')) {
+                        answerPanel.style.paddingTop = '1.5rem';
+                        answerPanel.style.paddingBottom = '1.5rem';
+                    } else {
+                        answerPanel.style.paddingTop = '0';
+                        answerPanel.style.paddingBottom = '0';
+                    }
+                });
+
+                return card;
+            }
+
+            const preTestContainer = document.getElementById('pre-test-container');
+            preTestQuestions.forEach((q, i) => {
+                preTestContainer.appendChild(createQuestionElement(q, i, 'pre'));
+            });
+
+            const postTestContainer = document.getElementById('post-test-container');
+            postTestQuestions.forEach((q, i) => {
+                postTestContainer.appendChild(createQuestionElement(q, i, 'post'));
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll and active state
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Score Calculation and Modal Logic
+            const calculateBtn = document.getElementById('calculate-score');
+            const modal = document.getElementById('score-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const preScoreEl = document.getElementById('pre-score');
+            const postScoreEl = document.getElementById('post-score');
+            const scoreDiffEl = document.getElementById('score-diff');
+            const chartCanvas = document.getElementById('score-chart');
+            let scoreChart = null;
+
+            calculateBtn.addEventListener('click', () => {
+                let preScore = 0;
+                preTestQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="pre-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        preScore++;
+                    }
+                });
+
+                let postScore = 0;
+                postTestQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="post-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        postScore++;
+                    }
+                });
+
+                preScoreEl.textContent = `${preScore} / 10`;
+                postScoreEl.textContent = `${postScore} / 10`;
+
+                const diff = postScore - preScore;
+                if (diff > 0) {
+                    scoreDiffEl.textContent = `進步分數：+${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-green-600';
+                } else if (diff < 0) {
+                    scoreDiffEl.textContent = `退步分數：${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-red-600';
+                } else {
+                    scoreDiffEl.textContent = '分數持平';
+                    scoreDiffEl.className = 'text-lg font-semibold text-gray-600';
+                }
+
+                modal.classList.remove('hidden');
+                
+                if(scoreChart) {
+                    scoreChart.destroy();
+                }
+
+                scoreChart = new Chart(chartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['前測', '後測'],
+                        datasets: [{
+                            label: '答對題數',
+                            data: [preScore, postScore],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.6)',
+                                'rgba(22, 163, 74, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(22, 163, 74, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 10,
+                                ticks: {
+                                    stepSize: 2
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

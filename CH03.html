@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第三單元課程資料（專業互動版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F0F7F8;
+            color: #334155; /* slate-700 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #047857; /* emerald-700 */
+            border-bottom-color: #047857;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E0E7EB;
+            border-radius: 0.75rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #065F46; /* emerald-800 */
+        }
+        .content-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #10B981; /* emerald-500 */
+            padding-left: 1rem;
+            color: #1E293B; /* slate-800 */
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background-color: #D1FAE5; /* emerald-100 */
+            color: #065F46; /* emerald-800 */
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .law-box {
+            background-color: #f8fafc; /* slate-50 */
+            border-left: 4px solid #F59E0B; /* amber-500 */
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .law-box ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .interactive-tab {
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            margin-bottom: -1px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .interactive-tab.active {
+            color: #047857;
+            border-bottom-color: #047857;
+            font-weight: 600;
+            background-color: #ECFDF5;
+        }
+        .concept-card {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: all 0.3s;
+        }
+        .concept-card:hover {
+            border-color: #10b981;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 2rem;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 0.5rem;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        /* Pyramid SVG styles */
+        .pyramid-svg {
+            width: 100%;
+            max-width: 500px;
+            margin: 1rem auto;
+        }
+        /* Questionnaire styles */
+        .questionnaire-container {
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            background-color: #f8fafc;
+        }
+        .questionnaire-item {
+            padding: 1rem;
+            border-radius: 0.375rem;
+        }
+        .questionnaire-item:nth-child(even) {
+            background-color: #f1f5f9; /* slate-100 for alternating rows */
+        }
+        .questionnaire-item p {
+             font-size: 1.125rem; /* Increased font size for questions */
+             line-height: 1.75;
+        }
+        .questionnaire-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.75rem;
+        }
+        .questionnaire-options label {
+            cursor: pointer;
+        }
+        .result-table {
+            width: 100%;
+            margin-top: 1rem;
+            border-collapse: collapse;
+        }
+        .result-table th, .result-table td {
+            border: 1px solid #ddd;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        .result-table th {
+            background-color: #f1f5f9;
+        }
+        /* Stroop Test Styles */
+        #stroop-word {
+            font-size: 4rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 2rem;
+        }
+        /* CPT Test Styles */
+        #cpt-display {
+            width: 200px;
+            height: 200px;
+            border: 2px solid #9ca3af;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin: 1rem auto;
+        }
+        #cpt-timer {
+            font-family: 'monospace';
+            font-size: 1.5rem;
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#065F46]">特殊教育導論：第三單元</h1>
+            <div class="hidden md:flex flex-wrap space-x-6">
+                <a href="#unit7" class="nav-link font-medium pb-1">情緒行為障礙與ADHD</a>
+                <a href="#unit8" class="nav-link font-medium pb-1">自閉症類群障礙</a>
+                <a href="#unit9" class="nav-link font-medium pb-1">語言障礙</a>
+                <a href="#resources" class="nav-link font-medium pb-1">相關資源</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#unit7" class="block py-2 nav-link text-center">情緒行為障礙與ADHD</a>
+            <a href="#unit8" class="block py-2 nav-link text-center">自閉症類群障礙</a>
+            <a href="#unit9" class="block py-2 nav-link text-center">語言障礙</a>
+            <a href="#resources" class="block py-2 nav-link text-center">相關資源</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+        
+        <section class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800">第三單元：行為、社交與溝通需求學生的教學實務</h2>
+            <div class="mt-4 max-w-3xl mx-auto card p-6 rounded-lg bg-[#F0F7F8]">
+                 <p class="text-slate-700 leading-relaxed">
+                本單元課程將依據學術研究，深入探討情緒行為障礙(EBD)、注意力不足過動症(ADHD)、自閉症類群障礙(ASD)及語言障礙學生的特質與需求。我們將不僅止於認識這些障礙，更將重點聚焦於理解其行為與溝通挑戰背後的認知與神經心理因素，並學習有實證依據的教室支持策略。本單元內容對應教科書第六、七、八、九章。
+            </p>
+            </div>
+        </section>
+
+        <section id="unit7" class="mb-20 scroll-mt-20" data-content-target="unit7-strategy-content">
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">單元七：情緒行為障礙 (EBD) 與注意力不足過動症 (ADHD) 學生</h3>
+                    <div class="space-y-6 text-slate-700">
+                        
+                        <div>
+                            <p><strong class="tag">定義與鑑定 (情緒行為障礙)</strong></p>
+                            <p class="mt-2">學理上，情緒行為問題可區分為「外向性」(如：攻擊、違抗)與「內向性」(如：退縮、焦慮)行為，並強調其問題需具備長期性，且對學習造成顯著負面影響。</p>
+                            <div class="law-box">
+                                <h4 class="font-semibold text-slate-800">法規依據：《特殊教育學生及幼兒鑑定辦法》第十條</h4>
+                                <p class="mt-2 text-slate-600">本法第三條第八款所稱情緒行為障礙，指長期情緒或行為表現顯著異常，致嚴重影響學校適應；其障礙非因智能、感官或健康等因素直接造成之結果。<br>前項情緒行為障礙之症狀，包括精神性疾患、情感性疾患、畏懼性疾患、焦慮性疾患、注意力缺陷過動症、或有其他持續性之情緒或行為問題。<br>第一項所定情緒行為障礙，其鑑定基準依下列各款規定：</p>
+                                <ul class="list-decimal list-inside ml-4 mt-2">
+                                    <li>1.情緒或行為表現顯著異於其同年齡或社會文化之常態者，得參考精神科醫師之診斷認定之。</li>
+                                    <li>2.在學校顯現學業、社會、人際、生活或職業學習等適應有顯著困難。</li>
+                                    <li>3.除學校外，在家庭、社區、社會或任一情境中顯現適應困難。</li>
+                                    <li>4.前二款之困難經評估後確定一般教育及輔導所提供之介入成效有限，仍有特殊教育需求。</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">核心特質與教育需求 (情緒行為障礙)</strong></p>
+                            <p class="mt-2">強調提供安全、可預測、結構化的學習環境，並直接教導社交技巧與情緒調節策略。其教育權益受《身心障礙者權益保障法》保障。</p>
+                        </div>
+                        
+                        <hr class="my-8 border-gray-200">
+
+                        <h4 class="content-heading text-emerald-700">主要類型深入探討：注意力不足過動症 (ADHD) <span class="text-base font-medium text-gray-400">(對應教科書第七章)</span></h4>
+
+                        <div>
+                            <p><strong class="tag">定義與核心症狀 (ADHD)</strong></p>
+                            <p class="mt-2">ADHD 是一種神經發展障礙，其核心問題並非「不專心」，而是「調節專注、控制衝動與活動量的能力有困難」。依據DSM-5，主要症狀可分為三大類：</p>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                                <li><strong>注意力不足：</strong>難以維持專注、容易分心、丟三落四、忘東忘西、看似有聽但沒在聽。</li>
+                                <li><strong>過動：</strong>在座位上動來動去、無法安靜、話多、精力旺盛。</li>
+                                <li><strong>衝動：</strong>問題未問完就搶答、難以等待、常打斷他人。</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <p><strong class="tag">行為背後的認知特質 (ADHD)</strong></p>
+                            <p class="mt-2">要有效支持ADHD學生，必須理解其外顯行為根源於內在的認知功能困難。點擊下方卡片，深入了解關鍵概念。</p>
+                            <div class="grid md:grid-cols-2 gap-4 mt-4">
+                                <div class="concept-card cursor-pointer" onclick="showModal('modal-inhibition')">
+                                    <h4 class="font-bold text-emerald-700">行為抑制困難 (Inhibitory Control)</h4>
+                                    <p class="text-sm mt-1">如同「大腦的煞車系統」失靈，難以抑制衝動的想法、行為與情緒，也難以忽略無關的干擾。這是執行功能的核心之一。</p>
+                                </div>
+                                <div class="concept-card cursor-pointer" onclick="showModal('modal-executive')">
+                                    <h4 class="font-bold text-emerald-700">執行功能缺陷 (Executive Functions)</h4>
+                                    <p class="text-sm mt-1">大腦的「指揮官」，負責管理與調控認知資源以達成目標。ADHD學生的困難普遍展現在執行功能的三大核心成分上。</p>
+                                </div>
+                            </div>
+                            
+                            <!-- MIB Test Section -->
+                            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                                <h4 class="font-bold text-lg text-slate-800 mb-2">ADHD 感知測試：運動誘導視盲 (Motion-Induced Blindness)</h4>
+                                <div class="aspect-w-16 aspect-h-9 mb-4">
+                                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/EI-bIfC4rVM" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                                <p class="text-sm text-slate-600 leading-relaxed">運動誘導視盲是一種視覺錯覺，當我們持續專注於一個中心點時，周圍靜止的物體（即使它們很顯眼）可能會暫時從我們的意識中消失。研究指出，這種現象與持續性注意力的能力有關。ADHD的核心困難之一便是持續性注意力的缺損，因此有些研究者認為，ADHD患者可能較不容易產生這種錯覺（即黃點不容易消失），因為他們的注意力較為發散，難以長時間鎖定在單一的中心目標上。這個測試提供了一個有趣的視角，來觀察注意力系統的運作方式，但它仍是個研究領域的議題，不能作為正式的診斷工具。</p>
+                            </div>
+
+                             <!-- Stroop Test Section -->
+                            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                                <h4 class="font-bold text-lg text-slate-800 mb-2">認知抑制體驗：史楚普效應 (Stroop Effect)</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-4">史楚普測驗是一個經典的心理學實驗，它要求我們忽略文字的「字義」，而去辨識文字的「顏色」。例如，當「紅」這個字用藍色墨水寫出時，我們必須抑制閱讀字義的自動化反應，而去回答「藍色」。這個過程需要大量的「抑制控制」，這正是許多ADHD學生感到困難的執行功能之一。請點擊「開始測驗」，並盡快選擇下方與文字顏色相符的按鈕。</p>
+                                <div id="stroop-test-area" class="text-center">
+                                    <div id="stroop-word" class="h-24 flex justify-center items-center">點擊下方按鈕開始</div>
+                                    <div id="stroop-buttons" class="flex justify-center gap-4 mt-4">
+                                        <!-- Stroop buttons will be generated here -->
+                                    </div>
+                                    <button id="start-stroop-btn" class="mt-4 bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">開始測驗</button>
+                                    <p id="stroop-result" class="mt-4 font-semibold"></p>
+                                </div>
+                            </div>
+
+                            <!-- CPT Simulation Section -->
+                            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                                <h4 class="font-bold text-lg text-slate-800 mb-2">持續性注意力體驗：CPT 模擬測驗</h4>
+                                <p class="text-sm text-slate-600 leading-relaxed mb-4">持續性表現測驗 (CPT) 是一種評估持續性注意力和衝動控制的工具。測驗會在螢幕上快速呈現一系列視覺刺激（如字母），受測者被要求在看到「目標刺激」時盡快反應，並忽略「非目標刺激」。這個模擬測驗（共20次，約30秒）將快速顯示字母，請在看到字母 "X" 時，立即點擊下方的按鈕。這個體驗能幫助我們理解長時間維持專注與抑制對無關刺激的衝動反應有多麼困難。</p>
+                                <div id="cpt-test-area" class="text-center">
+                                    <div id="cpt-display" class="text-6xl sm:text-8xl">?</div>
+                                    <p id="cpt-timer" class="mt-2 text-center">0.000</p>
+                                    <button id="cpt-response-btn" class="mt-4 w-full bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg text-sm sm:text-base" disabled>等待測驗開始</button>
+                                    <button id="start-cpt-btn" class="mt-4 bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">開始測驗</button>
+                                    <p id="cpt-result" class="mt-4 font-semibold"></p>
+                                </div>
+                            </div>
+
+                            <!-- CHEXI Questionnaire Section -->
+                            <div class="mt-6">
+                                <button id="toggle-chexi-btn" class="w-full bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-emerald-700 transition duration-300">
+                                    進行線上初步篩檢 (繁體中文兒童執行功能量表 TC-CHEXI)
+                                </button>
+                                <div id="chexi-container" class="hidden questionnaire-container">
+                                    <p class="text-sm text-gray-600 mb-4">本量表為初步篩檢工具，結果僅供參考，不能取代專業醫療診斷。分數越高表示該面向的困難程度越高。<br>引用來源：蔡青霖, 許育軒, & 林慧麗. (2020). Taiwanese traditional-Chinese childhood executive functioning inventory: revision, investigation of psychometric properties, and establishing of norms. 測驗學刊, 67(2), 119-143.</p>
+                                    <div class="flex items-center gap-4 mb-6">
+                                        <label for="child-age" class="font-semibold">請選擇兒童年齡：</label>
+                                        <select id="child-age" class="border-gray-300 rounded-md shadow-sm">
+                                            <option value="4">4歲</option>
+                                            <option value="5">5歲</option>
+                                            <option value="6">6歲</option>
+                                            <option value="7">7歲</option>
+                                            <option value="8">8歲</option>
+                                            <option value="9">9歲</option>
+                                            <option value="10">10歲</option>
+                                            <option value="11">11歲</option>
+                                            <option value="12">12歲</option>
+                                        </select>
+                                    </div>
+                                    <form id="chexi-form">
+                                        <!-- Questions will be injected here by JS -->
+                                    </form>
+                                    <div class="flex gap-4 mt-6">
+                                        <button id="calculate-chexi" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">計算分數</button>
+                                        <button id="reset-chexi" type="button" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition">重設</button>
+                                    </div>
+                                    <div id="chexi-results" class="mt-6 hidden"></div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">實證本位教學策略</strong></p>
+                            <div class="mt-4 border-b border-gray-200">
+                                <nav class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                    <button class="interactive-tab active" data-tab="ebd-strategy-pbis">全校性正向行為支持(SW-PBIS)</button>
+                                    <button class="interactive-tab" data-tab="ebd-strategy-rti">教學反應(RTI)</button>
+                                    <button class="interactive-tab" data-tab="ebd-strategy-crisis">治療性介入與危機處理</button>
+                                    <button class="interactive-tab" data-tab="adhd-strategy-multi">ADHD多模式介入</button>
+                                    <button class="interactive-tab" data-tab="adhd-strategy-med">ADHD藥物的角色</button>
+                                </nav>
+                            </div>
+                            <div id="unit7-strategy-content" class="mt-4 p-4 bg-emerald-50 rounded-md min-h-[200px]">
+                                <!-- Content loaded by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="unit8" class="mb-20 scroll-mt-20" data-content-target="asd-strategy-content">
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">單元八：理解與支持自閉症類群障礙 (ASD) 學生 <span class="text-base font-medium text-gray-400">(對應教科書第八章)</span></h3>
+                    <div class="space-y-6 text-slate-700">
+                        <div>
+                            <p><strong class="tag">定義與核心障礙</strong></p>
+                            <p class="mt-2">ASD 是一種光譜性的神經發展障礙。理解「光譜」的關鍵在於，它並非一條從「輕微」到「嚴重」的單向直線。更貼切的比喻是「音響的混音板」，每個孩子都有一組獨特的推桿，分別代表不同的能力向度（如語言、社交、感官、運動等）。有的孩子可能在語言表達的推桿非常高，但在社交理解的推桿卻很低。因此，我們不能用「高功能」或「低功能」等簡化標籤來定義他們，而必須看見每個孩子獨特的能力組合與需求樣貌。</p>
+                            <p class="mt-4">依據DSM-5，ASD的核心困難展現在兩大領域：</p>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                                <li><strong>社交溝通與社會互動的持續性困難：</strong>包含解讀非語言線索（如表情、語氣）、發展與維持人際關係、以及社交與情感相互性的困難。</li>
+                                <li><strong>侷限、重複的行為、興趣或活動 (RRBs)：</strong>包含固著的動作或語言（如重複搖晃、仿說）、對常規的堅持、極度侷限的興趣、以及對感官刺激的過高或過低反應。</li>
+                            </ul>
+                            <div class="law-box">
+                                <h4 class="font-semibold text-slate-800">法規依據：《特殊教育學生及幼兒鑑定辦法》第十二條</h4>
+                                <p class="mt-2 text-slate-600">本法第三條第十款所稱自閉症，指因神經心理功能異常而顯現出溝通、社會互動、行為及興趣表現上有嚴重問題，致在學習及生活適應上有顯著困難。<br>前項所定自閉症，其鑑定基準依下列各款規定：</p>
+                                <ul class="list-decimal list-inside ml-4 mt-2">
+                                    <li>1.顯著社會溝通及社會互動困難。</li>
+                                    <li>2.表現出固定而有限之行為模式及興趣。</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">行為背後的認知特質</strong></p>
+                            <p class="mt-2">ASD學生的許多社交困難，源於其獨特的認知處理方式。點擊下方卡片，深入了解關鍵概念。</p>
+                            <div class="grid md:grid-cols-2 gap-4 mt-4">
+                                <div class="concept-card cursor-pointer" onclick="showModal('modal-tom')">
+                                    <h4 class="font-bold text-emerald-700">心智理論困難 (Theory of Mind, ToM)</h4>
+                                    <p class="text-sm mt-1">難以理解他人擁有與自己不同的想法、信念、意圖與感受。這解釋了他們為何難以預測他人行為或理解社交潛規則。</p>
+                                </div>
+                                <div class="concept-card cursor-pointer" onclick="showModal('modal-hidden')">
+                                    <h4 class="font-bold text-emerald-700">潛在課程 (Hidden Curriculum)</h4>
+                                    <p class="text-sm mt-1">那些在學校中未明文規定，但大家卻心照不宣的社交規則。由於心智理論的困難，ASD學生需要被明確地教導這些規則。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CAST Questionnaire Section -->
+                        <div class="mt-6">
+                            <button id="toggle-cast-btn" class="w-full bg-emerald-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-emerald-700 transition duration-300">
+                                進行線上初步篩檢 (兒童自閉症光譜測驗 CAST)
+                            </button>
+                            <div id="cast-container" class="hidden questionnaire-container">
+                                <p class="text-sm text-gray-600 mb-4">本量表為初步篩檢工具，結果僅供參考，不能取代專業醫療診斷。總分高於15分表示有較高自閉症類群障礙的可能性。<br>引用來源：Autism Research Centre, University of Cambridge. (https://docs.autismresearchcentre.com/tests/CAST_Traditional_Chinese.pdf)</p>
+                                <form id="cast-form">
+                                    <!-- CAST Questions will be injected here by JS -->
+                                </form>
+                                <div class="flex gap-4 mt-6">
+                                    <button id="calculate-cast" class="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition">計算分數</button>
+                                    <button id="reset-cast" type="button" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-600 transition">重設</button>
+                                </div>
+                                <div id="cast-results" class="mt-6 hidden"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">實證本位教學策略</strong></p>
+                            <div class="mt-4 border-b border-gray-200">
+                                <nav class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                    <button class="interactive-tab active" data-tab="asd-strategy-teacch">結構化教學(TEACCH)</button>
+                                    <button class="interactive-tab" data-tab="asd-strategy-social-story">社交故事</button>
+                                    <button class="interactive-tab" data-tab="asd-strategy-sel">社會情緒學習(SEL)</button>
+                                </nav>
+                            </div>
+                            <div id="asd-strategy-content" class="mt-4 p-4 bg-emerald-50 rounded-md min-h-[200px]">
+                                <!-- Content loaded by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="unit9" class="mb-20 scroll-mt-20" data-content-target="lang-strategy-content">
+            <div class="card p-6 md:p-8 rounded-lg space-y-10">
+                <article>
+                    <h3 class="content-heading">單元九：理解與支持語言障礙學生 <span class="text-base font-medium text-gray-400">(對應教科書第九章)</span></h3>
+                    <div class="space-y-6 text-slate-700">
+                        <div>
+                            <p><strong class="tag">言語 vs. 語言</strong></p>
+                            <p class="mt-2">理解這兩者的區別是支持學生的第一步：</p>
+                            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                                <li><strong>言語 (Speech)：</strong>指產生聲音的「機制」，包含構音（咬字）、語暢（流暢度）、嗓音。例如，構音異常的學生可能把「西瓜」說成「希花」。</li>
+                                <li><strong>語言 (Language)：</strong>指用來溝通的「符號系統」，包含理解（聽、讀）與表達（說、寫）。語言障礙會深遠地影響學生的學業學習，特別是讀寫能力。</li>
+                            </ul>
+                            <div class="law-box">
+                                <h4 class="font-semibold text-slate-800">法規依據：《特殊教育學生及幼兒鑑定辦法》第六條</h4>
+                                <p class="mt-2 text-slate-600">本法第三條第四款所稱語言障礙，指言語或語言符號處理能力較同年齡者，有顯著偏差或低落現象，造成溝通困難，致影響參與學習活動。<br>前項所定語言障礙，其鑑定基準依下列各款規定之一：</p>
+                                <ul class="list-decimal list-inside ml-4 mt-2">
+                                   <li>1.語音異常：產出之語音有省略、替代、添加、歪曲、聲調錯誤或含糊不清等現象，致影響說話清晰度。</li>
+                                   <li>2.嗓音異常：說話之音質、音調、音量或共鳴與個人之性別、年齡或所處文化環境不相稱，致影響口語溝通效能。</li>
+                                   <li>3.語暢異常：說話之流暢度異常，包括聲音或音節重複、拉長、中斷或用力，及語速過快或急促不清、不適當停頓等口吃或迅吃現象，致影響口語溝通效能。</li>
+                                   <li>4.發展性語言異常：語言理解、語言表達或二者較同年齡者有顯著偏差或低落，其障礙非因感官、智能、情緒或文化刺激等因素直接造成之結果。</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p><strong class="tag">語言的五大要素與學業的連結</strong></p>
+                            <p class="mt-2">語言的困難會直接衝擊學業表現。點擊下方卡片，了解語言的五大要素如何影響學習。</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                                <div class="concept-card">
+                                    <h4 class="font-bold text-emerald-700">1. 語音 (Phonology)</h4>
+                                    <p class="text-sm mt-1">指語言中的聲音系統。語音覺識困難的學生，在學習注音符號、拼音和解碼文字時會遭遇極大挑戰。</p>
+                                </div>
+                                <div class="concept-card">
+                                    <h4 class="font-bold text-emerald-700">2. 語形 (Morphology)</h4>
+                                    <p class="text-sm mt-1">指詞彙的結構，如字根、字首、字尾。語形困難會影響學生理解詞彙的衍生變化與文法規則（如：複數、時態）。</p>
+                                </div>
+                                <div class="concept-card">
+                                    <h4 class="font-bold text-emerald-700">3. 語法 (Syntax)</h4>
+                                    <p class="text-sm mt-1">指組織句子的規則（文法）。語法困難的學生，難以理解或使用複雜的句子，這直接影響閱讀理解與寫作能力。</p>
+                                </div>
+                                <div class="concept-card">
+                                    <h4 class="font-bold text-emerald-700">4. 語意 (Semantics)</h4>
+                                    <p class="text-sm mt-1">指詞彙與句子的意義。語意困難的學生詞彙量有限，且難以理解一詞多義、譬喻或抽象概念，嚴重影響閱讀理解。</p>
+                                </div>
+                                <div class="concept-card">
+                                    <h4 class="font-bold text-emerald-700">5. 語用 (Pragmatics)</h4>
+                                    <p class="text-sm mt-1">指在不同社交情境中使用語言的規則。語用困難的學生不知道如何開啟話題、輪流發言或根據聽者調整說話方式。</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">語言的多元視角</strong></p>
+                             <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-4 bg-white rounded-lg border-l-4 border-sky-500">
+                                    <h5 class="font-bold text-sky-700">盛行率與跨文化差異</h5>
+                                    <p class="text-sm text-gray-600 mt-2">語言障礙的盛行率估計不易，因定義、統計方式及文化差異而有所不同。在美國，學齡兒童的盛行率約為7-8%。台灣的特殊教育統計數據顯示，語言障礙學生約佔所有特殊需求學生的10%。不同語言（如聲調語言、屈折語）的結構差異，也可能影響障礙的表現形式與鑑定標準。</p>
+                                </div>
+                                <div class="p-4 bg-white rounded-lg border-l-4 border-rose-500">
+                                    <h5 class="font-bold text-rose-700">語言的演化與遷徙</h5>
+                                    <p class="text-sm text-gray-600 mt-2">語言如同生物，會隨著時間演化、分歧。語言學家透過比較語言間的相似性，建構出「語言樹」，追溯其共同的來源（如印歐語系）。人類的遷徙歷史深深地刻印在語言的分佈上，例如南島語系的擴散，便是一個從台灣出發，遍及太平洋與印度洋的壯闊旅程。</p>
+                                    <div class="mt-3">
+                                        <a href="https://www.youtube.com/watch?v=iWDKsHm6gTA" target="_blank" class="text-sm text-blue-600 hover:underline">觀看影片：語言的演化 &rarr;</a>
+                                    </div>
+                                    <div class="mt-1">
+                                        <a href="https://www.youtube.com/watch?v=jcc40AowXPQ" target="_blank" class="text-sm text-blue-600 hover:underline">觀看影片：文化遷徙與語言 &rarr;</a>
+                                    </div>
+                                </div>
+                                 <div class="p-4 bg-white rounded-lg border-l-4 border-teal-500 col-span-1 md:col-span-2">
+                                    <h5 class="font-bold text-teal-700">語言的神經生理基礎</h5>
+                                    <p class="text-sm text-gray-600 mt-2">
+                                        語言是人類獨特的心智能力，其神經基礎也反映了這種獨特性。研究比較人類與動物的大腦結構，發現差異最大的地方，就在與語言密切相關的左腦半球<strong class="font-semibold">下額葉 (inferior frontal gyrus)</strong>與<strong class="font-semibold">下頂葉 (inferior parietal lobule)</strong>。這個由前、後兩大腦區所構成的網路，是語言處理的核心。
+                                        <br><br>
+                                        <strong class='font-semibold'>語言產出與語意搜尋：</strong>位於下額葉的<strong class="font-semibold">布洛卡區 (Broca's area)</strong>，如同語言的「建構師」，負責語法組織、句子生成與發音動作的規劃。當我們需要從腦中龐大的詞彙庫中搜尋正確的詞語時（語意搜尋），這個區域的神經活動就會特別活躍。
+                                        <br><br>
+                                        <strong class='font-semibold'>語言理解與語意整合：</strong>位於下頂葉附近的<strong class="font-semibold">韋尼克區 (Wernicke's area)</strong>，則像語言的「解碼器」，負責理解聽到的話語和讀到的文字。它處理將字的部件整合成完整字義的歷程（語意整合）。
+                                        <br><br>
+                                        這兩大語言中樞透過神經纖維（弓狀束）緊密連結，並隨著年齡增長與學習經驗的累積，其神經活動會愈趨成熟與有效率。當語言功能出現缺損時（如閱讀障礙或自閉症），這些核心腦區的活動可能會較低，有時大腦甚至會啟動右腦對應區域來進行「補償」。最終，大腦的指令透過運動皮質區，指揮呼吸、發聲、構音等數十條肌肉，完成複雜的說話過程。
+                                    </p>
+                                     <div class="mt-4">
+                                        <h6 class="font-semibold text-slate-700">延伸觀看：失語症、失讀症與肌肉運作</h6>
+                                        <p class="text-sm text-gray-600 mt-1 mb-2">以下影片將幫助我們更深入地理解語言障礙，以及說話、進食與歌唱之間，在肌肉運用上的細微差異。</p>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="aspect-w-16 aspect-h-9">
+                                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/DwVfCjbIJQI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                            </div>
+                                            <div class="aspect-w-16 aspect-h-9">
+                                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/n4Y4EQaw5oU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                            </div>
+                                             <div class="aspect-w-9 aspect-h-16 mx-auto">
+                                                <iframe class="w-full h-full" src="https://www.youtube.com/embed/0MoJPhCIfYc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">實證本位教學策略</strong></p>
+                            <div class="mt-4 border-b border-gray-200">
+                                <nav class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                    <button class="interactive-tab active" data-tab="lang-strategy-principles">教學原則與環境調整</button>
+                                    <button class="interactive-tab" data-tab="lang-strategy-semantics">語意介入策略</button>
+                                    <button class="interactive-tab" data-tab="lang-strategy-syntax">語法介入策略</button>
+                                    <button class="interactive-tab" data-tab="lang-strategy-pragmatics">語用介入策略</button>
+                                    <button class="interactive-tab" data-tab="lang-strategy-aac">輔助溝通系統 (AAC)</button>
+                                </nav>
+                            </div>
+                            <div id="lang-strategy-content" class="mt-4 p-4 bg-emerald-50 rounded-md min-h-[200px]">
+                                <!-- Content loaded by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="resources" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">相關法規與教學資源</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <a href="https://special.moe.gov.tw/" target="_blank" class="card block p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-emerald-700">教育部全國特殊教育資訊網</h3>
+                    <p class="text-gray-600">我國特殊教育的官方入口網站，提供最新的法規、政策、統計資料與研習訊息，是掌握特教動態的第一手來源。</p>
+                </a>
+                <a href="https://iris.peabody.vanderbilt.edu/" target="_blank" class="card block p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-emerald-700">The IRIS Center (美國)</h3>
+                    <p class="text-gray-600">由美國教育部資助，提供大量關於實證本位教學的免費線上資源，包含互動模組與案例研究，適用於各類特殊需求學生。</p>
+                </a>
+                <a href="https://www.nise.go.jp/" target="_blank" class="card block p-6 rounded-lg text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-emerald-700">国立特別支援教育総合研究所 (日本)</h3>
+                    <p class="text-gray-600">日本官方的特殊教育研究與資源中心，提供豐富的研究報告、教材資料庫與教學實踐案例，可了解日本的特教發展與策略。</p>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Modals -->
+    <div id="modal-inhibition" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('modal-inhibition')">&times;</span>
+            <h3 class="content-heading">行為抑制困難 (Inhibitory Control)</h3>
+            <p>「抑制控制」是執行功能的三大核心之一，指的是能自主控制、調節，以對抗內在衝動或外在誘惑的能力。它就像大腦的「煞車系統」，幫助我們在必要時停下來、想一想。</p>
+            <p class="mt-2">ADHD學生的這套煞車系統反應較慢且力道不足，因此在抑制以下三種反應時會特別困難：</p>
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li><strong>抑制初步反應：</strong>難以抑制一個立即、直覺的行為衝動（如：搶答、插嘴、推擠）。</li>
+                <li><strong>停止無效反應：</strong>即使一個策略或行為已不再有效，仍難以停止並轉換（如：持續用同樣的錯誤方法解題）。</li>
+                <li><strong>抑制無關干擾：</strong>難以忽略環境中無關的聲音、畫面或腦中的雜念，導致容易分心。</li>
+            </ul>
+        </div>
+    </div>
+    <div id="modal-executive" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('modal-executive')">&times;</span>
+            <h3 class="content-heading">執行功能缺陷 (Executive Functions)</h3>
+            <p>執行功能是一系列高階的認知歷程，如同大腦的「指揮官」或「CEO」，負責管理和調控其他認知能力，以完成複雜的、目標導向的行為。ADHD學生的挑戰，根源於執行功能核心成分的困難：</p>
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li><strong>1. 抑制控制 (Inhibitory Control)：</strong>
+                    <p class="text-sm">大腦的「煞車」。此功能困難導致學生容易衝動、分心、難以等待、情緒反應強烈。</p>
+                </li>
+                <li><strong>2. 工作記憶 (Working Memory)：</strong>
+                    <p class="text-sm">大腦的「便條紙」。負責在短時間內儲存並操作資訊。此功能困難導致學生聽了就忘、無法遵從多步驟指令、閱讀時忘記前面內容、心算困難、寫作時文不對題。</p>
+                </li>
+                <li><strong>3. 認知彈性 (Cognitive Flexibility)：</strong>
+                    <p class="text-sm">大腦的「換檔能力」。指能夠轉換思考角度、靈活應對變化的能力。此功能困難導致學生固執、難以適應計畫變動、無法從錯誤中學習、解決問題的方法單一。</p>
+                </li>
+            </ul>
+             <p class="mt-4">這三項核心功能共同建構了更高階的執行能力，如計畫、組織、問題解決與自我監控。</p>
+        </div>
+    </div>
+    <div id="modal-tom" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('modal-tom')">&times;</span>
+            <h3 class="content-heading">心智理論困難 (Theory of Mind)</h3>
+            <p>心智理論是指能夠理解他人擁有與自己不同的心理狀態（如想法、信念、慾望、意圖、感受）的能力。這是社交互動的基石。</p>
+            <p class="mt-2">缺乏或難以運用心智理論的ASD學生，可能會：</p>
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li><strong>難以理解他人觀點：</strong>經典的「莎莉-安測驗 (Sally-Anne test)」顯示，他們可能難以理解莎莉會去「她以為」球在的地方找，而不是去球「實際上」在的地方。這反映出他們認為「我知道的事，別人理所當然也知道」。</li>
+                <li><strong>誤解他人意圖：</strong>可能將無意的碰撞解讀為惡意的攻擊，或無法理解「白色謊言」背後保護他人感受的善意。</li>
+                <li><strong>無法預測他人行為：</strong>因為不了解他人的想法，所以對他人的反應感到困惑，難以建立友誼。</li>
+                <li><strong>難以理解譬喻、諷刺或謊言：</strong>傾向於從字面意義解讀語言，對於「老師的臉色很難看」這類譬喻感到困惑。</li>
+            </ul>
+            <p class="mt-4">因此，直接教導社交規則與他人觀點（如透過社交故事）至關重要。</p>
+        </div>
+    </div>
+    <div id="modal-hidden" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('modal-hidden')">&times;</span>
+            <h3 class="content-heading">潛在課程 (Hidden Curriculum)</h3>
+            <p>「潛在課程」是指在學校環境中，那些沒有被明確教導，但大家卻普遍遵守的社交規則、價值觀與行為期望。</p>
+            <p class="mt-2">一般學生透過觀察與推論（運用心智理論）就能學會，但ASD學生則需要被明確地教導。潛在課程的例子包含：</p>
+            <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                <li>老師在跟別的同學說話時，不可以插嘴。</li>
+                <li>下課時如何加入一個正在進行的遊戲。</li>
+                <li>在走廊上要安靜，不可以奔跑。</li>
+                <li>如何判斷同學是在開玩笑還是真的生氣。</li>
+                <li>不要評論同學的外表或穿著。</li>
+            </ul>
+            <p class="mt-4">將這些「潛規則」明確化、視覺化，是幫助ASD學生融入校園生活的關鍵。</p>
+        </div>
+    </div>
+
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者 pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm">©特殊教育導論課程活動第三單元，主要依據課程大綱與指定教科書內容（第六、七、八、九章）進行擴充，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.getAttribute('href'));
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Tabbed Content Logic
+            function setupTabs(containerId, contentData) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                const tabs = container.querySelectorAll('.interactive-tab');
+                const contentDiv = document.getElementById(container.dataset.contentTarget);
+
+                function updateContent(tabKey) {
+                    if (contentDiv && contentData[tabKey]) {
+                        contentDiv.innerHTML = contentData[tabKey];
+                        tabs.forEach(tab => {
+                            tab.classList.toggle('active', tab.dataset.tab === tabKey);
+                        });
+                    }
+                }
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        updateContent(tab.dataset.tab);
+                    });
+                });
+
+                // Initial load
+                if (tabs.length > 0) {
+                    updateContent(tabs[0].dataset.tab);
+                }
+            }
+            
+            // Data for Unit 7 Strategies
+            const unit7Strategies = {
+                'ebd-strategy-pbis': `
+                    <h4 class="font-semibold text-lg mb-4 text-emerald-800">全校性正向行為支持 (SW-PBIS)</h4>
+                    <p class="mb-4">這是一套系統性的預防架構，旨在透過改善校園環境與文化，促進所有學生的正向行為。其核心精神是「預防勝於治療」，強調在問題發生前，就先教導與增強所期待的行為。下圖為其三級預防模式：</p>
+                    <div class="text-center">
+                        <svg class="pyramid-svg" viewBox="0 0 300 220" aria-labelledby="pbis-title">
+                            <title id="pbis-title">PBIS三級預防金字塔</title>
+                            <polygon points="150,10 290,210 10,210" fill="#a7f3d0" stroke="#047857" stroke-width="2"/>
+                            <line x1="48" y1="150" x2="252" y2="150" stroke="#047857" stroke-width="1.5" stroke-dasharray="4,4"/>
+                            <line x1="99" y1="80" x2="201" y2="80" stroke="#047857" stroke-width="1.5" stroke-dasharray="4,4"/>
+                            
+                            <text x="150" y="185" text-anchor="middle" font-size="16" fill="#065f46" font-weight="bold">第一級：初級預防</text>
+                            
+                            <text x="150" y="115" text-anchor="middle" font-size="16" fill="#065f46" font-weight="bold">第二級：次級預防</text>
+                            
+                            <text x="150" y="50" text-anchor="middle" font-size="16" fill="#065f46" font-weight="bold">第三級：三級預防</text>
+                        </svg>
+                        <div class="space-y-4 max-w-lg mx-auto text-left">
+                            <div class="pbis-desc border-emerald-800">
+                                <h5 class="font-bold text-gray-700">第三級 (個別化支持，約5%學生):</h5>
+                                <p>針對有嚴重且持續行為問題的學生，進行功能性行為評量(FBA)，並發展個別化的行為支持計畫(BIP)。</p>
+                            </div>
+                            <div class="pbis-desc border-emerald-500">
+                                <h5 class="font-bold text-gray-700">第二級 (特定團體支持，約15%學生):</h5>
+                                <p>針對有高風險行為的學生群體，提供額外的支持，如社交技巧小組或簡易的行為契約。</p>
+                            </div>
+                            <div class="pbis-desc border-emerald-300">
+                                <h5 class="font-bold text-gray-700">第一級 (全校性支持，約80%學生):</h5>
+                                <p>針對全校所有學生，建立清晰的行為期望（如「尊重」、「負責」），並在校園各處進行明確教導與持續增強。</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'ebd-strategy-rti': `
+                    <h4 class="font-semibold text-lg mb-4 text-emerald-800">教學反應 (Response to Intervention, RTI)</h4>
+                    <p class="mb-4">教學反應 (RTI) 是一個多層次的預防系統，旨在及早發現有學習困難的學生，並提供一系列由研究實證的支持。其核心在於確保所有學生都接受高品質的教學，並透過持續的進步監控來調整教學策略。</p>
+                    <div class="text-center">
+                        <svg class="pyramid-svg" viewBox="0 0 300 220" aria-labelledby="rti-title">
+                           <title id="rti-title">RTI三層次介入模式</title>
+                            <polygon points="150,10 290,210 10,210" fill="#cce7ff" stroke="#004a99" stroke-width="2"/>
+                            <line x1="48" y1="150" x2="252" y2="150" stroke="#004a99" stroke-width="1.5" stroke-dasharray="4,4"/>
+                            <line x1="99" y1="80" x2="201" y2="80" stroke="#004a99" stroke-width="1.5" stroke-dasharray="4,4"/>
+                            
+                            <text x="150" y="185" text-anchor="middle" font-size="16" fill="#003366" font-weight="bold">第一層：核心課程</text>
+                            
+                            <text x="150" y="115" text-anchor="middle" font-size="16" fill="#003366" font-weight="bold">第二層：目標性介入</text>
+                            
+                            <text x="150" y="50" text-anchor="middle" font-size="16" fill="#003366" font-weight="bold">第三層：密集性介入</text>
+                        </svg>
+                         <div class="space-y-4 max-w-lg mx-auto text-left mt-4">
+                            <div class="pbis-desc border-blue-800">
+                                <h5 class="font-bold text-gray-700">第三層 (密集性、個別化介入):</h5>
+                                <p>針對在第二層介入後進步仍有限的學生，提供更密集、更長時間、更個人化的教學。此階段通常會與特殊教育的評估與鑑定連結。</p>
+                            </div>
+                            <div class="pbis-desc border-blue-500">
+                                <h5 class="font-bold text-gray-700">第二層 (目標性小組介入):</h5>
+                                <p>針對在第一層中經篩選後發現有落後風險的學生，提供標準化的小組教學，補充核心課程的不足。</p>
+                            </div>
+                            <div class="pbis-desc border-blue-300">
+                                <h5 class="font-bold text-gray-700">第一層 (高品質核心教學):</h5>
+                                <p>所有學生都在普通教育課堂中，接受以研究為基礎的高品質教學。此階段會進行全體篩選，以辨識有潛在困難的學生。</p>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                'ebd-strategy-crisis': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">治療性介入與危機處理</h4>
+                    <p class="mb-4">當學生的情緒行為問題已升級時，教師需要有效的策略來降溫並確保安全。</p>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-3">
+                        <li><strong>認知行為治療 (CBT)原則應用:</strong> 教師可運用CBT精神，教導學生辨識自己的非理性想法與情緒，並學習用更具適應性的想法和行為來取代。例如，學習「紅綠燈」思考法來控制衝動（紅燈：停下來，想一想；黃燈：思考不同做法的後果；綠燈：選擇最好的做法）。</li>
+                        <li><strong>降溫策略 (De-escalation):</strong> 當學生情緒高漲時，教師應保持冷靜，使用同理心傾聽（「我看得出來你現在很生氣」），提供選擇與空間，避免權力鬥爭，引導學生至冷靜區緩和情緒。</li>
+                        <li><strong>暫時隔離 (Seclusion):</strong> 僅在學生行為對自己或他人構成立即、嚴重危險，且其他方法無效時，作為最後的安全策略使用。必須符合法規程序，並以保護為唯一目的，而非懲罰。</li>
+                    </ul>
+                `,
+                'adhd-strategy-multi': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">ADHD多模式介入：為成功搭設鷹架</h4>
+                    <p class="mb-4">有效的ADHD支持並非單一策略，而是一個整合性的系統，如同食譜需要多種食材。重點在於「預防勝於治療」，透過主動調整來創造成功的機會。</p>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-3">
+                        <li><strong>環境支持：</strong>為成功佈置舞台。例如：安排遠離分心源的座位、在桌上張貼清晰的作息表與規則、減少教室內的雜物。</li>
+                        <li><strong>教學調整：</strong>讓學習更容易發生。例如：將大型作業分解為數個小任務、同時提供口頭與視覺指令、在活動間安排短暫的肢體伸展、使用計時器。</li>
+                        <li><strong>行為介入：</strong>明確教導期待的行為。例如：給予頻繁、即時且具體的正增強（「我看到你馬上開始寫作業，很棒！」）、教導學生自我監控的步驟（如使用檢核表）。</li>
+                    </ul>
+                `,
+                'adhd-strategy-med': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">客觀理解ADHD藥物的角色</h4>
+                    <p class="mb-4">藥物治療是ADHD多模式介入中一個經實證有效的選項，但常被誤解。教師的角色並非推薦或反對用藥，而是成為一位知情的觀察者與溝通者。</p>
+                    <div class="p-4 bg-white rounded-lg border-l-4 border-amber-500">
+                        <h5 class="font-bold text-slate-800">教師的關鍵角色</h5>
+                        <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-sm">
+                            <li><strong>觀察與記錄：</strong>客觀記錄學生在用藥後，於學校情境中注意力、行為、情緒及學習表現的變化（包含正面與負面影響）。</li>
+                            <li><strong>親師溝通：</strong>與家長保持暢通的溝通管道，分享您的觀察，以協助家長與醫師做出最適合孩子的決定。</li>
+                            <li><strong>破除迷思：</strong>了解藥物並非「聰明藥」或「控制孩子的工具」，而是協助調節大腦神經傳導物質，使其功能更有效率的醫療方法。藥物無法取代教學策略與行為支持。</li>
+                        </ul>
+                    </div>
+                `
+            };
+
+            // Data for ASD Strategies
+            const asdStrategies = {
+                'asd-strategy-teacch': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">結構化教學法 (TEACCH)</h4>
+                    <p class="mb-4">TEACCH的核心精神是「理解自閉症的文化」，透過調整物理環境與教學方式，來適應自閉症學生的特質，特別是他們的視覺優勢與對可預測性的需求。其四大核心元素包含：</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-white rounded-lg border-t-4 border-emerald-500 shadow">
+                            <h5 class="font-bold text-emerald-700">1. 物理環境結構化</h5>
+                            <p class="text-sm text-gray-600 mt-1">明確劃分教室中不同活動的區域（如：學習區、遊戲區、冷靜區），減少視覺干擾，讓學生清楚知道在什麼地方做什麼事。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg border-t-4 border-blue-500 shadow">
+                           <h5 class="font-bold text-blue-700">2. 作息時間視覺化</h5>
+                            <p class="text-sm text-gray-600 mt-1">使用文字、圖片或物件，將一天的活動流程視覺化地呈現出來。這能增加環境的可預測性，降低學生的焦慮，並幫助他們順利地轉換活動。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg border-t-4 border-purple-500 shadow">
+                            <h5 class="font-bold text-purple-700">3. 個人工作系統</h5>
+                            <p class="text-sm text-gray-600 mt-1">針對單一活動，清楚回答四個問題：(1)要做什麼？ (2)要做多少？ (3)如何知道做完了？ (4)做完之後要做什麼？ 這能幫助學生獨立完成任務。</p>
+                        </div>
+                         <div class="p-4 bg-white rounded-lg border-t-4 border-yellow-500 shadow">
+                            <h5 class="font-bold text-yellow-700">4. 視覺化提示</h5>
+                            <p class="text-sm text-gray-600 mt-1">將教材與指令視覺化。例如，將一個複雜任務分解成多個步驟圖卡，或在材料上貼上顏色標籤，讓學生能一看就懂，減少對口語指令的依賴。</p>
+                        </div>
+                    </div>
+                `,
+                'asd-strategy-social-story': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">社交故事 (Social Stories™)</h4>
+                    <p class="mb-2">這是一種依據特定句型結構撰寫的短文，用以第一人稱或第三人稱視角，客觀描述一個社交情境、他人的觀點與合宜的反應，旨在增進ASD學生的社交理解力。有效的社交故事需遵循特定原則：</p>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-2">
+                        <li><strong>黃金比例原則：</strong>描述句、觀點句、肯定句的數量，應多於指導句或控制句。理想的比例約為2-5個描述/觀點/肯定句，對應0-1個指導/控制句。</li>
+                        <li><strong>第一人稱視角：</strong>故事通常以「我」的口吻撰寫，幫助學生代入情境。</li>
+                        <li><strong>正面且具體的語言：</strong>使用正向的詞彙，並具體描述期待的行為，而非僅僅說「不要」做什麼。</li>
+                    </ul>
+                    <div class="p-4 mt-4 bg-white rounded-lg border-2 border-dashed border-emerald-400">
+                        <h5 class="font-bold text-center mb-2">範例：〈當老師請別人回答問題〉</h5>
+                        <p><span class="font-semibold text-blue-600">[描述句]</span> 有時候在課堂上，老師會問問題。</p>
+                        <p><span class="font-semibold text-blue-600">[描述句]</span> 我知道答案的時候，會舉手。</p>
+                        <p><span class="font-semibold text-purple-600">[觀點句]</span> 老師需要給每個同學練習回答的機會。</p>
+                        <p><span class="font-semibold text-purple-600">[觀點句]</span> 有時候老師會請我回答，有時候會請別的同學回答。這很公平。</p>
+                        <p><span class="font-semibold text-green-600">[指導句]</span> 如果老師請別人回答，我會試著安靜地坐好，聽聽看同學怎麼說。</p>
+                        <p><span class="font-semibold text-red-600">[肯定句]</span> 能夠安靜等待，讓別人有機會回答，是一種尊重，也是很棒的課堂行為。</p>
+                    </div>
+                `,
+                'asd-strategy-sel': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">社會情緒學習 (Social Emotional Learning, SEL)</h4>
+                    <p class="mb-4">SEL 是系統性地教導學生理解與管理情緒、設定正向目標、感受與表達同理心、建立與維持正向關係，並做出負責任決策的過程。對於自閉症學生，SEL 尤其重要，能幫助他們應對社交挑戰。其核心能力包含：</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-4 bg-white rounded-lg border-t-4 border-blue-400 shadow">
+                            <h5 class="font-bold text-blue-700">自我覺察</h5>
+                            <p class="text-sm text-gray-600 mt-1">幫助學生辨識自己的情緒與優勢。策略：情緒臉譜卡、心情溫度計、身體掃描練習。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg border-t-4 border-yellow-400 shadow">
+                            <h5 class="font-bold text-yellow-700">自我管理</h5>
+                            <p class="text-sm text-gray-600 mt-1">教導學生調節情緒與行為的技巧。策略：冷靜角、呼吸練習、壓力球、計畫性的感官活動。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg border-t-4 border-green-400 shadow">
+                            <h5 class="font-bold text-green-700">社會覺察</h5>
+                            <p class="text-sm text-gray-600 mt-1">提升學生理解他人觀點與社交線索的能力。策略：影片分析、角色扮演、社交故事。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg border-t-4 border-purple-400 shadow">
+                            <h5 class="font-bold text-purple-700">人際技巧</h5>
+                            <p class="text-sm text-gray-600 mt-1">訓練學生建立正向關係的具體方法。策略：合作遊戲、對話腳本、輪流與分享的練習。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg border-t-4 border-red-400 shadow">
+                            <h5 class="font-bold text-red-700">負責任的決策</h5>
+                            <p class="text-sm text-gray-600 mt-1">引導學生思考行為的後果，並做出安全的選擇。策略：情境討論、問題解決地圖、視覺化的選擇板。</p>
+                        </div>
+                    </div>
+                `
+            };
+            
+            // Data for Language Strategies
+            const langStrategies = {
+                'lang-strategy-principles': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">教學原則與環境調整</h4>
+                    <p class="mb-4">為語言障礙學生創造一個支持性的學習環境是首要之務。教師的角色是成為學生最重要的溝通夥伴，並在日常教學中自然地嵌入語言學習機會。</p>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-3">
+                        <li><strong>建立接納與支持的氣氛：</strong>耐心傾聽，鼓勵學生任何形式的溝通嘗試，無論是口語、手勢還是圖卡。</li>
+                        <li><strong>提供正確的語言示範：</strong>當學生說出不完整的語句時，自然地以完整、正確的語句重述一次，而非直接糾正。例如，學生說「狗狗 跑」，老師可回應「對，一隻『大』狗狗正在『草地上』跑。」</li>
+                        <li><strong>多感官教學：</strong>善用視覺（圖卡、心智圖）、聽覺、觸覺等多種感官來輔助教學，降低純粹聽覺理解的負擔。</li>
+                        <li><strong>調整說話速度與複雜度：</strong>對學生說話時，適度放慢速度，使用較簡單的句型，並給予足夠的等待時間（5-10秒），讓學生有時間處理訊息。</li>
+                        <li><strong>座位安排：</strong>安排學生坐在可以清楚看見老師口型與教材的位置，遠離噪音干擾源。</li>
+                        <li><strong>善用同儕力量：</strong>安排語言能力較佳的同儕作為小老師，提供模仿與練習的對象。</li>
+                    </ul>
+                `,
+                'lang-strategy-semantics': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">語意介入策略 (詞彙與概念)</h4>
+                    <p class="mb-4">語意困難會直接影響學生的閱讀理解與知識學習。教學重點在於加深、加廣學生的詞彙網路。</p>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-3">
+                        <li><strong>主題式教學：</strong>圍繞一個主題（如「交通工具」）介紹相關詞彙（公車、火車、飛機），並討論其功能、外型等關聯性。</li>
+                        <li><strong>語意圖 (Semantic Mapping)：</strong>以一個核心詞彙為中心，用放射狀圖表連結相關的詞彙、定義、同義/反義詞與例句，將詞彙視覺化。</li>
+                        <li><strong>分類活動：</strong>提供圖卡或詞卡，讓學生練習將物品依據不同屬性（如功能、顏色、材質）進行分類。</li>
+                        <li><strong>上下文線索：</strong>引導學生利用句子中其他的詞彙來推測生詞的意義。</li>
+                        <li><strong>直接教導抽象詞彙：</strong>對於譬喻、成語、或多重意義的詞彙，需提供具體的情境與例句來解釋。</li>
+                    </ul>
+                `,
+                'lang-strategy-syntax': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">語法介入策略 (句子結構)</h4>
+                    <p class="mb-4">語法困難會影響學生理解複雜指令與產出完整句子的能力，是讀寫能力的基礎。</p>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-3">
+                        <li><strong>句子擴展 (Expansion)：</strong>鼓勵學生將簡單的句子逐步加長。例如，從「貓咪睡覺」擴展成「一隻『懶洋洋的橘色』貓咪『在沙發上舒服地』睡覺」。</li>
+                        <li><strong>句子組合 (Combining)：</strong>提供兩個簡單的句子，引導學生使用連接詞（如：和、因為、所以）將其組合成一個複雜句。</li>
+                        <li><strong>視覺提示：</strong>使用不同顏色或形狀的卡片代表句子的不同成分（主詞、動詞、受詞），讓學生動手操作排列，學習正確的語法結構。</li>
+                        <li><strong>故事文法教學：</strong>在閱讀故事時，引導學生分析故事的結構（主角、背景、問題、經過、結果），增進對敘事結構的理解。</li>
+                    </ul>
+                `,
+                'lang-strategy-pragmatics': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">語用介入策略 (社交溝通)</h4>
+                    <p class="mb-4">語用困難會影響學生的人際互動與社會適應。教學重點在於讓學生學會如何在不同情境下適當地使用語言。</p>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-3">
+                        <li><strong>角色扮演：</strong>模擬生活中的各種社交情境（如：打電話、問路、點餐），讓學生練習開啟話題、輪流發言、結束對話等技巧。</li>
+                        <li><strong>影片示範 (Video Modeling)：</strong>觀看社交互動的影片，引導學生觀察與討論影片中人物的語言與非語言行為。</li>
+                        <li><strong>社交腳本：</strong>為特定的社交情境提供對話腳本，讓學生有所依循，降低社交焦慮。</li>
+                        <li><strong>直接教導非語言線索：</strong>明確教導學生如何解讀他人的臉部表情、肢體語言與語氣聲調。</li>
+                    </ul>
+                `,
+                 'lang-strategy-aac': `
+                    <h4 class="font-semibold text-lg mb-2 text-emerald-800">輔助溝通系統 (AAC) 應用</h4>
+                    <p class="mb-4">AAC 是指任何能「補充(擴增)」或「取代(替代)」口語的溝通方式。其目的並非要完全替代口語，而是為有嚴重溝通困難的個案提供有效的溝通管道，加強其自我抉擇的能力。</p>
+                    <div class="p-4 bg-white rounded-lg border-t-4 border-indigo-500 shadow mb-6">
+                        <h5 class="font-bold text-indigo-700">AAC的四大核心元素</h5>
+                        <ul class="list-decimal list-inside mt-2 space-y-1 text-sm text-gray-600">
+                            <li><strong>溝通符號 (Symbols):</strong> 用來代表物件、動作、概念與情感的圖像或文字。</li>
+                            <li><strong>溝通輔具 (Aids):</strong> 用來傳遞或接收訊息的裝置，從低科技的圖卡到高科技的語音溝通器。</li>
+                            <li><strong>溝通技術 (Techniques):</strong> 傳達訊息的方法，如直接指點、掃描或眼動追蹤。</li>
+                            <li><strong>溝通策略 (Strategies):</strong> 整合前三者，以提升溝通效率的特殊方法，如使用核心語彙。</li>
+                        </ul>
+                    </div>
+                    <h5 class="font-bold text-lg mb-3">溝通版面設計比較</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                         <div class="p-4 bg-white rounded-lg shadow-sm border">
+                            <h5 class="font-bold mb-2">常用句</h5>
+                            <p class="text-sm text-slate-600"><strong>優點:</strong> 溝通速度快，學習曲線短。<br><strong>缺點:</strong> 準確度低，訊息量有限，缺乏彈性。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg shadow-sm border-2 border-emerald-500">
+                            <h5 class="font-bold mb-2">核心語彙</h5>
+                            <p class="text-sm text-slate-600"><strong>優點:</strong> 平衡速度、準確度與訊息量，可組合出多樣句型。<br><strong>缺點:</strong> 學習曲線中等。</p>
+                        </div>
+                        <div class="p-4 bg-white rounded-lg shadow-sm border">
+                            <h5 class="font-bold mb-2">注音/拼音</h5>
+                            <p class="text-sm text-slate-600"><strong>優點:</strong> 準確度高，訊息量最大，可暢所欲言。<br><strong>缺點:</strong> 溝通速度慢，學習曲線長。</p>
+                        </div>
+                    </div>
+                     <p class="text-sm text-gray-500 mt-4 text-center">在實務上，這三種類型並非互斥，而是可以截長補短，搭配使用，以達最佳溝通效益。</p>
+                     <div class="mt-6">
+                        <h5 class="font-bold text-lg mb-2">使用者狀況實例</h5>
+                        <p class="text-sm text-slate-600 mb-4">以下影片呈現了溝通障礙者使用輔助溝通系統的實際情況，讓我們能更具體地理解他們所面臨的挑戰與AAC所能帶來的支持。</p>
+                        <div class="aspect-w-16 aspect-h-9">
+                            <iframe class="w-full h-full" src="https://www.youtube.com/embed/i72I_LEyND4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                `
+            };
+
+            // Setup all tab systems
+            setupTabs('unit7', unit7Strategies);
+            setupTabs('unit8', asdStrategies);
+            setupTabs('unit9', langStrategies);
+
+            // CHEXI Questionnaire Logic
+            const chexiData = {
+                questions: [
+                    "很難記住冗長的指示",
+                    "似乎很少能激勵他去做一些自己不喜歡做的事",
+                    "活動進行到一半時，很難記得自己正在做什麼",
+                    "很難對一些欠缺吸引力的任務堅持到底，除非有人答應會給他獎勵",
+                    "傾向在做事之前不會先想到後果",
+                    "當有好幾件事情要他去做的時候，只會記得第一件或最後一件事情",
+                    "當他無法解決當下問題時，很難想出其他的方法",
+                    "當有些事情必須要完成的時候，他常常會因為其他更具吸引力的事情而分心",
+                    "很容易忘記別人要他/她拿什麼東西回來",
+                    "顯然難以去做一些他認為沉悶/無聊的事",
+                    "很難計畫好一項活動(例如:記得帶齊戶外教學的用品或上學所需要的東西)",
+                    "很難抑制他的行動，就算事前已經先告訴過他也一樣",
+                    "很難進行需要多個步驟的活動(例如:年紀較小的小孩在沒有提示下穿好衣服鞋襪;年紀較大的小孩獨自做完所有功課)",
+                    "他一定要覺得任務有吸引力才能全神貫注",
+                    "很難在不適宜笑的場合忍住不笑",
+                    "很難把已發生的事情說得讓別人可以聽懂",
+                    "即使被喝令停止，仍然很難在活動中立即停下來，例如:他在被喊停後總要多跳幾下，或是多玩電腦一會兒",
+                    "很難理解用言語表達的指示，除非同時向他示範怎樣做",
+                    "很難進行包含多個步驟的任務或活動",
+                    "很難預先想好未來的事或從經驗中學習",
+                    "在一群小朋友當中會表現得比其他人更瘋狂(例如:生日派對上或團體活動中)",
+                    "很難做一些需要動腦筋的事，例如:倒數(由二十倒數到一)",
+                    "當他在做一件事情時，很難將其他事情記在心裡面",
+                    "跟年紀差不多的人比起來，很難理解時間的概念"
+                ],
+                subscales: {
+                    WM: [1, 3, 6, 7, 9, 18, 22, 23],
+                    PLAN: [11, 13, 16, 19, 20, 24],
+                    REG: [2, 4, 8, 10, 14],
+                    INHIB: [5, 12, 15, 17, 21]
+                },
+                norms: {
+                    // Data from PDF Appendix 2, pages 24-25
+                    4: { p: [25, 50, 75, 90, 95, 97], WM: [19, 23, 28, 32, 36, 39.14], PLAN: [10, 12, 15, 18, 20, 22], REG: [13, 16, 18.6, 21, 22, 23], INHIB: [12, 15, 18, 20, 21.9, 22.14], Total: [57, 68, 77, 87, 99, 103] },
+                    5: { p: [25, 50, 75, 90, 95, 97], WM: [20, 23, 27, 29.26, 32, 33], PLAN: [10, 12, 15, 16, 18, 18], REG: [13, 16, 19, 20, 21, 22], INHIB: [12, 15, 17, 19, 21, 23], Total: [56, 67, 75, 83, 86, 93.16] },
+                    6: { p: [25, 50, 75, 90, 95, 97], WM: [19, 22, 26, 30, 32, 34], PLAN: [9, 11, 14, 17, 19, 21], REG: [13, 15, 19, 20, 21.3, 23], INHIB: [12, 15, 17, 20, 22, 22.18], Total: [55, 64, 74, 84.06, 91.52, 96] },
+                    7: { p: [25, 50, 75, 90, 95, 97], WM: [17, 22, 27, 31, 33, 35.12], PLAN: [9, 11, 14, 17, 18, 20], REG: [13, 15, 18, 20, 22, 22.12], INHIB: [11, 14, 16, 19, 20, 21], Total: [51, 63, 74, 83, 90.6, 96.12] },
+                    8: { p: [25, 50, 75, 90, 95, 97], WM: [19, 23, 28, 31, 33, 35], PLAN: [9, 12, 15, 17, 19, 20], REG: [14, 16, 18, 21, 22.1, 23], INHIB: [12, 15, 17, 20, 21, 22.06], Total: [54.5, 66, 77, 85, 92, 96.12] },
+                    9: { p: [25, 50, 75, 90, 95, 97], WM: [18, 23, 27, 31, 35, 36], PLAN: [9, 12, 14.18, 17, 20, 21.66], REG: [13, 16, 19, 21, 22, 23], INHIB: [11, 14, 17, 20, 21.1, 23], Total: [53, 65, 76.49, 85.33, 94, 102] },
+                    10: { p: [25, 50, 75, 90, 95, 97], WM: [18, 23, 27, 31, 34.93, 37], PLAN: [8, 12, 14.29, 17, 19.8, 21], REG: [13, 16, 19, 21, 22, 23], INHIB: [11, 14, 17, 19, 21, 22], Total: [52, 65, 76, 87, 95, 98] },
+                    11: { p: [25, 50, 75, 90, 95, 97], WM: [17, 23, 27, 31, 34, 34], PLAN: [8, 11, 15, 17, 19, 20], REG: [13, 16, 19, 20, 22, 23], INHIB: [11, 14, 16, 19, 21, 21], Total: [49, 64, 74.75, 85, 90, 95] },
+                    12: { p: [25, 50, 75, 90, 95, 97], WM: [18, 21, 26, 30, 32.55, 35], PLAN: [8, 11, 14, 16, 18.55, 19.53], REG: [13, 16, 18, 21, 22, 23.53], INHIB: [10, 13, 16, 19, 21, 23], Total: [51.2, 61.74, 72, 83.12, 89, 95.06] }
+                }
+            };
+
+            const chexiForm = document.getElementById('chexi-form');
+            if (chexiForm) {
+                chexiData.questions.forEach((q, i) => {
+                    const qNum = i + 1;
+                    const questionHTML = `
+                        <div class="questionnaire-item">
+                            <p><strong>${qNum}.</strong> ${q}</p>
+                            <div class="questionnaire-options">
+                                ${[1,2,3,4,5].map(val => `
+                                    <label>
+                                        <input type="radio" name="q${qNum}" value="${val}" required>
+                                        <span class="block text-sm mt-1">${val}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                    chexiForm.innerHTML += questionHTML;
+                });
+                
+                const optionLabels = ['完全不正確', '不正確', '部分正確', '正確', '完全正確'];
+                const chexiOptionsDivs = document.querySelectorAll('#chexi-form .questionnaire-options');
+                chexiOptionsDivs.forEach(div => {
+                    const header = document.createElement('div');
+                    header.className = 'flex justify-between text-xs text-gray-500 font-semibold';
+                    optionLabels.forEach(label => {
+                        const span = document.createElement('span');
+                        span.className = 'flex-1 text-center';
+                        span.textContent = label;
+                        header.appendChild(span);
+                    });
+                    div.parentNode.insertBefore(header, div);
+                });
+
+
+                document.getElementById('toggle-chexi-btn').addEventListener('click', function() {
+                    document.getElementById('chexi-container').classList.toggle('hidden');
+                });
+
+                document.getElementById('calculate-chexi').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!chexiForm.checkValidity()) {
+                        alert('請回答所有問題。');
+                        return;
+                    }
+
+                    const age = document.getElementById('child-age').value;
+                    const scores = { WM: 0, PLAN: 0, REG: 0, INHIB: 0, Total: 0 };
+                    const formData = new FormData(chexiForm);
+                    
+                    for (let i = 1; i <= 24; i++) {
+                        const score = parseInt(formData.get(`q${i}`));
+                        scores.Total += score;
+                        for (const subscale in chexiData.subscales) {
+                            if (chexiData.subscales[subscale].includes(i)) {
+                                scores[subscale] += score;
+                            }
+                        }
+                    }
+                    
+                    displayChexiResults(scores, age);
+                });
+                
+                document.getElementById('reset-chexi').addEventListener('click', function() {
+                    chexiForm.reset();
+                    document.getElementById('chexi-results').classList.add('hidden');
+                });
+
+                function getPercentile(score, age, subscale) {
+                    const normData = chexiData.norms[age];
+                    const scoreLevels = normData[subscale];
+                    const pLevels = normData.p;
+
+                    if (score <= scoreLevels[0]) return `< ${pLevels[0]}`;
+                    for (let i = 0; i < scoreLevels.length - 1; i++) {
+                        if (score > scoreLevels[i] && score <= scoreLevels[i+1]) {
+                            return `${pLevels[i]} - ${pLevels[i+1]}`;
+                        }
+                    }
+                    return `> ${pLevels[pLevels.length - 1]}`;
+                }
+
+                function displayChexiResults(scores, age) {
+                    const resultsDiv = document.getElementById('chexi-results');
+                    resultsDiv.innerHTML = `
+                        <h4 class="text-lg font-bold mb-2">初步篩檢結果 (年齡: ${age}歲)</h4>
+                        <div class="overflow-x-auto">
+                            <table class="result-table">
+                                <thead>
+                                    <tr>
+                                        <th>向度</th>
+                                        <th>原始分數</th>
+                                        <th>百分位區間</th>
+                                        <th>說明</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>工作記憶 (WM)</td>
+                                        <td>${scores.WM}</td>
+                                        <td>${getPercentile(scores.WM, age, 'WM')}</td>
+                                        <td>在腦中暫存與操作訊息的能力</td>
+                                    </tr>
+                                    <tr>
+                                        <td>計畫 (PLAN)</td>
+                                        <td>${scores.PLAN}</td>
+                                        <td>${getPercentile(scores.PLAN, age, 'PLAN')}</td>
+                                        <td>組織、規劃步驟與材料的能力</td>
+                                    </tr>
+                                    <tr>
+                                        <td>調適 (REG)</td>
+                                        <td>${scores.REG}</td>
+                                        <td>${getPercentile(scores.REG, age, 'REG')}</td>
+                                        <td>調節情緒與動機以完成任務的能力</td>
+                                    </tr>
+                                    <tr>
+                                        <td>抑制 (INHIB)</td>
+                                        <td>${scores.INHIB}</td>
+                                        <td>${getPercentile(scores.INHIB, age, 'INHIB')}</td>
+                                        <td>抑制衝動與干擾的能力</td>
+                                    </tr>
+                                    <tr class="font-bold bg-gray-50">
+                                        <td>總分</td>
+                                        <td>${scores.Total}</td>
+                                        <td>${getPercentile(scores.Total, age, 'Total')}</td>
+                                        <td>整體執行功能困難程度</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    `;
+                    resultsDiv.classList.remove('hidden');
+                }
+            }
+
+
+            // CAST Questionnaire Logic
+            const castData = {
+                questions: [
+                    "他是否很容易與其他兒童一齊玩耍？", "他是否常常使用「假裝」的方式與其他兒童玩耍？", "他是否對其他兒童感興趣？", "他是否喜歡與您玩「躲貓貓」或「捉迷藏」的遊戲？", "他是否會使用食指來「指著」東西，以表示他對這樣東西感興趣？", "他是否會用食指指著東西，以引導您的注意力？", "他是否能與您玩需要輪流的遊戲？", "他是否會對您感興趣的事物表示感興趣？", "他是否會帶一些他感興趣的東西給您看？", "他是否對您的面部表情有反應？", "他是否會用說話以外的方式來告訴您他想要的東西？", "他是否會用簡單的動作來表達意思？", "他是否對您有興趣？", "他是否是一位「社交能手」？", "他是否常常看著您的眼睛？", "他是否會模仿您？", "他是否會跟著您的視線去看東西？", "他是否明白當您對著某些東西又看又指的時候，您是想要他看這樣東西？", "他是否會自發地玩一些假想的遊戲？", "他是否會帶玩具給其他兒童玩？", "他是否常常說一些與當時環境不配合的話？", "他是否說話的音調有點不尋常？", "他是否能與人打開話題或繼續別人的話題？", "他是否會將所說的話一字不漏地重複又重複？", "他是否說話過於正式？", "他是否對某些東西有過份濃厚的興趣？", "他是否對某些事情有不尋常的癖好？", "他是否對某些聲音特別敏感？", "他是否對某些質地、溫度或感覺特別敏感？", "他是否有一些不尋常的、重複的動作？", "他是否常常注意一些無關重要的事？", "他是否喜歡在每天的生活細節上跟從一些常規？", "他是否會說「你」、「我」等代名詞？", "他是否會與人建立友誼？", "他是否能明白其他人的想法或感受？", "他是否會留意社交上的細節？", "他是否能明白「雙關語」？"
+                ],
+                // Questions where "No" is scored 1 point
+                scoredNo: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 33, 34, 35, 36, 37],
+                // Questions where "Yes" is scored 1 point
+                scoredYes: [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+            };
+
+            const castForm = document.getElementById('cast-form');
+            if (castForm) {
+                castData.questions.forEach((q, i) => {
+                    const qNum = i + 1;
+                    const questionHTML = `
+                        <div class="questionnaire-item">
+                            <p><strong>${qNum}.</strong> ${q}</p>
+                            <div class="questionnaire-options">
+                                <label class="mr-4"><input type="radio" name="cast_q${qNum}" value="yes" required> 是</label>
+                                <label><input type="radio" name="cast_q${qNum}" value="no"> 否</label>
+                            </div>
+                        </div>
+                    `;
+                    castForm.innerHTML += questionHTML;
+                });
+
+                document.getElementById('toggle-cast-btn').addEventListener('click', function() {
+                    document.getElementById('cast-container').classList.toggle('hidden');
+                });
+
+                document.getElementById('calculate-cast').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!castForm.checkValidity()) {
+                        alert('請回答所有問題。');
+                        return;
+                    }
+
+                    let score = 0;
+                    const formData = new FormData(castForm);
+
+                    for (let i = 1; i <= 37; i++) {
+                        const answer = formData.get(`cast_q${i}`);
+                        if (answer === 'no' && castData.scoredNo.includes(i)) {
+                            score++;
+                        } else if (answer === 'yes' && castData.scoredYes.includes(i)) {
+                            score++;
+                        }
+                    }
+                    
+                    displayCastResults(score);
+                });
+
+                document.getElementById('reset-cast').addEventListener('click', function() {
+                    castForm.reset();
+                    document.getElementById('cast-results').classList.add('hidden');
+                });
+
+                function displayCastResults(score) {
+                    const resultsDiv = document.getElementById('cast-results');
+                    let resultText = `您的總分是：<strong class="text-2xl">${score}</strong> 分。<br>`;
+                    if (score >= 15) {
+                        resultText += "分數高於或等於15分，顯示孩子可能具有自閉症類群障礙的特質，建議尋求專業醫療人員（如兒童心智科醫師、臨床心理師）的進一步評估。";
+                    } else {
+                        resultText += "分數低於15分，顯示孩子較不具有自閉症類群障礙的特質。";
+                    }
+                    resultsDiv.innerHTML = `<div class="mt-4 p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 rounded-md">${resultText}</div>`;
+                    resultsDiv.classList.remove('hidden');
+                }
+            }
+            
+            // Stroop Test Logic
+            const stroopWordEl = document.getElementById('stroop-word');
+            const startStroopBtn = document.getElementById('start-stroop-btn');
+            const stroopButtonsEl = document.getElementById('stroop-buttons');
+            const stroopResultEl = document.getElementById('stroop-result');
+            const stroopColors = { '紅': 'red', '綠': 'green', '藍': 'blue', '黃': 'yellow' };
+            const colorNames = Object.keys(stroopColors);
+            const colorValues = Object.values(stroopColors);
+            let currentStroopColor = '';
+            let stroopScore = 0;
+            let stroopTotal = 0;
+            let stroopTimer;
+
+            function nextStroop() {
+                if (stroopTotal >= 10) {
+                    stroopWordEl.textContent = '測驗結束';
+                    stroopResultEl.textContent = `最終得分: ${stroopScore} / ${stroopTotal}`;
+                    startStroopBtn.disabled = false;
+                    startStroopBtn.textContent = '重新開始';
+                    clearTimeout(stroopTimer);
+                    return;
+                }
+                const randomWord = colorNames[Math.floor(Math.random() * colorNames.length)];
+                const randomColorValue = colorValues[Math.floor(Math.random() * colorValues.length)];
+                currentStroopColor = randomColorValue;
+                
+                stroopWordEl.textContent = randomWord;
+                stroopWordEl.style.color = randomColorValue;
+                stroopTotal++;
+                stroopResultEl.textContent = `得分: ${stroopScore} / ${stroopTotal-1}`;
+            }
+
+            function handleStroopChoice(e) {
+                if (e.target.tagName !== 'BUTTON' || !stroopWordEl.textContent.includes('測驗結束') === false) return;
+                const chosenColor = e.target.dataset.color;
+                if (chosenColor === currentStroopColor) {
+                    stroopScore++;
+                }
+                nextStroop();
+            }
+            
+            function startStroopTest() {
+                stroopScore = 0;
+                stroopTotal = 0;
+                startStroopBtn.disabled = true;
+                stroopButtonsEl.innerHTML = '';
+                colorValues.forEach(color => {
+                    const btn = document.createElement('button');
+                    btn.dataset.color = color;
+                    btn.style.backgroundColor = color;
+                    btn.className = 'w-16 h-16 rounded-lg border-2 border-gray-400';
+                    stroopButtonsEl.appendChild(btn);
+                });
+                nextStroop();
+            }
+
+            startStroopBtn.addEventListener('click', startStroopTest);
+            stroopButtonsEl.addEventListener('click', handleStroopChoice);
+
+            // CPT Test Logic
+            const cptDisplay = document.getElementById('cpt-display');
+            const startCptBtn = document.getElementById('start-cpt-btn');
+            const cptResponseBtn = document.getElementById('cpt-response-btn');
+            const cptResultEl = document.getElementById('cpt-result');
+            const cptTimerEl = document.getElementById('cpt-timer');
+            let cptInterval;
+            let cptGameActive = false;
+            let commissionErrors = 0;
+            let omissionErrors = 0;
+            let correctHits = 0;
+            let trials = 0;
+            let cptStartTime;
+            let timerAnimation;
+            const targetLetter = 'X';
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            function updateTimer() {
+                if (!cptGameActive) return;
+                const elapsedTime = (performance.now() - cptStartTime) / 1000;
+                cptTimerEl.textContent = elapsedTime.toFixed(3);
+                timerAnimation = requestAnimationFrame(updateTimer);
+            }
+
+            function startCPT() {
+                commissionErrors = 0;
+                omissionErrors = 0;
+                correctHits = 0;
+                trials = 0;
+                cptGameActive = true;
+                startCptBtn.disabled = true;
+                cptResponseBtn.disabled = false;
+                cptResponseBtn.textContent = '看到 "X" 時點擊這裡';
+                cptResultEl.textContent = '測驗進行中...';
+                cptStartTime = performance.now();
+                timerAnimation = requestAnimationFrame(updateTimer);
+
+                let lastWasTarget = false;
+
+                cptInterval = setInterval(() => {
+                    if (trials >= 20) {
+                        endCPT();
+                        return;
+                    }
+                    
+                    if (lastWasTarget) {
+                        omissionErrors++;
+                    }
+
+                    const isTarget = Math.random() < 0.2; // 20% chance of being the target
+                    const letter = isTarget ? targetLetter : letters[Math.floor(Math.random() * letters.length)];
+                    cptDisplay.textContent = letter;
+                    lastWasTarget = isTarget;
+                    
+                    cptResponseBtn.onclick = () => {
+                        if (!cptGameActive) return;
+                        if (cptDisplay.textContent === targetLetter) {
+                            correctHits++;
+                            lastWasTarget = false; // Reset since it was hit
+                        } else {
+                            commissionErrors++;
+                        }
+                        cptResponseBtn.onclick = null; // Prevent multiple clicks per letter
+                    };
+
+                    trials++;
+                }, 1500); // Display each letter for 1.5 seconds
+            }
+
+            function endCPT() {
+                clearInterval(cptInterval);
+                cancelAnimationFrame(timerAnimation);
+                cptGameActive = false;
+                cptDisplay.textContent = '結束';
+                cptResponseBtn.disabled = true;
+                cptResponseBtn.textContent = '測驗結束';
+                startCptBtn.disabled = false;
+                startCptBtn.textContent = '重新開始';
+                cptResultEl.innerHTML = `
+                    <span class="block">正確點擊 (看到X時點擊): ${correctHits}</span>
+                    <span class="block">漏失錯誤 (看到X未點擊): ${omissionErrors}</span>
+                    <span class="block">反應錯誤 (看到非X時點擊): ${commissionErrors}</span>
+                `;
+            }
+
+            startCptBtn.addEventListener('click', startCPT);
+
+        });
+
+        // Modal Logic
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

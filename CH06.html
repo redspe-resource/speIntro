@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第六單元：教學實踐、專業倫理與課程總結</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 採用高對比、適合投影的藍綠色系風格 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F9FAFB; /* gray-50 */
+            color: #1F2937; /* gray-800 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0F766E; /* teal-700 */
+            border-bottom-color: #0F766E;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB; /* gray-200 */
+            border-radius: 0.75rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #115E59; /* teal-800 */
+        }
+        .content-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #14B8A6; /* teal-500 */
+            padding-left: 1rem;
+            color: #111827; /* gray-900 */
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background-color: #CCFBF1; /* teal-100 */
+            color: #134E4A; /* teal-900 */
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .activity-box {
+            background-color: #F0FDFA; /* teal-50 */
+            border-left: 4px solid #2DD4BF; /* teal-400 */
+            padding: 1.25rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .reference-list li {
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+            text-indent: -1rem;
+        }
+        .support-button {
+            background-color: #F0FDFA;
+            border: 1px solid #99F6E4;
+            color: #115E59;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+            font-weight: 600;
+            text-align: center;
+        }
+        .support-button:hover {
+            background-color: #CCFBF1;
+            transform: translateY(-2px);
+        }
+        .support-button.active {
+            background-color: #115E59;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        #support-display {
+            background-color: #F8FAFC;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            min-height: 150px;
+            line-height: 1.75;
+            border: 1px solid #E5E7EB;
+        }
+        /* 教案產生器樣式 */
+        .form-section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0F766E;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.25rem;
+            border-bottom: 2px solid #99F6E4;
+        }
+        .form-checkbox-label, .form-radio-label {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s;
+        }
+        .form-checkbox-label:hover, .form-radio-label:hover {
+            background-color: #F9FAFB;
+        }
+        .form-checkbox, .form-radio {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.5rem;
+            accent-color: #14B8A6;
+        }
+        .ability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 0.25rem;
+        }
+        .ability-category {
+            font-weight: 600;
+            color: #047857;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: scale(1);
+        }
+        #lesson-plan-output {
+            white-space: pre-wrap;
+            background-color: #F3F4F6;
+            border: 1px solid #E5E7EB;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            min-height: 200px;
+            font-family: 'Noto Sans TC', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#115E59]">特殊教育導論：第六單元</h1>
+            <div class="hidden md:flex flex-wrap space-x-6">
+                <a href="#quiz" class="nav-link font-medium pb-1">課前測驗</a>
+                <a href="#part1" class="nav-link font-medium pb-1">適應體育與倫理</a>
+                <a href="#part2" class="nav-link font-medium pb-1">成果發表總結</a>
+                <a href="#final-quiz" class="nav-link font-medium pb-1">課後總測驗</a>
+                <a href="#references" class="nav-link font-medium pb-1">參考資料</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#quiz" class="block py-2 nav-link text-center">課前測驗</a>
+            <a href="#part1" class="block py-2 nav-link text-center">適應體育與倫理</a>
+            <a href="#part2" class="block py-2 nav-link text-center">成果發表總結</a>
+            <a href="#final-quiz" class="block py-2 nav-link text-center">課後總測驗</a>
+            <a href="#references" class="block py-2 nav-link text-center">參考資料</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+        
+        <section class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900">第六單元：教學實踐、專業倫理與課程總結</h2>
+            <div class="mt-4 max-w-3xl mx-auto card p-6 rounded-lg bg-white">
+                 <p class="text-gray-700 leading-relaxed">
+                本單元課程將聚焦於教學的實際應用與專業倫理的反思。學員將透過適應體育的教案設計，深化課程調整的能力；並藉由倫理議題的探討，為未來教學生涯的挑戰做準備。最後，透過成果發表與學習反思，為本課程畫下句點。
+            </p>
+            </div>
+        </section>
+
+        <section id="quiz" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">課前預習小測驗</h2>
+            <div class="max-w-3xl mx-auto card p-8 rounded-lg">
+                <ol class="list-decimal list-inside space-y-4 text-gray-700 leading-relaxed">
+                    <li>「適應體育」是要幫特殊需求學生上一堂「不一樣」的體育課嗎？它的核心精神是什麼？</li>
+                    <li>當老師與家長對於孩子的教育方式有不同看法時，您認為老師應該如何應對，才能兼顧專業判斷與親師合作？</li>
+                    <li>回顧本學期所學，請舉出三個您認為最重要的特殊教育關鍵詞，並簡述其意義。</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="part1" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">適應體育與倫理探究</h2>
+            <div class="card p-6 md:p-8 rounded-lg space-y-12">
+                <article>
+                    <h3 class="content-heading">單元十六：適應體育—理念與實務設計 <span class="text-base font-medium text-gray-400">(對應教科書第十三章及補充教材)</span></h3>
+                    <div class="space-y-8 text-gray-800">
+                        <div>
+                            <p><strong class="tag">核心理念</strong></p> 
+                            <p>強調適應體育(APE)是一種<span class="font-semibold text-teal-700">「調整」而非「排除」</span>的教育實踐。它與普通體育的目標一致，只是在考量學生個別差異的原則下，進行系統性的課程調整，旨在讓所有學生都能安全、有意義地參與體育活動。</p>
+                        </div>
+                        
+                        <div>
+                            <p><strong class="tag">法源依據與支持系統</strong></p>
+                            <p>我國《特殊教育法》明確指出，推動融合教育是為了讓所有特殊需求國民均有接受適性教育之權利。根據該法第38條，學校應依學生需求提供八大支持服務，其中「適應體育服務」是落實融合教育精神、促進學生平等參與權的重要途徑。點擊下方按鈕，查看各項服務的詳細說明與舉例。</p>
+                            <div id="support-buttons-container" class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+                                <button class="support-button" data-content-key="support1">教育及運動輔具</button>
+                                <button class="support-button" data-content-key="support2">適性教材</button>
+                                <button class="support-button" data-content-key="support3">學習及生活人力</button>
+                                <button class="support-button" data-content-key="support4">復健服務</button>
+                                <button class="support-button" data-content-key="support5">家庭支持</button>
+                                <button class="support-button" data-content-key="support6">適應體育服務</button>
+                                <button class="support-button" data-content-key="support7">校園無障礙環境</button>
+                                <button class="support-button" data-content-key="support8">其他支持服務</button>
+                            </div>
+                            <div id="support-display">
+                                <p class="text-gray-500">請點擊上方按鈕以查看詳細說明。</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p><strong class="tag">互動式教案設計工作坊</strong></p>
+                            <div class="activity-box">
+                                <p class="mb-4">請參考「某國小」的教案範例，透過勾選下列選項，為一節40分鐘的適應體育課設計一份專屬的簡易教案。這是一個應用「行為串連」與「工作分析」精神的實作練習。</p>
+                                
+                                <div id="lesson-plan-form" class="text-sm">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                                        <div>
+                                            <h4 class="form-section-title">設計理念與教材</h4>
+                                            <div id="form-design-concept"></div>
+                                        </div>
+                                        <div>
+                                            <h4 class="form-section-title">核心素養</h4>
+                                            <div id="form-core-competencies"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <h4 class="form-section-title">學生基本能力及需求 (可複選)</h4>
+                                    <div id="form-student-abilities"></div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                                        <div>
+                                            <h4 class="form-section-title">學習目標</h4>
+                                            <div id="form-learning-objectives"></div>
+                                        </div>
+                                        <div>
+                                            <h4 class="form-section-title">教學準備</h4>
+                                            <div id="form-teaching-prep"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                                      <div>
+                                          <h4 class="form-section-title">融入議題</h4>
+                                          <div id="form-integrated-issues"></div>
+                                      </div>
+                                      <div>
+                                          <h4 class="form-section-title">教學評量</h4>
+                                          <div id="form-teaching-eval"></div>
+                                      </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 class="form-section-title">教學活動（請勾選組成一節40分鐘的課程）</h4>
+                                        <div id="form-teaching-activities"></div>
+                                    </div>
+                                </div>
+
+                                <div class="flex space-x-4 mt-6">
+                                    <button id="generate-plan-btn" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors">產生教案</button>
+                                    <button id="clear-plan-btn" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors">清除選取</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <p><strong class="tag">教學資源影片</strong></p>
+                            <div class="mt-4 grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h5 class="font-semibold text-center mb-2">地板滾球-規則簡介與示範</h5>
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        <iframe class="w-full aspect-video rounded-lg" src="https://www.youtube.com/embed/5qqZc6-_ooY" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="font-semibold text-center mb-2">地板滾球-實際競賽與策略</h5>
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        <iframe class="w-full aspect-video rounded-lg" src="https://www.youtube.com/embed/4oamaD1_UNk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </article>
+
+                <hr class="border-gray-200">
+
+                <article>
+                    <h3 class="content-heading">單元十七：特教現場挑戰與倫理議題探究 <span class="text-base font-medium text-gray-400">(對應教科書第三章及補充教材)</span></h3>
+                    <div class="space-y-6 text-gray-800">
+                        <p><strong class="tag">專業倫理兩難</strong> 探討「保密與合作」、「家長權利與學生最佳利益」、「公平與個別化」等實務現場常見的倫理困境。</p>
+                        <div>
+                            <p><strong class="tag">教學實務困境與因應</strong></p>
+                            <ul class="mt-2 ml-4 space-y-3 list-disc list-outside">
+                                <li><strong>親師衝突：</strong> 學習建立信任、客觀陳述、表達共同關切等有效溝通策略。</li>
+                                <li><strong>霸凌防治：</strong> 探討如何透過班級輔導建立接納差異的文化。</li>
+                                <li><strong>教師壓力調適與專業成長：</strong> 分析壓力來源，並探討尋求社會支持、持續進修、正向思考、建立工作界線等因應策略。</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <p><strong class="tag">課堂活動：實務困境討論</strong></p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="part2" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">成果發表與課程總結</h2>
+            <div class="card p-6 md:p-8 rounded-lg">
+                <article>
+                    <h3 class="content-heading">單元十八：小組成果發表與學習反思 <span class="text-base font-medium text-gray-400">(對應教學大綱)</span></h3>
+                    <div class="space-y-6 text-gray-800">
+                        <p><strong class="tag">小組成果發表</strong> 各小組發表期末專題報告，進行知識共享與同儕學習。</p>
+                        <div>
+                            <p><strong class="tag">總結講座：二十一世紀融合教育教師的專業圖像</strong></p>
+                            <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div class="p-4 bg-teal-50 rounded-lg border-t-4 border-teal-500 shadow">
+                                    <h5 class="font-bold text-teal-800">思維者</h5>
+                                    <p class="text-sm text-gray-600 mt-1">從醫療模式轉向權利模式。</p>
+                                </div>
+                                <div class="p-4 bg-teal-50 rounded-lg border-t-4 border-teal-500 shadow">
+                                    <h5 class="font-bold text-teal-800">決策者</h5>
+                                    <p class="text-sm text-gray-600 mt-1">採納證據本位實踐。</p>
+                                </div>
+                                <div class="p-4 bg-teal-50 rounded-lg border-t-4 border-teal-500 shadow">
+                                    <h5 class="font-bold text-teal-800">設計師</h5>
+                                    <p class="text-sm text-gray-600 mt-1">運用學習通用設計(UDL)與課程調整。</p>
+                                </div>
+                                <div class="p-4 bg-teal-50 rounded-lg border-t-4 border-teal-500 shadow">
+                                    <h5 class="font-bold text-teal-800">促進者</h5>
+                                    <p class="text-sm text-gray-600 mt-1">擅長跨專業合作。</p>
+                                </div>
+                                <div class="p-4 bg-teal-50 rounded-lg border-t-4 border-teal-500 shadow">
+                                    <h5 class="font-bold text-teal-800">實踐家</h5>
+                                    <p class="text-sm text-gray-600 mt-1">成為終身學習的反思者。</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p><strong class="tag">最終學習反思</strong> 引導學員完成個人學習反思報告，將外在知識轉化為內在信念與承諾。</p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="final-quiz" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">課後總測驗</h2>
+            <div class="max-w-4xl mx-auto space-y-8">
+                <div class="card p-6 rounded-lg">
+                    <h4 class="font-bold text-lg text-gray-900 mb-2">情境應用題</h4>
+                    <p class="text-gray-700">一位國中七年級學生，經鑑定為雙重特殊需求（資賦優異—語文領域；自閉症）。他在課堂上能發表極具深度的見解，但分組討論時常因堅持己見、無法理解他人想法而與同學爆發衝突。請結合本課程所學的至少三種理論或策略（例如：雙重特殊需求輔導原則、社交故事、結構化教學、正向行為支持等），為他設計一套整合性的支持方案。</p>
+                </div>
+                <div class="card p-6 rounded-lg">
+                    <h4 class="font-bold text-lg text-gray-900 mb-2">理念思辨題</h4>
+                    <p class="text-gray-700">《薩拉曼卡宣言》與「社會模式」皆強調環境對於個體參與的重要性。請論述此觀點如何挑戰傳統的特殊教育思維，並說明一位普通班教師應如何將此理念轉化為具體的班級經營與教學實踐？</p>
+                </div>
+                <div class="card p-6 rounded-lg">
+                    <h4 class="font-bold text-lg text-gray-900 mb-2">專業成長反思題</h4>
+                    <p class="text-gray-700">在成為一名融合教育教師的道路上，您認為「專業倫理」與「壓力調適」為何同等重要？請舉例說明，在面對親師溝通的兩難情境時，您會如何運用專業倫理原則來指引您的行動，並同時照顧到自己的心理健康？</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="references" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">參考資料</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="card p-6 md:p-8 rounded-lg">
+                    <h3 class="content-heading">臺灣文獻與法規</h3>
+                    <ul class="reference-list text-sm text-gray-600">
+                        <li>張世彗（2017）。<em>特殊教育導論：探究特殊需求學習者</em>。五南圖書出版。</li>
+                        <li>教育部 (2023)。<em>《特殊教育法》</em>。</li>
+                        <li>教育部 (2023)。<em>《特殊教育法施行細則》</em>。</li>
+                        <li>教育部 (2024)。<em>《特殊教育學生及幼兒鑑定辦法》</em>。</li>
+                        <li>教育部 (2022)。<em>《特殊教育學生及幼兒支持服務辦法》</em>。</li>
+                        <li>教育部 (2019)。<em>《十二年國民基本教育特殊教育課程實施規範》</em>。</li>
+                        <li>國立臺東大學 (2024)。<em>113學年度暑期教學大綱—特殊教育導論</em>。</li>
+                        <li>呂依蓉 (2022)。融合教育的價值理念與實踐—以《融合指標》為例。<em>臺灣教育評論月刊，11</em>(12)，11-16。</li>
+                        <li>林慶仁、許棋凱 (2021)。融合教育50年發展的歷程與問題省思。<em>教育脈動</em>。</li>
+                        <li>洪儷瑜、曹祐榮、何佩容 (2023)。臺灣融合教育發展之跨國比較研究：以輸入－歷程－成果指標模型為例。<em>特殊教育研究學刊，48</em>(2)，1-35。</li>
+                        <li>張美華、簡瑞良 (2006)。人本策略在融合教育教師壓力調適訓練之應用。<em>特殊教育文集</em>。</li>
+                        <li>張瑞芬 (1989)。<em>特殊教育教師工作壓力與社會支持、工作滿意度之研究</em>。</li>
+                        <li>陳麗如 (2012)。應用結構化教學提升特教班自閉症學生在例行性活動中的主動行為。<em>臺東特教，35</em>，29-38。</li>
+                        <li>黃志雄 (2005)。特殊教育教師的壓力調適與成長團體之研究。<em>特殊教育與復健學報，13</em>，121-148。</li>
+                        <li>楊宗仁、李惠藺 (譯) (2010)。<em>自閉症學生融合教育課程與教學</em>。</li>
+                        <li>詹惠萍、吳明恩、羅思宜、廖晨惠 (2016)。結構化教學法對自閉症學生問題行為影響之研究。<em>臺中教育大學學報：教育類，30</em>(1)，51-71。</li>
+                        <li>蔡明富 (2001)。<em>特殊教育教師的壓力與調適</em>。</li>
+                        <li>鄭麗月 (2014)。從特殊教育相關法規看支持服務。<em>雲嘉特教，17</em>，6-13。</li>
+                        <li>謝佳穎 (2008)。<em>應用結構化教學法以減少自閉症學生分心行為及增進其獨立工作行為之學習成效</em>。</li>
+                        <li>鐘梅菁 (2018)。學前融合教育的挑戰與因應。<em>研習資訊，35</em>(3)，1-12。</li>
+                        <li>其他相關研究與教學資源。</li>
+                    </ul>
+                </div>
+                <div class="card p-6 md:p-8 rounded-lg">
+                    <h3 class="content-heading">國際學術資料</h3>
+                    <ul class="reference-list text-sm text-gray-600">
+                        <li>American Speech-Language-Hearing Association (ASHA). (n.d.). <em>Interprofessional Education/Interprofessional Practice (IPE/IPP)</em>.</li>
+                        <li>Booth, T., & Ainscow, M. (2011). <em>Index for inclusion: Developing learning and participation in schools</em> (3rd ed.). Centre for Studies on Inclusive Education (CSIE).</li>
+                        <li>CAST. (2018). <em>Universal Design for Learning Guidelines version 2.2</em>. Retrieved from http://udlguidelines.cast.org.</li>
+                        <li>Elser, C. (2017). <em>A Case Study of School-Family Collaboration: Examining Communication during Individualized Education Program Meetings</em>. ScholarWorks @ UNI.</li>
+                        <li>Koch, K. (2021). Improving Collaboration at the IEP Table. <em>Edutopia</em>.</li>
+                        <li>Owens, J. (2015). Exploring the critiques of the social model of disability: the transformative possibility of Arendt's notion of power. <em>Disability & Society, 30</em>(4), 491-506。</li>
+                        <li>Samaha, A. M. (2007). What good is the social model of disability?. <em>The University of Chicago Law Review, 74</em>(4), 1251-1308。</li>
+                        <li>Shakespeare, T. (2013). The social model of disability. In L. J. Davis (Ed.), <em>The disability studies reader</em> (4th ed., pp. 214-221). Routledge。</li>
+                        <li>UNESCO. (1994). <em>The Salamanca Statement and Framework for Action on Special Needs Education</em>. World Conference on Special Needs Education: Access and Quality, Salamanca, Spain。</li>
+                        <li>Wendell, S. (1996). <em>The Rejected Body: Feminist Philosophical Reflections on Disability</em>. Routledge。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者 pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm">©特殊教育導論課程活動第六單元，主要依據課程大綱，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+    <!-- Modal for Lesson Plan Output -->
+    <div id="lesson-plan-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-teal-800">您的適應體育簡易教案</h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <pre id="lesson-plan-output" class="text-sm text-gray-700">此處將顯示您所選取的教案內容...</pre>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.getAttribute('href'));
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    if(!mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // 八大支持服務互動功能
+            const supportButtonsContainer = document.getElementById('support-buttons-container');
+            const supportDisplay = document.getElementById('support-display');
+            
+            const supportContent = {
+                support1: '<strong>一、教育及運動輔具服務：</strong><br>指協助學生克服學習困難、增進學習或參與運動效果之輔助科技與器材。學校應評估學生需求，提供最適切之輔具並教導其使用。<br><strong>舉例：</strong>為書寫困難的學生提供觸控螢幕筆電；為視障生提供點字機或擴視機；運動方面可提供附響鈴的球或特製三輪自行車。',
+                support2: '<strong>二、適性教材服務：</strong><br>指為協助學生學習，將教材加以調整、改變或重編，確保學生能無礙地獲取課程內容。<br><strong>舉例：</strong>為閱讀障礙學生提供有聲書或電子書；為智能障礙學生提供符合其認知能力的易讀（Easy-to-read）版本教材；提供點字或大字體課本。',
+                support3: '<strong>三、學習及生活人力協助：</strong><br>指因應學生在校學習或生活需求，所提供之人力資源。<br><strong>舉例：</strong>申請教師助理員在課堂中協助教師教學；申請特教學生助理人員協助處理生活自理（如行動、如廁、進食）；申請手語翻譯員或代為抄寫筆記的同儕。',
+                support4: '<strong>四、復健服務：</strong><br>由相關專業人員提供旨在改善、維持或減緩學生功能退化之治療性服務。<br><strong>舉例：</strong>物理治療師協助改善學生的粗大動作與行動能力；職能治療師協助改善精細動作與感覺統合；語言治療師協助改善溝通與吞嚥能力。',
+                support5: '<strong>五、家庭支持服務：</strong><br>指為促進家庭功能，提供學生家庭所需之各項支持。<br><strong>舉例：</strong>辦理親職教育課程或工作坊；提供家庭諮詢與輔導服務；辦理家長支持團體；提供福利資源、權益倡導等相關資訊。',
+                support6: '<strong>六、適應體育服務：</strong><br>指為特殊需求學生規劃、調整或修改的體育課程。重點不是免修，而是透過調整，讓每位學生都能安全、成功且有意義地參與。<br><strong>舉例：</strong>將籃球規則修改為定點投籃；使用較輕、較大的球具；讓無法參與跑動的學生擔任裁判或記錄員。',
+                support7: '<strong>七、校園無障礙環境：</strong><br>包含「硬體」與「軟體」兩個層面。<br><strong>舉例：</strong>硬體上建置無障礙坡道、電梯、扶手、調整課桌椅高度；軟體上推動同儕接納的友善校園文化、確保網站資訊的無障礙、辦理教職員工相關知能研習。',
+                support8: '<strong>八、其他支持服務：</strong><br>此為彈性條款，涵蓋上述項目以外的所有必要支持。<br><strong>舉例：</strong>學生在校期間所需的醫療照護（如抽痰、管灌）；上下學所需之無障礙交通服務；心理與社會適應輔導；為離校做準備的生涯轉銜輔導。'
+            };
+
+            if (supportButtonsContainer) {
+                const buttons = supportButtonsContainer.querySelectorAll('.support-button');
+                buttons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        buttons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        const contentKey = this.dataset.contentKey;
+                        supportDisplay.innerHTML = supportContent[contentKey] || '<p class="text-gray-500">查無資料。</p>';
+                    });
+                });
+                
+                if (buttons.length > 0) {
+                    buttons[0].click();
+                }
+            }
+            
+            // 互動式教案產生器功能
+            const formContainers = {
+                designConcept: document.getElementById('form-design-concept'),
+                coreCompetencies: document.getElementById('form-core-competencies'),
+                studentAbilities: document.getElementById('form-student-abilities'),
+                learningObjectives: document.getElementById('form-learning-objectives'),
+                teachingPrep: document.getElementById('form-teaching-prep'),
+                integratedIssues: document.getElementById('form-integrated-issues'),
+                teachingEval: document.getElementById('form-teaching-eval'),
+                teachingActivities: document.getElementById('form-teaching-activities')
+            };
+
+            const lessonData = {
+                designConcept: [
+                    { id: 'dc1', text: '地板滾球：針對重度肢體動作困難者設計，普特共學。' },
+                    { id: 'dc2', text: '趣味體適能：透過樂趣化活動，增進團隊合作與問題解決能力。' },
+                    { id: 'dc3', text: '足球：改善人際關係，並在認知、情意、技能上成長。' },
+                    { id: 'dc4', text: '籃球/排球：學習基礎動作與團隊戰術，培養合作精神。'},
+                    { id: 'dc5', text: '羽球/桌球：發展手眼協調與反應能力，適合個別化練習。'}
+                ],
+                coreCompetencies: [
+                    { id: 'cc1', text: '健體-E-A1：具備良好身體活動與健康生活習慣。' },
+                    { id: 'cc2', text: '健體-E-B1：具備運用體育與健康符號知能，並以同理心溝通。' },
+                    { id: 'cc3', text: '健體-E-C2：具備同理心，樂於互動、公平競爭與團隊合作。' }
+                ],
+                studentAbilities: {
+                    attention: [
+                        { id: 'att1', text: '正常' }, { id: 'att2', text: '注意力固執' }, { id: 'att3', text: '注意力短暫' },
+                        { id: 'att4', text: '注意力渙散' }, { id: 'att5', text: '衝動性思考' }, { id: 'att6', text: '不自覺發呆' }
+                    ],
+                    memory: [
+                        { id: 'mem1', text: '正常' }, { id: 'mem2', text: '容易遺忘' }, { id: 'mem3', text: '短期記憶困難' }, { id: 'mem4', text: '長期記憶困難' }
+                    ],
+                    comprehension: [
+                        { id: 'comp1', text: '正常' }, { id: 'comp2', text: '文字理解困難' }, { id: 'comp3', text: '口語理解困難' }
+                    ],
+                    reasoning: [
+                        { id: 'reas1', text: '正常' }, { id: 'reas2', text: '幾何推理困難' }, { id: 'reas3', text: '文字推理困難' }, { id: 'reas4', text: '歸納統整困難' }
+                    ],
+                    mobility: [
+                        { id: 'mob1', text: '完全獨立行走' }, { id: 'mob2', text: '使用輔具' }, { id: 'mob3', text: '需他人協助' }
+                    ],
+                    fineMotor: [
+                        { id: 'fm1', text: '能用手指撿起物品' }, { id: 'fm2', text: '能捏揉' }, { id: 'fm3', text: '能握拿' },
+                        { id: 'fm4', text: '能抓放' }, { id: 'fm5', text: '手眼協調不佳' }
+                    ],
+                    action: [
+                        { id: 'act1', text: '快速敏捷' }, { id: 'act2', text: '普通' }, { id: 'act3', text: '緩慢' }
+                    ],
+                    communication: [
+                        { id: 'comm1', text: '口語' }, { id: 'comm2', text: '非口語(手勢/溝通板等)' }
+                    ],
+                    expression: [
+                        { id: 'exp1', text: '說話流暢' }, { id: 'exp2', text: '理解指令' }, { id: 'exp3', text: '用恰當方式表達需求' },
+                        { id: 'exp4', text: '詞彙缺乏' }, { id: 'exp5', text: '畏懼與人溝通' }
+                    ]
+                },
+                learningObjectives: [
+                    { id: 'lo1', text: '能做出指定運動項目的基本動作（如：投擲、盤球、揮拍）。' },
+                    { id: 'lo2', text: '能與團隊合作完成活動，並與同學友善互動。' },
+                    { id: 'lo3', text: '能在協助下依據調整後的規則進行簡易比賽。' }
+                ],
+                teachingPrep: [
+                    { id: 'tp1', text: '球類 (籃球/排球/足球/羽球/桌球/滾球)' },
+                    { id: 'tp2', text: '標示物 (角錐/圓盤)' },
+                    { id: 'tp3', text: '輔助器材 (彈力帶/沙包/呼拉圈)' }
+                ],
+                integratedIssues: [
+                    { id: 'ii1', text: '品德教育' }, { id: 'ii2', text: '人權教育' }, { id: 'ii3', text: '安全教育' }
+                ],
+                teachingEval: [
+                    { id: 'te1', text: '觀察動作的協調性、流暢性、熟練度。' },
+                    { id: 'te2', text: '實作評量' }, { id: 'te3', text: '口語評量' }, { id: 'te4', text: '同儕互評' }
+                ],
+                teachingActivities: {
+                    preparation: [
+                        { id: 'act_p1', text: '準備活動 (10分鐘)：靜態伸展與課程規則講解' },
+                        { id: 'act_p2', text: '準備活動 (10分鐘)：動態暖身與協調性運動 (如開合跳)' }
+                    ],
+                    development: [
+                        { id: 'act_d1', text: '發展活動 (20分鐘)：球感與基本動作練習 (如滾球/盤球/運球/對牆擊球)' },
+                        { id: 'act_d2', text: '發展活動 (20分鐘)：分組傳接球與簡易攻防練習' },
+                        { id: 'act_d3', text: '發展活動 (20分鐘)：調整後規則的簡易分組競賽' }
+                    ],
+                    summary: [
+                        { id: 'act_s1', text: '綜合活動 (10分鐘)：分享策略、重點歸納與收拾器材' }
+                    ]
+                }
+            };
+
+            function createCheckbox(item, name) {
+                return `<label class="form-checkbox-label"><input type="checkbox" name="${name}" value="${item.text}" class="form-checkbox"><span>${item.text}</span></label>`;
+            }
+            
+            function createRadio(item, name) {
+                 return `<label class="form-radio-label"><input type="radio" name="${name}" value="${item.text}" class="form-radio"><span>${item.text}</span></label>`;
+            }
+
+            function populateForm() {
+                formContainers.designConcept.innerHTML = lessonData.designConcept.map(item => createRadio(item, 'designConcept')).join('');
+                formContainers.coreCompetencies.innerHTML = lessonData.coreCompetencies.map(item => createCheckbox(item, 'coreCompetencies')).join('');
+                
+                let abilitiesHtml = '';
+                for (const key in lessonData.studentAbilities) {
+                    let title = '';
+                    if (key === 'attention') title = '注意能力';
+                    if (key === 'memory') title = '記憶能力';
+                    if (key === 'comprehension') title = '理解能力';
+                    if (key === 'reasoning') title = '推理能力';
+                    if (key === 'mobility') title = '獨立行動方面';
+                    if (key === 'fineMotor') title = '精細動作方面';
+                    if (key === 'action') title = '動作';
+                    if (key === 'communication') title = '慣用溝通方式';
+                    if (key === 'expression') title = '表達能力';
+                    abilitiesHtml += `<p class="ability-category">${title}</p><div class="ability-grid">`;
+                    abilitiesHtml += lessonData.studentAbilities[key].map(item => createCheckbox(item, 'studentAbilities')).join('');
+                    abilitiesHtml += `</div>`;
+                }
+                formContainers.studentAbilities.innerHTML = abilitiesHtml;
+
+                formContainers.learningObjectives.innerHTML = lessonData.learningObjectives.map(item => createCheckbox(item, 'learningObjectives')).join('');
+                formContainers.teachingPrep.innerHTML = lessonData.teachingPrep.map(item => createCheckbox(item, 'teachingPrep')).join('');
+                formContainers.integratedIssues.innerHTML = lessonData.integratedIssues.map(item => createCheckbox(item, 'integratedIssues')).join('');
+                formContainers.teachingEval.innerHTML = lessonData.teachingEval.map(item => createCheckbox(item, 'teachingEval')).join('');
+                
+                let activitiesHtml = '<h5><strong>準備活動</strong></h5>' + lessonData.teachingActivities.preparation.map(item => createCheckbox(item, 'activities')).join('');
+                activitiesHtml += '<h5 class="mt-2"><strong>發展活動</strong></h5>' + lessonData.teachingActivities.development.map(item => createCheckbox(item, 'activities')).join('');
+                activitiesHtml += '<h5 class="mt-2"><strong>綜合活動</strong></h5>' + lessonData.teachingActivities.summary.map(item => createCheckbox(item, 'activities')).join('');
+                formContainers.teachingActivities.innerHTML = activitiesHtml;
+            }
+
+            function generatePlan() {
+                const modal = document.getElementById('lesson-plan-modal');
+                const outputDiv = document.getElementById('lesson-plan-output');
+                let planText = `適應體育簡易教案 (單節課40分鐘)\n`;
+                planText += `設計學校：某國小\n`;
+                planText += `========================================\n\n`;
+
+                const getCheckedValues = (name) => {
+                    return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(cb => cb.value);
+                };
+                
+                const getRadioValue = (name) => {
+                    const checked = document.querySelector(`input[name="${name}"]:checked`);
+                    return checked ? checked.value : '（未選取）';
+                };
+
+                const appendSection = (title, name, isRadio = false) => {
+                    planText += `【${title}】\n`;
+                    if (isRadio) {
+                        planText += `  - ${getRadioValue(name)}\n`;
+                    } else {
+                        const values = getCheckedValues(name);
+                        if (values.length > 0) {
+                            values.forEach(val => planText += `  - ${val}\n`);
+                        } else {
+                            planText += `  （未選取）\n`;
+                        }
+                    }
+                    planText += `\n`;
+                };
+                
+                const appendStudentAbilities = () => {
+                    planText += `【學生基本能力及需求】\n`;
+                    let hasSelection = false;
+                    for (const key in lessonData.studentAbilities) {
+                        const selectedAbilities = Array.from(document.querySelectorAll(`#form-student-abilities input[type="checkbox"]:checked`))
+                            .filter(cb => lessonData.studentAbilities[key].some(item => item.text === cb.value))
+                            .map(cb => cb.value);
+
+                        if(selectedAbilities.length > 0) {
+                            let title = '';
+                            if (key === 'attention') title = '注意能力';
+                            if (key === 'memory') title = '記憶能力';
+                            if (key === 'comprehension') title = '理解能力';
+                            if (key === 'reasoning') title = '推理能力';
+                            if (key === 'mobility') title = '獨立行動方面';
+                            if (key === 'fineMotor') title = '精細動作方面';
+                            if (key === 'action') title = '動作';
+                            if (key === 'communication') title = '慣用溝通方式';
+                            if (key === 'expression') title = '表達能力';
+                            planText += `  - ${title}: ${selectedAbilities.join(', ')}\n`;
+                            hasSelection = true;
+                        }
+                    }
+                    if (!hasSelection) {
+                         planText += `  （未選取）\n`;
+                    }
+                    planText += `\n`;
+                };
+
+
+                appendSection('設計理念與教材', 'designConcept', true);
+                appendSection('核心素養', 'coreCompetencies');
+                appendStudentAbilities();
+                appendSection('學習目標', 'learningObjectives');
+                appendSection('教學準備', 'teachingPrep');
+                appendSection('融入議題', 'integratedIssues');
+                appendSection('教學評量', 'teachingEval');
+                
+                planText += `【教學活動】\n`;
+                const activities = getCheckedValues('activities');
+                if (activities.length > 0) {
+                    const prep = activities.filter(a => a.includes('準備活動'));
+                    const dev = activities.filter(a => a.includes('發展活動'));
+                    const sum = activities.filter(a => a.includes('綜合活動'));
+                    
+                    if(prep.length > 0) planText += `  [準備活動]\n` + prep.map(a => `    - ${a.replace(/準備活動 \(\d+分鐘\)：/,'')}`).join('\n') + '\n';
+                    if(dev.length > 0) planText += `  [發展活動]\n` + dev.map(a => `    - ${a.replace(/發展活動 \(\d+分鐘\)：/,'')}`).join('\n') + '\n';
+                    if(sum.length > 0) planText += `  [綜合活動]\n` + sum.map(a => `    - ${a.replace(/綜合活動 \(\d+分鐘\)：/,'')}`).join('\n') + '\n';
+
+                } else {
+                    planText += `  （未選取）\n`;
+                }
+
+
+                outputDiv.textContent = planText;
+                modal.classList.add('visible');
+            }
+
+            populateForm();
+            document.getElementById('generate-plan-btn').addEventListener('click', generatePlan);
+            document.getElementById('clear-plan-btn').addEventListener('click', () => {
+                document.querySelectorAll('#lesson-plan-form input[type="checkbox"], #lesson-plan-form input[type="radio"]').forEach(el => el.checked = false);
+            });
+
+            // Modal close functionality
+            const modal = document.getElementById('lesson-plan-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            closeModalBtn.addEventListener('click', () => modal.classList.remove('visible'));
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) {
+                    modal.classList.remove('visible');
+                }
+            });
+
+        });
+    </script>
+</body>
+</html>

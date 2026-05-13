@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第二單元 前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        /* 沿用第二單元課程頁面的藍綠色系 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F0F9FF; /* 淡藍色背景 */
+            color: #334155; /* slate-700 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #0369A1; /* sky-700 */
+            border-bottom-color: #0369A1; /* sky-700 */
+        }
+        .question-card {
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0; /* slate-200 */
+            border-radius: 0.5rem;
+            transition: box-shadow 0.3s;
+        }
+        .question-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+        }
+        .answer-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .answer-panel.open {
+            max-height: 500px;
+        }
+        .option-label {
+            display: block;
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e1; /* slate-300 */
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        input[type="radio"]:checked + .option-label {
+            background-color: #E0F2FE; /* sky-100 */
+            border-color: #38BDF8; /* sky-400 */
+        }
+        .modal-overlay {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-container {
+            transition: transform 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#0284C7]">第二單元：前後測</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#0284C7]">第二單元：前測</h2>
+                <a href="#score-section" class="hidden md:inline-block bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-slate-600 mb-12">本測驗旨在評估您對認知、學習與行為需求學生的基本概念理解。請選擇您認為最合適的答案，完成後點擊最下方的按鈕查看分數。</p>
+            
+            <div id="pre-test-container" class="space-y-4">
+                <!-- 前測題目將由 JS 動態生成 -->
+            </div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#0284C7]">第二單元：後測</h2>
+                 <a href="#score-section" class="hidden md:inline-block bg-slate-200 text-slate-700 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300 transition-colors">
+                    前往分數比較 &darr;
+                </a>
+            </div>
+            <p class="text-left max-w-3xl text-slate-600 mb-12">本測驗旨在評估您在學習本單元後的知識應用與策略判斷能力。題目將更側重於情境應用與細節比較。</p>
+
+            <div id="post-test-container" class="space-y-4">
+                <!-- 後測題目將由 JS 動態生成 -->
+            </div>
+        </section>
+        
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#0284C7] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#0369A1] transition-colors duration-300">
+                計算分數並比較
+            </button>
+        </div>
+
+    </main>
+    
+    <footer class="bg-slate-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-slate-600">
+            <p class="mb-4 text-slate-700">製作者 pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm">©特殊教育導論課程活動第二單元測驗，主要依據課程大綱，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+    <!-- 分數彈出視窗 -->
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="modal-container bg-white w-full max-w-lg rounded-lg shadow-xl p-8 transform -translate-y-12">
+            <h3 class="text-2xl font-bold text-center mb-4 text-slate-800">測驗結果比較</h3>
+            <div class="chart-container h-64 mx-auto mb-6">
+                <canvas id="score-chart"></canvas>
+            </div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 5</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 5</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-slate-300 text-slate-800 font-bold py-2 px-6 rounded-lg hover:bg-slate-400 transition-colors">
+                    關閉
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 前測題目資料
+            const preTestQuestions = [
+                {
+                    question: "1. 某學習障礙學生參加學校考試時，需要試題報讀的服務。下列哪一項最有可能是他的主要困難？",
+                    options: ["(A) 聽覺理解", "(B) 後設認知", "(C) 文字書寫", "(D) 文字識讀"],
+                    answer: "D",
+                    explanation: "試題報讀是將書面文字轉換為語音，主要目的是協助在「文字解碼」或「識讀」方面有困難的學生（如閱讀障礙）理解題意。這對應了單元五中提到的閱讀障礙核心困難。"
+                },
+                {
+                    question: "2. 小傑是三年級的注意力缺陷過動症學生，上課時專注課堂學習活動的時間很短暫。鍾老師希望延長小傑專注的時間，下列哪一項教學措施較為適當？",
+                    options: ["(A) 忽略小傑上課時出現的分心行為", "(B) 提供小傑分段學習及活動操作機會", "(C) 當小傑分心時，重新教導他了解上課規則", "(D) 當小傑分心時，安排他到教室後面獨立完成作業"],
+                    answer: "B",
+                    explanation: "針對ADHD學生注意力短暫的核心特質，有效的教學調整（單元六）是將任務分解（分段學習），並提供動手操作的機會，以維持其學習動機與專注力。忽略或懲罰並非治本之道。"
+                },
+                {
+                    question: "3. 小華是集中式特教班五年級的智能障礙學生，無法用口語表達與獨立進食，且經常有自傷行為。下列哪一項應優先列入學年教育目標的學習重點？",
+                    options: ["(A) 減少尖叫行為", "(B) 提升生活自理能力", "(C) 增進數字認讀能力", "(D) 增進需求表達能力"],
+                    answer: "D",
+                    explanation: "根據單元四提到的功能性觀點，學生的問題行為（如自傷）很多時候源自於無法有效表達需求。因此，教導功能性的溝通方式應為最優先目標，這不僅能提升其自主性，也可能從根本上減少問題行為。"
+                },
+                {
+                    question: "4. 多數閱讀障礙的學生在進行文字解碼的歷程中，會呈現視覺表徵(形)轉換成聲韻表徵(音)的對應或轉錄困難。要求學生看圖片後快速說出一系列物品名稱的任務，主要在評量學生哪一項認知的核心缺陷？",
+                    options: ["(A) 視覺記憶", "(B) 快速唸名", "(C) 語音覺識", "(D) 口語表達"],
+                    answer: "B",
+                    explanation: "快速自動化命名(Rapid Automatized Naming, RAN)是評估閱讀障礙（特別是流暢性困難）的核心指標之一。此任務評量的是個體從長期記憶中快速提取語音訊息並表達出來的能力，對應了單元五提到的閱讀障礙亞型。"
+                },
+                {
+                    question: "5. 下列哪一選項的敘述較符合通用設計學習(Universal Design for Learning)的原則？",
+                    options: ["(A) 數學老師依照講解概念、基本練習、延伸問題等步驟進行教學", "(B) 社會老師讓學生依自己擅長的方式，選擇撰寫報告、繪製圖片或錄影等方法展現成果", "(C) 自然老師讓高組學生自己設計實驗，低組學生觀看影片", "(D) 國語老師提供課文概念圖、紙本和電子翻譯，並播放影片幫助學生理解"],
+                    answer: "D",
+                    explanation: "通用設計學習(UDL)的第一原則是提供多元的表徵方式(Representation)，意指用不同方式呈現相同資訊。選項(D)同時提供概念圖（視覺）、文字（紙本/電子）、影片（視聽）等多種形式，是此原則的最佳體現。選項(B)則體現了第二原則「多元的表達方式」。"
+                }
+            ];
+
+            // 後測題目資料
+            const postTestQuestions = [
+                {
+                    question: "1. 小志為了引起老師注意會出現打同學的行為，因此，老師上課時會看著小志並讚美他有坐在椅子上。這位老師使用了何種策略？",
+                    options: ["(A) 消弱", "(B) 正增強", "(C) 負增強", "(D) 非後效增強"],
+                    answer: "D",
+                    explanation: "老師並非在小志「沒有」打人時才給予讚美，而是在他表現出「坐在椅子上」這個行為時就給予讚美，且讚美的提供與問題行為（打人）的發生與否無關。這種旨在降低問題行為動機的策略，稱為非後效增強(Non-contingent Reinforcement)，是行為介入的進階應用。"
+                },
+                {
+                    question: "2. 小風是九年級的學習障礙學生，中文識字量尚可，但常想不起國字要怎樣寫（部件錯置、增漏筆劃），上課很難一邊聽講一邊寫重點。下列哪一選項的教育輔具組合較能增進小風的學習成效？",
+                    options: ["(A) 錄音筆、有聲書", "(B) 溝通板、平板電腦", "(C) 有聲書、溝通板", "(D) 錄音筆、平板電腦"],
+                    answer: "D",
+                    explanation: "針對「聽講時抄寫困難」的問題，使用「錄音筆」可以先將課堂內容錄下。而「平板電腦」內建的語音轉文字、拍照、打字等功能，可以完全取代手寫，直接解決他書寫困難的問題。這體現了為學障生提供「另類學習路徑」的原則。"
+                },
+                {
+                    question: "3. 小芬是四年級的腦性麻痺伴隨智能障礙學生，能聽懂指令但構音困難，右手功能不佳。下列哪一選項的教學措施較適合目前小芬的能力？",
+                    options: ["(A) 教師協助支撐手臂，讓小芬以右手按壓鍵盤學習", "(B) 搭配潔牙口訣及牙菌斑顯示劑，拿電動牙刷自行刷牙", "(C) 使用語音溝通筆點擊溝通簿的圖片，搭配句型結構表達「我要吃漢堡」", "(D) 操作語音溝通板說「我要上廁所」，將語音轉換成文字表達自己的需求"],
+                    answer: "C",
+                    explanation: "考量小芬右手功能不佳但左手可操作，且構音困難，使用「語音溝通筆」點擊圖片(C)是最能發揮其優勢能力（聽懂指令、左手操作）並補償其弱勢（口語表達）的輔具策略。選項(A)要求使用功能不佳的右手，(B)電動牙刷可能對肌肉張力高的腦麻生有困難，(D)語音溝通板是輸出語音，無法轉換成文字。"
+                },
+                {
+                    question: "4. 小柏是一位不擅長交朋友的自閉症學生，在班上常因不能察言觀色而告狀，不受同學歡迎。為了協助小柏，下列何種方法的組合最為可行？",
+                    options: ["(A) 運用社會性故事來協助小柏了解他人的想法、運用行為功能評量找到小柏愛告狀的原因並擬定介入方案", "(B) 運用結構化教學，讓小柏透過固定課表和工作順序預測老師和同學的想法", "(C) 運用行為功能評量找到小柏愛告狀的原因、要求小柏每天閱讀情緒有關的故事，以從中模仿主角的情緒反應", "(D) 運用社會性故事來協助小柏了解他人的想法、運用結構化教學"],
+                    answer: "A",
+                    explanation: "社會性故事能具體教導社交情境中的合宜行為。同時，透過行為功能評量(FBA)可以系統性地分析他「愛告狀」行為背後的功能（可能是想與老師互動、或是不懂其他解決問題的方式），從而設計有效的介入方案。兩者結合能同時處理技巧不足與行為動機的問題。"
+                },
+                {
+                    question: "5. 特教老師請某位國小三年級學生朗讀一篇教過的國語課文，並記錄下一分鐘朗讀的正確字數，發現該生字數低於平均。上述主要在評估學生的哪一項能力？",
+                    options: ["(A) 識字", "(B) 構音", "(C) 注意力", "(D) 閱讀流暢性"],
+                    answer: "D",
+                    explanation: "評量「單位時間內正確閱讀的字數」(WCPM)是測量「閱讀流暢性」的標準方法。流暢性是連結識字解碼與閱讀理解的關鍵橋樑，也是單元五中教學策略的重點之一。"
+                }
+            ];
+
+            function createQuestionElement(q, index, type) {
+                const card = document.createElement('div');
+                card.className = 'question-card rounded-lg overflow-hidden';
+                
+                const questionHeader = document.createElement('div');
+                questionHeader.className = 'p-6 cursor-pointer';
+                questionHeader.innerHTML = `<h4 class="font-semibold">${q.question}</h4>`;
+                
+                const optionsList = document.createElement('div');
+                optionsList.className = 'px-6 pb-6 space-y-3';
+                q.options.forEach((opt, i) => {
+                    const optionValue = opt.match(/\(([^)]+)\)/)[1];
+                    const optionWrapper = document.createElement('div');
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `${type}-q${index}`;
+                    radio.id = `${type}-q${index}-opt${i}`;
+                    radio.value = optionValue;
+                    radio.className = 'hidden';
+
+                    const label = document.createElement('label');
+                    label.htmlFor = `${type}-q${index}-opt${i}`;
+                    label.className = 'option-label';
+                    label.textContent = opt;
+                    
+                    optionWrapper.appendChild(radio);
+                    optionWrapper.appendChild(label);
+                    optionsList.appendChild(optionWrapper);
+                });
+
+                const answerPanel = document.createElement('div');
+                answerPanel.className = 'answer-panel';
+                answerPanel.innerHTML = `
+                    <div class="p-6 border-t border-slate-200">
+                        <p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p>
+                        <p class="text-slate-600">${q.explanation}</p>
+                    </div>
+                `;
+
+                card.appendChild(questionHeader);
+                card.appendChild(optionsList);
+                card.appendChild(answerPanel);
+
+                questionHeader.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    answerPanel.classList.toggle('open');
+                });
+
+                return card;
+            }
+
+            const preTestContainer = document.getElementById('pre-test-container');
+            preTestQuestions.forEach((q, i) => {
+                preTestContainer.appendChild(createQuestionElement(q, i, 'pre'));
+            });
+
+            const postTestContainer = document.getElementById('post-test-container');
+            postTestQuestions.forEach((q, i) => {
+                postTestContainer.appendChild(createQuestionElement(q, i, 'post'));
+            });
+
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // 分數計算與彈出視窗邏輯
+            const calculateBtn = document.getElementById('calculate-score');
+            const modal = document.getElementById('score-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const preScoreEl = document.getElementById('pre-score');
+            const postScoreEl = document.getElementById('post-score');
+            const scoreDiffEl = document.getElementById('score-diff');
+            const chartCanvas = document.getElementById('score-chart');
+            let scoreChart = null;
+
+            calculateBtn.addEventListener('click', () => {
+                let preScore = 0;
+                preTestQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="pre-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        preScore++;
+                    }
+                });
+
+                let postScore = 0;
+                postTestQuestions.forEach((q, i) => {
+                    const selected = document.querySelector(`input[name="post-q${i}"]:checked`);
+                    if (selected && selected.value === q.answer) {
+                        postScore++;
+                    }
+                });
+
+                const totalQuestions = preTestQuestions.length;
+                preScoreEl.textContent = `${preScore} / ${totalQuestions}`;
+                postScoreEl.textContent = `${postScore} / ${totalQuestions}`;
+
+                const diff = postScore - preScore;
+                if (diff > 0) {
+                    scoreDiffEl.textContent = `進步分數：+${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-green-600';
+                } else if (diff < 0) {
+                    scoreDiffEl.textContent = `退步分數：${diff}`;
+                    scoreDiffEl.className = 'text-lg font-semibold text-red-600';
+                } else {
+                    scoreDiffEl.textContent = '分數持平';
+                    scoreDiffEl.className = 'text-lg font-semibold text-slate-600';
+                }
+
+                modal.classList.remove('hidden');
+                
+                if(scoreChart) {
+                    scoreChart.destroy();
+                }
+
+                scoreChart = new Chart(chartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: ['前測', '後測'],
+                        datasets: [{
+                            label: '答對題數',
+                            data: [preScore, postScore],
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.6)',
+                                'rgba(22, 163, 74, 0.6)'
+                            ],
+                            borderColor: [
+                                'rgba(59, 130, 246, 1)',
+                                'rgba(22, 163, 74, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: totalQuestions,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        }
+                    }
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

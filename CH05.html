@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>特殊教育導論：第五單元課程資料</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* 專業藍色系風格 */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F3F4F6; /* gray-100 */
+            color: #1F2937; /* gray-800 */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #2563EB; /* blue-600 */
+            border-bottom-color: #2563EB;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border: 1px solid #E5E7EB; /* gray-200 */
+            border-radius: 0.75rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.07);
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: #1E3A8A; /* blue-800 */
+        }
+        .content-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #3B82F6; /* blue-500 */
+            padding-left: 1rem;
+            color: #111827; /* gray-900 */
+        }
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background-color: #DBEAFE; /* blue-100 */
+            color: #1E40AF; /* blue-800 */
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .law-box {
+            background-color: #FEFCE8; /* yellow-50 */
+            border-left: 4px solid #FBBF24; /* amber-400 */
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border-radius: 0.25rem;
+        }
+        .law-box h5 {
+            font-weight: 700;
+            color: #1F2937;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .explanation-box {
+            background-color: #F0F9FF; /* light-blue-50 */
+            border: 1px solid #E0F2FE; /* light-blue-200 */
+            border-left: 4px solid #38BDF8; /* light-blue-400 */
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .interactive-tab {
+            cursor: pointer;
+            padding: 0.75rem 1.25rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .interactive-tab.active {
+            color: #1D4ED8; /* blue-700 */
+            border-bottom-color: #1D4ED8;
+            font-weight: 600;
+            background-color: #EFF6FF; /* blue-50 */
+        }
+        /* 迷思破解卡片樣式 */
+        .myth-buster-card { perspective: 1000px; cursor: pointer; }
+        .myth-buster-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .myth-buster-card.is-flipped .myth-buster-inner { transform: rotateY(180deg); }
+        .myth-buster-front, .myth-buster-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 1rem; border-radius: 0.5rem; text-align: center; }
+        .myth-buster-front { background-color: #FEE2E2; /* red-100 */ color: #991B1B; /* red-800 */ }
+        .myth-buster-back { background-color: #D1FAE5; /* green-100 */ color: #065F46; /* green-800 */ transform: rotateY(180deg); }
+        
+        /* 互動式工作分析 */
+        .task-step {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .task-step:hover {
+            background-color: #F9FAFB; /* gray-50 */
+        }
+        .task-step.completed {
+            text-decoration: line-through;
+            color: #6B7280; /* gray-500 */
+        }
+        .task-step.completed .step-checkbox {
+            background-color: #3B82F6; /* blue-500 */
+            border-color: #3B82F6;
+        }
+        .step-checkbox {
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #D1D5DB; /* gray-300 */
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .step-checkbox svg {
+            color: white;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .task-step.completed .step-checkbox svg {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 頂部導覽列 -->
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <div class="text-center py-2 text-sm text-gray-500 bg-gray-50 border-b border-gray-200">
+            製作者 pasta-layoff-1r@icloud.com
+        </div>
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-[#1E3A8A]">特殊教育導論：第五單元</h1>
+            <div class="hidden md:flex flex-wrap space-x-6">
+                <a href="#quiz" class="nav-link font-medium pb-1">課前測驗</a>
+                <a href="#unit10" class="nav-link font-medium pb-1">資優與2e需求</a>
+                <a href="#unit14" class="nav-link font-medium pb-1">重障與多障</a>
+                <a href="#unit-support" class="nav-link font-medium pb-1">特教支持系統</a>
+                <a href="#resources" class="nav-link font-medium pb-1">補充資源</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#quiz" class="block py-2 nav-link text-center">課前測驗</a>
+            <a href="#unit10" class="block py-2 nav-link text-center">資優與2e需求</a>
+            <a href="#unit14" class="block py-2 nav-link text-center">重障與多障</a>
+            <a href="#unit-support" class="block py-2 nav-link text-center">特教支持系統</a>
+            <a href="#resources" class="block py-2 nav-link text-center">補充資源</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-16">
+        
+        <section class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800">第五單元：需求光譜的擴展與系統性支持</h2>
+            <div class="mt-4 max-w-3xl mx-auto card p-6 rounded-lg bg-white">
+                 <p class="text-slate-700 leading-relaxed">
+                本單元課程將觸角延伸至需求光譜的兩端：資賦優異、雙重特殊需求(2e)，以及重度與多重障礙學生。我們將深入探討其鑑定挑戰與獨特的教育需求，並從系統觀點剖析學校應如何建構一個有效的支持服務體系，以落實通用學習設計(UDL)與無障礙校園的精神。
+            </p>
+            </div>
+        </section>
+
+        <section id="quiz" class="mb-20 scroll-mt-20">
+            <h2 class="section-title">課前預習反思</h2>
+            <div class="max-w-3xl mx-auto card p-8 rounded-lg">
+                <ol class="list-decimal list-inside space-y-4 text-gray-700 leading-relaxed">
+                    <li>「雙重特殊需求(2e)」學生同時擁有天賦與障礙，您認為在教育現場，哪一種特質比較容易被看見？為什麼？這可能導致什麼樣的後果？</li>
+                    <li>對於重度與多重障礙學生，您認為教育的「成功」應該如何定義？除了學業知識，還有哪些更重要的學習目標？</li>
+                    <li>想像一個理想的「無障礙校園」，除了硬體設施（如坡道、電梯）外，還應該包含哪些「軟體」層面的支持，才能真正讓所有學生都感到受歡迎與被支持？</li>
+                </ol>
+            </div>
+        </section>
+
+        <div class="space-y-16">
+            <section id="unit10" class="scroll-mt-20">
+                <div class="card p-6 md:p-8 rounded-lg">
+                    <article>
+                        <h3 class="content-heading">單元十：資賦優異與雙重特殊需求學生 <span class="text-base font-medium text-gray-400">(對應教科書第十章)</span></h3>
+                        <div class="space-y-8">
+                            <div>
+                                <p><strong class="tag">定義與鑑定</strong></p>
+                                <p class="mt-2">資優的定義已從單純的高智商，擴展至多元才能的展現。傳統的智力理論提供了理解資優的基礎。</p>
+                                <div class="explanation-box">
+                                    <h4 class="text-lg font-bold text-sky-700 mb-3">智力的雙面：流體智力與晶體智力</h4>
+                                    <p class="mb-3">心理學家卡泰爾(Cattell)提出的智力理論，將一般智力(g)區分為兩個主要部分，這有助於我們理解資優的不同表現形式：</p>
+                                    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-600">
+                                        <li><strong>流體智力 (Fluid Intelligence, Gf)：</strong>指天生的、非語文的心智能力，與神經系統的發展較有關。它展現在解決新奇問題、邏輯推理、辨識模式、訊息處理速度等能力上。這種能力在成年早期達到高峰後，可能隨年齡增長而逐漸下降。</li>
+                                        <li><strong>晶體智力 (Crystallized Intelligence, Gc)：</strong>指透過後天學習、經驗與文化累積而來的知識與技能。它展現在詞彙量、一般知識、對特定領域的專精程度上。這種能力在一生中可以持續增長。</li>
+                                    </ul>
+                                    <p class="mt-3 text-sm text-gray-500">流體智力是發展晶體智力的基礎。資優學生可能在其中一項或兩項都表現卓越。例如，一位數學家可能展現極高的流體智力，而一位歷史學家則可能擁有豐富的晶體智力。</p>
+                                </div>
+                                <div class="law-box">
+                                    <h4 class="font-semibold text-slate-800">法規依據：《特殊教育學生及幼兒鑑定辦法》第十六至二十一條</h4>
+                                    <h5>第十六條</h5>
+                                    <p class="mt-1 text-slate-600">本法第三條第十五款所稱資賦優異，指在下列領域具有卓越潛能或傑出表現，經專業評估及鑑定具學習特殊需求，須特殊教育及相關服務措施協助：一、一般智能。二、學術性向。三、藝術才能。四、創造能力。五、領導能力。六、其他特殊才能。</p>
+                                    <h5>第十七條</h5>
+                                    <p class="mt-1 text-slate-600">前條第一款所稱一般智能優異，指在記憶、理解、分析、綜合、推理、評鑑等方面，較同年齡者具有卓越潛能或傑出表現。</p>
+                                    <h5>第十八條</h5>
+                                    <p class="mt-1 text-slate-600">第十六條第二款所稱學術性向優異，指在語文、數學、社會科學或自然科學等學術領域，較同年齡者具有卓越潛能或傑出表現。</p>
+                                    <h5>第十九條</h5>
+                                    <p class="mt-1 text-slate-600">第十六條第三款所稱藝術才能優異，指在視覺藝術、音樂或表演藝術等領域，較同年齡者具有卓越潛能或傑出表現。</p>
+                                    <h5>第二十條</h5>
+                                    <p class="mt-1 text-slate-600">第十六條第四款所稱創造能力優異，指運用心智能力，產生新奇、獨特、精緻、流暢、變通、原創、有價值之觀念或產品，較同年齡者具有卓越潛能或傑出表現。</p>
+                                    <h5>第二十一條</h5>
+                                    <p class="mt-1 text-slate-600">第十六條第五款所稱領導能力優異，指在團體活動中，有效影響他人，使團體達成共同目標，較同年齡者具有卓越潛能或傑出表現。</p>
+                                </div>
+                                <div class="explanation-box">
+                                    <h4 class="text-lg font-bold text-sky-700 mb-3">深入探討：雙重特殊需求 (2e) 的鑑定困境</h4>
+                                    <p class="mb-3"><strong>2e 學生 (Twice-exceptional)</strong> 指同時具有「資賦優異」與「身心障礙」兩種特質的學生。他們的鑑定極具挑戰性，因為兩種特質會產生「遮蔽效應 (Masking Effect)」，導致三種可能的誤判：</p>
+                                    <ul class="list-disc list-outside ml-5 space-y-2 text-gray-600">
+                                        <li><strong>天賦遮蔽障礙：</strong>學生的優異表現使其學習困難被歸因於「不夠努力」或「粗心」，障礙需求被忽略。</li>
+                                        <li><strong>障礙遮蔽天賦：</strong>學生的障礙（如書寫困難、注意力不集中）過於顯著，導致其優異的潛能（如創造力、推理能力）完全被忽視。</li>
+                                        <li><strong>兩者互相抵銷：</strong>學生的優勢與劣勢互相拉扯，使其整體表現看起來「很平均」、「很普通」，導致其特殊需求完全未被發現。</li>
+                                    </ul>
+                                    <h5 class="font-semibold mt-4 mb-2">案例分享：看見2e學生的真實世界</h5>
+                                    <div class="aspect-w-16 aspect-h-9">
+                                        <iframe class="w-full h-full rounded-lg" src="https://www.youtube.com/embed/5Ih5oqkJZA0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 新增：鑑定理念與多元評量 -->
+                            <div>
+                                <p><strong class="tag">鑑定理念與多元評量</strong></p>
+                                <div class="mt-2 p-6 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                                    <h5 class="font-semibold text-blue-800 text-lg mb-2">當代鑑定理念與趨勢</h5>
+                                    <p class="text-blue-700">根據吳淑敏教授(2021)的觀點，資優鑑定應朝向更廣義、多元及與教學緊密連結的方向發展。核心考量包含：</p>
+                                    <ul class="mt-2 list-disc list-inside text-sm text-blue-700 space-y-1">
+                                        <li><strong>避免單一切截分數：</strong>揚棄僅以智力測驗分數為唯一標準的作法。</li>
+                                        <li><strong>接受多面向資優：</strong>承認來自不同社經文化群體的學生，會有不同形式的資優表現。</li>
+                                        <li><strong>真實與實作本位：</strong>採用能反映學生真實世界解決問題能力的評量程序。</li>
+                                        <li><strong>連結教學需求：</strong>鑑定的最終目的應是為了學生的教育需求規劃，而非僅為了符合方案名額。</li>
+                                    </ul>
+                                </div>
+                                <div class="mt-6">
+                                    <h5 class="font-semibold text-center text-gray-700 mb-4">多元評量方法</h5>
+                                    <div class="border-b border-gray-200">
+                                        <nav id="assessment-tabs" class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                            <button class="interactive-tab active" data-tab="performance">實作評量</button>
+                                            <button class="interactive-tab" data-tab="portfolio">檔案評量</button>
+                                            <button class="interactive-tab" data-tab="dynamic">動態評量</button>
+                                        </nav>
+                                    </div>
+                                    <div id="assessment-content" class="mt-4 p-4 bg-gray-50 rounded-md min-h-[150px]">
+                                        <!-- Content loaded by JS -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p><strong class="tag">核心特質與教育需求</strong></p>
+                                <p class="mt-2">2e學生的核心特質是「非同步發展」，其認知、情緒與社會能力的發展步調不一，常導致內在的衝突與挫折。教育的核心應採「優勢取向」，先發展其天賦領域，藉由成就感與自信心，帶動弱勢能力的學習動機。</p>
+                                <div class="mt-6">
+                                    <h5 class="font-semibold text-center text-gray-700 mb-4">資優教育的迷思破解 (點擊卡片)</h5>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div class="myth-buster-card h-48">
+                                            <div class="myth-buster-inner">
+                                                <div class="myth-buster-front"><span class="font-bold text-lg">迷思一</span><p class="mt-2">資優生=成績好，樣樣都行？</p></div>
+                                                <div class="myth-buster-back"><span class="font-bold text-lg">事實</span><p class="mt-2">資優是「非同步發展」的。許多資優生僅在特定領域表現突出，其他方面可能很普通，甚至有學習困難（2e學生）。他們不是全能的超人。</p></div>
+                                            </div>
+                                        </div>
+                                        <div class="myth-buster-card h-48">
+                                            <div class="myth-buster-inner">
+                                                <div class="myth-buster-front"><span class="font-bold text-lg">迷思二</span><p class="mt-2">資優生很聰明，不需要別人幫忙？</p></div>
+                                                <div class="myth-buster-back"><span class="font-bold text-lg">事實</span><p class="mt-2">資優生更需要適性的引導與挑戰。若課程過於簡單，他們會感到無聊而失去動機；他們也常面臨完美主義、人際困擾等情意問題，需要師長的支持。</p></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-6">
+                                    <h5 class="font-semibold text-center text-gray-700 mb-4">資優教育模式比較 (點擊展開)</h5>
+                                    <div class="space-y-2">
+                                        <details class="p-4 border rounded-lg cursor-pointer bg-gray-50">
+                                            <summary class="font-semibold text-blue-700">加速制 (Acceleration)</summary>
+                                            <p class="mt-2 text-sm text-gray-600">讓學生以比同齡者更快的速度學習。形式包含提早入學、跳級、單科加速、課程濃縮等。研究證實對學生的學業與情意發展有正面效益。</p>
+                                        </details>
+                                        <details class="p-4 border rounded-lg cursor-pointer bg-gray-50">
+                                            <summary class="font-semibold text-blue-700">充實制 (Enrichment)</summary>
+                                            <p class="mt-2 text-sm text-gray-600">在不改變學習速度的前提下，擴展或加深課程的廣度與深度。形式包含獨立研究、良師典範(師徒制)、專題製作等。</p>
+                                        </details>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <p><strong class="tag">實證本位教學策略</strong></p>
+                                <p class="mt-2">針對2e學生的教學，需同時運用資優教育與特殊教育的策略，如同為他們的大腦進行「雙重分化」。</p>
+                                <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                    <div class="p-6 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                                        <h5 class="font-semibold text-blue-800 text-lg mb-2">發展天賦 (資優策略)</h5>
+                                        <ul class="mt-2 list-disc list-inside text-sm text-blue-700 space-y-1">
+                                            <li><strong>課程濃縮：</strong>免除已精熟的內容，釋出時間進行充實活動。</li>
+                                            <li><strong>分層教學：</strong>依據學生的準備度、興趣與學習風格，設計不同層次的學習任務。</li>
+                                            <li><strong>獨立研究：</strong>引導學生針對其優勢領域進行深入探究。</li>
+                                        </ul>
+                                    </div>
+                                    <div class="p-6 bg-green-50 rounded-lg border-l-4 border-green-400">
+                                        <h5 class="font-semibold text-green-800 text-lg mb-2">支持弱勢 (特教策略)</h5>
+                                        <ul class="mt-2 list-disc list-inside text-sm text-green-700 space-y-1">
+                                            <li><strong>外顯教學：</strong>明確、直接地教導學習策略、組織技巧與社交技巧。</li>
+                                            <li><strong>輔助科技：</strong>提供語音轉文字、心智圖軟體等工具，繞過書寫或組織困難。</li>
+                                            <li><strong>情意輔導：</strong>提供諮商與支持，協助學生處理完美主義、焦慮與挫折感。</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <p><strong class="tag">課堂活動：IEP/IGP 案例研討</strong></p>
+                                <div class="mt-2 p-6 bg-amber-50 rounded-lg border-l-4 border-amber-400 space-y-3">
+                                    <p><strong>情境：</strong> 小明是一位五年級學生，鑑定為學術性向（數理）資優，同時伴隨注意力不足過動症(ADHD)與書寫困難。他在數學課上常能快速解出難題，但作業總是寫不完，字跡潦草難辨；國語課則完全坐不住，對閱讀長文感到極度困難。</p>
+                                    <p><strong>分組任務：</strong> 請依據「雙重分化」的原則，為小明草擬一份個別化教育計畫(IEP)或個別輔導計畫(IGP)的摘要，至少包含：</p>
+                                    <ol class="list-decimal list-inside ml-4">
+                                        <li>一項針對其數理優勢的「充實/加速」目標。</li>
+                                        <li>一項針對其書寫困難的「補救/代償」支持策略。</li>
+                                        <li>一項針對其ADHD特質的「環境/行為」支持策略。</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="unit14" class="scroll-mt-20">
+                <div class="card p-6 md:p-8 rounded-lg">
+                    <article>
+                        <h3 class="content-heading">單元十四：重度與多重障礙學生的教育與照護 <span class="text-base font-medium text-gray-400">(對應教科書第十四章)</span></h3>
+                        <div class="space-y-8">
+                            <div>
+                                <p><strong class="tag">定義與鑑定</strong></p>
+                                <p class="mt-2">此類學生的需求極為複雜且個別化程度高，常需要密集的醫療、教育與復健支持。鑑定上強調跨專業團隊的合作，以全面評估學生的能力現況與所需支持。</p>
+                                <div class="law-box space-y-4">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-800">發展遲緩 (《特殊教育學生及幼兒鑑定辦法》第十四條)</h4>
+                                        <p class="mt-1 text-slate-600">本法第三條第十三款所稱發展遲緩，指未滿六歲之兒童，因生理、心理或社會環境因素，在知覺、動作、認知、語言溝通、社會情緒或生活自理等方面之發展較同年齡者顯著落後，且其障礙類別無法確定者。</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-800">多重障礙 (《特殊教育學生及幼兒鑑定辦法》第十三條)</h4>
+                                        <p class="mt-1 text-slate-600">本法第三條第十二款所稱多重障礙，指包括二種以上不具連帶關係造成之障礙，致影響學習者。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p><strong class="tag">核心特質與教育需求</strong></p>
+                                <p class="mt-2">教育的最終目標在於提升學生的「生活品質」(Quality of Life)，使其能最大程度地獨立、參與社區並自我決定。這需要高度整合的跨專業團隊合作（物理治療、職能治療、語言治療等），並以家庭為中心的服務模式。</p>
+                                <div class="mt-6">
+                                    <h5 class="font-semibold text-center text-gray-700 mb-4">迷思破解 (點擊卡片)</h5>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <div class="myth-buster-card h-48">
+                                            <div class="myth-buster-inner">
+                                                <div class="myth-buster-front"><span class="font-bold text-lg">迷思</span><p class="mt-2">重度障礙的學生無法學習，只能接受「照顧」。</p></div>
+                                                <div class="myth-buster-back"><span class="font-bold text-lg">事實</span><p class="mt-2">所有學生都有學習的潛力。他們的學習目標可能更著重於功能性技能，如溝通、生活自理與休閒娛樂，這些對提升生活品質至關重要。</p></div>
+                                            </div>
+                                        </div>
+                                        <div class="myth-buster-card h-48">
+                                            <div class="myth-buster-inner">
+                                                <div class="myth-buster-front"><span class="font-bold text-lg">迷思</span><p class="mt-2">他們無法表達自己的想法和選擇。</p></div>
+                                                <div class="myth-buster-back"><span class="font-bold text-lg">事實</span><p class="mt-2">即使沒有口語，他們也能透過眼神、表情、肢體動作或輔助溝通系統(AAC)來表達。我們的責任是學習如何「傾聽」他們的聲音。</p></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p><strong class="tag">實證本位教學策略</strong></p>
+                                <div class="mt-2 p-6 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+                                    <h5 class="font-semibold text-blue-800 text-lg mb-2">功能性生活技能教學設計原則</h5>
+                                    <p class="text-blue-700">根據劉明松(n.d.)在《居家生活》教材中的觀點，教導重度與多重障礙學生生活技能時，應掌握以下核心原則，以確保教學切合學生真實需求：</p>
+                                    <ul class="mt-2 list-disc list-inside text-sm text-blue-700 space-y-2">
+                                        <li><strong>個別化原則：</strong>教學目標與策略需基於對學生個別生活環境與習慣的細膩觀察。</li>
+                                        <li><strong>技能的工作分析：</strong>將複雜技能（如穿衣）細分成具體、可學習的小步驟，按部就班地教學。</li>
+                                        <li><strong>彈性調整：</strong>教學內容需隨著學生的成長與環境變化而彈性調整。</li>
+                                        <li><strong>父母參與：</strong>讓父母了解並參與教學，有助於將學校習得的技能類化至家庭情境。</li>
+                                        <li><strong>生態取向：</strong>教學內容應源於學生真實的生活情境（學校、家庭、社區），並在這些情境中進行教學。</li>
+                                    </ul>
+                                </div>
+
+                                <div class="mt-6">
+                                    <h5 class="font-semibold text-center text-gray-700 mb-4">教學策略互動工具箱</h5>
+                                    <div class="border-b border-gray-200">
+                                        <nav id="smd-strategy-tabs" class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                            <button class="interactive-tab active" data-tab="chaining">行為串連 (Chaining)</button>
+                                            <button class="interactive-tab" data-tab="prompting">提示法 (Prompting)</button>
+                                            <button class="interactive-tab" data-tab="modeling">模仿 (Modeling)</button>
+                                            <button class="interactive-tab" data-tab="shaping">行為塑造 (Shaping)</button>
+                                            <button class="interactive-tab" data-tab="fading">褪除法 (Fading)</button>
+                                        </nav>
+                                    </div>
+                                    <div id="smd-strategy-content" class="mt-4 p-4 bg-gray-50 rounded-md min-h-[250px]">
+                                        <!-- Content loaded by JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="unit-support" class="scroll-mt-20">
+                <div class="card p-6 md:p-8 rounded-lg">
+                    <article>
+                        <h3 class="content-heading">特教支持服務與校園無障礙環境 <span class="text-base font-medium text-gray-400">(對應特教法及相關子法)</span></h3>
+                        <div class="space-y-8">
+                            <div>
+                                <p><strong class="tag">法定支持服務系統</strong></p>
+                                <p class="mt-2">依據《特殊教育法》與《特殊教育支持服務與專業團隊運作辦法》，學校應提供特殊教育學生全面性的支持服務，以確保其能公平地接受適性教育。這些服務是學生權利的一部分，也是實現融合教育的基石。</p>
+                                <div class="mt-4 border-b border-gray-200">
+                                    <nav id="support-tabs" class="-mb-px flex flex-wrap" aria-label="Tabs">
+                                        <button class="interactive-tab active" data-tab="support-aids">輔具與教材</button>
+                                        <button class="interactive-tab" data-tab="support-personnel">人力與專業服務</button>
+                                        <button class="interactive-tab" data-tab="support-family">家庭與環境</button>
+                                        <button class="interactive-tab" data-tab="support-others">其他支持</button>
+                                    </nav>
+                                </div>
+                                <div id="support-content" class="mt-4 p-6 bg-blue-50 rounded-md min-h-[200px]">
+                                    <!-- Content loaded by JS -->
+                                </div>
+                            </div>
+                            <div>
+                                <p><strong class="tag">通用學習設計 (UDL) 與無障礙校園</strong></p>
+                                <p class="mt-2">一個真正的無障礙校園，其核心精神與「通用學習設計(UDL)」不謀而合。它不僅僅是移除物理障礙，更是從課程設計、教學方法到校園文化，都預先考慮到所有學生的多樣性，創造一個讓每個人都能參與和成功的環境。</p>
+                                <div class="mt-4 grid md:grid-cols-3 gap-6">
+                                    <div class="p-4 bg-white rounded-lg border-t-4 border-teal-400 shadow">
+                                        <h5 class="font-bold text-teal-700">多元表徵 (the "what" of learning)</h5>
+                                        <p class="text-sm text-gray-600 mt-1">提供多元的資訊呈現方式（如文字、圖像、聲音、實體操作），確保所有學生都能獲取知識。</p>
+                                    </div>
+                                    <div class="p-4 bg-white rounded-lg border-t-4 border-orange-400 shadow">
+                                        <h5 class="font-bold text-orange-700">多元行動與表達 (the "how" of learning)</h5>
+                                        <p class="text-sm text-gray-600 mt-1">提供多元的管道讓學生展現所學（如口頭、書寫、繪圖、表演），讓評量更真實。</p>
+                                    </div>
+                                    <div class="p-4 bg-white rounded-lg border-t-4 border-rose-400 shadow">
+                                        <h5 class="font-bold text-rose-700">多元參與 (the "why" of learning)</h5>
+                                        <p class="text-sm text-gray-600 mt-1">提供多元的方式來引發學生的學習動機與興趣，使其能主動、持續地投入學習。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            
+            <section id="resources" class="scroll-mt-20">
+                <h2 class="section-title">補充資料與網站</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <a href="https://www.set.edu.tw/" target="_blank" class="block card p-6 h-full hover:border-blue-500">
+                        <h3 class="text-lg font-bold text-center text-blue-700 mb-2">教育部特教通報網</h3>
+                        <p class="text-sm text-gray-600">提供台灣最新的特教政策、法規公告、研習活動與統計資料，是掌握本地特教動態的官方入口。</p>
+                    </a>
+                    <a href="https://www.nise.go.jp/" target="_blank" class="block card p-6 h-full hover:border-blue-500">
+                        <h3 class="text-lg font-bold text-center text-blue-700 mb-2">日本：国立特別支援教育総合研究所</h3>
+                        <p class="text-sm text-gray-600">日本官方的特殊教育研究與資源中心，提供豐富的研究報告、教材資料庫與教學實踐案例。</p>
+                    </a>
+                    <a href="https://iris.peabody.vanderbilt.edu/" target="_blank" class="block card p-6 h-full hover:border-blue-500">
+                        <h3 class="text-lg font-bold text-center text-blue-700 mb-2">美國：The IRIS Center</h3>
+                        <p class="text-sm text-gray-600">由美國教育部資助，提供大量關於實證本位教學的免費線上互動模組與案例研究，適用於各類特教需求。</p>
+                    </a>
+                    <a href="https://www.european-agency.org/" target="_blank" class="block card p-6 h-full hover:border-blue-500">
+                        <h3 class="text-lg font-bold text-center text-blue-700 mb-2">歐洲：歐洲特教與融合教育署</h3>
+                        <p class="text-sm text-gray-600">一個獨立的跨國組織，致力於推動歐盟的融合教育政策與實踐，提供跨國比較的研究與數據。</p>
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+    
+    <footer class="bg-gray-200 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="mb-4 text-gray-700">製作者 pasta-layoff-1r@icloud.com</p>
+            <p class="text-sm">©特殊教育導論課程活動第五單元，主要依據課程大綱，僅供教學與演示目的，勿任意轉載。</p>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile Menu Toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Nav link smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(this.getAttribute('href'));
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    if(mobileMenu.classList.contains('hidden') === false){
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Myth buster card flip
+            document.querySelectorAll('.myth-buster-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    card.classList.toggle('is-flipped');
+                });
+            });
+
+            // Support Services Tabs
+            const supportTabsContainer = document.getElementById('support-tabs');
+            const supportContentDiv = document.getElementById('support-content');
+            
+            const supportContentData = {
+                'support-aids': `
+                    <h4 class="font-semibold text-lg mb-2 text-blue-800">輔具與教材</h4>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                        <li><strong>教育及運動輔具：</strong>包含助聽器、點字機、擴視機、溝通輔具、特製球類等，旨在協助學生克服學習與活動的困難。</li>
+                        <li><strong>適性教材：</strong>指為協助學生學習而調整、改變或重編的教材，如點字/大字體課本、有聲書、易讀版教材等。</li>
+                    </ul>`,
+                'support-personnel': `
+                    <h4 class="font-semibold text-lg mb-2 text-blue-800">人力與專業服務</h4>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                        <li><strong>學習及生活人力協助：</strong>包含教師助理員、特教學生助理人員、手語翻譯員、代抄筆記同儕等。</li>
+                        <li><strong>復健服務：</strong>由專業人員提供，包含物理治療、職能治療、語言治療等。</li>
+                    </ul>`,
+                'support-family': `
+                    <h4 class="font-semibold text-lg mb-2 text-blue-800">家庭與環境</h4>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                        <li><strong>家庭支持：</strong>提供親職教育、諮詢輔導、家長支持團體與福利資源資訊，強化家庭功能。</li>
+                        <li><strong>校園無障礙環境：</strong>包含硬體（坡道、電梯）與軟體（友善校園文化、資訊無障礙）兩個層面。</li>
+                    </ul>`,
+                'support-others': `
+                    <h4 class="font-semibold text-lg mb-2 text-blue-800">其他支持</h4>
+                    <ul class="list-disc list-outside ml-5 space-y-2 text-slate-700">
+                        <li><strong>適應體育：</strong>透過調整課程、規則與器材，讓所有學生都能參與體育活動。</li>
+                        <li><strong>其他支持服務：</strong>包含在校醫療照護、交通服務、心理與社會適應輔導、生涯轉銜服務等。</li>
+                    </ul>`
+            };
+
+            function updateSupportContent(tabKey) {
+                if (supportContentDiv && supportContentData[tabKey]) {
+                    supportContentDiv.innerHTML = supportContentData[tabKey];
+                    supportTabsContainer.querySelectorAll('.interactive-tab').forEach(tab => {
+                        tab.classList.toggle('active', tab.dataset.tab === tabKey);
+                    });
+                }
+            }
+            
+            if (supportTabsContainer) {
+                supportTabsContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('interactive-tab')) {
+                        updateSupportContent(e.target.dataset.tab);
+                    }
+                });
+                updateSupportContent('support-aids');
+            }
+
+            // Assessment Methods Tabs
+            const assessmentTabsContainer = document.getElementById('assessment-tabs');
+            const assessmentContentDiv = document.getElementById('assessment-content');
+
+            const assessmentContentData = {
+                'performance': `
+                    <h4 class="font-semibold text-lg mb-2 text-gray-800">實作評量 (Performance Assessment)</h4>
+                    <p class="text-sm text-slate-700">強調將知識轉化為具體行動的歷程，評量學生在真實或模擬情境中解決問題的能力。它著重於高層次思考，而非靜態知識的記憶。例如，要求學生設計一個實驗來驗證假設，而非僅回答選擇題。</p>`,
+                'portfolio': `
+                    <h4 class="font-semibold text-lg mb-2 text-gray-800">檔案評量 (Portfolio Assessment)</h4>
+                    <p class="text-sm text-slate-700">系統性地蒐集學生一段時間內的作品，以展現其努力、進步與成就。檔案內容可包含優良作業、創作、教師觀察紀錄、學生自我省思等，提供比單次測驗更豐富、縱貫性的評量資訊。</p>`,
+                'dynamic': `
+                    <h4 class="font-semibold text-lg mb-2 text-gray-800">動態評量 (Dynamic Assessment)</h4>
+                    <p class="text-sm text-slate-700">此評量遵循「前測—教學介入—後測」的程序。評量者的角色不僅是觀察者，更是教學者，旨在評估學生的「學習潛力」，即在獲得協助後能進步多少，特別適用於文化或社經背景不利的學生。</p>`
+            };
+            
+            function updateAssessmentContent(tabKey) {
+                if (assessmentContentDiv && assessmentContentData[tabKey]) {
+                    assessmentContentDiv.innerHTML = assessmentContentData[tabKey];
+                    assessmentTabsContainer.querySelectorAll('.interactive-tab').forEach(tab => {
+                        tab.classList.toggle('active', tab.dataset.tab === tabKey);
+                    });
+                }
+            }
+
+            if (assessmentTabsContainer) {
+                assessmentTabsContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('interactive-tab')) {
+                        updateAssessmentContent(e.target.dataset.tab);
+                    }
+                });
+                updateAssessmentContent('performance');
+            }
+
+            // SMD Strategy Tabs
+            const smdStrategyTabsContainer = document.getElementById('smd-strategy-tabs');
+            const smdStrategyContentDiv = document.getElementById('smd-strategy-content');
+
+            const smdStrategyContentData = {
+                'chaining': `
+                    <h4 class="font-semibold text-lg mb-2 text-gray-800">行為串連 (Chaining) 與 工作分析 (Task Analysis)</h4>
+                    <p class="text-sm text-slate-700 mb-4">這是教導多步驟生活技能最核心的策略。首先透過「工作分析」，將一個複雜技能（如自己盛飯）分解為一系列小而具體的步驟。然後，再運用「行為串連」技巧，一次一個步驟地教導學生。</p>
+                    <div class="p-4 border rounded-lg bg-white">
+                        <h5 class="font-bold text-center mb-3">互動體驗：自己盛飯的工作分析</h5>
+                        <p class="text-sm text-center text-gray-500 mb-4">請點擊以下步驟，模擬完成「自己盛飯」的過程。</p>
+                        <div id="task-analysis-container" class="space-y-2">
+                            <!-- Steps will be injected by JS -->
+                        </div>
+                        <button id="reset-task-btn" class="mt-4 text-sm bg-gray-200 px-3 py-1 rounded-md">重設</button>
+                    </div>
+                    <p class="text-sm text-slate-700 mt-4"><strong>教學方法：</strong><br><strong>- 前向連鎖 (Forward Chaining):</strong> 從第一個步驟開始教，學會後再教第二個，依此類推。<br><strong>- 後向連鎖 (Backward Chaining):</strong> 教師先完成前面所有步驟，只讓學生學習最後一個步驟，成功後再往前教倒數第二個。此法能讓學生立即體驗到完成任務的成就感。</p>`,
+                'prompting': `
+                    <h4 class="font-semibold text-lg mb-2 text-gray-800">提示法 (Prompting)</h4>
+                    <p class="text-sm text-slate-700 mb-4">提示是在學生需要協助時，提供額外的線索或鷹架，以引導其做出正確的反應。提示應由最少協助的開始，只有在必要時才增加協助的程度。</p>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-green-100 rounded-md"><strong>口語提示 (Verbal Prompt):</strong> 「接下來要做什麼？」或「記得要先打開電鍋喔。」</div>
+                        <div class="p-3 bg-yellow-100 rounded-md"><strong>手勢提示 (Gestural Prompt):</strong> 用手指指向電鍋或飯匙。</div>
+                        <div class="p-3 bg-orange-100 rounded-md"><strong>示範提示 (Modeling Prompt):</strong> 教師親自示範一次打開電鍋的動作。</div>
+                        <div class="p-3 bg-red-100 rounded-md"><strong>肢體提示 (Physical Prompt):</strong> 輕輕地引導學生的手去按下電鍋按鈕。</div>
+                    </div>`,
+                'modeling': `
+                    <h4 class="font-semibold text-lg mb-2 text-gray-800">模仿 (Modeling)</h4>
+                    <p class="text-sm text-slate-700">指讓學生透過觀察他人（楷模）的行為來學習。楷模可以是教師、同儕，甚至是影片中的人物。為達最佳效果，楷模應與學習者特質相近，且示範的行為應清楚、明確，並在楷模成功完成後立即給予增強。</p>`,
+                'shaping': `
+                    <h4 class="font-semibold text-lg mb-2 text-gray-800">行為塑造 (Shaping)</h4>
+                    <p class="text-sm text-slate-700">當學生完全不會某項技能時，可使用此策略。我們增強任何「趨近」目標行為的反應，並逐步提高標準。例如，教導學生自己拿湯匙，一開始可能只要求他「碰到」湯匙就給予增強，接著要求「握住」，最後才要求「拿起來」。</p>`,
+                'fading': `
+                    <h4 class="font-semibold text-lg mb-2 text-gray-800">褪除法 (Fading)</h4>
+                    <p class="text-sm text-slate-700">此策略與提示法相輔相成。其目標是逐步地、系統性地減少教學時所提供的提示，直到學生能夠獨立完成行為為止。例如，肢體提示可以逐漸轉為輕觸手肘的提示，再轉為手勢提示，最終完全不需要提示。</p>`
+            };
+            
+            function updateSmdStrategyContent(tabKey) {
+                if (smdStrategyContentDiv && smdStrategyContentData[tabKey]) {
+                    smdStrategyContentDiv.innerHTML = smdStrategyContentData[tabKey];
+                    smdStrategyTabsContainer.querySelectorAll('.interactive-tab').forEach(tab => {
+                        tab.classList.toggle('active', tab.dataset.tab === tabKey);
+                    });
+                    
+                    // Initialize interactive elements if they exist in the new content
+                    if (tabKey === 'chaining') {
+                        initializeTaskAnalysis();
+                    }
+                }
+            }
+
+            function initializeTaskAnalysis() {
+                const container = document.getElementById('task-analysis-container');
+                const resetButton = document.getElementById('reset-task-btn');
+                if (!container || !resetButton) return;
+
+                const steps = [
+                    "辨認電鍋", "用左手拿飯碗，並且走到電鍋前", "用右手大拇指按下鍋蓋扶手上的按鈕",
+                    "順勢將鍋蓋由下而上開啟", "將鍋蓋固定好", "辨認何為飯匙",
+                    "用右手拿起飯匙，手握握柄", "左手拿碗，右手拿飯匙", "舀一次，約三分之一碗飯量",
+                    "舀第二次，飯量同上", "用右手握住鍋蓋上的扶手處", "順勢蓋上鍋蓋"
+                ];
+
+                function renderSteps() {
+                    container.innerHTML = '';
+                    steps.forEach((step, index) => {
+                        const stepEl = document.createElement('div');
+                        stepEl.className = 'task-step flex items-center p-2 border-b';
+                        stepEl.dataset.index = index;
+                        stepEl.innerHTML = `
+                            <div class="step-checkbox mr-3 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <span>${index + 1}. ${step}</span>
+                        `;
+                        container.appendChild(stepEl);
+                    });
+                }
+
+                container.addEventListener('click', (e) => {
+                    const stepEl = e.target.closest('.task-step');
+                    if (stepEl) {
+                        stepEl.classList.toggle('completed');
+                    }
+                });
+
+                resetButton.addEventListener('click', () => {
+                    container.querySelectorAll('.task-step').forEach(el => el.classList.remove('completed'));
+                });
+
+                renderSteps();
+            }
+
+            if (smdStrategyTabsContainer) {
+                smdStrategyTabsContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('interactive-tab')) {
+                        updateSmdStrategyContent(e.target.dataset.tab);
+                    }
+                });
+                updateSmdStrategyContent('chaining');
+            }
+        });
+    </script>
+</body>
+</html>
