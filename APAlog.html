@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>APA 現場觀察填報系統 (平板專用版)</title>
+    <title>APA 現場觀察填報系統 (平板純淨版)</title>
     <style>
         :root {
             --primary: #1a4f76;
@@ -27,14 +27,18 @@
         .header-actions button { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.5); padding: 8px 12px; border-radius: 6px; font-size: 0.9rem; margin-left: 8px; cursor: pointer; font-weight: bold; }
         .header-actions button:active { background: rgba(255,255,255,0.4); }
 
-        /* 控制列 (學生與週次選擇) */
-        .control-bar { background: #fff; padding: 12px 16px; display: flex; gap: 12px; border-bottom: 1px solid var(--border); z-index: 15; align-items: center; }
-        .control-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+        /* 控制列 (教師、學生與週次選擇) */
+        .control-bar { background: #fff; padding: 12px 16px; display: flex; gap: 12px; border-bottom: 1px solid var(--border); z-index: 15; align-items: center; flex-wrap: wrap; }
+        .control-group { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px; }
         .control-group label { font-weight: bold; color: var(--primary); font-size: 1.1rem; white-space: nowrap; }
-        /* 平板友善的大型選單 */
+        
+        /* 平板友善的大型選單與輸入框 */
+        .huge-input { flex: 1; padding: 10px 14px; font-size: 1.1rem; border: 2px solid var(--primary-light); border-radius: 8px; background-color: #f8f9fa; color: var(--text); }
+        .huge-input:focus { outline: none; background-color: #fff; box-shadow: 0 0 0 3px rgba(41,128,185,0.2); }
+        
         select.huge-select { flex: 1; padding: 10px 14px; font-size: 1.1rem; border: 2px solid var(--primary-light); border-radius: 8px; background-color: #f8f9fa; color: var(--text); appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232980b9%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 14px auto; }
         
-        .student-badge { background: #eaf2f8; color: var(--primary); padding: 8px 12px; border-radius: 6px; font-size: 0.95rem; font-weight: bold; border: 1px solid #c5dff0; }
+        .student-badge { background: #eaf2f8; color: var(--primary); padding: 10px 14px; border-radius: 8px; font-size: 1rem; font-weight: bold; border: 1px solid #c5dff0; display: flex; align-items: center; white-space: nowrap; }
 
         /* 頁籤導航 */
         .tabs-header { display: flex; background: var(--primary-light); overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -69,11 +73,11 @@
         select.score-select, select.full-select { width: 100%; padding: 12px 14px; font-size: 1rem; border: 1px solid #bdc3c7; border-radius: 6px; background-color: #fff; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%237f8c8d%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 12px top 50%; background-size: 12px auto; }
         
         textarea.qualitative-input { width: 100%; padding: 12px; font-size: 1.05rem; border: 1px solid #bdc3c7; border-radius: 6px; height: 100px; resize: vertical; line-height: 1.5; background: #fafbfc; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); }
-        textarea.memo-input { height: 180px; }
+        textarea.memo-input { height: 150px; }
         
         select:focus, textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(41,128,185,0.2); background: #fff; }
 
-        /* 右側抽屜 (詞庫與數據) */
+        /* 右側抽屜 (純詞庫) */
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); z-index: 99; display: none; opacity: 0; transition: opacity 0.3s; }
         .drawer-overlay.active { display: block; opacity: 1; }
         
@@ -86,16 +90,6 @@
         /* 懸浮打開按鈕 (FAB) */
         .fab-btn { position: fixed; bottom: 20px; right: 20px; background: var(--accent); color: white; padding: 14px 20px; border-radius: 30px; box-shadow: 0 4px 10px rgba(230,126,34,0.4); font-size: 1.1rem; font-weight: bold; border: none; cursor: pointer; z-index: 90; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
         .fab-btn:active { transform: scale(0.95); }
-
-        /* 數據儀表板樣式 */
-        .dash-card { background: #fff; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 15px; overflow: hidden; }
-        .dash-title { background: #eaf2f8; padding: 8px 12px; font-size: 0.9rem; font-weight: bold; color: var(--primary); border-bottom: 1px solid var(--border); }
-        .stat-grid { display: grid; grid-template-columns: 1fr; }
-        .stat-item { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #f1f2f6; font-size: 0.95rem; }
-        .stat-item:last-child { border-bottom: none; }
-        .val-pos { color: var(--success); font-weight: bold; }
-        .val-neg { color: var(--danger); font-weight: bold; }
-        .val-neu { color: #95a5a6; }
 
         /* 摺疊詞庫樣式 */
         .lexicon-group { margin-bottom: 10px; background: #fff; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
@@ -112,7 +106,6 @@
 </head>
 <body>
 
-<!-- 頂部導航 -->
 <header>
     <h1>📋 APA 現場觀察表</h1>
     <div class="header-actions">
@@ -121,24 +114,24 @@
     </div>
 </header>
 
-<!-- 控制列 -->
 <div class="control-bar">
+    <div class="control-group">
+        <label>教師</label>
+        <input type="text" id="teacherName" class="huge-input" placeholder="請輸入您的姓名" onchange="saveTeacherName()">
+    </div>
     <div class="control-group">
         <label>學生</label>
         <select id="studentSelect" class="huge-select" onchange="changeStudent(this.value)">
-            <!-- JS 生成 -->
-        </select>
+            </select>
     </div>
     <div class="control-group">
         <label>週次</label>
         <select id="weekSelect" class="huge-select" onchange="changeWeek(this.value)">
-            <!-- JS 生成 -->
-        </select>
+            </select>
     </div>
     <div id="student-badge" class="student-badge">載入中...</div>
 </div>
 
-<!-- 分頁導航 -->
 <div class="tabs-header">
     <div class="tab-btn active" onclick="switchTab('tabA', this)">表單 A (抽離)</div>
     <div class="tab-btn" onclick="switchTab('tabB', this)">表單 B (入班)</div>
@@ -146,15 +139,12 @@
     <div class="tab-btn" onclick="switchTab('tabMemo', this)">🎯 校正反思</div>
 </div>
 
-<!-- 主內容區 -->
 <div class="main-content">
     
-    <!-- 動態週次主題提示 -->
     <div style="padding: 16px 16px 0 16px;">
         <div id="week-theme-display" class="week-theme-banner" style="display:none;"></div>
     </div>
 
-    <!-- 頁籤 A -->
     <div id="tabA" class="tab-content active">
         <div class="form-section">
             <div class="section-header">1. 量化評量 (1=萌芽, 2=發展, 3=應用, 4=類化)</div>
@@ -187,7 +177,6 @@
         </div>
     </div>
 
-    <!-- 頁籤 B -->
     <div id="tabB" class="tab-content">
         <div class="form-section" style="border-top: 4px solid #1abc9c;">
             <div class="section-header">1. 類化量化評量</div>
@@ -212,7 +201,6 @@
         </div>
     </div>
 
-    <!-- 頁籤 C -->
     <div id="tabC" class="tab-content">
         <div class="form-section" style="border-top: 4px solid #f39c12;">
             <div class="section-header">1. 普教現場適應評量</div>
@@ -278,60 +266,47 @@
         </div>
     </div>
 
-    <!-- 頁籤 Memo -->
     <div id="tabMemo" class="tab-content">
         <div class="form-section" style="border-top: 4px solid #8e44ad;">
             <div class="section-header">🎯 Sheet 5: 三角校正核心反思</div>
             <div class="section-body">
                 <div class="form-group">
-                    <label>請對比表單 A, B, C 與抽屜中的前後測數據：</label>
-                    <textarea id="triangulation_memo" class="qualitative-input memo-input" placeholder="記錄本週學生的整體轉變、資料間的矛盾點、或深層詮釋..." onfocus="trackFocus(this)"></textarea>
+                    <label>對比表單 A, B, C，記錄本週學生的整體轉變、矛盾點或深層詮釋：</label>
+                    <textarea id="triangulation_memo" class="qualitative-input memo-input" onfocus="trackFocus(this)"></textarea>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 浮動開啟抽屜按鈕 -->
 <button class="fab-btn" onclick="toggleDrawer(true)">
-    📚 數據與詞庫
+    📚 專業詞庫面板
 </button>
 
-<!-- 右側隱藏抽屜 -->
 <div class="drawer-overlay" id="drawerOverlay" onclick="toggleDrawer(false)"></div>
 <div class="side-drawer" id="sideDrawer">
     <div class="drawer-header">
-        <span>輔助面板</span>
+        <span>📚 質性專業詞庫</span>
         <button class="close-btn" onclick="toggleDrawer(false)">×</button>
     </div>
     <div class="drawer-content">
         
-        <div class="dash-card">
-            <div class="dash-title">💪 體適能測驗差值</div>
-            <div class="stat-grid" id="phys-stats"></div>
-        </div>
-        
-        <div class="dash-card">
-            <div class="dash-title">🧠 心理社會差值</div>
-            <div class="stat-grid" id="psych-stats"></div>
-            <div style="padding: 6px 12px; font-size:0.75rem; color:#7f8c8d; background:#fff;">
-                *綠字為進步(好轉)；紅字為退步(惡化)。
-            </div>
+        <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;">
+            💡 操作提示：請先在左側表單點選文字輸入框，展開下方選單後點擊按鈕，即可快速插入專業詞彙。
         </div>
 
-        <div style="font-size:0.85rem; font-weight:bold; color:var(--primary); margin: 15px 0 8px 0; border-bottom: 2px solid var(--border); padding-bottom:4px;">
-            📚 質性專業點擊詞庫
-        </div>
-
-        <details class="lexicon-group">
+        <details class="lexicon-group" open>
             <summary>1. 情境與行為 (C-B-R)</summary>
             <div class="lexicon-buttons">
                 <button class="tag-btn" onclick="injectTag('[情境] 在小組合作任務中')">小組任務</button>
                 <button class="tag-btn" onclick="injectTag('[情境] 面對未曾練習的新動作')">面對新動作</button>
                 <button class="tag-btn" onclick="injectTag('[情境] 競賽處於落後狀態')">競賽落後</button>
-                <button class="tag-btn" onclick="injectTag('[行為] 退縮並拒絕參與')">退縮拒絕</button>
+                <button class="tag-btn" onclick="injectTag('[情境] 面臨環境吵雜或規則變更')">環境吵雜變更</button>
+                <button class="tag-btn" onclick="injectTag('[行為] 出現退縮並拒絕參與')">退縮拒絕</button>
+                <button class="tag-btn" onclick="injectTag('[行為] 無法控制力道導致破壞')">無法控制力道</button>
                 <button class="tag-btn" onclick="injectTag('[行為] 選擇深呼吸嘗試冷靜')">深呼吸冷靜</button>
                 <button class="tag-btn" onclick="injectTag('[應對] 教師介入給予冷靜時間')">給予冷靜時間</button>
+                <button class="tag-btn" onclick="injectTag('[應對] 透過同理心對話化解衝突')">同理心化解</button>
                 <button class="tag-btn" onclick="injectTag('[結果] 順利完成獲同儕掌聲')">獲同儕掌聲</button>
             </div>
         </details>
@@ -340,10 +315,12 @@
             <summary>2. FMP 動作表現</summary>
             <div class="lexicon-buttons">
                 <button class="tag-btn" onclick="injectTag('核心無力導致姿勢無法維持')">核心無力</button>
-                <button class="tag-btn" onclick="injectTag('雙側協調良好')">雙側協調良好</button>
-                <button class="tag-btn" onclick="injectTag('動作轉換缺乏流暢度')">轉換不流暢</button>
+                <button class="tag-btn" onclick="injectTag('展現出良好的雙側協調能力')">雙側協調良好</button>
+                <button class="tag-btn" onclick="injectTag('動作轉換時缺乏流暢度')">轉換不流暢</button>
                 <button class="tag-btn" onclick="injectTag('能精準控制上肢投擲力道')">力道精準</button>
                 <button class="tag-btn" onclick="injectTag('下肢肌力不足導致落地不穩')">落地不穩</button>
+                <button class="tag-btn" onclick="injectTag('爆發力顯著提升能瞬間發力')">爆發力提升</button>
+                <button class="tag-btn" onclick="injectTag('身體中軸控制不佳出現代償')">中軸代償</button>
                 <button class="tag-btn" onclick="injectTag('動作類化成功能自然運用')">動作類化成功</button>
             </div>
         </details>
@@ -352,28 +329,32 @@
             <summary>3. UDL 策略與計畫</summary>
             <div class="lexicon-buttons">
                 <button class="tag-btn" onclick="injectTag('增加視覺化圖卡輔助')">視覺圖卡</button>
-                <button class="tag-btn" onclick="injectTag('提供不同重量器材供選擇')">器材選擇</button>
-                <button class="tag-btn" onclick="injectTag('將複雜動作拆解步驟')">拆解步驟</button>
-                <button class="tag-btn" onclick="injectTag('調整遊戲規則降低競爭')">降低競爭</button>
-                <button class="tag-btn" onclick="injectTag('設計難度降階的任務選項')">降階選項</button>
+                <button class="tag-btn" onclick="injectTag('提供不同重量/大小器材選擇')">器材選擇</button>
+                <button class="tag-btn" onclick="injectTag('將複雜動作拆解為三個簡單步驟')">拆解步驟</button>
+                <button class="tag-btn" onclick="injectTag('安排能力較佳的同儕進行示範')">同儕示範</button>
+                <button class="tag-btn" onclick="injectTag('調整遊戲規則以降低競爭壓力')">降低競爭</button>
+                <button class="tag-btn" onclick="injectTag('給予更充足的等待時間讓學生反應')">給予反應時間</button>
+                <button class="tag-btn" onclick="injectTag('設計難度分級(降階)的任務選項')">降階選項</button>
             </div>
         </details>
 
         <details class="lexicon-group">
             <summary>4. 融合/類化/環境</summary>
             <div class="lexicon-buttons">
-                <button class="tag-btn" onclick="injectTag('普通班同儕主動邀請')">同儕邀請</button>
-                <button class="tag-btn" onclick="injectTag('技巧成功類化應用於比賽')">技巧類化比賽</button>
+                <button class="tag-btn" onclick="injectTag('普通班同儕主動邀請加入分組')">同儕邀請</button>
+                <button class="tag-btn" onclick="injectTag('面對複雜指令出現茫然與抽離')">指令複雜抽離</button>
+                <button class="tag-btn" onclick="injectTag('成功將功能課技巧應用於比賽')">技巧類化比賽</button>
                 <button class="tag-btn" onclick="injectTag('因場地擁擠產生感官過載')">感官過載</button>
-                <button class="tag-btn" onclick="injectTag('缺乏適當輔具參與度下降')">缺輔具參與降</button>
-                <button class="tag-btn" onclick="injectTag('展現高挫折忍受力')">高挫折忍受力</button>
+                <button class="tag-btn" onclick="injectTag('缺乏適當輔具導致參與度下降')">缺輔具參與降</button>
+                <button class="tag-btn" onclick="injectTag('在無大人介入下自行解決衝突')">自行解決衝突</button>
+                <button class="tag-btn" onclick="injectTag('展現出高度的挫折忍受力')">高挫折忍受力</button>
+                <button class="tag-btn" onclick="injectTag('協同教師即時的鷹架支持發揮作用')">協同鷹架支持</button>
             </div>
         </details>
 
     </div>
 </div>
 
-<!-- 匯出選單 (隱藏) -->
 <div id="exportMenu" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); z-index:999; justify-content:center; align-items:center;">
     <div style="background:#fff; padding:20px; border-radius:10px; width:300px; text-align:center;">
         <h3 style="margin-top:0;">選擇匯出表單</h3>
@@ -397,7 +378,7 @@
     let currentStudent = '';
     let currentWeek = '';
     let lastFocusedElement = null;
-    let database = JSON.parse(localStorage.getItem('APA_DB_V8')) || {};
+    let database = JSON.parse(localStorage.getItem('APA_DB_V9')) || {};
 
     const weeklyThemes = {
         'W1': { title: 'W1 基礎與自我覺察', desc: '核心穩定、動物模仿；情緒天氣預報。' },
@@ -408,36 +389,35 @@
         'W6': { title: 'W6 整合與遷移', desc: '綜合體適能闖關；類化應用至普通班。' }
     };
 
+    // 移除了前後測數據，僅保留學生基本身分，避免觀察者偏誤
     const studentBaselines = {
-        'S01': { group: '實驗組', type: '情緒障礙', phys: {'心肺': 1, '核心': 9, '上肢': 16, '柔軟': 1, '下肢': 11, '敏捷': -0.17, '協調-接': 2, '協調-擲': 2}, psych: {'社交技巧': 22, '行為問題': -11, '教育需求總分': -18} },
-        'S02': { group: '控制組', type: '智能障礙', phys: {'心肺': 2, '核心': -8, '上肢': 22, '柔軟': 0, '下肢': 6, '敏捷': 0.53, '協調-接': -1, '協調-擲': -1}, psych: {'社交技巧': 24, '行為問題': 7, '教育需求總分': 39} },
-        'S03': { group: '控制組', type: '學習障礙', phys: {'心肺': 0, '核心': 0, '上肢': 0, '柔軟': 0, '下肢': 0, '敏捷': 2.51, '協調-接': 2, '協調-擲': -1}, psych: {'社交技巧': 8, '行為問題': 22, '教育需求總分': 130} },
-        'S04': { group: '實驗組', type: '自閉症', phys: {'心肺': 0, '核心': 3, '上肢': 0, '柔軟': 2, '下肢': 5, '敏捷': -0.93, '協調-接': 0, '協調-擲': 1}, psych: {'社交技巧': 11, '行為問題': -6, '教育需求總分': -34} },
-        'S05': { group: '控制組', type: '聽覺障礙', phys: {'心肺': 1, '核心': -7, '上肢': -9, '柔軟': 0, '下肢': -3, '敏捷': -0.61, '協調-接': 1, '協調-擲': -3}, psych: {'社交技巧': 41, '行為問題': 9, '教育需求總分': 33} },
-        'S06': { group: '控制組', type: '學習障礙', phys: {'心肺': 3, '核心': -3, '上肢': 29, '柔軟': 0, '下肢': -4, '敏捷': 0.40, '協調-接': -1, '協調-擲': -2}, psych: {'社交技巧': 32, '行為問題': 5, '教育需求總分': 72} },
-        'S07': { group: '控制組', type: '肢體障礙', phys: {'心肺': 0, '核心': 0, '上肢': 0, '柔軟': 0, '下肢': 8, '敏捷': -1.23, '協調-接': 1, '協調-擲': 1}, psych: {'社交技巧': 17, '行為問題': 8, '教育需求總分': 22} },
-        'S08': { group: '實驗組', type: '學習障礙', phys: {'心肺': 5, '核心': 18, '上肢': 5, '柔軟': 3, '下肢': 1, '敏捷': -0.85, '協調-接': 1, '協調-擲': 2}, psych: {'社交技巧': 1, '行為問題': -16, '教育需求總分': -158} },
-        'S09': { group: '實驗組', type: '學習障礙', phys: {'心肺': 5, '核心': 23, '上肢': 20, '柔軟': 2, '下肢': 3, '敏捷': -0.53, '協調-接': 1, '協調-擲': 2}, psych: {'社交技巧': 41, '行為問題': -17, '教育需求總分': -106} },
-        'S10': { group: '實驗組', type: '學習障礙', phys: {'心肺': 5, '核心': 10, '上肢': 21, '柔軟': 0, '下肢': 5, '敏捷': -0.62, '協調-接': 1, '協調-擲': 5}, psych: {'社交技巧': 7, '行為問題': -10, '教育需求總分': -29} },
-        'S11': { group: '控制組', type: '自閉症', phys: {'心肺': 5, '核心': -5, '上肢': -5, '柔軟': 0, '下肢': -1, '敏捷': -0.75, '協調-接': -2, '協調-擲': -1}, psych: {'社交技巧': -10, '行為問題': 7, '教育需求總分': 69} },
-        'S12': { group: '實驗組', type: '智能障礙', phys: {'心肺': 6, '核心': 11, '上肢': 5, '柔軟': 0, '下肢': 0, '敏捷': -0.13, '協調-接': 2, '協調-擲': 2}, psych: {'社交技巧': 15, '行為問題': 9, '教育需求總分': -33} },
-        'S13': { group: '控制組', type: '自閉症', phys: {'心肺': 2, '核心': -3, '上肢': -13, '柔軟': 0, '下肢': 14, '敏捷': 0.88, '協調-接': -2, '協調-擲': -3}, psych: {'社交技巧': 15, '行為問題': 19, '教育需求總分': 163} },
-        'S14': { group: '控制組', type: '學習障礙', phys: {'心肺': 4, '核心': -3, '上肢': -29, '柔軟': 0, '下肢': -9, '敏捷': -0.03, '協調-接': -3, '協調-擲': -6}, psych: {'社交技巧': 1, '行為問題': 9, '教育需求總分': 104} },
-        'S15': { group: '控制組', type: '自閉症', phys: {'心肺': 0, '核心': 0, '上肢': 0, '柔軟': 0, '下肢': 0, '敏捷': -1.60, '協調-接': -3, '協調-擲': 0}, psych: {'社交技巧': 2, '行為問題': 5, '教育需求總分': 81} },
-        'S16': { group: '實驗組', type: '自閉症', phys: {'心肺': 3, '核心': 8, '上肢': 2, '柔軟': 0, '下肢': 21, '敏捷': -0.66, '協調-接': 1, '協調-擲': 1}, psych: {'社交技巧': 6, '行為問題': -10, '教育需求總分': -19} },
-        'S17': { group: '實驗組', type: '學習障礙', phys: {'心肺': 3, '核心': 3, '上肢': 1, '柔軟': 0, '下肢': 18, '敏捷': -0.26, '協調-接': 2, '協調-擲': 2}, psych: {'社交技巧': 3, '行為問題': -7, '教育需求總分': -152} },
-        'S18': { group: '實驗組', type: '智能障礙', phys: {'心肺': 1, '核心': 1, '上肢': 20, '柔軟': 0, '下肢': 0, '敏捷': -0.40, '協調-接': 5, '協調-擲': 4}, psych: {'社交技巧': 19, '行為問題': -3, '教育需求總分': -169} },
-        'S19': { group: '控制組', type: '情緒障礙', phys: {'心肺': 5, '核心': 9, '上肢': -52, '柔軟': 0, '下肢': -14, '敏捷': 0.00, '協調-接': -1, '協調-擲': -2}, psych: {'社交技巧': -2, '行為問題': 4, '教育需求總分': 211} },
-        'S20': { group: '實驗組', type: '學習障礙', phys: {'心肺': 0, '核心': 0, '上肢': 0, '柔軟': 0, '下肢': 0, '敏捷': -0.44, '協調-接': 0, '協調-擲': 3}, psych: {'社交技巧': 39, '行為問題': -16, '教育需求總分': -134} },
-        'S21': { group: '控制組', type: '學習障礙', phys: {'心肺': 0, '核心': 0, '上肢': 0, '柔軟': 0, '下肢': 0, '敏捷': 1.38, '協調-接': -1, '協調-擲': 0}, psych: {'社交技巧': 31, '行為問題': 3, '教育需求總分': 107} },
-        'S22': { group: '實驗組', type: '語言障礙', phys: {'心肺': 5, '核心': 14, '上肢': 14, '柔軟': 2, '下肢': 7, '敏捷': -0.99, '協調-接': 1, '協調-擲': 0}, psych: {'社交技巧': 1, '行為問題': -10, '教育需求總分': -116} },
-        'S23': { group: '控制組', type: '學習障礙', phys: {'心肺': 1, '核心': -10, '上肢': -27, '柔軟': 0, '下肢': 12, '敏捷': 0.08, '協調-接': 0, '協調-擲': 1}, psych: {'社交技巧': 2, '行為問題': 9, '教育需求總分': 145} },
-        'S24': { group: '控制組', type: '自閉症', phys: {'心肺': 3, '核心': -2, '上肢': 6, '柔軟': 0, '下肢': -3, '敏捷': -1.17, '協調-接': 0, '協調-擲': 0}, psych: {'社交技巧': 31, '行為問題': 8, '教育需求總分': 44} },
-        'S25': { group: '實驗組', type: '聽覺障礙', phys: {'心肺': 3, '核心': 5, '上肢': 35, '柔軟': 5, '下肢': 3, '敏捷': -0.53, '協調-接': 3, '協調-擲': 2}, psych: {'社交技巧': 23, '行為問題': -5, '教育需求總分': -59} },
-        'S26': { group: '實驗組', type: '肢體障礙', phys: {'心肺': 2, '核心': 11, '上肢': 2, '柔軟': 0, '下肢': 2, '敏捷': -0.05, '協調-接': 1, '協調-擲': 2}, psych: {'社交技巧': 33, '行為問題': -14, '教育需求總分': -144} }
+        'S01': { group: '實驗組', type: '情緒障礙' },
+        'S02': { group: '控制組', type: '智能障礙' },
+        'S03': { group: '控制組', type: '學習障礙' },
+        'S04': { group: '實驗組', type: '自閉症' },
+        'S05': { group: '控制組', type: '聽覺障礙' },
+        'S06': { group: '控制組', type: '學習障礙' },
+        'S07': { group: '控制組', type: '肢體障礙' },
+        'S08': { group: '實驗組', type: '學習障礙' },
+        'S09': { group: '實驗組', type: '學習障礙' },
+        'S10': { group: '實驗組', type: '學習障礙' },
+        'S11': { group: '控制組', type: '自閉症' },
+        'S12': { group: '實驗組', type: '智能障礙' },
+        'S13': { group: '控制組', type: '自閉症' },
+        'S14': { group: '控制組', type: '學習障礙' },
+        'S15': { group: '控制組', type: '自閉症' },
+        'S16': { group: '實驗組', type: '自閉症' },
+        'S17': { group: '實驗組', type: '學習障礙' },
+        'S18': { group: '實驗組', type: '智能障礙' },
+        'S19': { group: '控制組', type: '情緒障礙' },
+        'S20': { group: '實驗組', type: '學習障礙' },
+        'S21': { group: '控制組', type: '學習障礙' },
+        'S22': { group: '實驗組', type: '語言障礙' },
+        'S23': { group: '控制組', type: '學習障礙' },
+        'S24': { group: '控制組', type: '自閉症' },
+        'S25': { group: '實驗組', type: '聽覺障礙' },
+        'S26': { group: '實驗組', type: '肢體障礙' }
     };
-
-    const physLabels = { '心肺':'PACER', '核心':'捲腹', '上肢':'伏地', '柔軟':'體前彎', '下肢':'30秒坐站', '敏捷':'8呎繞物', '協調-接':'接球', '協調-擲':'擲球' };
 
     const ALL_IDS = [
         'A_fmp1', 'A_fmp2', 'A_fmp3', 'A_fmp4', 'A_sel1', 'A_sel2', 'A_sel3', 'A_sel4', 'A_sel5', 'A_lpa1', 'A_lpa2', 'A_lpa3', 'A_lpa4',
@@ -447,6 +427,13 @@
 
     window.onload = function() {
         initSelectors();
+        
+        // 載入儲存的教師名稱
+        const savedTeacher = localStorage.getItem('APA_TeacherName');
+        if(savedTeacher) {
+            document.getElementById('teacherName').value = savedTeacher;
+        }
+
         changeStudent('S01');
         changeWeek('W1');
     };
@@ -467,6 +454,11 @@
     }
 
     // 2. 核心控制邏輯
+    function saveTeacherName() {
+        const tName = document.getElementById('teacherName').value;
+        localStorage.setItem('APA_TeacherName', tName);
+    }
+
     function changeStudent(val) {
         if(currentStudent && currentWeek) saveCurrentRecord();
         currentStudent = val;
@@ -494,15 +486,11 @@
 
     // 3. UI 互動邏輯 (分頁、抽屜)
     function switchTab(tabId, btnElement) {
-        // 隱藏所有內容
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-        // 移除所有按鈕 active
         document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-        // 顯示目標
         document.getElementById(tabId).classList.add('active');
         btnElement.classList.add('active');
-        // 切換頁籤時自動存檔
-        saveCurrentRecord();
+        saveCurrentRecord(); // 切換頁籤時自動存檔
     }
 
     function toggleDrawer(isOpen) {
@@ -517,41 +505,19 @@
         }
     }
 
-    // 4. 數據儀表板更新
-    function formatStat(val, isNegativeGood = false) {
-        const num = parseFloat(val);
-        if(num === 0 || isNaN(num)) return `<span class="val-neu">0</span>`;
-        let sign = num > 0 ? "+" : "";
-        let colorClass = num > 0 ? "val-pos" : "val-neg";
-        if (isNegativeGood) colorClass = num < 0 ? "val-pos" : "val-neg";
-        return `<span class="${colorClass}">${sign}${val}</span>`;
-    }
-
     function updateStatus() {
         if(!currentStudent) return;
         const base = studentBaselines[currentStudent];
         document.getElementById('student-badge').innerText = `${base.group} / ${base.type}`;
-        
-        let physHtml = '';
-        for (const [key, value] of Object.entries(base.phys)) {
-            physHtml += `<div class="stat-item"><span class="label">${physLabels[key]||key}</span> ${formatStat(value, false)}</div>`;
-        }
-        document.getElementById('phys-stats').innerHTML = physHtml;
-
-        document.getElementById('psych-stats').innerHTML = `
-            <div class="stat-item"><span class="label">社交技巧</span> ${formatStat(base.psych['社交技巧'], false)}</div>
-            <div class="stat-item"><span class="label">行為問題</span> ${formatStat(base.psych['行為問題'], true)}</div>
-            <div class="stat-item"><span class="label">教育需求</span> ${formatStat(base.psych['教育需求總分'], true)}</div>
-        `;
     }
 
-    // 5. 詞庫追蹤與插入
+    // 4. 詞庫追蹤與插入
     function trackFocus(el) { lastFocusedElement = el; }
     
     function injectTag(t) {
         if(!lastFocusedElement) {
-            alert('請先在左邊表單點一下要輸入的文字框，再來點標籤喔！');
-            toggleDrawer(false); // 貼心設計：自動關閉抽屜讓老師選框
+            alert('請先在左邊表單點選您要輸入的文字框，再來點標籤喔！');
+            toggleDrawer(false); 
             return;
         }
         const el = lastFocusedElement;
@@ -560,12 +526,9 @@
         el.value = el.value.substring(0, start) + insert + el.value.substring(el.selectionEnd);
         el.focus(); 
         el.selectionStart = el.selectionEnd = start + insert.length;
-        
-        // 可選：點擊後自動關閉抽屜，若老師喜歡連續點擊多個詞則不要加這行
-        // toggleDrawer(false); 
     }
 
-    // 6. 資料存取邏輯
+    // 5. 資料存取與匯出邏輯
     function loadRecord() {
         const key = currentStudent + '_' + currentWeek;
         const rec = database[key] || {};
@@ -584,34 +547,38 @@
             if(el) { rec[id] = el.value; }
         });
         database[key] = rec;
-        localStorage.setItem('APA_DB_V8', JSON.stringify(database));
+        localStorage.setItem('APA_DB_V9', JSON.stringify(database));
     }
 
     function clearAllData() {
         if(confirm('⚠️ 警告：這將徹底清空平板上的所有暫存紀錄！您確定要繼續嗎？')) { 
-            localStorage.removeItem('APA_DB_V8'); 
+            localStorage.removeItem('APA_DB_V9'); 
             database = {}; 
             loadRecord(); 
         }
     }
 
     function exportCSV(form) {
+        saveTeacherName(); // 匯出前確保教師名稱已儲存
         saveCurrentRecord();
+        
+        const teacherName = document.getElementById('teacherName').value || '未填寫';
         let csv = "\uFEFF";
         let headers = [];
         let extractIds = [];
 
+        // 在所有表單開頭加入「填報教師」
         if(form === 'FormA') {
-            headers = ['學生代碼','週次','FMP1','FMP2','FMP3','FMP4','SEL1','SEL2','SEL3','SEL4','SEL5','LPA1','LPA2','LPA3','LPA4','SEL焦點觀察','FMP焦點觀察','UDL反思'];
+            headers = ['填報教師','學生代碼','週次','FMP1','FMP2','FMP3','FMP4','SEL1','SEL2','SEL3','SEL4','SEL5','LPA1','LPA2','LPA3','LPA4','SEL焦點觀察','FMP焦點觀察','UDL反思'];
             extractIds = ['A_fmp1','A_fmp2','A_fmp3','A_fmp4','A_sel1','A_sel2','A_sel3','A_sel4','A_sel5','A_lpa1','A_lpa2','A_lpa3','A_lpa4','A_qual_sel','A_qual_fmp','A_qual_udl'];
         } else if (form === 'FormB') {
-            headers = ['學生代碼','週次','LPA1','LPA2','LPA3','LPA4','SEL綜合','FMP綜合','類化差距','環境障礙','環境促進','協同教學建議'];
+            headers = ['填報教師','學生代碼','週次','LPA1','LPA2','LPA3','LPA4','SEL綜合','FMP綜合','類化差距','環境障礙','環境促進','協同教學建議'];
             extractIds = ['B_lpa1','B_lpa2','B_lpa3','B_lpa4','B_sel','B_fmp','B_qual_gap','B_qual_bar','B_qual_fac','B_qual_cot'];
         } else if (form === 'FormC') {
-            headers = ['學生代碼','週次','參與主動性','同儕互動','常規遵從','挫折忍受','運動家精神','關鍵事件','其他補充'];
+            headers = ['填報教師','學生代碼','週次','參與主動性','同儕互動','常規遵從','挫折忍受','運動家精神','關鍵事件','其他補充'];
             extractIds = ['C_lpa1','C_lpa2','C_lpa3','C_lpa4','C_lpa5','C_qual_evt','C_qual_oth'];
         } else if (form === 'Triangulation') {
-            headers = ['學生代碼','週次','三角校正Memo'];
+            headers = ['填報教師','學生代碼','週次','三角校正Memo'];
             extractIds = ['triangulation_memo'];
         }
 
@@ -621,7 +588,9 @@
             for(let w=1; w<=6; w++){
                 const key = s + '_W' + w;
                 const rec = database[key] || {};
-                let row = [s, 'W'+w];
+                
+                // 寫入包含填報教師的列資料
+                let row = ['"' + teacherName + '"', s, 'W'+w];
                 extractIds.forEach(id => {
                     let val = (rec[id] || "").replace(/"/g, '""');
                     row.push('"' + val + '"');
