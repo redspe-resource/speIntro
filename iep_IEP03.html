@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學前特教與IEP實務：第三次 法令相關內容（兩小時教學版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover, .nav-link.active { color: #8B6FC4; border-bottom-color: #8B6FC4; }
+        .card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .flowchart-node { cursor: pointer; transition: background-color 0.3s, transform 0.3s; }
+        .flowchart-node:hover { transform: scale(1.03); background-color: #EDE6F8; }
+        .principle-card { cursor: pointer; transition: all 0.2s ease-in-out; }
+        .principle-card:hover { background-color: #F3EFFA; border-color: #9B7DD4; }
+        .reveal-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.4s ease-in-out; }
+        .reveal-panel.open { max-height: 1600px; }
+        .tab-btn { transition: all 0.2s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #8B6FC4; border-bottom-color: #8B6FC4; font-weight: 700; }
+        .flip-card { perspective: 1000px; cursor: pointer; height: 200px; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+        .flip-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 0.75rem; display: flex; flex-direction: column; justify-content: center; padding: 1.25rem; }
+        .flip-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
+            <h1 class="text-base md:text-xl font-bold text-[#8B6FC4] shrink-0">第三次：法令相關內容</h1>
+            <div class="hidden lg:flex space-x-5 text-sm">
+                <a href="#s1" class="nav-link font-medium pb-1">五大內容</a>
+                <a href="#s2" class="nav-link font-medium pb-1">表件對照</a>
+                <a href="#s3" class="nav-link font-medium pb-1">權責流程</a>
+                <a href="#s4" class="nav-link font-medium pb-1">考試調整</a>
+                <a href="#s5" class="nav-link font-medium pb-1">案例研討</a>
+                <a href="#s6" class="nav-link font-medium pb-1">課堂演練</a>
+                <a href="iep_IEPT03.html" class="nav-link font-medium pb-1 text-[#8B6FC4]">測驗</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="lg:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white px-6 pb-4 grid grid-cols-2 gap-1">
+            <a href="#s1" class="block py-2 nav-link text-center">五大內容</a>
+            <a href="#s2" class="block py-2 nav-link text-center">表件對照</a>
+            <a href="#s3" class="block py-2 nav-link text-center">權責流程</a>
+            <a href="#s4" class="block py-2 nav-link text-center">考試調整</a>
+            <a href="#s5" class="block py-2 nav-link text-center">案例研討</a>
+            <a href="#s6" class="block py-2 nav-link text-center">課堂演練</a>
+            <a href="iep_IEPT03.html" class="block py-2 nav-link text-center text-[#8B6FC4]">測驗</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-10 md:py-14 max-w-5xl">
+
+        <!-- 課程重點 -->
+        <section class="mb-14">
+            <div class="grid md:grid-cols-5 gap-8 items-center">
+                <div class="md:col-span-3">
+                    <p class="text-sm font-semibold text-[#8B6FC4] tracking-widest mb-2">第三次課程 · 三小時（含測驗）</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#8B6FC4] mb-4">法令相關內容</h2>
+                    <p class="text-gray-600 leading-relaxed">前兩次建立了法源精神與跨階段圖像，這一次要把法規<strong>逐段落到臺東縣 IEP 空白表件</strong>：施行細則第 10 條的五大內容如何對應到現況、服務、目標、行為介入、轉銜每一欄；集中式與巡迴輔導的表件差在哪；鑑輔會與特推會誰做什麼；以及考試調整服務的四大分類如何寫進 IEP。這一堂讓「法條」變成「你手上那張表要怎麼填」。</p>
+                    <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                        <span class="bg-[#EDE6F8] text-[#6B4FA0] px-3 py-1 rounded-full">施行細則第10條</span>
+                        <span class="bg-[#EDE6F8] text-[#6B4FA0] px-3 py-1 rounded-full">特教法第31條</span>
+                        <span class="bg-[#EDE6F8] text-[#6B4FA0] px-3 py-1 rounded-full">考試服務辦法</span>
+                        <span class="bg-[#EDE6F8] text-[#6B4FA0] px-3 py-1 rounded-full">鑑輔會 · 特推會</span>
+                    </div>
+                </div>
+                <div class="md:col-span-2">
+                    <svg class="w-full rounded-2xl shadow-sm" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="法規落實到IEP表件">
+  <defs><linearGradient id="pp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3EFFA"/><stop offset="1" stop-color="#E7DEF5"/></linearGradient></defs>
+  <rect width="800" height="340" fill="url(#pp)"/>
+  <ellipse cx="400" cy="302" rx="360" ry="24" fill="#D8CBEE" opacity="0.6"/>
+  <!-- 左：法典 -->
+  <g transform="translate(130,110)">
+    <rect x="-10" y="20" width="120" height="150" rx="8" fill="#7C5CBF"/>
+    <rect x="0" y="10" width="120" height="150" rx="8" fill="#9B7DD4"/>
+    <rect x="14" y="30" width="92" height="10" rx="5" fill="#E7DEF5"/>
+    <rect x="14" y="50" width="70" height="8" rx="4" fill="#CDBBEC"/>
+    <rect x="14" y="66" width="80" height="8" rx="4" fill="#CDBBEC"/>
+    <path d="M60 92 l8 16 l18 2 l-13 13 l3 18 l-16 -9 l-16 9 l3 -18 l-13 -13 l18 -2 z" fill="#F5D98E"/>
+    <text x="28" y="150" font-size="13" fill="#fff" font-family="sans-serif">特教法規</text>
+  </g>
+  <!-- 箭頭 -->
+  <g transform="translate(290,180)">
+    <rect x="0" y="-7" width="120" height="14" rx="7" fill="#8B6FC4"/>
+    <path d="M120 -22 L152 0 L120 22 z" fill="#8B6FC4"/>
+    <text x="20" y="-24" font-size="15" fill="#6B4FA0" font-family="sans-serif">落實到欄位</text>
+  </g>
+  <!-- 右：IEP 表件(五段) -->
+  <g transform="translate(500,90)">
+    <rect x="0" y="0" width="200" height="190" rx="10" fill="#fff" stroke="#C4B2E6" stroke-width="3"/>
+    <rect x="16" y="18" width="168" height="22" rx="5" fill="#EDE6F8"/><text x="24" y="34" font-size="12" fill="#6B4FA0" font-family="sans-serif">①現況與需求</text>
+    <rect x="16" y="48" width="168" height="22" rx="5" fill="#EDE6F8"/><text x="24" y="64" font-size="12" fill="#6B4FA0" font-family="sans-serif">②服務與支持</text>
+    <rect x="16" y="78" width="168" height="22" rx="5" fill="#EDE6F8"/><text x="24" y="94" font-size="12" fill="#6B4FA0" font-family="sans-serif">③目標與評量</text>
+    <rect x="16" y="108" width="168" height="22" rx="5" fill="#EDE6F8"/><text x="24" y="124" font-size="12" fill="#6B4FA0" font-family="sans-serif">④行為介入</text>
+    <rect x="16" y="138" width="168" height="22" rx="5" fill="#EDE6F8"/><text x="24" y="154" font-size="12" fill="#6B4FA0" font-family="sans-serif">⑤轉銜服務</text>
+  </g>
+  <circle cx="700" cy="56" r="26" fill="#D6C4F0" opacity="0.7"/>
+</svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊一：五大內容 -->
+        <section id="s1" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9B7DD4] text-2xl font-black">①</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#8B6FC4]">IEP 五大內容（施行細則第 10 條）</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="五大內容">
+  <rect width="240" height="160" rx="14" fill="#F3EFFA"/>
+  <rect x="52" y="20" width="136" height="122" rx="8" fill="#fff" stroke="#C4B2E6" stroke-width="3"/>
+  <g font-family="sans-serif">
+    <circle cx="70" cy="40" r="9" fill="#9B7DD4"/><text x="70" y="44" font-size="11" fill="#fff" text-anchor="middle">1</text><rect x="86" y="35" width="84" height="9" rx="4" fill="#D8CBEE"/>
+    <circle cx="70" cy="64" r="9" fill="#9B7DD4"/><text x="70" y="68" font-size="11" fill="#fff" text-anchor="middle">2</text><rect x="86" y="59" width="70" height="9" rx="4" fill="#D8CBEE"/>
+    <circle cx="70" cy="88" r="9" fill="#9B7DD4"/><text x="70" y="92" font-size="11" fill="#fff" text-anchor="middle">3</text><rect x="86" y="83" width="84" height="9" rx="4" fill="#D8CBEE"/>
+    <circle cx="70" cy="112" r="9" fill="#9B7DD4"/><text x="70" y="116" font-size="11" fill="#fff" text-anchor="middle">4</text><rect x="86" y="107" width="60" height="9" rx="4" fill="#D8CBEE"/>
+  </g>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">點每一項展開：法條原文怎麼說、對應到臺東縣表件的哪一段、學前實務要注意什麼。這五項就是一份合法 IEP 的骨架，缺一不可。</p>
+            <div id="five-list" class="space-y-3"></div>
+        </section>
+
+        <!-- 區塊二：表件對照 -->
+        <section id="s2" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9B7DD4] text-2xl font-black">②</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#8B6FC4]">集中式 vs 巡迴輔導：表件欄位對照</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="表件欄位對照">
+  <rect width="240" height="160" rx="14" fill="#F3EFFA"/>
+  <rect x="30" y="34" width="80" height="14" rx="7" fill="#9B7DD4"/>
+  <rect x="120" y="34" width="80" height="14" rx="7" fill="#D8CBEE"/>
+  <rect x="30" y="56" width="170" height="82" rx="8" fill="#fff" stroke="#C4B2E6" stroke-width="3"/>
+  <g fill="#D8CBEE"><rect x="44" y="72" width="140" height="9" rx="4"/><rect x="44" y="90" width="110" height="9" rx="4"/><rect x="44" y="108" width="140" height="9" rx="4"/></g>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">同樣依施行細則第 10 條，但服務型態不同，表件的重點就不同。切換頁籤看兩種型態在各欄位的填寫差異。</p>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="form-tab tab-btn active pb-2 text-sm md:text-base" data-tab="ft1">現況與需求</button>
+                <button class="form-tab tab-btn pb-2 text-sm md:text-base" data-tab="ft2">服務與支持</button>
+                <button class="form-tab tab-btn pb-2 text-sm md:text-base" data-tab="ft3">目標與評量</button>
+                <button class="form-tab tab-btn pb-2 text-sm md:text-base" data-tab="ft4">行為介入</button>
+                <button class="form-tab tab-btn pb-2 text-sm md:text-base" data-tab="ft5">轉銜服務</button>
+            </div>
+            <div id="form-tab-content" class="grid md:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- 區塊三：權責流程 -->
+        <section id="s3" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9B7DD4] text-2xl font-black">③</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#8B6FC4]">鑑輔會 vs 特推會：誰做什麼</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="權責流程">
+  <rect width="240" height="160" rx="14" fill="#F3EFFA"/>
+  <rect x="70" y="22" width="100" height="34" rx="8" fill="#9B7DD4"/><text x="120" y="44" font-size="13" fill="#fff" text-anchor="middle" font-family="sans-serif">鑑輔會</text>
+  <path d="M120 56 v18" stroke="#8B6FC4" stroke-width="3"/>
+  <rect x="34" y="90" width="76" height="34" rx="8" fill="#fff" stroke="#C4B2E6" stroke-width="3"/><text x="72" y="112" font-size="12" fill="#6B4FA0" text-anchor="middle" font-family="sans-serif">學校</text>
+  <rect x="130" y="90" width="76" height="34" rx="8" fill="#fff" stroke="#C4B2E6" stroke-width="3"/><text x="168" y="112" font-size="12" fill="#6B4FA0" text-anchor="middle" font-family="sans-serif">特推會</text>
+  <path d="M110 74 L72 90 M130 74 L168 90" stroke="#C4B2E6" stroke-width="2.5"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">最常混淆的兩個組織。一個在縣市層級做鑑定安置，一個在學校層級推動與審議。點節點看它的法定任務與在 IEP 流程中的角色。</p>
+            <div class="grid md:grid-cols-2 gap-5">
+                <div>
+                    <div class="flowchart-node bg-[#EDE6F8] border-2 border-[#C4B2E6] rounded-xl p-5 text-center" data-org="jfh">
+                        <p class="font-bold text-[#6B4FA0] text-lg">縣市層級：鑑輔會</p>
+                        <p class="text-sm text-gray-500 mt-1">特殊教育學生鑑定及就學輔導會（點擊看任務）</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="flowchart-node bg-white border-2 border-[#C4B2E6] rounded-xl p-5 text-center" data-org="tph">
+                        <p class="font-bold text-[#6B4FA0] text-lg">學校層級：特推會</p>
+                        <p class="text-sm text-gray-500 mt-1">特殊教育推行委員會（點擊看任務）</p>
+                    </div>
+                </div>
+            </div>
+            <div id="org-detail" class="mt-5 bg-white border border-[#E0D6F0] rounded-xl p-6 text-gray-700 leading-relaxed">
+                <p class="text-gray-400 text-center py-4">點上方任一組織，看它的法定任務與在 IEP 流程中的定位。</p>
+            </div>
+            <div class="mt-5 bg-[#F3EFFA] border-l-4 border-[#9B7DD4] rounded-r-lg p-4 text-sm text-[#6B4FA0]">
+                <strong>一句話記憶：</strong>鑑輔會（縣市）決定「這孩子是不是特教生、該安置在哪」；特推會（學校）負責「進來之後，校內怎麼推動、審 IEP、調課程與評量」。
+            </div>
+        </section>
+
+        <!-- 區塊四：考試調整服務 -->
+        <section id="s4" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9B7DD4] text-2xl font-black">④</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#8B6FC4]">考試調整服務：四大分類</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="考試調整服務">
+  <rect width="240" height="160" rx="14" fill="#F3EFFA"/>
+  <rect x="52" y="28" width="96" height="112" rx="8" fill="#fff" stroke="#C4B2E6" stroke-width="3"/>
+  <g fill="#D8CBEE"><rect x="66" y="44" width="68" height="8" rx="4"/><rect x="66" y="60" width="52" height="8" rx="4"/><rect x="66" y="76" width="68" height="8" rx="4"/><rect x="66" y="92" width="44" height="8" rx="4"/></g>
+  <g transform="translate(120,96) rotate(40)"><rect x="0" y="0" width="10" height="52" fill="#F5C06E"/><path d="M0 52 l5 12 l5 -12 z" fill="#6B4FA0"/><rect x="0" y="0" width="10" height="10" fill="#E59B4E"/></g>
+  <circle cx="176" cy="46" r="22" fill="#fff" stroke="#9B7DD4" stroke-width="3"/><path d="M176 46 v-13 M176 46 l10 6" stroke="#6B4FA0" stroke-width="3" stroke-linecap="round"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">依《身心障礙學生考試服務辦法》第 5 條，考試服務分四大類，校內評量得準用，並<strong>應載明於 IEP</strong>。點每張卡看範例與常見誤解。</p>
+            <div id="exam-cards" class="grid sm:grid-cols-2 gap-5"></div>
+            <div class="mt-5 bg-[#F3EFFA] border-l-4 border-[#9B7DD4] rounded-r-lg p-4 text-sm text-[#6B4FA0]">
+                <strong>關鍵區辨：</strong>考試調整改變的是「作答與呈現的方式」（合理調整），不是「降低及格標準」。延長時間、報讀、放大試卷都屬合理調整；直接改簡單、降分數則是改變了目標的實質。
+            </div>
+        </section>
+
+        <!-- 區塊五：案例研討 -->
+        <section id="s5" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9B7DD4] text-2xl font-black">⑤</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#8B6FC4]">案例研討：找出不符法規之處</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="案例判讀">
+  <rect width="240" height="160" rx="14" fill="#F3EFFA"/>
+  <rect x="40" y="28" width="110" height="104" rx="8" fill="#fff" stroke="#C4B2E6" stroke-width="3"/>
+  <g fill="#D8CBEE"><rect x="54" y="44" width="82" height="8" rx="4"/><rect x="54" y="60" width="64" height="8" rx="4"/><rect x="54" y="76" width="82" height="8" rx="4"/></g>
+  <rect x="54" y="92" width="50" height="8" rx="4" fill="#F0A6A0"/>
+  <circle cx="160" cy="96" r="30" fill="none" stroke="#9B7DD4" stroke-width="7"/><line x1="182" y1="118" x2="206" y2="142" stroke="#6B4FA0" stroke-width="8" stroke-linecap="round"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">三份有瑕疵的 IEP 片段。先想「哪裡不符施行細則第 10 條或相關法規、會造成什麼實務後果」，再點開對照專業判讀。</p>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="case-tab tab-btn active pb-2 text-sm md:text-base" data-tab="c1">案例一：缺漏</button>
+                <button class="case-tab tab-btn pb-2 text-sm md:text-base" data-tab="c2">案例二：倒置</button>
+                <button class="case-tab tab-btn pb-2 text-sm md:text-base" data-tab="c3">案例三：形式</button>
+            </div>
+            <div id="case-content"></div>
+        </section>
+
+        <!-- 區塊六：課堂演練 -->
+        <section id="s6" class="mb-10 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9B7DD4] text-2xl font-black">⑥</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#8B6FC4]">課堂演練</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="課堂演練">
+  <rect width="240" height="160" rx="14" fill="#F3EFFA"/>
+  <rect x="34" y="34" width="110" height="60" rx="12" fill="#9B7DD4"/><path d="M56 94 l0 18 l20 -18 z" fill="#9B7DD4"/>
+  <g fill="#EDE6F8"><rect x="48" y="50" width="80" height="8" rx="4"/><rect x="48" y="66" width="60" height="8" rx="4"/></g>
+  <rect x="118" y="74" width="92" height="52" rx="12" fill="#fff" stroke="#C4B2E6" stroke-width="3"/><path d="M188 126 l0 16 l-18 -16 z" fill="#fff" stroke="#C4B2E6" stroke-width="3"/>
+  <g fill="#D8CBEE"><rect x="130" y="88" width="66" height="7" rx="3"/><rect x="130" y="102" width="48" height="7" rx="3"/></g>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">分組討論，把今天的法規對照落到手上的表件。每題先小組討論，再全班分享。</p>
+            <div id="discuss-cards" class="grid md:grid-cols-2 gap-5 mb-8"></div>
+            <div class="bg-[#8B6FC4] text-white rounded-2xl p-6 md:p-8">
+                <p class="text-sm font-semibold tracking-widest text-[#E7DEF5] mb-2">本次帶走的產出</p>
+                <h4 class="text-xl font-bold mb-3">法規—欄位對照表（定稿）</h4>
+                <p class="text-[#EDE6F8] leading-relaxed text-sm">承接第一次的初稿，把施行細則第 10 條五大內容、考試調整四分類、集中式/巡迴表件差異，整理成一張「法條 → 表件欄位 → 學前填寫要點」的對照表。這張表下一次談轉銜、第五次談行為介入時都會回來用。</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 mt-8">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm mb-1">學前特殊教育與IEP實務 第三次課程 ｜ 主教材：林素貞《個別化教育計畫之實施》</p>
+            <p class="text-xs text-gray-400 mb-3">法源依據：特殊教育法施行細則第10條、特殊教育法第31條、身心障礙學生考試服務辦法第5條、特殊教育學生鑑定及就學輔導會組織及運作辦法、各縣市特殊教育推行委員會設置辦法。僅供教學與演示用途。</p>
+            <div class="flex justify-center gap-3">
+                <a href="iep_IEPT03.html" class="inline-block bg-[#8B6FC4] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#7A5EB0] transition-colors">前往第三次測驗</a>
+                <a href="iep_index.html" class="inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-5 rounded-lg hover:bg-gray-300 transition-colors">回課程入口</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ===== 區塊一：五大內容 =====
+        const fiveItems = [
+            { n:"一", title:"學生能力現況、家庭狀況及需求評估", law:"「學生能力現況、家庭狀況及需求評估。」", form:"對應表件「基本資料 / 現況描述」段：障礙類別與亞型、鑑定有效日期、各發展/學習領域現況、家庭與健康狀況。", pre:"學前以發展領域描述（感官知覺、粗大/精細動作、認知、語言溝通、社會情緒、生活自理），並記錄環境障礙與所需支持，而非只寫缺陷。" },
+            { n:"二", title:"學生所需特殊教育、相關服務及支持策略", law:"「學生所需特殊教育、相關服務及支持策略。」", form:"對應表件「特殊教育服務 / 相關專業服務 / 支持策略」段：服務型態（集中式/巡迴/資源班）、相關專業（物理、職能、語言治療）、教學與環境調整。", pre:"學前常見物理/職能/語言治療入園或到宅服務；支持策略要具體（誰、多久一次、在哪、做什麼）。" },
+            { n:"三", title:"學年與學期教育目標、評量方式、日期及標準", law:"「學年與學期教育目標、達成學期教育目標之評量方式、日期及標準。」", form:"對應表件「教育目標」段：每個領域的學年目標、拆解的學期目標，以及對應的評量方式、預定日期與通過標準。", pre:"學前目標多為發展性/功能性（如自行穿脫、輪流分享）；評量以觀察、操作、指認、口說為主，須寫明可評量的標準與時間。" },
+            { n:"四", title:"具情緒與行為問題學生所需之行為功能介入方案及行政支援", law:"「具情緒與行為問題學生所需之行為功能介入方案及行政支援。」", form:"對應表件「行為功能介入方案（BIP）」段：僅在學生有情緒行為問題時才需填，內容含功能假設、前事/替代/後果策略與所需行政支援。", pre:"重點是先做行為功能分析（FBA）再設計介入（第五次深入談）；行政支援如人力、環境調整、跨處室協調也要寫入。" },
+            { n:"五", title:"學生之轉銜輔導及服務內容", law:"「學生之轉銜輔導及服務內容。」（含升學、生活、就業、心理輔導、福利服務及其他專業服務）", form:"對應表件「轉銜服務」段：現階段的轉銜規劃、需通報網填報與資料移轉的安排、跨階段銜接的支持。", pre:"學前重點是幼小銜接：大班的 IEP 必須有轉銜內容（參訪小學、能力銜接、資料移轉），缺漏即不符法規（第四次深入談）。" }
+        ];
+        const fiveList = document.getElementById('five-list');
+        fiveItems.forEach(it => {
+            const card = document.createElement('div');
+            card.className = 'principle-card bg-white border border-[#E0D6F0] rounded-xl overflow-hidden';
+            card.innerHTML = `
+                <div class="flex items-center gap-4 p-5">
+                    <span class="shrink-0 w-9 h-9 rounded-full bg-[#9B7DD4] text-white flex items-center justify-center font-bold">${it.n}</span>
+                    <h4 class="font-semibold text-gray-800 flex-1">${it.title}</h4>
+                    <span class="toggle-icon text-[#9B7DD4] text-xl">＋</span>
+                </div>
+                <div class="reveal-panel px-5">
+                    <div class="pb-5 pl-13 space-y-3 text-sm">
+                        <div class="bg-[#F3EFFA] rounded-lg p-3"><span class="font-semibold text-[#6B4FA0]">法條原文：</span>${it.law}</div>
+                        <div><span class="font-semibold text-[#8B6FC4]">對應表件欄位：</span><span class="text-gray-700">${it.form}</span></div>
+                        <div><span class="font-semibold text-[#8B6FC4]">學前實務要點：</span><span class="text-gray-700">${it.pre}</span></div>
+                    </div>
+                </div>`;
+            fiveList.appendChild(card);
+            const head = card.querySelector('.flex.items-center');
+            head.style.cursor = 'pointer';
+            head.addEventListener('click', () => {
+                const panel = card.querySelector('.reveal-panel');
+                const icon = card.querySelector('.toggle-icon');
+                panel.classList.toggle('open');
+                const open = panel.classList.contains('open');
+                panel.style.paddingTop = open ? '0.25rem' : '0';
+                panel.style.paddingBottom = open ? '0' : '0';
+                icon.textContent = open ? '－' : '＋';
+            });
+        });
+
+        // ===== 區塊二：集中式 vs 巡迴 表件對照 =====
+        const formData = {
+            ft1: { title:"現況與需求", zi:"集中式特教班的現況描述通常最完整、跨多個發展領域，且因學生障礙程度較重，需詳列生活自理與健康照護需求；由班級教師長時間觀察填寫。", xun:"巡迴輔導的現況以「普通班適應」為核心：記錄幼兒在普通幼兒園的參與情形、遇到的環境障礙，以及巡輔教師與班級教師共同觀察的結果。" },
+            ft2: { title:"服務與支持", zi:"服務欄以「全日/半日在特教班的發展課程」為主體，相關專業服務（物理/職能/語言治療）常入班或抽出實施，人力與環境支持較密集。", xun:"服務欄以「巡迴輔導教師定期入園節數」為核心，強調對普通班教師的諮詢與協同，以及最少限制環境下的間接支持。" },
+            ft3: { title:"目標與評量", zi:"目標數量較多、涵蓋多領域，評量方式以教師觀察與操作記錄為主，通過標準需明確可檢核。", xun:"目標聚焦幼兒在融合情境中的關鍵參與能力，評量須兼顧普通班情境下的表現，常需班級教師協同記錄。" },
+            ft4: { title:"行為介入", zi:"若學生有情緒行為問題，集中式班常需完整的行為功能介入方案與較高強度的行政支援（人力、環境）。", xun:"巡迴輔導的行為介入須設計成「普通班教師可執行」的策略，強調前事調整與環境安排，並提供班級教師諮詢。" },
+            ft5: { title:"轉銜服務", zi:"轉銜計畫需詳細規劃從集中式進入小學後的安置與服務銜接，資料移轉與跨階段會議尤其重要。", xun:"轉銜聚焦幼兒是否能延續融合安置、進入小學普通班加資源班/巡迴的可行性，並延續有效的環境支持。" }
+        };
+        function renderForm(key) {
+            const d = formData[key];
+            document.getElementById('form-tab-content').innerHTML = `
+                <div class="card rounded-xl p-5 border-t-4 border-[#9B7DD4]">
+                    <p class="text-xs font-semibold text-[#6B4FA0] mb-1">集中式特教班</p>
+                    <h5 class="font-bold text-gray-800 mb-2">${d.title}</h5>
+                    <p class="text-sm text-gray-600 leading-relaxed">${d.zi}</p>
+                </div>
+                <div class="card rounded-xl p-5 border-t-4 border-[#C4B2E6]">
+                    <p class="text-xs font-semibold text-[#6B4FA0] mb-1">巡迴輔導</p>
+                    <h5 class="font-bold text-gray-800 mb-2">${d.title}</h5>
+                    <p class="text-sm text-gray-600 leading-relaxed">${d.xun}</p>
+                </div>`;
+        }
+        document.querySelectorAll('.form-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.form-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderForm(btn.dataset.tab);
+            });
+        });
+        renderForm('ft1');
+
+        // ===== 區塊三：權責流程 =====
+        const orgData = {
+            jfh: { name:"鑑輔會（縣市層級）", full:"特殊教育學生鑑定及就學輔導會", tasks:["審議鑑定、安置相關事項","審議特殊教育學生輔導及支持服務相關事項","辦理鑑定、安置、重新安置與輔導","提供資源配置（特教班規劃、心評人員、輔具）之專業諮詢"], role:"是各縣市的法定權責單位，決定「這名幼兒/學生是不是特教生、應安置在哪種型態」，是 IEP 服務的上游。分組收到學校送件後，應於期限內完成初評並綜合研判。" },
+            tph: { name:"特推會（學校層級）", full:"特殊教育推行委員會", tasks:["審議校內 IEP、個別化輔導計畫、特殊教育方案","審議課程與評量（含考試服務）調整方案","協調行政支援、經費、輔具與專業服務","召開安置輔導會議、審議轉銜與無障礙環境"], role:"設在學校，負責「學生進來之後，校內怎麼推動特教」。IEP 與考試服務調整方案通常須經特推會審議通過；它是把鑑輔會的安置決定，落實成校內具體支持的執行平台。" }
+        };
+        function renderOrg(key) {
+            const d = orgData[key];
+            document.getElementById('org-detail').innerHTML = `
+                <p class="font-bold text-[#6B4FA0] text-lg mb-1">${d.name}</p>
+                <p class="text-xs text-gray-400 mb-3">${d.full}</p>
+                <p class="text-sm font-semibold text-[#8B6FC4] mb-2">法定任務</p>
+                <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">${d.tasks.map(t=>`<li>${t}</li>`).join('')}</ul>
+                <div class="bg-[#F3EFFA] rounded-lg p-3 text-sm text-gray-700"><span class="font-semibold text-[#6B4FA0]">在 IEP 流程中的角色：</span>${d.role}</div>`;
+        }
+        document.querySelectorAll('.flowchart-node').forEach(node => {
+            node.addEventListener('click', () => renderOrg(node.dataset.org));
+        });
+
+        // ===== 區塊四：考試調整四分類 =====
+        const examCards = [
+            { title:"試場服務", color:"#9B7DD4", ex:"調整考試時間（提早入場、延長作答）、無障礙試場環境、提醒服務（視覺/聽覺提醒、手語）、特殊試場（單人或少數人、空調）。", myth:"常見誤解：以為只有「延長時間」。其實環境、提醒、特殊試場都算試場服務。" },
+            { title:"輔具服務", color:"#8B6FC4", ex:"擴視機、放大鏡、點字機、盲用電腦及印表機、檯燈、特殊桌椅等。自備輔具須經監考人員檢查後始得使用。", myth:"常見誤解：以為學校一定要買齊。可由考生自備或商洽福利團體協助，經檢查後使用。" },
+            { title:"試題（卷）調整服務", color:"#7A5EB0", ex:"調整試題與考生的適配性、題數或比例計分、放大試卷、點字試卷、電子/有聲/觸摸圖形試題、提供試卷並報讀。", myth:"常見誤解：把「報讀」誤歸作答方式。報讀屬試題呈現，是試題卷調整服務。" },
+            { title:"作答方式調整服務", color:"#6B4FA0", ex:"電腦輸入法作答、盲用電腦作答、放大答案卡（卷）、電腦打字代謄、口語（錄音）作答、代謄答案卡。", myth:"常見誤解：與試題呈現混淆。作答方式處理的是「學生如何把答案表達出來」。" }
+        ];
+        const examWrap = document.getElementById('exam-cards');
+        examCards.forEach(c => {
+            const el = document.createElement('div');
+            el.className = 'principle-card bg-white border border-[#E0D6F0] rounded-xl overflow-hidden';
+            el.innerHTML = `
+                <div class="flex items-center gap-3 p-5" style="cursor:pointer">
+                    <span class="w-3 h-8 rounded-full" style="background:${c.color}"></span>
+                    <h4 class="font-bold text-gray-800 flex-1">${c.title}</h4>
+                    <span class="toggle-icon text-xl" style="color:${c.color}">＋</span>
+                </div>
+                <div class="reveal-panel px-5">
+                    <div class="pb-5 space-y-2 text-sm">
+                        <div><span class="font-semibold text-[#8B6FC4]">包含項目：</span><span class="text-gray-700">${c.ex}</span></div>
+                        <div class="bg-[#F3EFFA] rounded-lg p-3 text-gray-700">${c.myth}</div>
+                    </div>
+                </div>`;
+            examWrap.appendChild(el);
+            const head = el.querySelector('.flex.items-center');
+            head.addEventListener('click', () => {
+                const panel = el.querySelector('.reveal-panel');
+                const icon = el.querySelector('.toggle-icon');
+                panel.classList.toggle('open');
+                const open = panel.classList.contains('open');
+                panel.style.paddingBottom = open ? '0' : '0';
+                icon.textContent = open ? '－' : '＋';
+            });
+        });
+
+        // ===== 區塊五：案例研討 =====
+        const caseData = {
+            c1: { tag:"缺漏", scene:"一份大班幼兒（無情緒行為問題）的 IEP，完整寫了現況、服務、目標與評量，但整份沒有任何「轉銜輔導及服務」的內容。承辦教師說：「他還小，等升大班下學期再補。」", q:"這份 IEP 不符法規之處與實務後果是什麼？", ans:"轉銜輔導及服務是施行細則第 10 條的法定內容之一，缺漏即不符法規。更關鍵的是：這名幼兒已是大班，正處幼小銜接關鍵期，缺漏轉銜不僅違法，也錯失規劃參訪小學、能力銜接、資料移轉的最佳時機，可能造成入小一的適應斷層。（註：第四款行為介入方案只有『具情緒行為問題』的學生才需要；但第五款轉銜對所有學生都適用。）" },
+            c2: { tag:"倒置", scene:"一份 IEP 把「行為功能介入方案」寫得洋洋灑灑放在最前面，但「現況能力與需求評估」只寫了一句「個案能力落後」，放在最後且內容空泛。", q:"從五大內容的邏輯關係看，問題出在哪？", ans:"五大內容有內在邏輯順序：現況與需求評估是後續服務、目標與行為介入的基礎。現況空泛卻先寫出詳細介入，等於介入沒有評估依據，是專業邏輯的倒置。行為介入方案更應建立在行為功能分析（FBA）之上，若連現況都不清楚，介入策略難以對症，也無從評估成效。" },
+            c3: { tag:"形式", scene:"一份 IEP 各欄位都填滿了，簽名頁上有特教教師、組長、家長的簽名。但家長私下表示：「我沒參加會議，是老師寫好之後拿來給我補簽的。」", q:"這份 IEP 表面合法，實質問題是什麼？", ans:"特教法第 31 條要求以團隊合作方式訂定 IEP，家長是平等參與的夥伴。事後補簽跳過了『會議協商』的過程，使 IEP 淪為單方完成的行政文書，違背『IEP＝會議＋書面文件』的核心精神。表件填滿、有簽名只是形式合法；真正的合法性來自實質的團隊協商與家長參與。" }
+        };
+        function renderCase(key) {
+            const d = caseData[key];
+            document.getElementById('case-content').innerHTML = `
+                <div class="bg-white border border-[#E0D6F0] rounded-xl p-6">
+                    <span class="inline-block bg-[#EDE6F8] text-[#6B4FA0] text-xs font-semibold px-3 py-1 rounded-full mb-3">${d.tag}</span>
+                    <p class="text-gray-700 leading-relaxed mb-4">${d.scene}</p>
+                    <p class="font-semibold text-[#8B6FC4] mb-3">${d.q}</p>
+                    <button class="reveal-ans bg-[#8B6FC4] text-white text-sm font-semibold py-2 px-5 rounded-lg hover:bg-[#7A5EB0] transition-colors">顯示專業判讀</button>
+                    <div class="ans-panel reveal-panel mt-0">
+                        <div class="bg-[#F3EFFA] border-l-4 border-[#9B7DD4] rounded-r-lg p-4 mt-4 text-sm text-gray-700 leading-relaxed">${d.ans}</div>
+                    </div>
+                </div>`;
+            const btn = document.querySelector('#case-content .reveal-ans');
+            const panel = document.querySelector('#case-content .ans-panel');
+            btn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                btn.textContent = panel.classList.contains('open') ? '收合判讀' : '顯示專業判讀';
+            });
+        }
+        document.querySelectorAll('.case-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.case-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderCase(btn.dataset.tab);
+            });
+        });
+        renderCase('c1');
+
+        // ===== 區塊六：課堂演練 =====
+        const discussItems = [
+            { q:"拿出臺東縣集中式與巡迴輔導兩份空白表件，找出「同一個施行細則第 10 條欄位」在兩份表件中，填寫重點的三個差異。", hint:"提示：從現況描述的視角（特教班內 vs 普通班適應）、服務欄的主體（發展課程 vs 巡輔節數）切入。" },
+            { q:"為一名『能力現況：精細動作弱、需口語提示如廁』的大班幼兒，示範第五款『轉銜服務』欄該怎麼寫（至少三個具體項目）。", hint:"提示：參訪小學、把如廁提示與握筆需求做能力銜接說明、安排資料移轉與幼小轉銜會議。" },
+            { q:"一名學障幼兒申請『延長作答時間＋報讀』。請判斷這兩項各屬考試服務四分類的哪一類，並說明該寫進 IEP 的哪一欄。", hint:"提示：延長時間屬試場服務、報讀屬試題（卷）調整服務；兩者都應載明於 IEP 的服務/評量調整段。" },
+            { q:"分組辯論：『IEP 只要特推會審過、家長簽名就合法。』這句話對嗎？請結合第 31 條與『IEP＝會議＋文件』回應。", hint:"提示：特推會審議與家長簽名是必要條件，但不能取代團隊會議的實質協商；缺乏會議即使簽名齊全也違背精神。" }
+        ];
+        const dWrap = document.getElementById('discuss-cards');
+        discussItems.forEach((it, i) => {
+            const el = document.createElement('div');
+            el.className = 'card rounded-xl p-5 border-l-4 border-[#9B7DD4]';
+            el.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <span class="shrink-0 w-7 h-7 rounded-full bg-[#EDE6F8] text-[#6B4FA0] flex items-center justify-center font-bold text-sm">${i+1}</span>
+                    <div class="flex-1">
+                        <p class="text-gray-800 font-medium leading-relaxed mb-3">${it.q}</p>
+                        <button class="hint-btn text-xs text-[#8B6FC4] font-semibold">顯示討論方向 ▾</button>
+                        <div class="hint-panel reveal-panel"><p class="text-sm text-gray-500 pt-2 leading-relaxed">${it.hint}</p></div>
+                    </div>
+                </div>`;
+            dWrap.appendChild(el);
+            const btn = el.querySelector('.hint-btn');
+            const panel = el.querySelector('.hint-panel');
+            btn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                btn.textContent = panel.classList.contains('open') ? '收合討論方向 ▴' : '顯示討論方向 ▾';
+            });
+        });
+
+        // ===== 導覽：選單、平滑捲動、高亮 =====
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+        const sections = ['s1','s2','s3','s4','s5','s6'];
+        const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+        window.addEventListener('scroll', () => {
+            let cur = '';
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && window.scrollY >= el.offsetTop - 120) cur = id;
+            });
+            navLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+            });
+        });
+    });
+    </script>
+</body>
+</html>

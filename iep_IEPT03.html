@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第三次 法令相關內容：前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #8B6FC4; border-bottom-color: #8B6FC4; }
+        .question-card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: box-shadow 0.3s; }
+        .question-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .answer-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; }
+        .answer-panel.open { max-height: 900px; }
+        .option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-label:hover { background-color: #f6f3fb; }
+        input[type="radio"]:checked + .option-label { background-color: #EDE6F8; border-color: #8B6FC4; }
+        .modal-overlay { transition: opacity 0.3s ease-in-out; }
+        .badge { font-size: 0.7rem; padding: 0.15rem 0.6rem; border-radius: 9999px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-lg md:text-2xl font-bold text-[#8B6FC4]">第三次：法令相關內容 · 測驗</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12 max-w-4xl">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#8B6FC4]">前測 <span class="badge bg-blue-100 text-blue-700 align-middle">基礎</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">前測評估您對特教法規落實面的既有理解：施行細則第 10 條五大內容、特教法第 31 條的時程與參與人員、鑑輔會與特推會的權責分工、考試調整服務四大分類。偏法條辨識與定義，可作為課前快速診斷。完成後點最下方按鈕看分數；也可隨時點題目卡片看詳解。</p>
+            <div id="pre-test-container" class="space-y-4"></div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#8B6FC4]">後測 <span class="badge bg-[#EDE6F8] text-[#6B4FA0] align-middle">碩士級</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">後測拉高到碩士層次：判讀有瑕疵的 IEP 片段「哪裡不符法規、會導致什麼實務後果」、集中式與巡迴表件欄位差異判讀、法規未明處專業團隊如何裁量、考試調整服務的情境配對與界線判斷。題目較長、需要分析與取捨，請選出最適當者。</p>
+            <div id="post-test-container" class="space-y-4"></div>
+        </section>
+
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#8B6FC4] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#7A5EB0] transition-colors duration-300">計算分數並比較</button>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm">學前特殊教育與IEP實務 第三次測驗 ｜ 主教材：林素貞《個別化教育計畫之實施》｜ 僅供教學與演示用途。</p>
+            <a href="iep_index.html" class="inline-block mt-3 bg-[#8B6FC4] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#7A5EB0] transition-colors">回課程入口</a>
+        </div>
+    </footer>
+
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-xl p-8">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="h-64 mx-auto mb-6"><canvas id="score-chart"></canvas></div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 20</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 20</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preTestQuestions = [
+            { question: "1. 依特殊教育法施行細則第10條，IEP 的內容包括幾大項？", options:["(A) 三項","(B) 四項","(C) 五項","(D) 六項"], answer:"C", explanation:"施行細則第10條明定 IEP 內容包括五項：①能力現況、家庭狀況及需求評估 ②所需特殊教育、相關服務及支持策略 ③學年學期教育目標、評量方式、日期及標準 ④行為功能介入方案及行政支援 ⑤轉銜輔導及服務。" },
+            { question: "2. 下列何者「不是」施行細則第10條所定的 IEP 法定內容？", options:["(A) 學生能力現況、家庭狀況及需求評估","(B) 學年與學期教育目標及評量方式","(C) 學生之轉銜輔導及服務內容","(D) 教師的年度授課時數統計"], answer:"D", explanation:"教師授課時數屬人事行政，非 IEP 內容。五大內容為現況需求、服務支持、目標評量、行為介入、轉銜服務。" },
+            { question: "3. IEP 五大內容中，哪一項「只有在學生具情緒與行為問題時」才需要填寫？", options:["(A) 現況與需求評估","(B) 相關服務及支持策略","(C) 行為功能介入方案及行政支援","(D) 轉銜輔導及服務"], answer:"C", explanation:"第四款「具情緒與行為問題學生所需之行為功能介入方案及行政支援」是條件式內容，僅在學生有情緒行為問題時才需納入；其餘四項為所有身障學生 IEP 的必要內容。" },
+            { question: "4. 依施行細則規定，新生及轉學生的 IEP 應於何時訂定？", options:["(A) 入學後一個月內","(B) 入學後一學期內","(C) 入學後一學年內","(D) 畢業前"], answer:"A", explanation:"新生及轉學生的 IEP 應於入學後一個月內訂定；其餘在學學生應於開學前訂定。這是 IEP 時程的重要法定要求。" },
+            { question: "5. 依規定，IEP 每學期至少應檢討幾次？", options:["(A) 不需檢討","(B) 每學期至少一次","(C) 每學年一次","(D) 每三年一次"], answer:"B", explanation:"IEP 每學期應至少檢討一次，以確保計畫貼合學生當前需求，體現 IEP 動態調整的精神。" },
+            { question: "6. 依特教法第31條，IEP 應以何種方式訂定？", options:["(A) 由特教教師一人完成","(B) 由校長裁定","(C) 以團隊合作方式訂定","(D) 委外機構撰寫"], answer:"C", explanation:"特教法第31條明定應以團隊合作方式訂定 IEP，這是 IEP 正當性的核心要求之一。" },
+            { question: "7. 下列何者是各縣市負責特教學生「鑑定與安置」最終決議的法定單位？", options:["(A) 學校特殊教育推行委員會","(B) 縣市特殊教育學生鑑定及就學輔導會（鑑輔會）","(C) 家長會","(D) 教育部"], answer:"B", explanation:"鑑輔會設於縣市層級，審議並辦理鑑定、安置、重新安置與輔導相關事項，是決定「是否為特教生、如何安置」的法定權責單位。" },
+            { question: "8. 學校層級負責審議校內 IEP、課程與評量調整方案的組織是？", options:["(A) 鑑輔會","(B) 特殊教育推行委員會（特推會）","(C) 教評會","(D) 課發會"], answer:"B", explanation:"特推會設於學校，任務包括審議校內 IEP、個別化輔導計畫、特殊教育方案，以及課程與評量（含考試服務）調整方案等。" },
+            { question: "9. 依《身心障礙學生考試服務辦法》第5條，考試服務分為幾大類？", options:["(A) 二大類","(B) 三大類","(C) 四大類（另加其他合理調整）","(D) 六大類"], answer:"C", explanation:"考試服務分試場服務、輔具服務、試題（卷）調整服務、作答方式調整服務四大類，另加其他合理調整之服務。" },
+            { question: "10. 「延長作答時間、提供無障礙試場、單人試場」屬於考試服務的哪一類？", options:["(A) 試場服務","(B) 輔具服務","(C) 試題（卷）調整服務","(D) 作答方式調整服務"], answer:"A", explanation:"調整考試時間、無障礙試場環境、提醒服務、特殊試場都屬「試場服務」。" },
+            { question: "11. 「放大試卷、點字試卷、報讀」屬於考試服務的哪一類？", options:["(A) 試場服務","(B) 輔具服務","(C) 試題（卷）調整服務","(D) 作答方式調整服務"], answer:"C", explanation:"放大試卷、點字試卷、電子/有聲/觸摸圖形試題、提供試卷並報讀等，屬於「試題（卷）調整服務」，處理的是試題的呈現方式。" },
+            { question: "12. 「電腦輸入法作答、口語（錄音）作答、代謄答案卡」屬於哪一類？", options:["(A) 試場服務","(B) 輔具服務","(C) 試題（卷）調整服務","(D) 作答方式調整服務"], answer:"D", explanation:"這些處理的是「學生如何把答案表達出來」，屬「作答方式調整服務」。" },
+            { question: "13. 依考試服務辦法第10條，身心障礙學生參加校內學習評量的考試服務，應載明於何處？", options:["(A) 學生手冊","(B) 個別化教育計畫或個別化支持計畫","(C) 聯絡簿","(D) 成績單"], answer:"B", explanation:"校內學習評量的各項考試服務項目，應載明於 IEP 或個別化支持計畫，並得作為申請入學考試服務的佐證資料。" },
+            { question: "14. 依特教法第31條與相關規定，下列何者屬於 IEP 團隊的必要成員？", options:["(A) 只有特教教師","(B) 學校行政人員、特教及相關教師、學生家長","(C) 只有家長","(D) 只有校長"], answer:"B", explanation:"參與訂定 IEP 之人員應包括學校行政人員、特殊教育及相關教師、學生家長；必要時得邀請相關專業人員及學生本人參與。" },
+            { question: "15. 高級中等以下學校得設的特殊教育班，依法包含哪三種型態？", options:["(A) 集中式特教班、分散式資源班、巡迴輔導班","(B) 資優班、普通班、特教班","(C) 全日班、半日班、夜間班","(D) 實驗班、示範班、輔導班"], answer:"A", explanation:"特殊教育法規定特教班辦理方式為集中式特殊教育班、分散式資源班、巡迴輔導班三種型態。" },
+            { question: "16. 「轉銜輔導及服務」依規定包含哪些面向？", options:["(A) 只有升學","(B) 升學輔導、生活、就業、心理輔導、福利服務及其他相關專業服務","(C) 只有就業","(D) 只有福利補助"], answer:"B", explanation:"轉銜輔導及服務包含升學輔導、生活、就業、心理輔導、福利服務及其他相關專業服務等多面向，是第五款的法定內涵。" },
+            { question: "17. IEP 五大內容中，作為後續服務、目標與行為介入「基礎」的是哪一項？", options:["(A) 轉銜服務","(B) 行為介入方案","(C) 學生能力現況、家庭狀況及需求評估","(D) 行政支援"], answer:"C", explanation:"現況與需求評估是整份 IEP 的基礎，後續的服務、目標與行為介入都應建立在充分的現況評估之上。" },
+            { question: "18. 幼兒園為身心障礙幼兒訂定 IEP 時，依施行細則第10條規定？", options:["(A) 不需訂定 IEP","(B) 應準用第一項（五大內容）規定","(C) 只需寫現況即可","(D) 由家長自行撰寫"], answer:"B", explanation:"施行細則第10條末項明定：幼兒園為身心障礙幼兒訂定 IEP 時，應準用第一項規定，即同樣涵蓋五大內容。" },
+            { question: "19. 下列關於鑑輔會與特推會的敘述，何者正確？", options:["(A) 兩者都設在學校","(B) 鑑輔會設在縣市、負責鑑定安置；特推會設在學校、負責校內推動與審議","(C) 兩者都設在縣市","(D) 特推會負責鑑定，鑑輔會負責校內審議"], answer:"B", explanation:"鑑輔會是縣市層級，決定鑑定與安置；特推會是學校層級，負責校內特教推動、審議 IEP 與課程評量調整。層級與任務不同。" },
+            { question: "20. 考試調整服務與「降低及格標準」最主要的差別是？", options:["(A) 兩者相同","(B) 考試調整改變作答與呈現方式（合理調整），不改變核心目標的實質；降低標準則改變了目標本身","(C) 考試調整就是降分","(D) 兩者都會降低目標"], answer:"B", explanation:"考試調整（延長時間、報讀、放大等）改變的是達成與呈現的方式，屬合理調整，讓學生公平展現能力；降低及格標準則改變了學習目標的實質要求，兩者性質不同。" }
+        ];
+
+        const postTestQuestions = [
+            { question: "1. 一份大班幼兒（無情緒行為問題）IEP，完整寫了現況、服務、目標與評量，卻完全沒有轉銜相關內容。此 IEP 最主要的法規問題是？", options:["(A) 沒問題，學前不需轉銜","(B) 缺漏施行細則第10條第五款的轉銜輔導及服務，且大班正是幼小銜接關鍵期","(C) 應刪除評量","(D) 目標寫太多"], answer:"B", explanation:"轉銜輔導及服務是第五款法定內容，對所有身障學生皆適用（不同於第四款行為介入僅限具情緒行為問題者）。大班缺漏轉銜不僅違法，也錯失幼小銜接的關鍵規劃時機。" },
+            { question: "2. 一份 IEP 把「行為功能介入方案」寫得詳盡並置於最前，「現況能力與需求評估」卻只有一句「能力落後」且置於最後。此問題在於？", options:["(A) 順序不影響品質","(B) 介入應建立在充分的現況與需求評估之上，現況空泛使介入失去依據，是專業邏輯的倒置","(C) 應刪除現況","(D) 行為介入不需評估"], answer:"B", explanation:"五大內容有內在邏輯：現況評估是服務、目標與行為介入的基礎。現況空泛卻先寫詳細介入，等於介入缺乏依據；行為介入更應以行為功能分析為前提。" },
+            { question: "3. 一份 IEP 各欄填滿、簽名頁有特教師、組長、家長簽名，但家長表示「沒開會，是寫好拿來補簽的」。此 IEP 的實質問題是？", options:["(A) 完全合法無問題","(B) 事後補簽跳過團隊會議協商，違背第31條團隊合作與『IEP＝會議＋文件』的精神","(C) 簽名太少","(D) 欄位填太滿"], answer:"B", explanation:"表件填滿與簽名只是形式合法；IEP 的正當性來自實質的團隊會議協商與家長平等參與。事後補簽使 IEP 淪為單方行政文書，違反第31條精神。" },
+            { question: "4. 比較臺東縣「集中式特教班」與「巡迴輔導」IEP 的『服務欄』，下列判讀何者最精確？", options:["(A) 兩者服務欄完全相同","(B) 集中式以全日/半日發展課程為服務主體；巡迴輔導以巡輔教師定期入園節數與對普通班教師的諮詢協同為核心","(C) 巡迴輔導不需填服務欄","(D) 集中式不提供相關專業服務"], answer:"B", explanation:"集中式服務欄以特教班內的發展課程為主體、支持較密集；巡迴輔導則以巡輔節數、間接支持與對普通班教師的諮詢協同為核心，反映服務型態差異。" },
+            { question: "5. 一名學障幼兒申請「延長作答時間」與「報讀試題」。此兩項分別屬於考試服務的哪一類？", options:["(A) 都屬試場服務","(B) 延長時間屬試場服務、報讀屬試題（卷）調整服務","(C) 都屬作答方式調整","(D) 延長時間屬輔具服務、報讀屬作答方式調整"], answer:"B", explanation:"延長作答時間屬「試場服務」（調整考試時間）；報讀屬「試題（卷）調整服務」（試題呈現）。兩者都應載明於 IEP。正確歸類有助於在表件對應欄位填寫。" },
+            { question: "6. 某縣市 IEP 表件新增一欄「環境支持與合理調整」。從法律位階與 CRPD 精神評估，此設計？", options:["(A) 牴觸母法，應刪除","(B) 逾越權限，違法","(C) 符合合理調整精神，是上位規範在表件層次的具體化，值得肯定","(D) 與 IEP 無關"], answer:"C", explanation:"CRPD 與特教法規重視合理調整與支持策略。縣市表件將其具體化為明確欄位，是把上位精神落地的良好設計，未牴觸上位規範。" },
+            { question: "7. 對於「法規未明確規定、需專業團隊裁量」的情形（如某項服務頻率），最適當的處理原則是？", options:["(A) 一律不提供，因為法規沒寫","(B) 依學生個別需求，由團隊在會議中依專業評估共同裁量，並記錄於 IEP","(C) 由教師個人憑經驗決定即可","(D) 交由家長單方決定"], answer:"B", explanation:"法規未明處正是專業裁量空間。應回到 IEP 的團隊合作精神：依學生個別需求，由團隊在會議中專業評估、共同決策，並將裁量的依據與內容記錄於 IEP，兼顧個別化與可檢核性。" },
+            { question: "8. 一位教師主張「考試調整就是讓特教生比較好過，直接把題目改簡單、及格標準降低」。此觀念的最主要錯誤是？", options:["(A) 完全正確","(B) 混淆了『合理調整』與『降低標準』：考試調整改變作答/呈現方式，不應改變核心目標的實質","(C) 考試調整不存在","(D) 應該再降更多"], answer:"B", explanation:"合理調整（延長、報讀、放大、電腦作答）改變的是達成與呈現方式，讓學生公平展現真實能力；直接改簡單、降及格標準則改變了目標本身，兩者性質不同，不可混為一談。" },
+            { question: "9. 一份集中式特教班幼兒的 IEP，行為介入方案寫「看到孩子打人就隔離」，沒有任何功能分析。此做法的問題是？", options:["(A) 沒問題，隔離最有效","(B) 未先做行為功能分析（FBA）就直接套後果策略，可能誤判功能、介入無效甚至惡化，且不符先評估再介入的專業邏輯","(C) 應該加重處罰","(D) 行為介入不需寫入 IEP"], answer:"B", explanation:"行為介入方案應建立在行為功能分析之上（先了解行為的功能，再設計前事/替代/後果策略）。看到行為就開策略、忽略功能假設，容易誤判與失效，違背專業邏輯（第五次深入探討）。" },
+            { question: "10. 關於鑑輔會與特推會在 IEP 流程中的分工，下列敘述何者最正確？", options:["(A) 鑑輔會審 IEP，特推會做鑑定","(B) 鑑輔會（縣市）決定安置，特推會（學校）審議校內 IEP 與課程評量調整並落實","(C) 兩者都做鑑定安置","(D) 兩者都不參與 IEP"], answer:"B", explanation:"鑑輔會在縣市層級決定鑑定與安置（上游）；特推會在學校層級審議校內 IEP、課程與評量調整方案，把安置決定落實成具體校內支持（下游）。分工不同、不可互換。" },
+            { question: "11. 一名幼兒安置在普通幼兒園並接受巡迴輔導。其 IEP 的行為介入策略設計，最需要考量的是？", options:["(A) 只讓巡輔教師執行","(B) 設計成普通班教師可執行的策略（如前事調整與環境安排），並提供班級教師諮詢","(C) 把幼兒轉到集中式班","(D) 不設計介入"], answer:"B", explanation:"巡迴輔導強調間接支持與融合。行為介入須考量普通班教師的可執行性，偏重前事調整與環境安排，並由巡輔教師提供諮詢，才能在融合情境中落實。" },
+            { question: "12. 下列哪一種 IEP 目標寫法，最符合施行細則第10條第三款「可評量」的要求？", options:["(A) 提升專注力","(B) 在團體活動中，於教師口語提示下，能持續參與活動達10分鐘，連續兩週有四天達成","(C) 變得更專心","(D) 表現更好"], answer:"B", explanation:"第三款要求目標要有評量方式、日期及標準。選項B具情境、支持程度、可觀察行為、量化標準與時間，是可評量目標；其餘為模糊描述，無法評量。" },
+            { question: "13. 一份巡迴輔導 IEP 的現況欄，只抄了醫學診斷與智力分數，沒有描述幼兒在普通班的參與情形與環境障礙。此現況描述的最主要問題是？", options:["(A) 沒問題","(B) 巡迴輔導的現況核心應是普通班適應與環境互動，只抄診斷分數無法導出融合情境所需的支持","(C) 應該只寫診斷","(D) 現況不重要"], answer:"B", explanation:"巡迴輔導服務於融合情境，現況應描述幼兒在普通班的參與、遇到的環境障礙與所需支持。僅抄診斷與分數（偏醫療模式），無法對應到融合環境的具體支持設計。" },
+            { question: "14. 承上，若要改善這份巡迴輔導 IEP 的現況描述，最適當的補強方向是？", options:["(A) 增加更多測驗分數","(B) 補充幼兒在普通班的實際參與情形、環境障礙與所需的調整支持","(C) 刪除所有現況","(D) 改寫成集中式格式"], answer:"B", explanation:"應補上幼兒在普通班的參與情形、遇到的環境障礙（社會模式視角）與所需支持，讓現況能導出對應的巡迴輔導服務與環境調整，而非堆疊診斷分數。" },
+            { question: "15. 某校特推會審議一名自閉症幼兒的考試服務申請，家長要求「所有科目都用口語作答」。最符合專業與法規的處理是？", options:["(A) 一律拒絕","(B) 無條件同意","(C) 依幼兒的個別需求與科目特性評估，提供適配的作答方式調整，並將決議載明於 IEP","(D) 交由家長決定"], answer:"C", explanation:"考試服務應衡酌考試科目特性、學習優勢管道與個別需求提供適當調整。特推會應依專業評估決定適配的作答方式，而非一概拒絕或照單全收，並將決議載明於 IEP。" },
+            { question: "16. 一份 IEP 現況寫得很完整，但『服務與支持策略』只寫「提供特教服務」四個字。此欄位的最主要問題是？", options:["(A) 沒問題","(B) 支持策略過於空泛、不具體，無法據以執行與檢核，應載明服務型態、頻率、人員與內容","(C) 應該刪掉","(D) 現況才重要"], answer:"B", explanation:"第二款要求載明所需特殊教育、相關服務及支持策略。『提供特教服務』過於空泛，應具體寫明服務型態（集中式/巡迴/資源班）、相關專業服務、頻率與內容，才能執行與檢核。" },
+            { question: "17. 從法律位階看，臺東縣的 IEP 空白表件欄位設計，其正當性來源與界線為何？", options:["(A) 縣市表件位階最高，可自訂任何欄位","(B) 表件欄位應以母法與施行細則為依據、不得牴觸上位規範，但可在其精神下具體化與在地化","(C) 表件與法規無關","(D) 表件可牴觸施行細則"], answer:"B", explanation:"法律位階由上而下：母法→施行細則→縣市表件。表件欄位須以上位規範為依據、不得牴觸，但可在其精神下做具體化與貼合在地資源的設計（如增列環境支持欄）。" },
+            { question: "18. 一名幼兒的 IEP 完全比照他縣市範本，未考量臺東縣在地資源與該幼兒特性。最可能的風險是？", options:["(A) 完全沒有風險","(B) 表件雖合法，但可能與在地實務脫節、欄位形同虛設，降低 IEP 的實用性","(C) 一定違反母法","(D) 家長無法簽名"], answer:"B", explanation:"合法性與實用性是兩件事。照搬他縣市範本雖不違法，但若未貼合在地資源（如臺東的巡迴輔導人力、交通）與幼兒特性，欄位可能無法真實使用，使 IEP 流於形式。" },
+            { question: "19. 一名疑似生（尚未鑑定）的幼兒，在正式鑑定前，最適當的作法是？", options:["(A) 什麼都不做，等鑑定確定","(B) 先實施教學介入方案並記錄反應，作為後續鑑輔會鑑定與規劃的依據","(C) 直接當作特教生寫 IEP","(D) 拒絕入學"], answer:"B", explanation:"疑似生可先以教學介入方案介入並記錄反應（介入反應的精神），既及早支持，也蒐集客觀資料供鑑輔會判斷，避免延誤或誤判。IEP 則於鑑定確認後訂定。" },
+            { question: "20. 綜合本次課程，下列哪一句最能貫穿「法令相關內容」的核心？", options:["(A) 法規只要背起來就好","(B) IEP 的每一個欄位都是法條的具體落地，把施行細則第10條、考試服務辦法與組織權責，轉化為手上那張表可執行、可檢核的內容","(C) 表件填滿就合法","(D) 法規與實務無關"], answer:"B", explanation:"本次課程主線：把抽象法條落到臺東縣 IEP 表件的每一段。施行細則第10條五大內容、考試服務四分類、鑑輔會/特推會權責，最終都要轉化為表件上可執行、可檢核的具體填寫，這才是法規落地的意義。" }
+        ];
+
+        function createQuestionElement(q, index, type) {
+            const card = document.createElement('div');
+            card.className = 'question-card rounded-lg overflow-hidden';
+            const header = document.createElement('div');
+            header.className = 'p-6 cursor-pointer';
+            header.innerHTML = `<h4 class="font-semibold leading-relaxed">${q.question}</h4>`;
+            const optionsList = document.createElement('div');
+            optionsList.className = 'px-6 pb-6 space-y-3';
+            q.options.forEach((opt, i) => {
+                const wrapper = document.createElement('div');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `${type}-q${index}`;
+                radio.id = `${type}-q${index}-opt${i}`;
+                radio.value = opt.match(/\(([^)]+)\)/)[1];
+                radio.className = 'hidden';
+                const label = document.createElement('label');
+                label.htmlFor = `${type}-q${index}-opt${i}`;
+                label.className = 'option-label';
+                label.textContent = opt;
+                wrapper.appendChild(radio);
+                wrapper.appendChild(label);
+                optionsList.appendChild(wrapper);
+            });
+            const panel = document.createElement('div');
+            panel.className = 'answer-panel bg-gray-50';
+            panel.innerHTML = `<div class="p-6"><p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p><p class="text-gray-800 leading-relaxed">${q.explanation}</p></div>`;
+            card.appendChild(header);
+            card.appendChild(optionsList);
+            card.appendChild(panel);
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '1.5rem' : '0';
+                panel.style.paddingBottom = panel.classList.contains('open') ? '1.5rem' : '0';
+            });
+            return card;
+        }
+
+        const preC = document.getElementById('pre-test-container');
+        preTestQuestions.forEach((q,i) => preC.appendChild(createQuestionElement(q,i,'pre')));
+        const postC = document.getElementById('post-test-container');
+        postTestQuestions.forEach((q,i) => postC.appendChild(createQuestionElement(q,i,'post')));
+
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        const modal = document.getElementById('score-modal');
+        let scoreChart = null;
+        document.getElementById('calculate-score').addEventListener('click', () => {
+            let pre = 0, post = 0;
+            preTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="pre-q${i}"]:checked`); if(s && s.value === q.answer) pre++; });
+            postTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="post-q${i}"]:checked`); if(s && s.value === q.answer) post++; });
+            document.getElementById('pre-score').textContent = `${pre} / 20`;
+            document.getElementById('post-score').textContent = `${post} / 20`;
+            const diff = post - pre, el = document.getElementById('score-diff');
+            if(diff > 0){ el.textContent = `進步分數：+${diff}`; el.className = 'text-lg font-semibold text-green-600'; }
+            else if(diff < 0){ el.textContent = `退步分數：${diff}`; el.className = 'text-lg font-semibold text-red-600'; }
+            else { el.textContent = '分數持平'; el.className = 'text-lg font-semibold text-gray-600'; }
+            modal.classList.remove('hidden');
+            if(scoreChart) scoreChart.destroy();
+            scoreChart = new Chart(document.getElementById('score-chart'), {
+                type: 'bar',
+                data: { labels:['前測','後測'], datasets:[{ label:'答對題數', data:[pre,post], backgroundColor:['rgba(59,130,246,0.6)','rgba(139,111,196,0.65)'], borderColor:['rgba(59,130,246,1)','rgba(122,94,176,1)'], borderWidth:1 }] },
+                options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:20, ticks:{ stepSize:5 } } }, plugins:{ legend:{ display:false } } }
+            });
+        });
+        document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
+    });
+    </script>
+</body>
+</html>
