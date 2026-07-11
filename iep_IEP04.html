@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學前特教與IEP實務：第四次 轉銜法令與實務（兩小時教學版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover, .nav-link.active { color: #E0A82E; border-bottom-color: #E0A82E; }
+        .card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .flowchart-node { cursor: pointer; transition: background-color 0.3s, transform 0.3s; }
+        .flowchart-node:hover { transform: scale(1.03); background-color: #FBEBC6; }
+        .principle-card { cursor: pointer; transition: all 0.2s ease-in-out; }
+        .principle-card:hover { background-color: #FEF6E6; border-color: #F2CE72; }
+        .reveal-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.4s ease-in-out; }
+        .reveal-panel.open { max-height: 1600px; }
+        .tab-btn { transition: all 0.2s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #E0A82E; border-bottom-color: #E0A82E; font-weight: 700; }
+        .flip-card { perspective: 1000px; cursor: pointer; height: 200px; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+        .flip-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 0.75rem; display: flex; flex-direction: column; justify-content: center; padding: 1.25rem; }
+        .flip-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
+            <h1 class="text-base md:text-xl font-bold text-[#E0A82E] shrink-0">第四次：轉銜法令與實務</h1>
+            <div class="hidden lg:flex space-x-5 text-sm">
+                <a href="#s1" class="nav-link font-medium pb-1">年齡階段</a>
+                <a href="#s2" class="nav-link font-medium pb-1">轉銜流程</a>
+                <a href="#s3" class="nav-link font-medium pb-1">計畫六面向</a>
+                <a href="#s4" class="nav-link font-medium pb-1">會議角色</a>
+                <a href="#s5" class="nav-link font-medium pb-1">案例研討</a>
+                <a href="#s6" class="nav-link font-medium pb-1">課堂演練</a>
+                <a href="iep_IEPT04.html" class="nav-link font-medium pb-1 text-[#E0A82E]">測驗</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="lg:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white px-6 pb-4 grid grid-cols-2 gap-1">
+            <a href="#s1" class="block py-2 nav-link text-center">年齡階段</a>
+            <a href="#s2" class="block py-2 nav-link text-center">轉銜流程</a>
+            <a href="#s3" class="block py-2 nav-link text-center">計畫六面向</a>
+            <a href="#s4" class="block py-2 nav-link text-center">會議角色</a>
+            <a href="#s5" class="block py-2 nav-link text-center">案例研討</a>
+            <a href="#s6" class="block py-2 nav-link text-center">課堂演練</a>
+            <a href="iep_IEPT04.html" class="block py-2 nav-link text-center text-[#E0A82E]">測驗</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-10 md:py-14 max-w-5xl">
+
+        <!-- 課程重點 -->
+        <section class="mb-14">
+            <div class="grid md:grid-cols-5 gap-8 items-center">
+                <div class="md:col-span-3">
+                    <p class="text-sm font-semibold text-[#E0A82E] tracking-widest mb-2">第四次課程 · 三小時（含測驗）</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#E0A82E] mb-4">轉銜法令與實務</h2>
+                    <p class="text-gray-600 leading-relaxed">上一次談到 IEP 第五款「轉銜輔導及服務」，這一次要把它完整攤開：轉銜<strong>不是畢業前才開始的臨時作業</strong>，而是從 IFSP（0–2 早療）、IEP（3 歲起入園／學齡）到 ITP（16–21 離校）縱貫全程的概念。落地到我國制度，重點是<strong>《各教育階段身心障礙學生與幼兒轉銜輔導及服務辦法》</strong>：跨階段須召開轉銜會議、依決議通報網填報、資料移轉與支持服務銜接。本次聚焦學前最關鍵的一段——<strong>幼小銜接</strong>。</p>
+                    <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                        <span class="bg-[#FBEBC6] text-[#B4801A] px-3 py-1 rounded-full">轉銜輔導及服務辦法</span>
+                        <span class="bg-[#FBEBC6] text-[#B4801A] px-3 py-1 rounded-full">施行細則第10條第五款</span>
+                        <span class="bg-[#FBEBC6] text-[#B4801A] px-3 py-1 rounded-full">特教通報網</span>
+                        <span class="bg-[#FBEBC6] text-[#B4801A] px-3 py-1 rounded-full">幼小銜接</span>
+                    </div>
+                </div>
+                <div class="md:col-span-2">
+                    <svg class="w-full rounded-2xl shadow-sm" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="轉銜：跨階段銜接時間軸">
+  <defs><linearGradient id="h4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FEF6E6"/><stop offset="1" stop-color="#FBEBC6"/></linearGradient></defs>
+  <rect width="800" height="340" fill="url(#h4)"/>
+  <ellipse cx="400" cy="300" rx="380" ry="26" fill="#EAD79E" opacity="0.5"/>
+  <line x1="120" y1="200" x2="680" y2="200" stroke="#E0A82E" stroke-width="6" stroke-linecap="round"/>
+  <!-- 節點1 IFSP -->
+  <circle cx="160" cy="200" r="16" fill="#B4801A"/><text x="160" y="205" font-size="13" fill="#fff" text-anchor="middle" font-family="sans-serif">0</text>
+  <text x="160" y="245" font-size="14" fill="#8A6410" text-anchor="middle" font-family="sans-serif">IFSP</text>
+  <!-- 節點2 幼兒園IEP -->
+  <g transform="translate(340,120)">
+    <rect x="-46" y="0" width="92" height="70" rx="8" fill="#FFF7E6" stroke="#E0A82E" stroke-width="3"/>
+    <rect x="-34" y="14" width="68" height="8" rx="4" fill="#F2CE72"/>
+    <rect x="-34" y="30" width="52" height="7" rx="3" fill="#FBE7BE"/>
+    <rect x="-34" y="44" width="60" height="7" rx="3" fill="#FBE7BE"/>
+  </g>
+  <circle cx="340" cy="200" r="16" fill="#E0A82E"/><text x="340" y="245" font-size="14" fill="#8A6410" text-anchor="middle" font-family="sans-serif">幼兒園 IEP</text>
+  <!-- 轉銜會議星 -->
+  <g transform="translate(490,150)"><path d="M0 -20 l6 13 l14 2 l-10 10 l3 15 l-13 -8 l-13 8 l3 -15 l-10 -10 l14 -2 z" fill="#B4801A"/></g>
+  <text x="490" y="200" font-size="12" fill="#B4801A" text-anchor="middle" font-family="sans-serif">轉銜會議</text>
+  <circle cx="490" cy="200" r="10" fill="#B4801A"/>
+  <!-- 節點3 國小IEP -->
+  <g transform="translate(640,120)">
+    <rect x="-46" y="0" width="92" height="70" rx="8" fill="#FFF7E6" stroke="#B4801A" stroke-width="3"/>
+    <rect x="-34" y="14" width="68" height="8" rx="4" fill="#E0A82E"/>
+    <rect x="-34" y="30" width="52" height="7" rx="3" fill="#FBE7BE"/>
+    <rect x="-34" y="44" width="60" height="7" rx="3" fill="#FBE7BE"/>
+  </g>
+  <circle cx="640" cy="200" r="16" fill="#B4801A"/><text x="640" y="245" font-size="14" fill="#8A6410" text-anchor="middle" font-family="sans-serif">國小 IEP</text>
+  <text x="400" y="60" font-size="22" fill="#B4801A" text-anchor="middle" font-family="sans-serif" font-weight="bold">轉銜不是畢業前才開始</text>
+</svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊一：IFSP→IEP→ITP 年齡階段時間軸 -->
+        <section id="s1" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#F2CE72] text-2xl font-black">①</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#E0A82E]">IFSP→IEP→ITP：轉銜是縱貫全程的概念</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="年齡階段">
+  <rect width="300" height="200" fill="#FEF6E6" rx="12"/>
+  <line x1="40" y1="120" x2="260" y2="120" stroke="#E0A82E" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="70" cy="120" r="12" fill="#B4801A"/><text x="70" y="155" font-size="12" fill="#8A6410" text-anchor="middle" font-family="sans-serif">0-2</text>
+  <circle cx="150" cy="120" r="12" fill="#E0A82E"/><text x="150" y="155" font-size="12" fill="#8A6410" text-anchor="middle" font-family="sans-serif">3-6</text>
+  <circle cx="230" cy="120" r="12" fill="#B4801A"/><text x="230" y="155" font-size="12" fill="#8A6410" text-anchor="middle" font-family="sans-serif">6+</text>
+  <text x="150" y="55" font-size="16" fill="#B4801A" text-anchor="middle" font-family="sans-serif" font-weight="bold">IFSP→IEP→ITP</text>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">很多人以為「轉銜」只發生在畢業前一學期，其實它是貫穿三個計畫類型、跨越整個生涯的持續歷程。點每一段展開，看各階段的焦點與我國對應的實務。</p>
+            <div id="age-list" class="space-y-3"></div>
+        </section>
+
+        <!-- 區塊二：我國轉銜辦法流程圖 -->
+        <section id="s2" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#F2CE72] text-2xl font-black">②</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#E0A82E]">我國轉銜辦法流程：四步驟</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="轉銜流程">
+  <rect width="300" height="200" fill="#FEF6E6" rx="12"/>
+  <rect x="24" y="40" width="70" height="46" rx="8" fill="#FFF7E6" stroke="#E0A82E" stroke-width="2.5"/><text x="59" y="68" font-size="12" fill="#8A6410" text-anchor="middle" font-family="sans-serif">會議</text>
+  <rect x="115" y="40" width="70" height="46" rx="8" fill="#FFF7E6" stroke="#E0A82E" stroke-width="2.5"/><text x="150" y="68" font-size="12" fill="#8A6410" text-anchor="middle" font-family="sans-serif">通報網</text>
+  <rect x="206" y="40" width="70" height="46" rx="8" fill="#FFF7E6" stroke="#B4801A" stroke-width="2.5"/><text x="241" y="68" font-size="12" fill="#8A6410" text-anchor="middle" font-family="sans-serif">移送</text>
+  <path d="M94 63 L113 63" stroke="#E0A82E" stroke-width="3" marker-end="url(#a4)"/>
+  <path d="M185 63 L204 63" stroke="#E0A82E" stroke-width="3" marker-end="url(#a4)"/>
+  <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#E0A82E"/></marker></defs>
+  <text x="150" y="140" font-size="12" fill="#8A6410" text-anchor="middle" font-family="sans-serif">安置確定後 2 星期內</text>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">依<a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL000431" target="_blank" class="text-[#B4801A] underline hover:text-[#C99323]">《各教育階段身心障礙學生與幼兒轉銜輔導及服務辦法》</a>，跨教育階段的轉銜有明確的四個步驟與時程。點每個節點看時程與法定要點——幼小銜接的關鍵是「安置前一個月召開會議」。</p>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="flow-nodes"></div>
+            <div id="flow-detail" class="mt-5 bg-white border border-[#F2CE72] rounded-xl p-6 text-gray-700 leading-relaxed">
+                <p class="text-gray-400 text-center py-4">點上方任一節點，看該階段的法定時程與要點。</p>
+            </div>
+            <div class="mt-5 bg-[#FEF6E6] border-l-4 border-[#F2CE72] rounded-r-lg p-4 text-sm text-[#B4801A]">
+                <strong>一句話記憶：</strong>學前→國小的幼小銜接，原幼兒園應於<strong>安置前一個月</strong>召開轉銜會議；安置確定後<strong>二星期內</strong>完成通報網填報與資料移送。逾期未移送，接手端就無法及時銜接支持服務。
+            </div>
+        </section>
+
+        <!-- 區塊三：臺東縣個別化轉銜服務計畫欄位互動卡 -->
+        <section id="s3" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#F2CE72] text-2xl font-black">③</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#E0A82E]">個別化轉銜服務計畫：六面向</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="轉銜計畫六面向">
+  <rect width="300" height="200" fill="#FEF6E6" rx="12"/>
+  <circle cx="150" cy="100" r="30" fill="#B4801A"/><text x="150" y="105" font-size="13" fill="#fff" text-anchor="middle" font-family="sans-serif">轉銜</text>
+  <circle cx="211.4307793323261" cy="126.36840462323116" r="16" fill="#F2CE72"/><circle cx="154.9516041167392" cy="154.862224263223" r="16" fill="#F2CE72"/><circle cx="90.01778726417369" cy="128.35257545018052" r="16" fill="#F2CE72"/><circle cx="90.63299778027144" cy="70.85901225003286" r="16" fill="#F2CE72"/><circle cx="149.13279355759767" cy="45.00422083397446" r="16" fill="#F2CE72"/><circle cx="211.98636618589234" cy="74.44688013224334" r="16" fill="#F2CE72"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">依施行細則第10條第五款＋轉銜實施要點，轉銜服務資料表涵蓋六個面向。點每張卡看它在<strong>學前幼小銜接情境</strong>下的具體實例（就業一項已合理詮釋為「未來學習與適應準備」）。</p>
+            <div id="plan-cards" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+
+        <!-- 區塊四：轉銜會議角色卡 tab -->
+        <section id="s4" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#F2CE72] text-2xl font-black">④</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#E0A82E]">轉銜會議角色：五方任務</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="轉銜會議角色">
+  <rect width="300" height="200" fill="#FEF6E6" rx="12"/>
+  <ellipse cx="150" cy="110" rx="90" ry="60" fill="none" stroke="#E0A82E" stroke-width="2.5" stroke-dasharray="5 5"/>
+  <g transform="translate(199.72879746165316,153.0829800295116)"><circle cx="0" cy="-8" r="9" fill="#B4801A"/><rect x="-10" y="2" width="20" height="18" rx="6" fill="#F2CE72"/></g><g transform="translate(102.91991061957233,154.46730221007746)"><circle cx="0" cy="-8" r="9" fill="#B4801A"/><rect x="-10" y="2" width="20" height="18" rx="6" fill="#F2CE72"/></g><g transform="translate(75.0834650167363,90.7069224770709)"><circle cx="0" cy="-8" r="9" fill="#B4801A"/><rect x="-10" y="2" width="20" height="18" rx="6" fill="#F2CE72"/></g><g transform="translate(149.00890692296875,55.00422083397446)"><circle cx="0" cy="-8" r="9" fill="#B4801A"/><rect x="-10" y="2" width="20" height="18" rx="6" fill="#F2CE72"/></g><g transform="translate(226.81362293202926,94.63214759905908)"><circle cx="0" cy="-8" r="9" fill="#B4801A"/><rect x="-10" y="2" width="20" height="18" rx="6" fill="#F2CE72"/></g>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">轉銜會議不是特教教師一人的事。切換頁籤看幼兒園端、國小端、家長、專業團隊、行政各自的任務與該提供的資訊。</p>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="role-tab tab-btn active pb-2 text-sm md:text-base" data-tab="r1">幼兒園端</button>
+                <button class="role-tab tab-btn pb-2 text-sm md:text-base" data-tab="r2">國小端</button>
+                <button class="role-tab tab-btn pb-2 text-sm md:text-base" data-tab="r3">家長</button>
+                <button class="role-tab tab-btn pb-2 text-sm md:text-base" data-tab="r4">專業團隊</button>
+                <button class="role-tab tab-btn pb-2 text-sm md:text-base" data-tab="r5">行政</button>
+            </div>
+            <div id="role-content" class="bg-white border border-[#F2CE72] rounded-xl p-6"></div>
+        </section>
+
+        <!-- 區塊五：案例研討 -->
+        <section id="s5" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#F2CE72] text-2xl font-black">⑤</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#E0A82E]">案例研討：找出不符轉銜規定之處</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="轉銜案例研討">
+  <rect width="300" height="200" fill="#FEF6E6" rx="12"/>
+  <rect x="70" y="45" width="160" height="110" rx="10" fill="#FFF7E6" stroke="#E0A82E" stroke-width="2.5"/>
+  <rect x="90" y="65" width="120" height="10" rx="5" fill="#F2CE72"/>
+  <rect x="90" y="85" width="90" height="8" rx="4" fill="#FBE7BE"/>
+  <rect x="90" y="102" width="110" height="8" rx="4" fill="#FBE7BE"/>
+  <circle cx="200" cy="128" r="14" fill="#B4801A"/><text x="200" y="133" font-size="14" fill="#fff" text-anchor="middle" font-family="sans-serif">?</text>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">三份有瑕疵的轉銜實務片段。先想「哪裡不符轉銜辦法或第10條第五款、會造成什麼銜接後果」，再點開對照專業判讀。</p>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="case-tab tab-btn active pb-2 text-sm md:text-base" data-tab="c1">案例一：缺欄</button>
+                <button class="case-tab tab-btn pb-2 text-sm md:text-base" data-tab="c2">案例二：缺席</button>
+                <button class="case-tab tab-btn pb-2 text-sm md:text-base" data-tab="c3">案例三：逾期</button>
+            </div>
+            <div id="case-content"></div>
+        </section>
+
+        <!-- 區塊六：課堂演練 -->
+        <section id="s6" class="mb-10 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#F2CE72] text-2xl font-black">⑥</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#E0A82E]">課堂演練</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="課堂演練討論">
+  <rect width="300" height="200" fill="#FEF6E6" rx="12"/>
+  <rect x="45" y="55" width="120" height="72" rx="14" fill="#FFF7E6" stroke="#E0A82E" stroke-width="2.5"/><path d="M75 127 l0 22 l24 -22 z" fill="#FFF7E6" stroke="#E0A82E" stroke-width="2.5"/>
+  <rect x="150" y="80" width="105" height="60" rx="14" fill="#F2CE72"/><path d="M225 140 l0 20 l-22 -20 z" fill="#F2CE72"/>
+  <rect x="60" y="72" width="80" height="7" rx="3" fill="#F2CE72"/><rect x="60" y="86" width="64" height="7" rx="3" fill="#FBE7BE"/><rect x="60" y="100" width="72" height="7" rx="3" fill="#FBE7BE"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">分組討論，把今天的轉銜法令與六面向落到一場真實的幼小轉銜會議。每題先小組討論，再全班分享。</p>
+            <div id="discuss-cards" class="grid md:grid-cols-2 gap-5 mb-8"></div>
+            <div class="bg-[#E0A82E] text-white rounded-2xl p-6 md:p-8">
+                <p class="text-sm font-semibold tracking-widest text-[#FEF6E6] mb-2">本次帶走的產出</p>
+                <h4 class="text-xl font-bold mb-3">幼小轉銜會議議程＋轉銜計畫摘要（角色扮演演練）</h4>
+                <p class="text-[#FBEBC6] leading-relaxed text-sm">以一名大班幼兒為對象，分組角色扮演幼兒園端、國小端、家長、專業團隊，共同擬出一份轉銜會議議程與六面向轉銜計畫摘要。這份產出下一次談行為介入、第六次做總複習時都會回來對照使用。</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 mt-8">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm mb-1">學前特殊教育與IEP實務 第四次課程 ｜ 主教材：林素貞《個別化教育計畫之實施》</p>
+            <p class="text-xs text-gray-400 mb-3">法源依據：<a href="https://edu.law.moe.gov.tw/LawContent.aspx?id=GL000431" target="_blank" class="underline hover:text-[#B4801A]">各教育階段身心障礙學生與幼兒轉銜輔導及服務辦法</a>、特殊教育法施行細則第10條第五款、轉銜實施要點（GL000092）。僅供教學與演示用途。</p>
+            <div class="flex justify-center gap-3">
+                <a href="iep_IEPT04.html" class="inline-block bg-[#E0A82E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C99323] transition-colors">前往第四次測驗</a>
+                <a href="iep_index.html" class="inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-5 rounded-lg hover:bg-gray-300 transition-colors">回課程入口</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ===== 區塊一：IFSP→IEP→ITP 年齡階段時間軸 =====
+        const ageItems = [
+            { n:"IFSP", title:"個別化家庭服務計畫（0–2 歲，早期療育）", law:"以「家庭」為服務單位，聚焦嬰幼兒發展與家庭支持需求，強調自然情境中的服務提供。", form:"我國對應：發展遲緩兒童通報轉介中心、早療機構評估與服務；進入學前教育場所前，通報轉介中心/早療機構應於轉介前一個月召開轉銜會議。", pre:"學前實務要點：0–2 歲階段的重點是「家庭本位」，家長是核心服務對象之一，早療服務需與後續學前教育銜接，避免斷點。" },
+            { n:"IEP", title:"個別化教育計畫（3歲起入幼兒園、學齡階段）", law:"聚焦學生在教育情境中的能力現況、服務、目標與行為介入，並依施行細則第10條第五款納入轉銜輔導及服務。", form:"我國對應：幼兒園依規定為身心障礙幼兒訂定 IEP（準用第一項五大內容）；大班的 IEP 必須含轉銜服務內容，為幼小銜接做準備。", pre:"學前實務要點：IEP 階段的轉銜不是額外附加，而是第五款的法定必要內容；大班缺漏轉銜即不符法規。" },
+            { n:"ITP", title:"個別化轉銜計畫（16–21 歲，離校轉銜）", law:"聚焦學生離開學校後的生涯轉銜：升學、就業、獨立生活與社區參與，是轉銜歷程的後段高峰。", form:"我國對應：高中（職）階段的個別化轉銜計畫，畢業前一學期召開轉銜會議，銜接大專、職場或社政/勞政資源。", pre:"學前實務要點：雖然學前階段接觸不到 ITP 本身，但理解 ITP 的邏輯（生涯轉銜是持續累積的歷程）能幫助我們把學前的轉銜計畫定位為整條路徑的第一步，而非孤立事件。" }
+        ];
+        const ageList = document.getElementById('age-list');
+        ageItems.forEach(it => {
+            const card = document.createElement('div');
+            card.className = 'principle-card bg-white border border-[#F2CE72] rounded-xl overflow-hidden';
+            card.innerHTML = `
+                <div class="flex items-center gap-4 p-5">
+                    <span class="shrink-0 w-16 h-9 rounded-full bg-[#F2CE72] text-white flex items-center justify-center font-bold text-xs">${it.n}</span>
+                    <h4 class="font-semibold text-gray-800 flex-1">${it.title}</h4>
+                    <span class="toggle-icon text-[#F2CE72] text-xl">＋</span>
+                </div>
+                <div class="reveal-panel px-5">
+                    <div class="pb-5 pl-13 space-y-3 text-sm">
+                        <div class="bg-[#FEF6E6] rounded-lg p-3"><span class="font-semibold text-[#B4801A]">階段焦點：</span>${it.law}</div>
+                        <div><span class="font-semibold text-[#E0A82E]">我國對應：</span><span class="text-gray-700">${it.form}</span></div>
+                        <div><span class="font-semibold text-[#E0A82E]">學前實務要點：</span><span class="text-gray-700">${it.pre}</span></div>
+                    </div>
+                </div>`;
+            ageList.appendChild(card);
+            const head = card.querySelector('.flex.items-center');
+            head.style.cursor = 'pointer';
+            head.addEventListener('click', () => {
+                const panel = card.querySelector('.reveal-panel');
+                const icon = card.querySelector('.toggle-icon');
+                panel.classList.toggle('open');
+                const open = panel.classList.contains('open');
+                panel.style.paddingTop = open ? '0.25rem' : '0';
+                panel.style.paddingBottom = open ? '0' : '0';
+                icon.textContent = open ? '－' : '＋';
+            });
+        });
+
+        // ===== 區塊二：轉銜辦法流程 四步驟 =====
+        const flowSteps = [
+            { key:"f1", title:"① 召開轉銜會議", detail:"原安置場所／就讀學校／幼兒園應召開轉銜會議，討論訂定生涯轉銜計畫。<strong>幼小銜接關鍵時程：應於安置前一個月召開</strong>，邀請擬安置學校、學生/幼兒本人、法定代理人或實際照顧者及相關人員參加。" },
+            { key:"f2", title:"② 通報網填報", detail:"依轉銜會議決議，至<strong>教育部特殊教育通報網</strong>填寫轉銜服務資料，內容含基本資料、現況能力分析、學習紀錄摘要、評量資料、輔導紀錄、專業服務紀錄、福利服務紀錄與未來進路建議。" },
+            { key:"f3", title:"③ 安置確定後資料移轉", corr:"③", detail:"安置確定後<strong>二星期內</strong>完成通報，並將轉銜服務資料表移送安置場所／學校，確保接手單位取得完整的學生資料。" },
+            { key:"f4", title:"④ 新單位接手／追蹤", detail:"新單位（如國小）依轉銜資料接手規劃支持服務；<strong>已安置但未報到者</strong>，開學二星期後由新單位通報原校，原校須追蹤輔導<strong>六個月</strong>。" }
+        ];
+        const flowWrap = document.getElementById('flow-nodes');
+        flowSteps.forEach((f,i) => {
+            const el = document.createElement('div');
+            el.className = 'flowchart-node bg-[#FBEBC6] border-2 border-[#F2CE72] rounded-xl p-5 text-center';
+            el.dataset.step = f.key;
+            el.innerHTML = `<p class="font-bold text-[#B4801A] text-base">${f.title}</p><p class="text-xs text-gray-500 mt-1">點擊看時程與要點</p>`;
+            flowWrap.appendChild(el);
+        });
+        function renderFlow(key) {
+            const d = flowSteps.find(f => f.key === key);
+            document.getElementById('flow-detail').innerHTML = `
+                <p class="font-bold text-[#B4801A] text-lg mb-3">${d.title}</p>
+                <div class="bg-[#FEF6E6] rounded-lg p-4 text-sm text-gray-700 leading-relaxed">${d.detail}</div>`;
+        }
+        document.querySelectorAll('#flow-nodes .flowchart-node').forEach(node => {
+            node.addEventListener('click', () => renderFlow(node.dataset.step));
+        });
+
+        // ===== 區塊三：轉銜計畫六面向 =====
+        const planItems = [
+            { title:"升學輔導", ex:"參訪擬安置國小、了解課程與作息差異、安排學前與國小教師交流觀課，協助家長理解國小的入學與編班程序。" },
+            { title:"生活", ex:"整理幼兒生活自理現況（如飲食、如廁、穿脫衣物）與所需協助程度，提供國小端具體的生活支持建議，減少環境轉換的落差。" },
+            { title:"就業（詮釋為：未來學習與適應準備）", ex:"學前階段沒有就業議題，合理詮釋為「為未來學習與生活適應做準備」：如培養基本工作習慣（收拾整理、依指令完成簡單任務）的雛型能力。" },
+            { title:"心理輔導", ex:"記錄幼兒面對新環境的焦慮反應與因應方式，建議國小端如何協助情緒調適、安排漸進式入班或同儕支持。" },
+            { title:"福利服務", ex:"說明幼兒目前領有的社福資源（如早療補助、身心障礙證明相關福利），提醒國小端後續申請特教資源、輔具或交通補助的銜接窗口。" },
+            { title:"其他相關專業服務", ex:"列出目前接受的物理／職能／語言治療等專業服務內容與頻率，建議國小端評估是否延續或轉銜至校內資源班/巡迴輔導安排。" }
+        ];
+        const planWrap = document.getElementById('plan-cards');
+        planItems.forEach(it => {
+            const el = document.createElement('div');
+            el.className = 'principle-card bg-white border border-[#F2CE72] rounded-xl overflow-hidden';
+            el.innerHTML = `
+                <div class="flex items-center gap-3 p-5" style="cursor:pointer">
+                    <span class="w-3 h-8 rounded-full bg-[#E0A82E] shrink-0"></span>
+                    <h4 class="font-bold text-gray-800 flex-1">${it.title}</h4>
+                    <span class="toggle-icon text-xl text-[#E0A82E]">＋</span>
+                </div>
+                <div class="reveal-panel px-5">
+                    <div class="pb-5 text-sm">
+                        <div class="bg-[#FEF6E6] rounded-lg p-3 text-gray-700"><span class="font-semibold text-[#B4801A]">學前幼小銜接情境實例：</span>${it.ex}</div>
+                    </div>
+                </div>`;
+            planWrap.appendChild(el);
+            const head = el.querySelector('.flex.items-center');
+            head.addEventListener('click', () => {
+                const panel = el.querySelector('.reveal-panel');
+                const icon = el.querySelector('.toggle-icon');
+                panel.classList.toggle('open');
+                icon.textContent = panel.classList.contains('open') ? '－' : '＋';
+            });
+        });
+
+        // ===== 區塊四：轉銜會議角色 tab =====
+        const roleData = {
+            r1: { name:"幼兒園端", tasks:["彙整幼兒學習與發展現況、IEP執行成果", "召開轉銜會議（安置前一個月）並邀集各方", "填寫轉銜服務資料並完成通報網登錄", "安置確定後二星期內移送資料給國小"], info:"提供資訊：能力現況、學習紀錄、行為觀察、目前服務內容與成效、對國小銜接的具體建議。" },
+            r2: { name:"國小端", tasks:["派員參加轉銜會議、了解幼兒現況與需求", "檢視自身資源（資源班/巡迴/普通班支持）是否足以銜接", "安置確定後主動確認資料是否於二星期內收到", "開學後追蹤幼兒適應狀況，未報到者依規定通報"], info:"提供資訊：擬安置班型、可提供的特教資源、學校物理環境與交通動線、任課教師配置。" },
+            r3: { name:"家長", tasks:["提供家庭觀察到的能力與生活習慣資訊", "表達對國小安置與服務的期待與疑慮", "參與轉銜會議並確認轉銜計畫內容", "配合資料填寫（如醫療診斷、社福資源證明）"], info:"提供資訊：居家生活自理狀況、家庭支持資源、幼兒特殊偏好或敏感點、既有的醫療/社福資源。" },
+            r4: { name:"專業團隊", tasks:["提供物理/職能/語言治療等專業評估與服務紀錄", "建議國小端是否延續專業服務或轉銜至巡迴/資源班", "說明輔具使用情形與後續適配建議", "必要時列席轉銜會議說明專業意見"], info:"提供資訊：專業評估報告、目前介入策略與成效、輔具清單、對銜接環境的專業建議。" },
+            r5: { name:"行政", tasks:["協調轉銜會議時間與場地、通知各方與會", "監督通報網填報時程（安置確定後二星期內）", "追蹤資料是否確實移送安置學校", "統整全園/全校轉銜個案清單並列管"], info:"提供資訊：轉銜時程管控表、通報網系統操作與紀錄、跨處室（教務/輔導/總務）協調結果。" }
+        };
+        function renderRole(key) {
+            const d = roleData[key];
+            document.getElementById('role-content').innerHTML = `
+                <p class="font-bold text-[#B4801A] text-lg mb-3">${d.name}</p>
+                <p class="text-sm font-semibold text-[#E0A82E] mb-2">會議任務</p>
+                <ul class="list-disc list-inside text-sm text-gray-700 space-y-1 mb-4">${d.tasks.map(t=>`<li>${t}</li>`).join('')}</ul>
+                <div class="bg-[#FEF6E6] rounded-lg p-3 text-sm text-gray-700"><span class="font-semibold text-[#B4801A]">應提供的資訊：</span>${d.info}</div>`;
+        }
+        document.querySelectorAll('.role-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.role-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderRole(btn.dataset.tab);
+            });
+        });
+        renderRole('r1');
+
+        // ===== 區塊五：案例研討 =====
+        const caseData = {
+            c1: { tag:"缺欄", scene:"一份大班幼兒（無情緒行為問題）的 IEP，現況、服務、目標都完整，但整份完全沒有「轉銜輔導及服務」欄位的內容。承辦教師表示：「轉銜是升國小前才要辦的事，現在寫太早。」", q:"這份 IEP 的問題是什麼？會造成什麼銜接後果？", ans:"轉銜輔導及服務是施行細則第10條第五款的法定必要內容，對所有身障學生皆適用，不是「額外選填」。大班正是幼小銜接的關鍵時間點，缺漏轉銜欄不僅違法，也可能導致轉銜會議延遲召開、資料未及時整理，錯過「安置前一個月召開會議」的時程，造成幼兒入小一時支持服務出現斷點。" },
+            c2: { tag:"缺席", scene:"某園依規定召開了幼小銜接的轉銜會議，但與會者只有園內特教教師一人；擬安置國小未派員參加，家長因故未到，也沒有另行確認家長意見。", q:"這場會議是否符合轉銜辦法的規定？問題在哪？", ans:"轉銜辦法要求會議應邀請擬安置學校、學生/幼兒本人、法定代理人或實際照顧者及相關人員參加，重點是「團隊參與」而非形式上召開。國小端缺席，代表接手單位無法在第一時間掌握幼兒現況與需求，也無法即時提出資源準備的意見；家長缺席且未另行確認意見，則違反轉銜服務應以幼兒與家庭需求為核心的精神。這場會議雖然「開了」，但實質參與度不足，轉銜計畫的品質與可執行性都會受影響。" },
+            c3: { tag:"逾期", scene:"一名幼兒的安置已於學期中確定進入某國小就讀，但原幼兒園因人力不足，遲至安置確定後<strong>六週</strong>才將轉銜服務資料送達該國小，國小端表示已開學多日，仍不清楚這名新生的特教需求。", q:"這樣的資料移送時程是否合規？會造成什麼實務後果？", ans:"依轉銜辦法，安置確定後應於<strong>二星期內</strong>完成通報網填報與資料移送；本案六週已明顯逾期，違反法定時限。實務後果是接手的國小端在幼兒入學初期缺乏關鍵資訊（現況能力、專業服務紀錄、支持策略），無法及時準備適配的環境調整、資源班或巡迴輔導安排，可能讓幼兒在最需要銜接支持的入學初期，反而處於資訊真空、支持不到位的高風險階段。逾期未移送也使後續的追蹤輔導機制無法及時啟動。" }
+        };
+        function renderCase(key) {
+            const d = caseData[key];
+            document.getElementById('case-content').innerHTML = `
+                <div class="bg-white border border-[#F2CE72] rounded-xl p-6">
+                    <span class="inline-block bg-[#FBEBC6] text-[#B4801A] text-xs font-semibold px-3 py-1 rounded-full mb-3">${d.tag}</span>
+                    <p class="text-gray-700 leading-relaxed mb-4">${d.scene}</p>
+                    <p class="font-semibold text-[#E0A82E] mb-3">${d.q}</p>
+                    <button class="reveal-ans bg-[#E0A82E] text-white text-sm font-semibold py-2 px-5 rounded-lg hover:bg-[#C99323] transition-colors">顯示專業判讀</button>
+                    <div class="ans-panel reveal-panel mt-0">
+                        <div class="bg-[#FEF6E6] border-l-4 border-[#F2CE72] rounded-r-lg p-4 mt-4 text-sm text-gray-700 leading-relaxed">${d.ans}</div>
+                    </div>
+                </div>`;
+            const btn = document.querySelector('#case-content .reveal-ans');
+            const panel = document.querySelector('#case-content .ans-panel');
+            btn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                btn.textContent = panel.classList.contains('open') ? '收合判讀' : '顯示專業判讀';
+            });
+        }
+        document.querySelectorAll('.case-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.case-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderCase(btn.dataset.tab);
+            });
+        });
+        renderCase('c1');
+
+        // ===== 區塊六：課堂演練 =====
+        const discussItems = [
+            { q:"為一名大班、擬安置於普通國小普通班（申請資源班服務）的幼兒，擬一份幼小轉銜會議議程，至少列出五個議程項目與應邀出席人員。", hint:"提示：議程可包含現況報告、各方意見交流、支持服務討論、時程確認、決議事項；出席人員含幼兒園端、國小端、家長、必要之專業人員。" },
+            { q:"為同一名幼兒填寫轉銜計畫六面向摘要（升學輔導/生活/就業（詮釋為未來學習與適應準備）/心理輔導/福利服務/其他專業服務），每面向至少一句具體內容。", hint:"提示：避免空泛描述（如「加強適應」），改寫成可執行的具體建議（如「安排入班前兩次半日試讀，觀察情緒反應」）。" },
+            { q:"轉銜會議中，幼兒園端認為幼兒已準備好進入普通班，國小端則擔心資源不足、傾向建議先安置資源班。雙方期待不一致時，會議主席（可設定為行政人員）該如何協商？", hint:"提示：回到幼兒個別需求與現有資料為依據，而非各自立場；可討論漸進式安置、試讀觀察期、資源到位後再調整等折衷方案，並將決議與後續檢核時程明確記錄。" },
+            { q:"討論：通報時程「安置確定後二星期內」在實務上常遇到什麼困難？學校/幼兒園可以怎麼建立內部流程避免逾期？並討論追蹤輔導六個月機制若執行不到位，可能造成什麼風險。", hint:"提示：常見困難包含人力不足、安置確定時間點不明確、跨單位聯繫延遲；可建立轉銜個案清單、指定專責人員、設定內部提前提醒機制；追蹤輔導不到位可能使適應困難的幼兒錯過及早介入的時機。" }
+        ];
+        const dWrap = document.getElementById('discuss-cards');
+        discussItems.forEach((it, i) => {
+            const el = document.createElement('div');
+            el.className = 'card rounded-xl p-5 border-l-4 border-[#E0A82E]';
+            el.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <span class="shrink-0 w-7 h-7 rounded-full bg-[#FBEBC6] text-[#B4801A] flex items-center justify-center font-bold text-sm">${i+1}</span>
+                    <div class="flex-1">
+                        <p class="text-gray-800 font-medium leading-relaxed mb-3">${it.q}</p>
+                        <button class="hint-btn text-xs text-[#E0A82E] font-semibold">顯示討論方向 ▾</button>
+                        <div class="hint-panel reveal-panel"><p class="text-sm text-gray-500 pt-2 leading-relaxed">${it.hint}</p></div>
+                    </div>
+                </div>`;
+            dWrap.appendChild(el);
+            const btn = el.querySelector('.hint-btn');
+            const panel = el.querySelector('.hint-panel');
+            btn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                btn.textContent = panel.classList.contains('open') ? '收合討論方向 ▴' : '顯示討論方向 ▾';
+            });
+        });
+
+        // ===== 導覽：選單、平滑捲動、高亮 =====
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+        const sections = ['s1','s2','s3','s4','s5','s6'];
+        const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+        window.addEventListener('scroll', () => {
+            let cur = '';
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && window.scrollY >= el.offsetTop - 120) cur = id;
+            });
+            navLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+            });
+        });
+    });
+    </script>
+</body>
+</html>

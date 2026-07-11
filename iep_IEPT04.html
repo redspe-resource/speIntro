@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第四次 轉銜法令與實務：前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #E0A82E; border-bottom-color: #E0A82E; }
+        .question-card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: box-shadow 0.3s; }
+        .question-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .answer-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; }
+        .answer-panel.open { max-height: 900px; }
+        .option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-label:hover { background-color: #fdf7ea; }
+        input[type="radio"]:checked + .option-label { background-color: #FBEBC6; border-color: #E0A82E; }
+        .modal-overlay { transition: opacity 0.3s ease-in-out; }
+        .badge { font-size: 0.7rem; padding: 0.15rem 0.6rem; border-radius: 9999px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-lg md:text-2xl font-bold text-[#E0A82E]">第四次：轉銜法令與實務 · 測驗</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12 max-w-4xl">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#E0A82E]">前測 <span class="badge bg-blue-100 text-blue-700 align-middle">基礎</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">前測評估您對轉銜法令與流程的既有理解：轉銜辦法的流程步驟、通報網填報時機、IFSP/IEP/ITP 的年齡對應、轉銜會議法定參與者、幼小銜接會議召開時點、轉銜六面向定義、轉銜資料表內容。偏定義與辨識，可作為課前快速診斷。完成後點最下方按鈕看分數；也可隨時點題目卡片看詳解。</p>
+            <div id="pre-test-container" class="space-y-4"></div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#E0A82E]">後測 <span class="badge bg-[#FBEBC6] text-[#B4801A] align-middle">碩士級</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">後測拉高到碩士層次：幼小銜接情境下一步的判斷、幼兒園端/國小端/家長期待不一致時的決策與優先排序、轉銜計畫六面向的情境歸類、資料移轉與支持服務銜接案例、逾期通報與追蹤輔導後果的判讀、轉銜會議主席如何權衡。題目較長、需要分析與取捨，請選出最適當者。</p>
+            <div id="post-test-container" class="space-y-4"></div>
+        </section>
+
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#E0A82E] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#C99323] transition-colors duration-300">計算分數並比較</button>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm">學前特殊教育與IEP實務 第四次測驗 ｜ 主教材：林素貞《個別化教育計畫之實施》｜ 僅供教學與演示用途。</p>
+            <a href="iep_index.html" class="inline-block mt-3 bg-[#E0A82E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C99323] transition-colors">回課程入口</a>
+        </div>
+    </footer>
+
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-xl p-8">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="h-64 mx-auto mb-6"><canvas id="score-chart"></canvas></div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 20</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 20</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preTestQuestions = [
+            { question: "1. 我國轉銜辦法明定，跨教育階段及離開學校階段之轉銜，原安置場所/就讀學校/幼兒園應召開什麼會議？", options:["(A) 轉銜會議","(B) 期初校務會議","(C) IEP審查會議","(D) 特推會議"], answer:"A", explanation:"依《各教育階段身心障礙學生與幼兒轉銜輔導及服務辦法》，跨階段及離校轉銜，原單位應召開轉銜會議，討論訂定生涯轉銜計畫。" },
+            { question: "2. 依轉銜辦法，轉銜會議決議後，應至何處填寫轉銜服務資料？", options:["(A) 縣市政府公文系統","(B) 教育部特殊教育通報網","(C) 學校內部公文夾","(D) 衛生福利部系統"], answer:"B", explanation:"依會議決議，應至教育部特殊教育通報網填寫轉銜服務資料，這是法定的通報管道。" },
+            { question: "3. 學前→國小的幼小銜接轉銜會議，依規定應於何時召開？", options:["(A) 安置確定後一個月","(B) 開學當天","(C) 安置前一個月","(D) 畢業典禮當天"], answer:"C", explanation:"學前→國小、國小→國中之轉銜，原單位應於安置前一個月召開轉銜會議，邀請擬安置學校、幼兒本人、法定代理人及相關人員參加。" },
+            { question: "4. 轉銜會議召開後，安置確定，應於多久內完成通報並移送轉銜服務資料？", options:["(A) 一個月內","(B) 一學期內","(C) 不限時間","(D) 二星期內"], answer:"D", explanation:"安置確定後應於二星期內填寫安置學校、完成通報，並將轉銜服務資料移送安置場所或學校。" },
+            { question: "5. 「個別化家庭服務計畫」的英文縮寫及主要服務年齡是？", options:["(A) IFSP，0–2歲","(B) IEP，3–6歲","(C) ITP，16–21歲","(D) IHP，6–12歲"], answer:"A", explanation:"IFSP（Individualized Family Service Plan）主要服務0–2歲的早期療育嬰幼兒，以家庭為服務單位。" },
+            { question: "6. 「個別化轉銜計畫」的英文縮寫及主要適用年齡階段是？", options:["(A) IFSP，0–2歲","(B) ITP，16–21歲","(C) IEP，3–6歲","(D) IBP，6–12歲"], answer:"B", explanation:"ITP（Individualized Transition Plan）主要適用16–21歲階段，聚焦離校前的生涯轉銜規劃。" },
+            { question: "7. 依施行細則第10條第五款，IEP的轉銜輔導及服務內容包含哪些面向？", options:["(A) 只有升學輔導","(B) 只有福利服務","(C) 升學輔導、生活、就業、心理輔導、福利服務及其他相關專業服務","(D) 只有就業與生活"], answer:"C", explanation:"第10條第五款明定轉銜輔導及服務包括升學輔導、生活、就業、心理輔導、福利服務及其他相關專業服務等項目。" },
+            { question: "8. 依轉銜辦法規定，轉銜會議應邀請哪些人員參加？", options:["(A) 只需特教教師出席即可","(B) 只需家長出席即可","(C) 只需行政人員出席即可","(D) 擬安置學校、學生/幼兒本人、法定代理人或實際照顧者及相關人員"], answer:"D", explanation:"轉銜會議應邀請擬安置學校（或機構）、學生/幼兒本人、法定代理人或實際照顧者及相關人員參加，體現團隊參與精神。" },
+            { question: "9. 發展遲緩兒童進入學前教育場所之轉銜，應由誰於轉介前一個月召開轉銜會議？", options:["(A) 通報轉介中心或早療機構","(B) 擬安置的幼兒園","(C) 縣市教育局","(D) 家長自行召開"], answer:"A", explanation:"發展遲緩兒童進入學前教育場所之轉銜，通報轉介中心/早療機構應於轉介前一個月召開轉銜會議，並於安置確定後二星期內移送資料。" },
+            { question: "10. 畢業（離校）轉銜的會議，依規定應於何時召開？", options:["(A) 畢業典禮當天","(B) 畢業前一學期","(C) 畢業後一個月","(D) 入學時"], answer:"B", explanation:"畢業（離校）轉銜應於畢業前一學期召開轉銜會議，讓學生與家庭有充分時間規劃後續進路。" },
+            { question: "11. 轉銜服務資料表的內容，下列何者「不包含」？", options:["(A) 學生基本資料與現況能力分析","(B) 學習紀錄摘要與評量資料","(C) 教師個人年度考績","(D) 學生與家庭輔導紀錄、專業服務紀錄、福利服務紀錄"], answer:"C", explanation:"轉銜服務資料表內容包含基本資料、現況能力分析、學習紀錄摘要、評量資料、學生與家庭輔導紀錄、專業服務紀錄、福利服務紀錄、未來進路所需協助與輔導建議；教師考績與轉銜資料無關。" },
+            { question: "12. 已安置但未報到的學生/幼兒，依規定應如何處理？", options:["(A) 不需處理","(B) 直接除籍","(C) 由家長自行負責","(D) 開學二星期後通報原校，由原校追蹤輔導六個月"], answer:"D", explanation:"已安置未報到者，應於開學二星期後通報原校，並由原校追蹤輔導六個月，避免學生/幼兒的支持服務出現斷點。" },
+            { question: "13. 轉銜辦法所稱的「生涯轉銜計畫」，其訂定的責任單位主要是？", options:["(A) 各級學校/幼兒園（原安置場所）","(B) 家長","(C) 教育部","(D) 衛生福利部"], answer:"A", explanation:"依轉銜辦法，各級學校/幼兒園應評估學生個別能力與轉銜需求，訂定生涯轉銜計畫，並協調社政、勞工、衛生機關提供整體性服務。" },
+            { question: "14. 「IFSP→IEP→ITP」三者的關係，下列敘述何者正確？", options:["(A) 三者互不相關，各自獨立","(B) 三者依年齡階段銜接，共同構成縱貫全程的轉銜歷程","(C) IEP包含在ITP之下","(D) 只有ITP具有法律效力"], answer:"B", explanation:"IFSP（0–2歲）、IEP（3歲起入園/學齡）、ITP（16–21歲）依年齡階段銜接，是同一位個案生涯轉銜歷程中不同階段的計畫類型，彼此銜接而非獨立事件。" },
+            { question: "15. 依施行細則第10條第五款，轉銜輔導及服務是否為所有身心障礙學生IEP的必要內容？", options:["(A) 否，只適用於高中生","(B) 否，只有具情緒行為問題的學生才需要","(C) 是，適用於所有身心障礙學生","(D) 否，可由學校自由決定是否納入"], answer:"C", explanation:"第五款轉銜輔導及服務對所有身心障礙學生皆適用，與第四款（僅限具情緒行為問題者才需要的行為介入方案）不同，不可省略。" },
+            { question: "16. 幼小銜接的轉銜會議中，「擬安置學校」指的是？", options:["(A) 幼兒目前就讀的幼兒園","(B) 家長工作的公司","(C) 教育局本身","(D) 幼兒未來即將就讀的國小"], answer:"D", explanation:"擬安置學校是指學生/幼兒未來即將就讀、目前正在辦理安置程序的學校（如即將入學的國小），為轉銜會議的重要邀請對象。" },
+            { question: "17. 轉銜六面向中的「福利服務」，主要對應下列哪一類資源？", options:["(A) 社福資源與補助（如身心障礙證明相關福利、早療補助）","(B) 課程內容調整","(C) 考試調整服務","(D) 教師教學方法"], answer:"A", explanation:"福利服務面向對應社福資源與補助，如身心障礙證明相關福利、早療補助等，需在轉銜計畫中說明現況與後續銜接窗口。" },
+            { question: "18. 下列何者是轉銜辦法規範的核心精神？", options:["(A) 轉銜只在畢業前處理即可","(B) 跨教育階段的轉銜應有整體性與持續性的服務銜接，避免支持斷點","(C) 轉銜只需要學校單方面決定","(D) 轉銜與IEP無關"], answer:"B", explanation:"轉銜辦法的核心精神是提供整體性與持續性的服務，讓學生/幼兒在跨階段轉換時，支持服務能夠銜接不中斷，而非畢業前才臨時處理。" },
+            { question: "19. 轉銜會議中，「專業團隊」通常提供的資訊是？", options:["(A) 家庭經濟狀況","(B) 學校行政流程","(C) 專業評估報告、目前介入策略與成效、輔具使用情形","(D) 教師薪資結構"], answer:"C", explanation:"專業團隊（如物理、職能、語言治療師）主要提供專業評估報告、介入策略與成效、輔具使用情形等資訊，供轉銜計畫與新單位參考。" },
+            { question: "20. 依轉銜辦法，若安置場所變更（如由學前進入國小），下列何者是資料移轉的正確流程？", options:["(A) 家長口頭轉達即可，不需書面資料","(B) 由學生自行攜帶資料","(C) 不需要移轉，新單位重新評估即可","(D) 原單位召開轉銜會議→通報網填報→安置確定後二星期內移送資料→新單位接手"], answer:"D", explanation:"正確流程為：原單位召開轉銜會議討論生涯轉銜計畫→依決議至通報網填報轉銜服務資料→安置確定後二星期內完成資料移送→新單位依資料接手規劃支持服務。" }
+        ];
+
+        const postTestQuestions = [
+            { question: "1. 一名大班幼兒（無情緒行為問題）的IEP完整寫了現況、服務、目標與評量，卻完全沒有轉銜相關內容。承辦教師說「升國小前再補」。此做法最主要的問題是？", options:["(A) 缺漏施行細則第10條第五款的法定內容，且可能延誤幼小銜接安置前一個月的會議時程","(B) 沒有問題，轉銜本來就該在升國小前才辦","(C) 應該刪除現況欄位","(D) 目標寫太多，應該精簡"], answer:"A", explanation:"轉銜輔導及服務是第五款法定必要內容，對所有身障學生皆適用。大班正是幼小銜接關鍵期，延後處理可能錯過安置前一個月召開轉銜會議的時程，造成銜接斷點。" },
+            { question: "2. 某轉銜會議僅特教教師一人出席，擬安置國小未派員參加、家長也未到場且未另行確認意見。此會議最主要的實質問題是？", options:["(A) 沒有問題，開會形式已完成","(B) 團隊參與不足，接手單位無法及時掌握需求，也違背轉銜服務以幼兒與家庭需求為核心的精神","(C) 應該取消轉銜會議制度","(D) 特教教師一人出席即已足夠代表所有意見"], answer:"B", explanation:"轉銜辦法要求邀請擬安置學校、幼兒本人、法定代理人及相關人員參加，重點在實質團隊參與。單方召開雖形式上「開了會」，但接手單位與家長缺席，會使轉銜計畫失去關鍵資訊來源與共識基礎。" },
+            { question: "3. 一名幼兒安置確定後，原幼兒園因人力不足遲至六週後才將轉銜服務資料送達國小。此逾期最直接的實務風險是？", options:["(A) 沒有實質風險，資料遲早會到","(B) 只影響家長的滿意度","(C) 國小端在入學初期缺乏關鍵資訊，無法及時準備環境調整與資源安排，錯過支持到位的黃金時機","(D) 只是行政瑕疵，與幼兒實際適應無關"], answer:"C", explanation:"法定時限為安置確定後二星期內。逾期移送使國小端在幼兒入學初期缺乏現況、服務與專業紀錄等關鍵資訊，無法及時規劃支持，讓幼兒在最需要銜接的階段反而處於支持真空。" },
+            { question: "4. 幼兒園端認為幼兒已準備好進入普通班，國小端因資源不足傾向建議先安置資源班，雙方期待不一致。轉銜會議主席最適當的處理方式是？", options:["(A) 直接採納國小端意見，因為國小是接手單位","(B) 直接採納幼兒園端意見，因為幼兒園較了解幼兒","(C) 讓家長自行決定，會議不做任何討論","(D) 回到幼兒個別需求與現有評估資料為依據，討論漸進式安置或試讀觀察等折衷方案，並明確記錄決議與後續檢核時程"], answer:"D", explanation:"轉銜會議應以幼兒個別需求與客觀資料為核心，而非各方立場之爭。折衷方案如漸進式安置、試讀觀察期，並將決議與後續檢核時程書面化，才能兼顧幼兒適應與資源現實。" },
+            { question: "5. 一份轉銜計畫將幼兒「培養基本工作習慣（如收拾整理、依指令完成簡單任務）」的目標歸入「就業」面向。此歸類是否合理？", options:["(A) 合理，這是將「就業」面向依學前情境詮釋為「未來學習與適應準備」的合理轉化","(B) 不合理，學前幼兒不應涉及就業概念","(C) 應歸入福利服務面向","(D) 應刪除此目標，因為與轉銜無關"], answer:"A", explanation:"六面向中的「就業」對學前幼兒而言可合理詮釋為「未來學習與生活適應準備」，培養基本工作習慣、依指令完成任務等雛型能力，正是此面向在學前情境的合理落地。" },
+            { question: "6. 一名幼兒目前接受語言治療師定期到園服務。轉銜計畫中，這項資訊最適合歸入六面向的哪一項，並應同時建議什麼？", options:["(A) 歸入生活面向，建議增加治療頻率","(B) 歸入其他相關專業服務面向，建議國小端評估是否延續服務或轉銜至校內資源班/巡迴輔導安排","(C) 歸入心理輔導面向，不需其他建議","(D) 不需納入轉銜計畫，屬醫療事項"], answer:"B", explanation:"語言治療等專業服務屬「其他相關專業服務」面向。轉銜計畫應說明目前服務內容與頻率，並建議接手單位評估延續方式（如轉銜至資源班或巡迴輔導），確保專業服務銜接不中斷。" },
+            { question: "7. 某幼兒已安置於國小但開學兩星期後仍未到校報到，且原幼兒園未主動處理。此情形最符合下列哪一項判斷？", options:["(A) 無需處理，因安置已確定","(B) 應由家長自行負責，與雙方單位無關","(C) 違反規定：國小應通報原校，原校應追蹤輔導六個月，原幼兒園未處理已延誤法定機制的啟動","(D) 應立即取消該幼兒的特教生資格"], answer:"C", explanation:"依規定，已安置未報到者，國小端應於開學二星期後通報原校，原校須追蹤輔導六個月。原幼兒園未主動處理，代表法定的追蹤輔導機制未能及時啟動，可能讓幼兒的安置狀況與需求持續處於未掌握狀態。" },
+            { question: "8. 從IFSP、IEP、ITP三階段的縱貫概念評估，一份學前IEP的轉銜服務內容若完全未參考幼兒之前的IFSP（若有）資料，最可能的問題是？", options:["(A) 沒有問題，IFSP與IEP完全無關","(B) IFSP資料應予銷毀，不應保留","(C) 只有ITP才需要參考先前資料","(D) 可能造成轉銜資訊斷點，未能延續早療階段已掌握的發展史與家庭支持資訊，降低轉銜計畫的完整性"], answer:"D", explanation:"IFSP→IEP→ITP是縱貫全程的轉銜歷程，各階段計畫應延續累積資訊。若學前IEP轉銜服務未參考既有的IFSP資料（如早療階段的發展史、家庭支持需求），會造成資訊斷點，影響轉銜計畫的完整性與延續性。" },
+            { question: "9. 某轉銜服務資料表中，「現況能力分析」欄位只填寫了醫學診斷名稱與一句「發展遲緩」，未描述具體能力與需求。此填寫方式的最主要問題是？", options:["(A) 過於空泛，接手單位無法據以規劃具體的支持服務與環境調整","(B) 沒有問題，診斷名稱已足夠說明一切","(C) 應該刪除此欄位","(D) 只有國小端需要填寫此欄位"], answer:"A", explanation:"轉銜服務資料表的現況能力分析應具體描述各領域能力現況與需求，而非僅列診斷名稱。空泛描述無法讓接手單位（如國小）據以規劃具體的環境調整與支持策略，降低轉銜資料的實用性。" },
+            { question: "10. 依轉銜辦法精神，若某縣市在轉銜服務資料表中增列「跨單位聯繫窗口與聯絡方式」欄位，此設計應如何評估？", options:["(A) 逾越法規授權，應予刪除","(B) 符合整體性與持續性服務銜接的精神，是上位規範在表件層次的具體化，值得肯定","(C) 與母法牴觸，違法","(D) 與轉銜辦法無關，純屬行政多此一舉"], answer:"B", explanation:"轉銜辦法強調整體性與持續性的服務銜接。增列聯繫窗口欄位有助於跨單位（教育、社政、勞政、衛生）實際聯繫與資源協調，是把上位精神具體化、增進實務可執行性的良好設計，未牴觸母法。" },
+            { question: "11. 一名幼兒的轉銜會議紀錄顯示：會議決議「加強國小適應」，但未載明具體策略、負責人與時程。此決議品質最主要的缺陷是？", options:["(A) 沒有缺陷，決議已經很清楚","(B) 決議內容應刪除，不需要任何文字","(C) 決議過於原則性、不可執行也不可檢核，應具體化為可操作的策略、負責單位與時程","(D) 只要有開會紀錄即已足夠，內容不重要"], answer:"C", explanation:"轉銜會議決議應具體、可執行、可檢核，例如「安排入班前兩次半日試讀，由巡輔教師於開學後兩週內追蹤觀察」。「加強適應」這類原則性語句無法轉化為實際行動，也無法後續檢核成效。" },
+            { question: "12. 某國小收到轉銜資料後，發現資料中僅有醫療診斷與測驗分數，缺乏幼兒在原幼兒園的參與情形與環境因應方式。國小端最適當的下一步是？", options:["(A) 直接依診斷分數安排特教服務，不需其他資訊","(B) 退回轉銜資料，拒給收案","(C) 忽略轉銜資料，重新從零評估","(D) 主動聯繫原幼兒園補充參與情形與環境因應等現況資訊，以規劃更貼合實際的支持服務"], answer:"D", explanation:"轉銜資料若偏重醫療模式（僅診斷與分數），缺乏融合情境下的參與現況與環境因應資訊，國小端應主動聯繫原單位補充，才能規劃出貼合幼兒實際需求的支持服務，而非重新評估或照單全收。" },
+            { question: "13. 比較轉銜六面向中「心理輔導」與「福利服務」，下列判讀何者最精確？", options:["(A) 心理輔導聚焦情緒調適與適應歷程的支持；福利服務聚焦可運用的社福資源與補助銜接，關注點不同","(B) 兩者定義相同，可互換使用","(C) 福利服務只適用於國小以上學生","(D) 心理輔導只在學生有情緒行為問題時才需填寫"], answer:"A", explanation:"心理輔導面向聚焦幼兒/學生面對轉換時的情緒調適與適應歷程支持；福利服務面向聚焦社福資源、補助與相關福利的銜接（如早療補助、身心障礙證明相關福利）。兩者關注點不同，不可混用，且六面向對所有轉銜個案皆適用，非僅限特定情緒行為問題者。" },
+            { question: "14. 某轉銜會議中，家長提出希望幼兒直接跳過資源班、全面融入普通班；專業團隊評估後認為漸進式安排較適合。此時最符合轉銜精神的處理方式是？", options:["(A) 完全尊重家長意見，忽略專業團隊評估","(B) 以團隊合作方式討論，整合家長期待與專業評估，尋求兼顧幼兒需求與可行性的共識方案，並記錄決議依據","(C) 完全採納專業團隊意見，不採納家長意見","(D) 由行政人員片面決定安置方式"], answer:"B", explanation:"轉銜會議的核心精神是團隊合作與整體性服務，應整合家長期待與專業評估，透過討論尋求兼顧幼兒實際需求與資源可行性的共識，而非任一方片面主導，並應將決議依據書面記錄以供後續檢核。" },
+            { question: "15. 一名幼兒的轉銜計畫六面向摘要中，「生活」面向僅寫「生活自理待加強」，未說明具體項目與協助方式。此填寫方式對接手單位的最大影響是？", options:["(A) 沒有影響，接手單位會自行了解","(B) 此欄位不重要，可以省略","(C) 接手單位無法據此規劃具體的生活支持策略（如如廁提示、進食協助程度），可能延誤入學初期的必要調整","(D) 只需家長口頭說明即可，不需書面紀錄"], answer:"C", explanation:"轉銜計畫應具體描述生活自理現況（如飲食、如廁、穿脫衣物）與所需協助程度，讓接手單位能及早規劃對應支持。空泛描述會使國小端無法在入學初期即時提供適當協助，增加適應困難的風險。" },
+            { question: "16. 某幼兒園將轉銜會議安排在安置確定後才召開，理由是「等確定安置學校後討論才有意義」。此做法對幼小銜接而言，最主要的問題是？", options:["(A) 沒有問題，這樣討論更精確","(B) 轉銜會議本來就沒有時程規定","(C) 應該安置後半年才召開較合適","(D) 違反法定時程：幼小銜接應於安置前一個月召開會議，安置後才召開已錯失規劃與資源準備的時間"], answer:"D", explanation:"轉銜辦法明定學前→國小之轉銜，應於安置前一個月召開轉銜會議，讓各方在安置確定前就能討論與準備。安置後才召開已違反法定時程，且錯失了讓接手單位提前準備資源與環境調整的機會。" },
+            { question: "17. 從轉銜服務的整體性精神來看，若某幼兒同時涉及教育、社政（早療補助）與衛生（醫療追蹤）三個系統，轉銜計畫應如何處理？", options:["(A) 依轉銜辦法整體性與持續性服務的精神，協調社政、衛生等相關機關共同提供銜接服務，並整合記錄於轉銜計畫","(B) 只需處理教育系統事項，其他系統由家長自行聯繫","(C) 三個系統應各自獨立作業，不應整合","(D) 轉銜計畫僅適用教育體系內部轉換，不涉及跨部門"], answer:"A", explanation:"轉銜辦法明定各級學校/幼兒園應協調社政、勞工、衛生機關提供整體性與持續性服務。跨系統個案的轉銜計畫應整合協調各相關機關資源，而非侷限於教育體系內部，才能落實轉銜服務的整體性精神。" },
+            { question: "18. 一名國小新生於開學後表現出明顯的分離焦慮與哭鬧，事後檢視發現轉銜資料中未提及幼兒在幼兒園階段的類似反應與因應策略。此案例最能說明轉銜計畫中哪個面向的重要性？", options:["(A) 福利服務面向未落實","(B) 心理輔導面向：應記錄幼兒面對新環境的情緒反應模式與有效因應方式，供接手單位提前規劃支持","(C) 就業面向未落實","(D) 與六面向皆無關，純屬偶發事件"], answer:"B", explanation:"心理輔導面向應記錄幼兒面對新環境的焦慮反應與因應方式，並建議接手單位如何協助情緒調適（如漸進入班、同儕支持）。若轉銜資料缺漏此資訊，接手單位便無法提前準備因應策略，增加適應困難風險。" },
+            { question: "19. 某轉銜會議因應幼兒有明顯粗大動作與精細動作限制，決議由國小端提前規劃無障礙環境動線與適配桌椅。此決議展現了轉銜服務六面向中哪一項的具體落實，並涉及哪個角色的資訊提供？", options:["(A) 福利服務面向；由家長提供","(B) 升學輔導面向；與專業團隊無關","(C) 生活面向的延伸落實；主要仰賴專業團隊（如職能治療）提供的評估資訊與行政端的環境調整執行","(D) 心理輔導面向；僅需幼兒園端資訊"], answer:"C", explanation:"無障礙環境與適配桌椅屬生活面向在環境支持上的具體落實，通常需要專業團隊（如職能治療師）提供的評估與輔具建議，並由行政端負責環境調整的實際執行，展現角色分工與六面向落地的結合。" },
+            { question: "20. 綜合本次課程，下列哪一句最能貫穿「轉銜法令與實務」的核心？", options:["(A) 轉銜只是畢業前的行政程序，走完流程即可","(B) 轉銜只涉及教育系統內部，與家庭和其他機關無關","(C) 只要通報網填報完成，轉銜任務就算結束","(D) 轉銜是縱貫IFSP、IEP、ITP全程的持續歷程，我國轉銜辦法把它落實為會議、通報、資料移轉與追蹤的具體機制，核心是讓支持服務不斷點"], answer:"D", explanation:"本次課程主線：轉銜不是畢業前的臨時作業，而是從IFSP到ITP縱貫全程的概念；我國轉銜辦法透過轉銜會議、通報網填報、二星期內資料移轉與追蹤輔導機制，把這個概念落實為具體可執行的流程，核心目標是讓幼兒/學生跨階段轉換時，支持服務能夠銜接、不出現斷點。" }
+        ];
+
+        function createQuestionElement(q, index, type) {
+            const card = document.createElement('div');
+            card.className = 'question-card rounded-lg overflow-hidden';
+            const header = document.createElement('div');
+            header.className = 'p-6 cursor-pointer';
+            header.innerHTML = `<h4 class="font-semibold leading-relaxed">${q.question}</h4>`;
+            const optionsList = document.createElement('div');
+            optionsList.className = 'px-6 pb-6 space-y-3';
+            q.options.forEach((opt, i) => {
+                const wrapper = document.createElement('div');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `${type}-q${index}`;
+                radio.id = `${type}-q${index}-opt${i}`;
+                radio.value = opt.match(/\(([^)]+)\)/)[1];
+                radio.className = 'hidden';
+                const label = document.createElement('label');
+                label.htmlFor = `${type}-q${index}-opt${i}`;
+                label.className = 'option-label';
+                label.textContent = opt;
+                wrapper.appendChild(radio);
+                wrapper.appendChild(label);
+                optionsList.appendChild(wrapper);
+            });
+            const panel = document.createElement('div');
+            panel.className = 'answer-panel bg-gray-50';
+            panel.innerHTML = `<div class="p-6"><p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p><p class="text-gray-800 leading-relaxed">${q.explanation}</p></div>`;
+            card.appendChild(header);
+            card.appendChild(optionsList);
+            card.appendChild(panel);
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '1.5rem' : '0';
+                panel.style.paddingBottom = panel.classList.contains('open') ? '1.5rem' : '0';
+            });
+            return card;
+        }
+
+        const preC = document.getElementById('pre-test-container');
+        preTestQuestions.forEach((q,i) => preC.appendChild(createQuestionElement(q,i,'pre')));
+        const postC = document.getElementById('post-test-container');
+        postTestQuestions.forEach((q,i) => postC.appendChild(createQuestionElement(q,i,'post')));
+
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        const modal = document.getElementById('score-modal');
+        let scoreChart = null;
+        document.getElementById('calculate-score').addEventListener('click', () => {
+            let pre = 0, post = 0;
+            preTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="pre-q${i}"]:checked`); if(s && s.value === q.answer) pre++; });
+            postTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="post-q${i}"]:checked`); if(s && s.value === q.answer) post++; });
+            document.getElementById('pre-score').textContent = `${pre} / 20`;
+            document.getElementById('post-score').textContent = `${post} / 20`;
+            const diff = post - pre, el = document.getElementById('score-diff');
+            if(diff > 0){ el.textContent = `進步分數：+${diff}`; el.className = 'text-lg font-semibold text-green-600'; }
+            else if(diff < 0){ el.textContent = `退步分數：${diff}`; el.className = 'text-lg font-semibold text-red-600'; }
+            else { el.textContent = '分數持平'; el.className = 'text-lg font-semibold text-gray-600'; }
+            modal.classList.remove('hidden');
+            if(scoreChart) scoreChart.destroy();
+            scoreChart = new Chart(document.getElementById('score-chart'), {
+                type: 'bar',
+                data: { labels:['前測','後測'], datasets:[{ label:'答對題數', data:[pre,post], backgroundColor:['rgba(59,130,246,0.6)','rgba(224,168,46,0.65)'], borderColor:['rgba(59,130,246,1)','rgba(201,147,35,1)'], borderWidth:1 }] },
+                options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:20, ticks:{ stepSize:5 } } }, plugins:{ legend:{ display:false } } }
+            });
+        });
+        document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
+    });
+    </script>
+</body>
+</html>

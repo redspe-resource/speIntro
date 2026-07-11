@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第五次 行為功能分析 FBA：前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #D9534F; border-bottom-color: #D9534F; }
+        .question-card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: box-shadow 0.3s; }
+        .question-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .answer-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; }
+        .answer-panel.open { max-height: 900px; }
+        .option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-label:hover { background-color: #fdf3f2; }
+        input[type="radio"]:checked + .option-label { background-color: #F7D0CE; border-color: #D9534F; }
+        .modal-overlay { transition: opacity 0.3s ease-in-out; }
+        .badge { font-size: 0.7rem; padding: 0.15rem 0.6rem; border-radius: 9999px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-lg md:text-2xl font-bold text-[#D9534F]">第五次：行為功能分析 FBA · 測驗</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12 max-w-4xl">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#D9534F]">前測 <span class="badge bg-blue-100 text-blue-700 align-middle">基礎</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">前測評估您對行為功能分析基礎概念的既有理解：ABC 定義與紀錄要點、行為四功能辨識、PBS 正確流程（先 FBA 後介入）、正增強/負增強/消弱/反應代價辨析、嫌惡與非嫌惡處置、可評量目標要素，以及行為功能介入方案的法源依據。完成後點最下方按鈕看分數；也可隨時點題目卡片看詳解。</p>
+            <div id="pre-test-container" class="space-y-4"></div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#D9534F]">後測 <span class="badge bg-[#F7D0CE] text-[#A63B38] align-middle">碩士級</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">後測拉高到碩士層次：給定行為案例推論功能假設、選擇最適介入策略、介入無效時如何回頭修正功能假設、模糊目標改寫成可評量目標的判讀、區辨 DRA/DRI/DRO/非後效增強等進階策略，以及增強與處罰概念的常見誤解辨析。題目較長、需要分析與取捨，請選出最適當者。</p>
+            <div id="post-test-container" class="space-y-4"></div>
+        </section>
+
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#D9534F] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#BF4642] transition-colors duration-300">計算分數並比較</button>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm">學前特殊教育與IEP實務 第五次測驗 ｜ 主教材：林素貞《個別化教育計畫之實施》｜ 僅供教學與演示用途。</p>
+            <a href="iep_index.html" class="inline-block mt-3 bg-[#D9534F] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#BF4642] transition-colors">回課程入口</a>
+        </div>
+    </footer>
+
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-xl p-8">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="h-64 mx-auto mb-6"><canvas id="score-chart"></canvas></div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 20</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 20</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preTestQuestions = [
+            { question: "1. ABC 觀察紀錄中的「A」指的是？", options:["(A) 前事 Antecedent","(B) 行為 Behavior","(C) 後果 Consequence","(D) 評量 Assessment"], answer:"A", explanation:"ABC 分別代表前事（Antecedent，行為之前的情境）、行為（Behavior，可觀察的具體行為）、後果（Consequence，行為之後的結果）。" },
+            { question: "2. 下列哪一種行為紀錄方式最符合 ABC 觀察的客觀性要求？", options:["(A) 記錄「他不聽話又鬧脾氣」","(B) 記錄「老師發下作業後，幼兒用手推翻桌上教材」","(C) 記錄「他今天心情不好」","(D) 記錄「他很生氣地推桌子」"], answer:"B", explanation:"ABC 紀錄應客觀描述情境與行為，避免使用「生氣」「不聽話」「心情不好」等形容詞或推論性描述，選項B具體描述了前事與行為。" },
+            { question: "3. 行為的「取得注意」功能是指？", options:["(A) 行為後逃避了某項要求","(B) 行為本身提供感官刺激","(C) 行為後有人互動或回應（含責備）","(D) 行為後拿到想要的實物"], answer:"C", explanation:"取得注意（Attention）功能是指行為之後有人給予互動或回應，即使是責備，也算是一種關注，因此可能強化該行為。" },
+            { question: "4. 一名幼兒每次被要求收拾玩具就大哭，結果收拾要求被取消。這個行為最可能的功能是？", options:["(A) 感官/自動增強","(B) 取得注意","(C) 取得實物或活動","(D) 逃避/避免要求"], answer:"D", explanation:"行為之後「要求被取消」，屬於逃避/避免要求（Escape/Avoidance）功能：指令或作業因行為而被延後、取消或降低難度。" },
+            { question: "5. 正向行為支持（PBS）強調的核心精神是？", options:["(A) 先做功能評量，再設計正向、預防性的介入策略","(B) 一律採用隔離策略","(C) 立即施以嫌惡處置以求速效","(D) 只要行為停止，方法不重要"], answer:"A", explanation:"PBS 強調積極、預防、正向的策略，並主張行為是有功能的，應先做功能評量再設計介入，重視社會效度。" },
+            { question: "6. 依 PBS 的正確流程，下列排序何者正確？", options:["(A) 介入 → 評估 → 觀察","(B) 觀察 → 功能假設 → 介入 → 評估調整","(C) 直接介入 → 觀察 → 假設","(D) 評估調整 → 介入 → 觀察"], answer:"B", explanation:"正確流程是先觀察（ABC/FAI）、歸納功能假設，再發展並執行介入方案，最後持續評估與調整，形成循環。" },
+            { question: "7. 下列何者「不是」功能評量的間接評量方式？", options:["(A) 詢問家長對行為的觀察與推測","(B) 詢問任課教師對行為情境的看法","(C) 直接的 ABC 觀察紀錄","(D) FAI 功能評量訪談"], answer:"C", explanation:"間接評量指透過訪談蒐集他人對行為的觀察與推測（如FAI訪談家長、教師）；直接觀察ABC屬於直接評量方式，不是間接評量。" },
+            { question: "8. 「移除嫌惡刺激以增加行為出現的頻率」，這是哪一種增強/處理方式？", options:["(A) 正增強","(B) 消弱","(C) 反應代價","(D) 負增強"], answer:"D", explanation:"負增強（Negative Reinforcement）是移除嫌惡的刺激以增加行為，例如幼兒逃避作業成功、指令因此被取消，行為就被負增強了。" },
+            { question: "9. 「給予喜歡的事物以增加行為出現的頻率」，這是？", options:["(A) 正增強","(B) 負增強","(C) 消弱","(D) 隔離"], answer:"A", explanation:"正增強（Positive Reinforcement）是給予喜歡的刺激以增加行為出現的頻率，例如幼兒完成任務後得到讚美或喜歡的玩具。" },
+            { question: "10. 「移除原本維持行為的增強物，使該行為逐漸減少」，這是？", options:["(A) 負增強","(B) 消弱","(C) 反應代價","(D) 正增強"], answer:"B", explanation:"消弱（Extinction）是指移除原本用來維持某行為的增強物，使該行為因不再獲得原有的結果而逐漸減少。" },
+            { question: "11. 「幼兒每次搶玩具就被沒收原本擁有的貼紙」，這種做法屬於？", options:["(A) 正增強","(B) 消弱","(C) 反應代價","(D) 非後效增強"], answer:"C", explanation:"反應代價（Response Cost）是指行為出現後，取走既有的增強物（如已擁有的貼紙），以減少該行為。" },
+            { question: "12. 下列何者屬於「嫌惡處置」而非正向行為支持的做法？", options:["(A) 針對功能設計後果策略","(B) 教導替代溝通行為","(C) 調整前事情境降低問題行為發生機率","(D) 斥責、隔離、體罰等立即見效的處置"], answer:"D", explanation:"嫌惡處置（如斥責、隔離、體罰）雖可能立即見效，但效果不易類化、通常僅止於當時與實施者在場時，與PBS強調的正向、預防策略相對。" },
+            { question: "13. 依施行細則第10條第四款，行為功能介入方案適用於？", options:["(A) 僅具情緒與行為問題的學生","(B) 所有身心障礙學生","(C) 僅資賦優異學生","(D) 僅國小以上學生"], answer:"A", explanation:"施行細則第10條第四款規定「具情緒與行為問題學生所需之行為功能介入方案及行政支援」，僅在學生有情緒行為問題時才需納入 IEP。" },
+            { question: "14. 下列哪一項「不屬於」完整行為功能介入方案應包含的要素？", options:["(A) 後果策略","(B) 僅口頭警告即可","(C) 前事調整","(D) 替代行為教學"], answer:"B", explanation:"完整的行為功能介入方案應包含前事調整、替代行為教學、後果處理策略與行政支援；僅口頭警告屬單一壓抑做法，不足以構成完整方案。" },
+            { question: "15. 下列哪一句最符合「可評量目標」的要素要求？", options:["(A) 幼兒表現進步","(B) 減少不當行為","(C) 在團體活動中，於教師口語提示下能持續參與10分鐘，連續兩週四天達成","(D) 讓幼兒變得更專心"], answer:"C", explanation:"可評量目標須包含情境、支持程度、可觀察行為、量化標準與時間，選項C具備完整五要素；其他選項皆為模糊描述。" },
+            { question: "16. 功能評量五步驟中，第一步應該是？", options:["(A) 發展介入方案","(B) 直接開始隔離處置","(C) 通報轉銜","(D) 選擇並定義目標行為"], answer:"D", explanation:"功能評量五步驟依序為：①選擇並定義目標行為 ②執行功能性評量 ③發展功能假設陳述 ④發展介入方案 ⑤介入評量與調整。第一步是明確定義目標行為。" },
+            { question: "17. 區別性增強中，「增強與目標行為不能同時發生的其他行為」稱為？", options:["(A) DRI","(B) DRA","(C) DRO","(D) DRL"], answer:"A", explanation:"DRI（Differential Reinforcement of Incompatible behavior）是增強與問題行為在生理上不兩立、無法同時發生的行為，例如增強「坐好」來取代「離座」。" },
+            { question: "18. 「非後效增強（NCR）」的做法是指？", options:["(A) 只增強最嚴重的行為","(B) 不論行為表現如何，定時或定量提供增強物","(C) 依行為表現給予增強","(D) 完全不給任何增強"], answer:"B", explanation:"非後效增強（Noncontingent Reinforcement）是不論行為是否出現，都依固定時間或排程提供增強物，藉此降低幼兒用問題行為換取增強的動機。" },
+            { question: "19. 下列何者是「行為四功能」中不屬於社會性增強的類別？", options:["(A) 取得實物或活動","(B) 逃避/避免要求","(C) 感官/自動增強","(D) 取得注意"], answer:"C", explanation:"感官/自動增強（Sensory）的增強來源是行為本身產生的內在刺激，不涉及他人反應或外在事物，因此不屬於社會性增強；其他三項都涉及他人或外在環境的回應。" },
+            { question: "20. 「看到孩子出現問題行為就立刻決定介入策略，不做任何評估」，這種做法最主要違反了？", options:["(A) 團隊合作原則","(B) 轉銜服務規定","(C) 考試調整規定","(D) 先做功能評量、後設計介入的專業邏輯"], answer:"D", explanation:"這種「看到行為就開策略」的做法違反了行為功能分析強調的先評估後介入邏輯，容易導致功能誤判、介入無效甚至使行為惡化。" }
+        ];
+
+        const postTestQuestions = [
+            { question: "1. 一名幼兒每次被要求進行精細動作作業時就用手推翻教材，教師隨即收回作業並讓他到角落休息。根據 ABC 資料，最合理的功能假設是？", options:["(A) 取得注意，因為老師過去關心他","(B) 取得實物，因為他想要角落的玩具","(C) 逃避/避免要求，因為作業被取消且他被帶離現場","(D) 感官/自動增強，與外部後果無關"], answer:"C", explanation:"後果是「作業被收回、要求被取消」，符合逃避/避免要求的功能特徵：指令或作業因行為而被延後、取消。" },
+            { question: "2. 承上題，若要設計對症的介入策略，下列何者「最不適當」？", options:["(A) 逐步提高任務要求的耐受度並提供行政支援","(B) 調整作業難度與呈現方式（前事調整）","(C) 教導幼兒用「我需要幫忙」表達替代溝通","(D) 加重處罰強度以嚇阻推翻教材行為"], answer:"D", explanation:"功能假設是逃避要求，加重處罰並未針對功能設計，反而可能無效甚至讓幼兒用更激烈的方式逃避；應針對前事、替代行為、後果與行政支援四面向對症介入。" },
+            { question: "3. 一份行為介入方案僅寫「幼兒打人，處理方式：立即隔離5分鐘」，未做任何 ABC 觀察或功能假設。此方案最主要的風險是？", options:["(A) 若打人的功能其實是逃避要求，隔離反而可能增強該行為","(B) 隔離時間太短","(C) 方案格式不符表件規定","(D) 沒有記載法條名稱"], answer:"A", explanation:"若未做功能評估就直接介入，一旦功能其實是逃避，隔離恰好符合幼兒想要的結果（離開現場），會意外強化打人行為，使問題惡化。" },
+            { question: "4. 教師主張：「我們對推人行為施以嫌惡的處罰，這就是負增強，應該能讓推人行為減少。」此說法的錯誤在於？", options:["(A) 負增強不存在於行為分析中","(B) 混淆了負增強（移除嫌惡刺激）與處罰（施加嫌惡刺激）的定義","(C) 處罰一定會使行為增加","(D) 處罰本來就是負增強的一種"], answer:"B", explanation:"負增強是「移除」嫌惡刺激以增加行為；教師描述的是「施加」嫌惡刺激以減少行為，這是處罰，兩者概念完全不同，不可混用。" },
+            { question: "5. 一份行為介入方案只寫「幼兒出現不當行為時立即制止並口頭警告」，未教導任何替代行為。此方案的核心問題是？", options:["(A) 應該改用隔離取代口頭警告","(B) 沒有問題，制止本身已足夠","(C) 屬於治標不治本，行為可能換一種形式復發或在制止者不在場時再現","(D) 口頭警告用詞不夠嚴厲"], answer:"C", explanation:"只壓抑行為而未教導替代行為，沒有讓幼兒學會用合宜方式滿足原本的功能，效果通常無法持久也不易類化，是治標不治本的做法。" },
+            { question: "6. 承上題，若要改善這份方案，最適當的補強方向是？", options:["(A) 刪除口頭警告","(B) 直接交由家長處理","(C) 增加制止的頻率即可","(D) 補上前事調整、替代行為教學與行政支援，形成完整的行為功能介入方案"], answer:"D", explanation:"完整的行為功能介入方案須同時包含前事調整、替代行為教學、後果策略與行政支援，缺一不可，才能真正對應功能、產生持久效果。" },
+            { question: "7. 一名幼兒的問題行為介入方案實施兩週後，行為頻率不降反升。依 FBA 的專業邏輯，下一步最適當的做法是？", options:["(A) 先確認方案是否被忠實執行，再回頭檢視功能假設是否正確並重新蒐集資料","(B) 換一位教師執行同樣的方案即可","(C) 立即加重處罰強度","(D) 直接放棄介入方案"], answer:"A", explanation:"功能評量五步驟強調介入、評量與調整是持續循環：成效不佳時應先檢查執行完整度，再回頭檢視功能假設是否正確，必要時重新蒐集 ABC 資料修正假設，而非直接加重處罰。" },
+            { question: "8. 「提升專注力」這個目標若要改寫成可評量目標，下列哪一個版本最完整？", options:["(A) 幼兒要表現得更好","(B) 在團體活動中，於教師口語提示下能持續參與活動達10分鐘，連續兩週四天達成","(C) 教師觀察幼兒的專注表現","(D) 讓幼兒更專心一點"], answer:"B", explanation:"可評量目標須具備情境（團體活動中）、支持程度（教師口語提示下）、可觀察行為（持續參與活動）、量化標準（10分鐘）、時間（連續兩週四天）五要素，選項B完整具備。" },
+            { question: "9. 一名幼兒在沒有他人互動、沒有明顯外部後果的情境下，仍反覆搖晃身體。此行為最可能的功能與對應介入方向是？", options:["(A) 逃避要求；應調整作業難度","(B) 取得實物；應教導等待與輪流","(C) 感官/自動增強；應評估提供合宜的替代感官輸出管道","(D) 取得注意；應增加對正向行為的關注"], answer:"C", explanation:"行為本身提供內在刺激、不涉及他人反應，屬感官/自動增強功能，介入應評估合宜的替代感官活動，而非單純制止。" },
+            { question: "10. 「增強與問題行為在生理上不能同時發生的行為」，這種區別性增強策略稱為？", options:["(A) DRO 增強其他行為","(B) DRL 低頻率增強","(C) DRA 增強替代行為","(D) DRI 增強不兩立行為"], answer:"D", explanation:"DRI（增強不兩立行為）是指增強與目標問題行為無法同時發生的行為，例如增強「雙手拿教材」來取代「用手打人」，兩者生理上不能同時進行。" },
+            { question: "11. 一名幼兒尖叫的功能被評估為「取得注意」。下列哪一個策略最符合區別性增強 DRA 的邏輯？", options:["(A) 教導並增強「舉手」這個能達到同樣取得注意功能的替代行為","(B) 增強幼兒安靜坐好但與注意功能無關的行為","(C) 每5分鐘定時給予關注，不論行為表現","(D) 完全忽略幼兒所有行為"], answer:"A", explanation:"DRA（增強替代行為）是增強一個能滿足與問題行為相同功能的替代行為，例如教「舉手」取代「尖叫」以取得注意，兩者功能相同但形式合宜。" },
+            { question: "12. 「不論幼兒行為表現如何，教師每10分鐘主動給予一次關注」，這種策略稱為？", options:["(A) 反應代價","(B) 非後效增強（NCR）","(C) DRA","(D) DRI"], answer:"B", explanation:"非後效增強是不論行為是否出現，都依固定排程提供增強物，藉此降低幼兒必須靠問題行為換取增強的動機，常用於取得注意功能的行為。" },
+            { question: "13. 一份 IEP 的行為介入方案寫著：「幼兒出現問題行為時，取走他原本已經在玩的積木作為處理方式。」此做法屬於？", options:["(A) 消弱","(B) 非後效增強","(C) 反應代價","(D) 正增強"], answer:"C", explanation:"反應代價是取走既有的增強物（已在玩的積木）以減少問題行為，與消弱（移除維持行為的增強來源）及正增強的機制不同，應正確歸類。" },
+            { question: "14. 教師誤將「延長作業時間直到幼兒安靜下來才收回」的做法稱為負增強的應用。此描述的問題是？", options:["(A) 應該改稱為正增強","(B) 完全正確","(C) 負增強一定與作業時間有關","(D) 這其實是拖延了要求，並未移除嫌惡刺激，不構成負增強的正確應用"], answer:"D", explanation:"此描述掩蓋了關鍵機制：若幼兒因為安靜而使作業被暫緩或取消，才是負增強（移除嫌惡刺激）；若只是拖延時間，並未真正移除要求，需要進一步釐清情境才能正確判斷是否構成負增強。" },
+            { question: "15. 一名幼兒想玩同儕手上的玩具，用力搶奪，搶到後行為立刻停止。此行為的功能與最適介入方向是？", options:["(A) 取得實物或活動；應教導等待、輪流與語言表達需求","(B) 感官增強；應提供替代感官刺激","(C) 取得注意；應增加關注頻率","(D) 逃避要求；應簡化作業難度"], answer:"A", explanation:"行為之後幼兒「拿到想要的玩具」，屬取得實物或活動功能，介入應教導等待、輪流與合宜的語言表達需求，並建立清楚的輪流規則。" },
+            { question: "16. 依 DRO（增強其他行為）的邏輯，下列做法何者正確？", options:["(A) 增強頻率越低的行為","(B) 只要目標問題行為在一段時間內沒有出現，就給予增強，不論這段時間內出現了什麼其他行為","(C) 必須指定某一個特定替代行為才能增強","(D) 增強與問題行為不兩立的行為"], answer:"B", explanation:"DRO 是指在一段時間內，只要目標問題行為沒有出現（不論出現的是什麼其他行為），就給予增強，強調的是問題行為的「不出現」，而非特定替代行為的出現。" },
+            { question: "17. 一份行為功能介入方案中，「行政支援」最合適的具體內容應包含？", options:["(A) 僅記載幼兒的醫學診斷","(B) 僅記載家長的聯絡方式","(C) 增派人力、調整環境動線、跨處室協調等具體支持措施","(D) 僅記載評量分數"], answer:"C", explanation:"依施行細則第10條第四款，行為功能介入方案應包含行政支援，具體內容如增派人力、環境調整、跨處室協調等，是方案能否落實執行的重要條件。" },
+            { question: "18. 一名幼兒的攻擊行為經評估同時具有「逃避要求」與「取得注意」雙重功能。最適當的介入設計原則是？", options:["(A) 只處理其中一個功能即可","(B) 直接採用嫌惡處置以求同時壓制兩種功能","(C) 等功能單純化後再介入","(D) 針對兩個功能分別設計對應的前事調整、替代行為與後果策略，並整合成一份方案"], answer:"D", explanation:"行為可能同時具有多重功能，介入方案應針對每一個已確認的功能分別設計對應策略（前事調整、替代行為教學、後果處理），再整合成一份完整方案，而非只處理單一功能或訴諸嫌惡處置。" },
+            { question: "19. 下列哪一種說法最能反映功能評量五步驟的完整精神？", options:["(A) 選擇並定義目標行為 → 執行功能性評量 → 發展功能假設 → 發展介入方案 → 介入評量與調整（成效不佳需回頭修正假設）","(B) 只需執行一次評量即完成整個流程","(C) 選定目標行為後直接介入即可，不需假設","(D) 介入方案訂定後不需再評估成效"], answer:"A", explanation:"完整的五步驟強調各步驟間的邏輯順序與持續循環，尤其成效不佳時要回頭修正功能假設，而非把介入視為一次性、線性完成的動作。" },
+            { question: "20. 綜合本次課程，下列哪一句最能貫穿「行為功能分析 FBA」的核心？", options:["(A) 增強與處罰可以互相替代使用","(B) 先透過客觀觀察建立功能假設，再據此設計前事、替代行為、後果與行政支援兼備的介入方案，並持續評估調整","(C) 只要處置夠嚴厲，行為就會消失","(D) 行為介入方案只是表件上的形式要求"], answer:"B", explanation:"本次課程主線：行為是有功能的，必須先做功能評量、建立功能假設，才能設計對症且完整（前事/替代/後果/行政支援）的介入方案，並持續評估、必要時回頭修正假設，這才是 FBA 與 PBS 的核心精神。" }
+        ];
+
+        function createQuestionElement(q, index, type) {
+            const card = document.createElement('div');
+            card.className = 'question-card rounded-lg overflow-hidden';
+            const header = document.createElement('div');
+            header.className = 'p-6 cursor-pointer';
+            header.innerHTML = `<h4 class="font-semibold leading-relaxed">${q.question}</h4>`;
+            const optionsList = document.createElement('div');
+            optionsList.className = 'px-6 pb-6 space-y-3';
+            q.options.forEach((opt, i) => {
+                const wrapper = document.createElement('div');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `${type}-q${index}`;
+                radio.id = `${type}-q${index}-opt${i}`;
+                radio.value = opt.match(/\(([^)]+)\)/)[1];
+                radio.className = 'hidden';
+                const label = document.createElement('label');
+                label.htmlFor = `${type}-q${index}-opt${i}`;
+                label.className = 'option-label';
+                label.textContent = opt;
+                wrapper.appendChild(radio);
+                wrapper.appendChild(label);
+                optionsList.appendChild(wrapper);
+            });
+            const panel = document.createElement('div');
+            panel.className = 'answer-panel bg-gray-50';
+            panel.innerHTML = `<div class="p-6"><p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p><p class="text-gray-800 leading-relaxed">${q.explanation}</p></div>`;
+            card.appendChild(header);
+            card.appendChild(optionsList);
+            card.appendChild(panel);
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '1.5rem' : '0';
+                panel.style.paddingBottom = panel.classList.contains('open') ? '1.5rem' : '0';
+            });
+            return card;
+        }
+
+        const preC = document.getElementById('pre-test-container');
+        preTestQuestions.forEach((q,i) => preC.appendChild(createQuestionElement(q,i,'pre')));
+        const postC = document.getElementById('post-test-container');
+        postTestQuestions.forEach((q,i) => postC.appendChild(createQuestionElement(q,i,'post')));
+
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        const modal = document.getElementById('score-modal');
+        let scoreChart = null;
+        document.getElementById('calculate-score').addEventListener('click', () => {
+            let pre = 0, post = 0;
+            preTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="pre-q${i}"]:checked`); if(s && s.value === q.answer) pre++; });
+            postTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="post-q${i}"]:checked`); if(s && s.value === q.answer) post++; });
+            document.getElementById('pre-score').textContent = `${pre} / 20`;
+            document.getElementById('post-score').textContent = `${post} / 20`;
+            const diff = post - pre, el = document.getElementById('score-diff');
+            if(diff > 0){ el.textContent = `進步分數：+${diff}`; el.className = 'text-lg font-semibold text-green-600'; }
+            else if(diff < 0){ el.textContent = `退步分數：${diff}`; el.className = 'text-lg font-semibold text-red-600'; }
+            else { el.textContent = '分數持平'; el.className = 'text-lg font-semibold text-gray-600'; }
+            modal.classList.remove('hidden');
+            if(scoreChart) scoreChart.destroy();
+            scoreChart = new Chart(document.getElementById('score-chart'), {
+                type: 'bar',
+                data: { labels:['前測','後測'], datasets:[{ label:'答對題數', data:[pre,post], backgroundColor:['rgba(59,130,246,0.6)','rgba(217,83,79,0.65)'], borderColor:['rgba(59,130,246,1)','rgba(191,70,66,1)'], borderWidth:1 }] },
+                options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:20, ticks:{ stepSize:5 } } }, plugins:{ legend:{ display:false } } }
+            });
+        });
+        document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
+    });
+    </script>
+</body>
+</html>

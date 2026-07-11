@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學前特教與IEP實務：第五次 行為功能分析 FBA（兩小時教學版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover, .nav-link.active { color: #D9534F; border-bottom-color: #D9534F; }
+        .card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .flowchart-node { cursor: pointer; transition: background-color 0.3s, transform 0.3s; }
+        .flowchart-node:hover { transform: scale(1.03); background-color: #F7D0CE; }
+        .principle-card { cursor: pointer; transition: all 0.2s ease-in-out; }
+        .principle-card:hover { background-color: #FDECEC; border-color: #EE9B98; }
+        .reveal-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.4s ease-in-out; }
+        .reveal-panel.open { max-height: 1600px; }
+        .tab-btn { transition: all 0.2s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #D9534F; border-bottom-color: #D9534F; font-weight: 700; }
+        .flip-card { perspective: 1000px; cursor: pointer; height: 200px; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+        .flip-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 0.75rem; display: flex; flex-direction: column; justify-content: center; padding: 1.25rem; }
+        .flip-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
+            <h1 class="text-base md:text-xl font-bold text-[#D9534F] shrink-0">第五次：行為功能分析 FBA</h1>
+            <div class="hidden lg:flex space-x-5 text-sm">
+                <a href="#s1" class="nav-link font-medium pb-1">ABC三元素</a>
+                <a href="#s2" class="nav-link font-medium pb-1">PBS流程</a>
+                <a href="#s3" class="nav-link font-medium pb-1">行為四功能</a>
+                <a href="#s4" class="nav-link font-medium pb-1">目標改寫</a>
+                <a href="#s5" class="nav-link font-medium pb-1">案例研討</a>
+                <a href="#s6" class="nav-link font-medium pb-1">課堂演練</a>
+                <a href="iep_IEPT05.html" class="nav-link font-medium pb-1 text-[#D9534F]">測驗</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="lg:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white px-6 pb-4 grid grid-cols-2 gap-1">
+            <a href="#s1" class="block py-2 nav-link text-center">ABC三元素</a>
+            <a href="#s2" class="block py-2 nav-link text-center">PBS流程</a>
+            <a href="#s3" class="block py-2 nav-link text-center">行為四功能</a>
+            <a href="#s4" class="block py-2 nav-link text-center">目標改寫</a>
+            <a href="#s5" class="block py-2 nav-link text-center">案例研討</a>
+            <a href="#s6" class="block py-2 nav-link text-center">課堂演練</a>
+            <a href="iep_IEPT05.html" class="block py-2 nav-link text-center text-[#D9534F]">測驗</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-10 md:py-14 max-w-5xl">
+
+        <!-- 課程重點 -->
+        <section class="mb-14">
+            <div class="grid md:grid-cols-5 gap-8 items-center">
+                <div class="md:col-span-3">
+                    <p class="text-sm font-semibold text-[#D9534F] tracking-widest mb-2">第五次課程 · 三小時（含測驗）</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#D9534F] mb-4">行為功能分析 FBA</h2>
+                    <p class="text-gray-600 leading-relaxed">上一次把法規落到表件欄位，這一次要深入五大內容中最容易被誤用的一項：<strong>具情緒與行為問題學生所需之行為功能介入方案</strong>。核心原則是<strong>先做行為功能分析，再設計介入</strong>，而不是「看到行為就開策略」。我們會練習 ABC 觀察紀錄、辨識行為四功能、把模糊目標改寫成可評量目標，並連結正向行為支持（PBS）的精神，最後用案例研討抓出實務中常見的誤用。</p>
+                    <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                        <span class="bg-[#F7D0CE] text-[#A63B38] px-3 py-1 rounded-full">施行細則第10條第四款</span>
+                        <span class="bg-[#F7D0CE] text-[#A63B38] px-3 py-1 rounded-full">ABC 觀察</span>
+                        <span class="bg-[#F7D0CE] text-[#A63B38] px-3 py-1 rounded-full">行為四功能</span>
+                        <span class="bg-[#F7D0CE] text-[#A63B38] px-3 py-1 rounded-full">正向行為支持 PBS</span>
+                    </div>
+                </div>
+                <div class="md:col-span-2">
+                    <svg class="w-full rounded-2xl shadow-sm" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="行為功能分析 ABC">
+  <defs><linearGradient id="h5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDECEC"/><stop offset="1" stop-color="#F9D4D2"/></linearGradient></defs>
+  <rect width="800" height="340" fill="url(#h5)"/>
+  <ellipse cx="400" cy="300" rx="380" ry="26" fill="#E9B4B1" opacity="0.5"/>
+  <text x="400" y="58" font-size="22" fill="#A63B38" text-anchor="middle" font-family="sans-serif" font-weight="bold">先找功能，再設計介入</text>
+  <g transform="translate(150,120)">
+    <rect x="0" y="0" width="130" height="110" rx="12" fill="#FFF0EF" stroke="#D9534F" stroke-width="3"/>
+    <circle cx="65" cy="40" r="22" fill="#EE9B98"/><text x="65" y="47" font-size="22" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="bold">A</text>
+    <text x="65" y="90" font-size="14" fill="#8F332F" text-anchor="middle" font-family="sans-serif">前事</text>
+  </g>
+  <g transform="translate(335,120)">
+    <rect x="0" y="0" width="130" height="110" rx="12" fill="#FFF0EF" stroke="#A63B38" stroke-width="3"/>
+    <circle cx="65" cy="40" r="22" fill="#A63B38"/><text x="65" y="47" font-size="22" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="bold">B</text>
+    <text x="65" y="90" font-size="14" fill="#8F332F" text-anchor="middle" font-family="sans-serif">行為</text>
+  </g>
+  <g transform="translate(520,120)">
+    <rect x="0" y="0" width="130" height="110" rx="12" fill="#FFF0EF" stroke="#D9534F" stroke-width="3"/>
+    <circle cx="65" cy="40" r="22" fill="#EE9B98"/><text x="65" y="47" font-size="22" fill="#fff" text-anchor="middle" font-family="sans-serif" font-weight="bold">C</text>
+    <text x="65" y="90" font-size="14" fill="#8F332F" text-anchor="middle" font-family="sans-serif">後果</text>
+  </g>
+  <path d="M282 175 L333 175" stroke="#D9534F" stroke-width="4" marker-end="url(#h5a)"/>
+  <path d="M467 175 L518 175" stroke="#D9534F" stroke-width="4" marker-end="url(#h5a)"/>
+  <defs><marker id="h5a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#D9534F"/></marker></defs>
+</svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊一：ABC 三元素互動卡 -->
+        <section id="s1" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#EE9B98] text-2xl font-black">①</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#D9534F]">ABC 三元素互動卡</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ABC三元素">
+  <rect width="300" height="200" fill="#FDECEC" rx="12"/>
+  <g transform="translate(50,80)"><rect x="0" y="0" width="52" height="52" rx="10" fill="#FFF0EF" stroke="#D9534F" stroke-width="2.5"/><text x="26" y="35" font-size="22" fill="#A63B38" text-anchor="middle" font-family="sans-serif" font-weight="bold">A</text></g><g transform="translate(125,80)"><rect x="0" y="0" width="52" height="52" rx="10" fill="#FFF0EF" stroke="#D9534F" stroke-width="2.5"/><text x="26" y="35" font-size="22" fill="#A63B38" text-anchor="middle" font-family="sans-serif" font-weight="bold">B</text></g><g transform="translate(200,80)"><rect x="0" y="0" width="52" height="52" rx="10" fill="#FFF0EF" stroke="#D9534F" stroke-width="2.5"/><text x="26" y="35" font-size="22" fill="#A63B38" text-anchor="middle" font-family="sans-serif" font-weight="bold">C</text></g>
+  <path d="M104 106 L123 106" stroke="#D9534F" stroke-width="3"/><path d="M179 106 L198 106" stroke="#D9534F" stroke-width="3"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">行為不是憑空發生的，前面一定有情境（前事），後面一定有結果（後果）。點每一張卡展開定義與紀錄要點，最下方附一個學前幼兒的完整 ABC 範例。</p>
+            <div id="abc-list" class="space-y-3"></div>
+        </section>
+
+        <!-- 區塊二：PBS 正確流程圖 -->
+        <section id="s2" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#EE9B98] text-2xl font-black">②</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#D9534F]">PBS 正確流程：先評估、後介入</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PBS正確流程">
+  <rect width="300" height="200" fill="#FDECEC" rx="12"/>
+  <rect x="30" y="70" width="72" height="50" rx="9" fill="#FFF0EF" stroke="#D9534F" stroke-width="2.5"/><text x="66" y="100" font-size="12" fill="#8F332F" text-anchor="middle" font-family="sans-serif">FBA</text>
+  <rect x="198" y="70" width="72" height="50" rx="9" fill="#A63B38"/><text x="234" y="100" font-size="12" fill="#fff" text-anchor="middle" font-family="sans-serif">介入</text>
+  <path d="M104 95 L196 95" stroke="#D9534F" stroke-width="3" marker-end="url(#p5a)"/>
+  <defs><marker id="p5a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#D9534F"/></marker></defs>
+  <text x="150" y="150" font-size="12" fill="#8F332F" text-anchor="middle" font-family="sans-serif">先假設功能，再開策略</text>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">正向行為支持（PBS）強調行為是有功能的，必須先做功能評量，才能設計對症的介入。點每個節點看它的內容；下方對照「常見錯誤順序」。</p>
+            <div class="grid md:grid-cols-4 gap-4 mb-6">
+                <div class="flowchart-node bg-[#F7D0CE] border-2 border-[#EE9B98] rounded-xl p-4 text-center" data-step="observe">
+                    <p class="font-bold text-[#A63B38]">① 觀察</p>
+                    <p class="text-xs text-gray-500 mt-1">ABC 紀錄／FAI 訪談</p>
+                </div>
+                <div class="flowchart-node bg-white border-2 border-[#EE9B98] rounded-xl p-4 text-center" data-step="hypothesis">
+                    <p class="font-bold text-[#A63B38]">② 功能假設</p>
+                    <p class="text-xs text-gray-500 mt-1">推論行為的功能</p>
+                </div>
+                <div class="flowchart-node bg-white border-2 border-[#EE9B98] rounded-xl p-4 text-center" data-step="intervene">
+                    <p class="font-bold text-[#A63B38]">③ 介入</p>
+                    <p class="text-xs text-gray-500 mt-1">前事／替代／後果／行政支援</p>
+                </div>
+                <div class="flowchart-node bg-white border-2 border-[#EE9B98] rounded-xl p-4 text-center" data-step="review">
+                    <p class="font-bold text-[#A63B38]">④ 評估與調整</p>
+                    <p class="text-xs text-gray-500 mt-1">成效不佳回頭修正假設</p>
+                </div>
+            </div>
+            <div id="pbs-detail" class="bg-white border border-[#F1DCDA] rounded-xl p-6 text-gray-700 leading-relaxed mb-6">
+                <p class="text-gray-400 text-center py-4">點上方任一節點，看該步驟的具體內容。</p>
+            </div>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="order-tab tab-btn active pb-2 text-sm md:text-base" data-tab="wrong">錯誤順序</button>
+                <button class="order-tab tab-btn pb-2 text-sm md:text-base" data-tab="right">正確順序</button>
+            </div>
+            <div id="order-content"></div>
+        </section>
+
+        <!-- 區塊三：行為四功能分類卡 -->
+        <section id="s3" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#EE9B98] text-2xl font-black">③</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#D9534F]">行為四功能分類卡</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="行為四功能">
+  <rect width="300" height="200" fill="#FDECEC" rx="12"/>
+  <g transform="translate(30,40)"><rect x="0" y="0" width="118" height="52" rx="9" fill="#FFF0EF" stroke="#D9534F" stroke-width="2"/><circle cx="22" cy="26" r="10" fill="#EE9B98"/><rect x="40" y="20" width="62" height="7" rx="3" fill="#F7D0CE"/><rect x="40" y="33" width="46" height="6" rx="3" fill="#F7D0CE"/></g><g transform="translate(155,40)"><rect x="0" y="0" width="118" height="52" rx="9" fill="#FFF0EF" stroke="#D9534F" stroke-width="2"/><circle cx="22" cy="26" r="10" fill="#EE9B98"/><rect x="40" y="20" width="62" height="7" rx="3" fill="#F7D0CE"/><rect x="40" y="33" width="46" height="6" rx="3" fill="#F7D0CE"/></g><g transform="translate(30,110)"><rect x="0" y="0" width="118" height="52" rx="9" fill="#FFF0EF" stroke="#D9534F" stroke-width="2"/><circle cx="22" cy="26" r="10" fill="#EE9B98"/><rect x="40" y="20" width="62" height="7" rx="3" fill="#F7D0CE"/><rect x="40" y="33" width="46" height="6" rx="3" fill="#F7D0CE"/></g><g transform="translate(155,110)"><rect x="0" y="0" width="118" height="52" rx="9" fill="#FFF0EF" stroke="#D9534F" stroke-width="2"/><circle cx="22" cy="26" r="10" fill="#EE9B98"/><rect x="40" y="20" width="62" height="7" rx="3" fill="#F7D0CE"/><rect x="40" y="33" width="46" height="6" rx="3" fill="#F7D0CE"/></g>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">同一個行為（如哭鬧、攻擊），可能來自不同功能。點每張卡看幼兒情境例與對應的介入方向——功能不同，策略就不同。</p>
+            <div id="func-cards" class="grid sm:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- 區塊四：模糊目標→可評量目標改寫工作台 -->
+        <section id="s4" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#EE9B98] text-2xl font-black">④</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#D9534F]">模糊目標 → 可評量目標改寫工作台</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="模糊目標改寫可評量">
+  <rect width="300" height="200" fill="#FDECEC" rx="12"/>
+  <rect x="24" y="60" width="96" height="80" rx="9" fill="#FFF0EF" stroke="#EE9B98" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <rect x="38" y="78" width="60" height="7" rx="3" fill="#F7D0CE"/><rect x="38" y="94" width="48" height="7" rx="3" fill="#F7D0CE"/>
+  <text x="72" y="128" font-size="11" fill="#8F332F" text-anchor="middle" font-family="sans-serif">模糊</text>
+  <path d="M128 100 L172 100" stroke="#D9534F" stroke-width="3" marker-end="url(#c5a)"/>
+  <defs><marker id="c5a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#D9534F"/></marker></defs>
+  <rect x="180" y="60" width="96" height="80" rx="9" fill="#FFF0EF" stroke="#A63B38" stroke-width="2.5"/>
+  <rect x="194" y="78" width="68" height="7" rx="3" fill="#EE9B98"/><rect x="194" y="94" width="56" height="7" rx="3" fill="#EE9B98"/><rect x="194" y="110" width="62" height="7" rx="3" fill="#EE9B98"/>
+  <text x="228" y="132" font-size="11" fill="#8F332F" text-anchor="middle" font-family="sans-serif">可評量</text>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">依施行細則第10條第三款，教育目標須有評量方式、日期及標準。切換頁籤看每組模糊目標如何改寫，並標出可評量目標的五個要素。</p>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="convert-tab tab-btn active pb-2 text-sm md:text-base" data-tab="cv1">範例一</button>
+                <button class="convert-tab tab-btn pb-2 text-sm md:text-base" data-tab="cv2">範例二</button>
+                <button class="convert-tab tab-btn pb-2 text-sm md:text-base" data-tab="cv3">範例三</button>
+                <button class="convert-tab tab-btn pb-2 text-sm md:text-base" data-tab="cv4">範例四</button>
+            </div>
+            <div id="convert-content"></div>
+        </section>
+
+        <!-- 區塊五：案例研討 -->
+        <section id="s5" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#EE9B98] text-2xl font-black">⑤</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#D9534F]">案例研討：找出行為介入方案的問題</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="行為案例研討">
+  <rect width="300" height="200" fill="#FDECEC" rx="12"/>
+  <rect x="70" y="45" width="160" height="110" rx="10" fill="#FFF0EF" stroke="#D9534F" stroke-width="2.5"/>
+  <circle cx="110" cy="80" r="16" fill="#EE9B98"/>
+  <rect x="140" y="70" width="70" height="8" rx="4" fill="#F7D0CE"/><rect x="140" y="86" width="54" height="8" rx="4" fill="#F7D0CE"/>
+  <rect x="90" y="112" width="120" height="8" rx="4" fill="#F7D0CE"/>
+  <circle cx="200" cy="132" r="13" fill="#A63B38"/><text x="200" y="137" font-size="13" fill="#fff" text-anchor="middle" font-family="sans-serif">?</text>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">三份有瑕疵的行為介入方案片段。先想「哪裡違反先評估後介入的邏輯、增強概念用錯在哪」，再點開對照專業判讀。</p>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="case-tab tab-btn active pb-2 text-sm md:text-base" data-tab="c1">案例一：沒做FBA</button>
+                <button class="case-tab tab-btn pb-2 text-sm md:text-base" data-tab="c2">案例二：增強誤用</button>
+                <button class="case-tab tab-btn pb-2 text-sm md:text-base" data-tab="c3">案例三：只壓抑</button>
+            </div>
+            <div id="case-content"></div>
+        </section>
+
+        <!-- 區塊六：課堂演練 -->
+        <section id="s6" class="mb-10 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#EE9B98] text-2xl font-black">⑥</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#D9534F]">課堂演練</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="課堂演練討論">
+  <rect width="300" height="200" fill="#FDECEC" rx="12"/>
+  <rect x="45" y="55" width="120" height="72" rx="14" fill="#FFF0EF" stroke="#D9534F" stroke-width="2.5"/><path d="M75 127 l0 22 l24 -22 z" fill="#FFF0EF" stroke="#D9534F" stroke-width="2.5"/>
+  <rect x="150" y="80" width="105" height="60" rx="14" fill="#EE9B98"/><path d="M225 140 l0 20 l-22 -20 z" fill="#EE9B98"/>
+  <rect x="60" y="72" width="80" height="7" rx="3" fill="#EE9B98"/><rect x="60" y="86" width="64" height="7" rx="3" fill="#F7D0CE"/><rect x="60" y="100" width="72" height="7" rx="3" fill="#F7D0CE"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">分組討論，把今天的 FBA 邏輯落到一個實際幼兒行為。每題先小組討論，再全班分享。</p>
+            <div id="discuss-cards" class="grid md:grid-cols-2 gap-5 mb-8"></div>
+            <div class="bg-[#D9534F] text-white rounded-2xl p-6 md:p-8">
+                <p class="text-sm font-semibold tracking-widest text-[#FDECEC] mb-2">本次帶走的產出</p>
+                <h4 class="text-xl font-bold mb-3">ABC 紀錄＋功能假設＋可寫入 IEP 的行為介入方案</h4>
+                <p class="text-[#F7D0CE] leading-relaxed text-sm">承接第三次談的施行細則第10條第四款，把今天練習的 ABC 觀察、行為四功能判斷、可評量目標改寫，整理成一份完整的行為功能介入方案雛形（含功能假設陳述、前事調整、替代行為教學、後果策略與行政支援），下次遇到類似個案可直接套用這個思考流程。</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 mt-8">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm mb-1">學前特殊教育與IEP實務 第五次課程 ｜ 主教材：林素貞《個別化教育計畫之實施》</p>
+            <p class="text-xs text-gray-400 mb-3">法源依據：特殊教育法施行細則第10條第四款、特殊教育法第31條。行為功能分析（FBA）與正向行為支持（PBS）相關專業概念僅供教學與演示用途。</p>
+            <div class="flex justify-center gap-3">
+                <a href="iep_IEPT05.html" class="inline-block bg-[#D9534F] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#BF4642] transition-colors">前往第五次測驗</a>
+                <a href="iep_index.html" class="inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-5 rounded-lg hover:bg-gray-300 transition-colors">回課程入口</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ===== 區塊一：ABC 三元素 =====
+        const abcItems = [
+            { n:"A", title:"前事 Antecedent（行為發生之前的情境）", law:"行為出現「之前」發生了什麼：指令、活動轉換、環境刺激、他人互動等。", form:"紀錄要點：客觀描述當下情境（誰、做什麼、說了什麼），避免用「他心情不好」等推論性描述。", pre:"學前常見前事：老師發下不熟悉的作業、要求收拾玩具、同儕搶玩具、轉換活動（自由活動轉團體活動）。" },
+            { n:"B", title:"行為 Behavior（可觀察、可測量的具體行為）", law:"行為本身要用「客觀、可觀察、可測量」的方式描述，而非用形容詞或大人的解釋替代。", form:"正例：「用手推翻桌上的教材」；反例：「生氣」「不聽話」——這些是解釋，不是行為描述。", pre:"學前實務上要記錄行為的具體型態（推、打、尖叫、逃跑）、強度與持續時間，才能作為後續功能分析的客觀資料。" },
+            { n:"C", title:"後果 Consequence（行為發生之後的結果）", law:"行為之後緊接發生了什麼：他人的反應、行為是否達到某種結果（被關注、拿到東西、逃過要求）。", form:"紀錄要點：後果往往就是維持行為的關鍵線索，要記錄「誰做了什麼回應」以及「幼兒接下來的狀態」。", pre:"學前常見後果：老師過去關注／責備、同儕讓出玩具、活動被取消或延後、幼兒被帶離現場。" }
+        ];
+        const abcList = document.getElementById('abc-list');
+        abcItems.forEach(it => {
+            const card = document.createElement('div');
+            card.className = 'principle-card bg-white border border-[#F1DCDA] rounded-xl overflow-hidden';
+            card.innerHTML = `
+                <div class="flex items-center gap-4 p-5">
+                    <span class="shrink-0 w-9 h-9 rounded-full bg-[#EE9B98] text-white flex items-center justify-center font-bold">${it.n}</span>
+                    <h4 class="font-semibold text-gray-800 flex-1">${it.title}</h4>
+                    <span class="toggle-icon text-[#EE9B98] text-xl">＋</span>
+                </div>
+                <div class="reveal-panel px-5">
+                    <div class="pb-5 pl-13 space-y-3 text-sm">
+                        <div class="bg-[#FDECEC] rounded-lg p-3"><span class="font-semibold text-[#A63B38]">說明：</span>${it.law}</div>
+                        <div><span class="font-semibold text-[#D9534F]">紀錄要點：</span><span class="text-gray-700">${it.form}</span></div>
+                        <div><span class="font-semibold text-[#D9534F]">學前情境：</span><span class="text-gray-700">${it.pre}</span></div>
+                    </div>
+                </div>`;
+            abcList.appendChild(card);
+            const head = card.querySelector('.flex.items-center');
+            head.style.cursor = 'pointer';
+            head.addEventListener('click', () => {
+                const panel = card.querySelector('.reveal-panel');
+                const icon = card.querySelector('.toggle-icon');
+                panel.classList.toggle('open');
+                const open = panel.classList.contains('open');
+                panel.style.paddingTop = open ? '0.25rem' : '0';
+                panel.style.paddingBottom = open ? '0' : '0';
+                icon.textContent = open ? '－' : '＋';
+            });
+        });
+        // ABC 範例卡（固定顯示，非互動之外的補充說明）
+        const abcExample = document.createElement('div');
+        abcExample.className = 'bg-[#FDECEC] border-l-4 border-[#D9534F] rounded-r-lg p-4 text-sm text-[#A63B38] mt-2';
+        abcExample.innerHTML = `<strong>學前 ABC 範例：</strong>老師發下今天的操作作業（A）→ 幼兒用手推翻桌面上的教材（B）→ 老師收回作業並讓他到角落休息（C）→ <strong>功能假設：逃避／避免要求（Escape）</strong>。這份紀錄全程用客觀描述，沒有出現「他不想寫」「他在鬧」這類形容詞或推論。`;
+        abcList.appendChild(abcExample);
+
+        // ===== 區塊二：PBS 流程 =====
+        const pbsData = {
+            observe: { title:"① 觀察：執行功能性評量", body:"包含間接評量（如 FAI 功能評量訪談，問家長/老師對行為的觀察與推測）與直接觀察（ABC 觀察紀錄），必要時進行功能分析（操弄變項驗證假設）。目的是蒐集客觀資料，而不是憑印象下結論。" },
+            hypothesis: { title:"② 功能假設：這個行為在為幼兒做什麼", body:"根據 ABC 資料，歸納出「在什麼情境下、幼兒做了什麼、獲得或逃避了什麼」的功能假設陳述，例如：「當要求進行不熟悉的精細動作作業時，幼兒會推翻教材，藉此逃避作業要求。」" },
+            intervene: { title:"③ 介入：發展行為功能介入方案", body:"針對假設的功能，同時設計前事調整（如簡化作業難度、預告轉換）、替代行為教學（教「我要休息」的替代溝通）、後果策略（調整增強方式）與行政支援（人力、環境、跨處室協調）。" },
+            review: { title:"④ 評估與調整：成效不佳要回頭修正假設", body:"介入後持續蒐集資料檢驗成效；若行為沒有改善，不是「加重處罰」，而是回頭檢視功能假設是否正確，重新評估、調整介入方案，形成持續循環。" }
+        };
+        function renderPbs(key){
+            const d = pbsData[key];
+            document.getElementById('pbs-detail').innerHTML = `<p class="font-bold text-[#A63B38] text-lg mb-2">${d.title}</p><p class="text-sm text-gray-700 leading-relaxed">${d.body}</p>`;
+        }
+        document.querySelectorAll('#s2 .flowchart-node').forEach(node => {
+            node.addEventListener('click', () => renderPbs(node.dataset.step));
+        });
+
+        const orderData = {
+            wrong: { tag:"錯誤順序（常見誤區）", body:"「看到孩子打人 → 直接決定用隔離處罰」。這種做法跳過了觀察與功能假設，等於還沒搞清楚行為背後在滿足什麼需求，就先套用策略。結果可能是：功能猜錯、策略無效，甚至因為隔離剛好符合「逃避」的功能而讓行為<strong>被增強、變得更頻繁</strong>。" },
+            right: { tag:"正確順序（先評估、後介入）", body:"「觀察並記錄 ABC → 歸納功能假設（如逃避要求）→ 針對逃避功能設計前事調整＋替代溝通教學＋合宜後果策略 → 持續評估成效」。每一個介入策略都能回答「為什麼選這個策略」，而答案來自功能假設，不是憑經驗或情緒反應。" }
+        };
+        function renderOrder(key){
+            const d = orderData[key];
+            document.getElementById('order-content').innerHTML = `
+                <div class="bg-white border border-[#F1DCDA] rounded-xl p-6">
+                    <span class="inline-block bg-[#F7D0CE] text-[#A63B38] text-xs font-semibold px-3 py-1 rounded-full mb-3">${d.tag}</span>
+                    <p class="text-gray-700 leading-relaxed">${d.body}</p>
+                </div>`;
+        }
+        document.querySelectorAll('.order-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.order-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderOrder(btn.dataset.tab);
+            });
+        });
+        renderOrder('wrong');
+
+        // ===== 區塊三：行為四功能 =====
+        const funcCards = [
+            { title:"取得注意 Attention", color:"#D9534F", ex:"幼兒在老師忙著指導別的孩子時大聲尖叫，老師立刻過去關注（即使是責備）。行為之後「有人互動、有人回應」，就達到取得注意的功能。", dir:"介入方向：教導合宜的求助/求關注方式（如舉手、拍老師肩膀），並提高對正向行為的關注頻率，減少只在問題行為出現時才給關注。" },
+            { title:"取得實物或活動 Tangible", color:"#A63B38", ex:"幼兒想玩同儕手上的玩具，用力搶奪，搶到後行為立刻停止。行為讓幼兒「拿到想要的東西或被允許進行某活動」。", dir:"介入方向：教導等待、輪流、用語言表達需求的替代行為，並建立清楚的輪流規則與計時器等視覺提示。" },
+            { title:"逃避/避免要求 Escape/Avoidance", color:"#BF4642", ex:"老師發下不熟悉的操作作業，幼兒推翻教材，老師收回作業讓他休息。指令或作業因此被延後、取消或降低難度。", dir:"介入方向：調整作業難度與呈現方式（前事調整），同時教「我要休息」「我需要幫忙」的替代溝通行為，逐步提高任務要求的耐受度。" },
+            { title:"感官/自動增強 Sensory", color:"#EE9B98", ex:"幼兒在沒有他人互動、沒有明顯外部後果的情境下，仍反覆搖晃身體或敲打桌面。行為本身提供了內在的感官刺激。", dir:"介入方向：評估替代的感官輸出管道（如提供合宜的觸覺/本體覺活動），並安排合適的時間與場合讓需求被滿足，而非單純制止。" }
+        ];
+        const funcWrap = document.getElementById('func-cards');
+        funcCards.forEach(c => {
+            const el = document.createElement('div');
+            el.className = 'principle-card bg-white border border-[#F1DCDA] rounded-xl overflow-hidden';
+            el.innerHTML = `
+                <div class="flex items-center gap-3 p-5" style="cursor:pointer">
+                    <span class="w-3 h-8 rounded-full" style="background:${c.color}"></span>
+                    <h4 class="font-bold text-gray-800 flex-1">${c.title}</h4>
+                    <span class="toggle-icon text-xl" style="color:${c.color}">＋</span>
+                </div>
+                <div class="reveal-panel px-5">
+                    <div class="pb-5 space-y-2 text-sm">
+                        <div><span class="font-semibold text-[#D9534F]">幼兒情境例：</span><span class="text-gray-700">${c.ex}</span></div>
+                        <div class="bg-[#FDECEC] rounded-lg p-3 text-gray-700"><span class="font-semibold text-[#A63B38]">介入方向：</span>${c.dir}</div>
+                    </div>
+                </div>`;
+            funcWrap.appendChild(el);
+            const head = el.querySelector('.flex.items-center');
+            head.addEventListener('click', () => {
+                const panel = el.querySelector('.reveal-panel');
+                const icon = el.querySelector('.toggle-icon');
+                panel.classList.toggle('open');
+                const open = panel.classList.contains('open');
+                panel.style.paddingBottom = open ? '0' : '0';
+                icon.textContent = open ? '－' : '＋';
+            });
+        });
+
+        // ===== 區塊四：模糊目標改寫 =====
+        const convertData = {
+            cv1: { vague:"提升專注力。", better:"在團體活動中，於教師口語提示下，能持續參與活動達10分鐘，連續兩週四天達成。", parts:["情境：團體活動中","支持程度：教師口語提示下","可觀察行為：持續參與活動","量化標準：達10分鐘","時間：連續兩週四天達成"] },
+            cv2: { vague:"減少攻擊行為。", better:"在被要求進行精細動作作業時，能以口語表達「我需要休息」取代推打教材，一週五天中至少四天達成零次推打。", parts:["情境：被要求進行精細動作作業時","支持程度：獨立表現（不需提示）","可觀察行為：以口語表達替代推打","量化標準：一週五天中至少四天、零次推打","時間：以週為單位持續追蹤"] },
+            cv3: { vague:"增加社會互動。", better:"在自由活動時間，能主動邀請一名同儕共玩，經教師示範後每日至少一次，連續三週達成。", parts:["情境：自由活動時間","支持程度：經教師示範後","可觀察行為：主動邀請同儕共玩","量化標準：每日至少一次","時間：連續三週達成"] },
+            cv4: { vague:"情緒穩定。", better:"在活動轉換前接受視覺提示卡預告後，能在1分鐘內完成轉換且不出現尖叫或哭鬧，十次轉換中八次達成。", parts:["情境：活動轉換前","支持程度：接受視覺提示卡預告後","可觀察行為：完成轉換且不尖叫哭鬧","量化標準：十次中八次達成、1分鐘內","時間：以轉換次數為評量單位"] }
+        };
+        function renderConvert(key){
+            const d = convertData[key];
+            document.getElementById('convert-content').innerHTML = `
+                <div class="grid md:grid-cols-2 gap-5 mb-5">
+                    <div class="card rounded-xl p-5 border-t-4 border-[#EE9B98]">
+                        <p class="text-xs font-semibold text-[#A63B38] mb-1">模糊目標（不可評量）</p>
+                        <p class="text-gray-700 leading-relaxed">${d.vague}</p>
+                    </div>
+                    <div class="card rounded-xl p-5 border-t-4 border-[#D9534F]">
+                        <p class="text-xs font-semibold text-[#A63B38] mb-1">改寫後（可評量目標）</p>
+                        <p class="text-gray-700 leading-relaxed">${d.better}</p>
+                    </div>
+                </div>
+                <div class="bg-[#FDECEC] border-l-4 border-[#D9534F] rounded-r-lg p-4">
+                    <p class="text-sm font-semibold text-[#A63B38] mb-2">可評量目標的五個要素：</p>
+                    <div class="flex flex-wrap gap-2 text-xs">${d.parts.map(p=>`<span class="bg-white text-[#A63B38] px-3 py-1 rounded-full border border-[#EE9B98]">${p}</span>`).join('')}</div>
+                </div>`;
+        }
+        document.querySelectorAll('.convert-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.convert-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderConvert(btn.dataset.tab);
+            });
+        });
+        renderConvert('cv1');
+
+        // ===== 區塊五：案例研討 =====
+        const caseData = {
+            c1: { tag:"沒做FBA", scene:"一份行為介入方案寫著：「幼兒打人，處理方式：立即帶到角落隔離5分鐘。」全份方案沒有任何 ABC 觀察紀錄或功能假設。", q:"這份方案最主要的問題與可能後果是什麼？", ans:"違反「先評估、後介入」的專業邏輯：沒有做行為功能分析就直接套用後果策略，可能誤判功能。舉例來說，如果這個打人行為的功能其實是「逃避要求」，那麼隔離反而符合他想要的結果（逃離現場），會意外增強打人行為，使問題惡化而非改善。依施行細則第10條第四款，行為功能介入方案應以功能評量為基礎。" },
+            c2: { tag:"增強誤用", scene:"教師報告：「我們對幼兒的推人行為用『負增強』來處理——每次他推人就處罰他，讓他覺得很嫌惡，這樣負增強應該會讓推人行為減少。」", q:"這段敘述對增強概念的理解錯在哪裡？", ans:"這是典型的負增強與處罰混淆。負增強的定義是「移除嫌惡刺激以增加行為」，而不是「施加嫌惡刺激」。教師描述的其實是「懲罰」（施加嫌惡後果以減少行為），概念上完全不同。此外，若處罰只是單方面壓抑，沒有搭配功能假設與替代行為教學，效果通常無法持久且不易類化。" },
+            c3: { tag:"只壓抑", scene:"行為介入方案只寫了「幼兒出現不當行為時立即制止並口頭警告」，通篇沒有教導任何替代行為，也沒有前事調整或行政支援的安排。", q:"這種做法的核心問題是什麼？", ans:"只壓抑行為屬於治標不治本：制止與警告或許能暫時中止當下的行為，但沒有教幼兒「用什麼合宜的方式滿足同樣的功能」，行為很可能換一種形式再出現，或在制止者不在場時復發。完整的行為功能介入方案必須同時包含前事調整、替代行為教學、後果策略與行政支援，缺一不可，這也是與單純嫌惡處置最大的差異。" }
+        };
+        function renderCase(key) {
+            const d = caseData[key];
+            document.getElementById('case-content').innerHTML = `
+                <div class="bg-white border border-[#F1DCDA] rounded-xl p-6">
+                    <span class="inline-block bg-[#F7D0CE] text-[#A63B38] text-xs font-semibold px-3 py-1 rounded-full mb-3">${d.tag}</span>
+                    <p class="text-gray-700 leading-relaxed mb-4">${d.scene}</p>
+                    <p class="font-semibold text-[#D9534F] mb-3">${d.q}</p>
+                    <button class="reveal-ans bg-[#D9534F] text-white text-sm font-semibold py-2 px-5 rounded-lg hover:bg-[#BF4642] transition-colors">顯示專業判讀</button>
+                    <div class="ans-panel reveal-panel mt-0">
+                        <div class="bg-[#FDECEC] border-l-4 border-[#D9534F] rounded-r-lg p-4 mt-4 text-sm text-gray-700 leading-relaxed">${d.ans}</div>
+                    </div>
+                </div>`;
+            const btn = document.querySelector('#case-content .reveal-ans');
+            const panel = document.querySelector('#case-content .ans-panel');
+            btn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                btn.textContent = panel.classList.contains('open') ? '收合判讀' : '顯示專業判讀';
+            });
+        }
+        document.querySelectorAll('.case-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.case-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderCase(btn.dataset.tab);
+            });
+        });
+        renderCase('c1');
+
+        // ===== 區塊六：課堂演練 =====
+        const discussItems = [
+            { q:"為一名你熟悉（或想像）的幼兒，選一個具體的問題行為，寫出至少三次的 ABC 觀察紀錄，並嘗試推論出功能假設。", hint:"提示：注意用客觀描述而非形容詞；比對不同次紀錄中前事與後果是否有共同模式，才能較有信心地推論功能。" },
+            { q:"假設功能假設是「逃避要求」，請從前事調整、替代行為教學、後果策略、行政支援四個面向，各提出一個具體做法。", hint:"提示：前事可調整任務難度或呈現方式；替代行為教「我需要休息」；後果策略避免逃避行為被強化；行政支援可包含增派人力或調整課表。" },
+            { q:"把「增加社會互動」這種模糊目標，依可評量目標的五要素（情境/支持程度/可觀察行為/量化標準/時間）改寫成一句完整的可評量目標。", hint:"提示：可參考區塊四的範例格式，逐一填入五個要素，確認每個要素都具體、可觀察。" },
+            { q:"如果依假設設計的介入方案實施兩週後，行為完全沒有改善甚至變嚴重，下一步該怎麼做？請說明完整的檢討流程。", hint:"提示：先確認介入是否被忠實執行（執行完整度），再回頭檢視功能假設是否正確，必要時重新蒐集 ABC 資料、修正假設，形成持續的評估—調整循環，而不是直接加重處罰。" }
+        ];
+        const dWrap = document.getElementById('discuss-cards');
+        discussItems.forEach((it, i) => {
+            const el = document.createElement('div');
+            el.className = 'card rounded-xl p-5 border-l-4 border-[#D9534F]';
+            el.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <span class="shrink-0 w-7 h-7 rounded-full bg-[#F7D0CE] text-[#A63B38] flex items-center justify-center font-bold text-sm">${i+1}</span>
+                    <div class="flex-1">
+                        <p class="text-gray-800 font-medium leading-relaxed mb-3">${it.q}</p>
+                        <button class="hint-btn text-xs text-[#D9534F] font-semibold">顯示討論方向 ▾</button>
+                        <div class="hint-panel reveal-panel"><p class="text-sm text-gray-500 pt-2 leading-relaxed">${it.hint}</p></div>
+                    </div>
+                </div>`;
+            dWrap.appendChild(el);
+            const btn = el.querySelector('.hint-btn');
+            const panel = el.querySelector('.hint-panel');
+            btn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                btn.textContent = panel.classList.contains('open') ? '收合討論方向 ▴' : '顯示討論方向 ▾';
+            });
+        });
+
+        // ===== 導覽：選單、平滑捲動、高亮 =====
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+        const sections = ['s1','s2','s3','s4','s5','s6'];
+        const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+        window.addEventListener('scroll', () => {
+            let cur = '';
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && window.scrollY >= el.offsetTop - 120) cur = id;
+            });
+            navLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+            });
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第六次 教檢題目提點與練習：前後測（純教檢應試版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #5B5FC7; border-bottom-color: #5B5FC7; }
+        .question-card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: box-shadow 0.3s; }
+        .question-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .answer-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; }
+        .answer-panel.open { max-height: 900px; }
+        .option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-label:hover { background-color: #f2f3fc; }
+        input[type="radio"]:checked + .option-label { background-color: #D5D7F5; border-color: #5B5FC7; }
+        .modal-overlay { transition: opacity 0.3s ease-in-out; }
+        .badge { font-size: 0.7rem; padding: 0.15rem 0.6rem; border-radius: 9999px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-lg md:text-2xl font-bold text-[#5B5FC7]">第六次：教檢題目提點與練習 · 測驗</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12 max-w-4xl">
+
+        <div class="bg-[#ECEDFB] border-l-4 border-[#5B5FC7] rounded-r-lg p-4 mb-10 text-sm text-[#3C40A0] leading-relaxed">
+            <strong>本測驗頁為「純教檢應試取向」：</strong>前測與後測皆比照歷屆教師資格考試特殊教育科（課程教學與評量／教育理念與實務）之題型與難度設計，全部為四選一單選（含少量甲乙丙丁組合題），不採碩士反思雙軌設計，目標是幫助你直接檢核應試能力。
+        </div>
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#5B5FC7]">前測 <span class="badge bg-blue-100 text-blue-700 align-middle">教檢基礎題</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">前測為教檢高頻考點的事實辨識題：IEP 時程／參與人員／五大內容、LRE、動態評量、實作評量、真實評量、課程本位評量（CBM）、檔案評量、形成性／總結性評量、FBA 四功能、轉銜時程、鑑輔會／特推會、考試服務四分類等定義辨識。純教檢應試取向，完成後點最下方按鈕看分數，也可隨時點題目卡片看詳解。</p>
+            <div id="pre-test-container" class="space-y-4"></div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#5B5FC7]">後測 <span class="badge bg-[#D5D7F5] text-[#3C40A0] align-middle">教檢情境題</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">後測拉高到教檢情境應用題：目標具體化原則的判斷、動態評量與課程本位評量的情境配對、FBA＋可評量目標＋考試調整＋轉銜的跨概念整合題。難度略高於前測，但仍為教師資格考試選擇題型（非碩士申論反思），全部以幫助你考取教師證為目標設計。</p>
+            <div id="post-test-container" class="space-y-4"></div>
+        </section>
+
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#5B5FC7] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#4A4EB0] transition-colors duration-300">計算分數並比較</button>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm">學前特殊教育與IEP實務 第六次測驗（純教檢應試取向） ｜ 主教材：林素貞《個別化教育計畫之實施》｜ 僅供教學與演示用途。</p>
+            <a href="iep_index.html" class="inline-block mt-3 bg-[#5B5FC7] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#4A4EB0] transition-colors">回課程入口</a>
+        </div>
+    </footer>
+
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-xl p-8">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="h-64 mx-auto mb-6"><canvas id="score-chart"></canvas></div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 20</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 20</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preTestQuestions = [
+            { question: "1. 依特殊教育法施行細則第10條，IEP 之訂定，新生及轉學生應於入學後多久內完成？", options:["(A) 一個月內","(B) 兩週內","(C) 一週內","(D) 一學期內"], answer:"A", explanation:"新生及轉學生的 IEP 應於入學後一個月內訂定；其餘在學學生應於開學前訂定，每學期至少檢討一次。" },
+            { question: "2. 下列何者「不屬於」IEP 應以團隊合作方式訂定時的必要成員？", options:["(A) 學校行政人員","(B) 教育局督學","(C) 學生家長","(D) 特殊教育及相關教師"], answer:"B", explanation:"IEP 團隊必要成員為學校行政人員、特殊教育及相關教師、學生家長；必要時得邀請相關專業人員及學生本人參與，督學非必要成員。" },
+            { question: "3. IEP 五大內容中，何者僅在學生具情緒與行為問題時才需要納入？", options:["(A) 學生能力現況、家庭狀況及需求評估","(B) 特殊教育、相關服務及支持策略","(C) 行為功能介入方案及行政支援","(D) 轉銜輔導及服務"], answer:"C", explanation:"第四款「行為功能介入方案及行政支援」為條件式內容，僅具情緒行為問題之學生才需納入；其餘四項為所有身障學生 IEP 之必要內容。" },
+            { question: "4. 「動態評量」最強調的評量與教學關係為何？", options:["(A) 評量與教學分離，互不影響","(B) 完全取代標準化測驗","(C) 只在學期末進行一次總結性評量","(D) 評量與教學循環進行，掌握學習潛能與最近發展區"], answer:"D", explanation:"動態評量主張評量與教學不可分割，透過「評量—介入—再評量」循環，掌握學生的學習潛能與最近發展區（ZPD），據以調整教學。" },
+            { question: "5. 教師請學生實際操作剪紙、綁鞋帶等日常活動以評估其精細動作能力，此評量方式最符合下列何者？", options:["(A) 實作評量","(B) 標準化常模測驗","(C) 總結性評量","(D) 智力測驗"], answer:"A", explanation:"實作評量要求學生在真實或模擬情境中實際操作、完成任務，藉此評估其應用能力，剪紙、綁鞋帶即屬實作評量的典型例子。" },
+            { question: "6. 「真實評量」與「實作評量」最主要的差異為何？", options:["(A) 完全相同，可互換使用","(B) 真實評量更強調在自然情境中評量日常生活所需的能力，實作評量可在模擬情境中進行","(C) 真實評量只用紙筆測驗","(D) 實作評量不需觀察學生表現"], answer:"B", explanation:"真實評量強調評量情境須貼近真實生活情境與任務；實作評量則泛指要求學生實際操作，可以是模擬或真實情境，兩者概念有重疊但真實評量更強調情境的真實性。" },
+            { question: "7. 教師收集學生每週的隨堂練習與習作，定期分析其進步曲線以調整教學，此屬於下列何種評量取向？", options:["(A) 智力測驗","(B) 常模參照測驗","(C) 課程本位評量（CBM）","(D) 標準化成就測驗"], answer:"C", explanation:"課程本位評量（CBM）以學生實際使用的課程教材為評量內容，透過持續收集平時習作與隨堂練習的表現資料，分析學習成效並據以調整教學。" },
+            { question: "8. 教師長期收集學生的作品、作業與學習紀錄，整理成一份完整資料以呈現學習歷程與進步情形，此屬於下列何種評量？", options:["(A) 智力測驗","(B) 常模參照評量","(C) 總結性評量","(D) 檔案評量"], answer:"D", explanation:"檔案評量（Portfolio Assessment）透過系統性收集學生作品與學習紀錄，呈現學習歷程、進步軌跡與多元表現，是質性與量化兼具的評量方式。" },
+            { question: "9. 期中考、期末考等在教學單元結束後進行、用以總結學習成果的評量，稱為？", options:["(A) 總結性評量","(B) 形成性評量","(C) 診斷性評量","(D) 動態評量"], answer:"A", explanation:"總結性評量在教學階段結束後實施，目的在總結學習成果並評定等級或成就水準；形成性評量則於教學過程中進行，用以隨時調整教學。" },
+            { question: "10. 教師在教學過程中隨時以小測驗、觀察、問答蒐集學生學習情形，並立即調整教學步調，此屬於？", options:["(A) 總結性評量","(B) 形成性評量","(C) 常模參照測驗","(D) 篩選性評量"], answer:"B", explanation:"形成性評量於教學進行中實施，目的是即時掌握學生學習狀況並調整教學方法與進度，具高度的診斷與回饋功能。" },
+            { question: "11. 依行為功能分析（FBA），問題行為的功能通常可歸納為「逃避」與下列何者兩大類？", options:["(A) 模仿","(B) 記憶","(C) 獲得（注意、物品或感覺）","(D) 遺忘"], answer:"C", explanation:"行為功能分析主張問題行為具有溝通功能，常見功能分為「逃避」（逃避任務、要求、情境）與「獲得」（獲得注意、物品或感覺刺激）兩大類。" },
+            { question: "12. 依規定，身心障礙學生之轉銜輔導及服務內容，不包含下列何者？", options:["(A) 升學輔導","(B) 生活與就業輔導","(C) 心理輔導及福利服務","(D) 學生的宗教信仰輔導"], answer:"D", explanation:"轉銜輔導及服務依法涵蓋升學輔導、生活、就業、心理輔導、福利服務及其他相關專業服務，宗教信仰輔導非法定轉銜面向。" },
+            { question: "13. 各縣市負責身心障礙學生鑑定與安置最終決議的法定單位是？", options:["(A) 特殊教育學生鑑定及就學輔導會（鑑輔會）","(B) 學校特殊教育推行委員會","(C) 家長會","(D) 教育部國教署"], answer:"A", explanation:"鑑輔會設於縣市層級，負責審議並辦理身心障礙學生的鑑定、安置、重新安置與輔導相關事項，是決定安置的法定權責單位。" },
+            { question: "14. 學校層級負責審議校內 IEP、課程與評量調整方案的組織是？", options:["(A) 鑑輔會","(B) 特殊教育推行委員會（特推會）","(C) 教評會","(D) 課發會"], answer:"B", explanation:"特推會設於學校層級，任務包括審議校內 IEP、個別化輔導計畫、特殊教育方案，以及課程與評量（含考試服務）調整方案。" },
+            { question: "15. 依《身心障礙學生考試服務辦法》，考試服務主要分為幾大類？", options:["(A) 二大類","(B) 三大類","(C) 四大類（另加其他合理調整）","(D) 六大類"], answer:"C", explanation:"考試服務分試場服務、輔具服務、試題（卷）調整服務、作答方式調整服務四大類，另加其他合理調整之服務。" },
+            { question: "16. 下列關於最少限制環境（LRE）的敘述，何者正確？", options:["(A) 一律安置於集中式特教班","(B) LRE 與安置決定無關","(C) LRE 只適用於國小以上學生","(D) 應優先考量與非障礙同儕一起接受教育的可能性，非確有必要不安置於隔離環境"], answer:"D", explanation:"LRE 主張身心障礙學生應在盡可能符合其需求的前提下，與非障礙同儕一起學習，除非確有必要才安置於較隔離的環境，且應定期檢討。" },
+            { question: "17. 甲、動態評量重視評量與教學的循環　乙、課程本位評量只能用於總結性評量　丙、檔案評量可呈現學習歷程　丁、真實評量強調自然情境。上列正確的是？", options:["(A) 甲丙丁","(B) 甲乙","(C) 乙丙","(D) 甲乙丙丁"], answer:"A", explanation:"乙錯誤，課程本位評量本質上偏形成性、可持續監控學習成效並調整教學，並非只能用於總結性評量；甲、丙、丁描述皆正確。" },
+            { question: "18. 依施行細則第10條末項規定，幼兒園為身心障礙幼兒訂定 IEP 時應如何處理？", options:["(A) 不需訂定 IEP","(B) 應準用第一項（五大內容）規定","(C) 只需寫現況即可","(D) 完全由家長自行撰寫"], answer:"B", explanation:"施行細則第10條末項明定：幼兒園為身心障礙幼兒訂定 IEP 時，應準用第一項規定，同樣涵蓋五大內容。" },
+            { question: "19. 「延長作答時間、提供無障礙試場、單人試場」屬於考試服務的哪一類？", options:["(A) 試題（卷）調整服務","(B) 輔具服務","(C) 試場服務","(D) 作答方式調整服務"], answer:"C", explanation:"調整考試時間、無障礙試場環境、提醒服務、特殊試場等，皆屬於「試場服務」類別。" },
+            { question: "20. 下列關於鑑輔會與特推會分工的敘述，何者正確？", options:["(A) 兩者都設於學校","(B) 特推會負責鑑定，鑑輔會負責校內審議","(C) 兩者都設於縣市","(D) 鑑輔會設於縣市、負責鑑定安置；特推會設於學校、負責校內推動與審議"], answer:"D", explanation:"鑑輔會為縣市層級組織，決定鑑定與安置；特推會為學校層級組織，負責校內特教推動、審議 IEP 與課程評量調整方案，層級與任務不同。" }
+        ];
+
+        const postTestQuestions = [
+            { question: "1. 教師為一名精細動作發展遲緩的幼兒撰寫 IEP 目標：「小明能於教師口語提示下，使用湯匙自行進食，連續三天達八成成功率」。此目標最符合下列何種原則？", options:["(A) 具情境、支持程度、可觀察行為與量化標準，符合可評量目標原則","(B) 目標模糊、無法評量","(C) 缺乏行為動詞","(D) 屬於總結性評量而非教育目標"], answer:"A", explanation:"可評量目標須包含情境／條件（口語提示下）、可觀察行為（使用湯匙自行進食）、標準（連續三天八成成功率），此目標三要素齊備，符合原則。" },
+            { question: "2. 教師想了解學生在「他人給予提示後」能否完成某項認知任務，並藉此推估其學習潛能，最適合採用下列何種評量方式？", options:["(A) 總結性評量","(B) 動態評量","(C) 標準化智力測驗","(D) 檔案評量"], answer:"B", explanation:"動態評量透過「評量—中介介入—再評量」的循環，觀察學生在協助下的表現變化，藉此推估其學習潛能與最近發展區，最符合題意。" },
+            { question: "3. 某教師每週收集學生的國語習作與朗讀正確率，繪製成長曲線圖，用以判斷是否需調整教學策略。此作法主要體現下列哪一種評量的精神？", options:["(A) 總結性評量","(B) 常模參照測驗","(C) 課程本位評量（CBM）","(D) 智力測驗"], answer:"C", explanation:"課程本位評量強調以學生實際使用的課程內容為材料、持續蒐集資料並繪製進步曲線，作為調整教學的依據，正是題目所述作法。" },
+            { question: "4. 一名幼兒因逃避精細動作作業而出現哭鬧行為。教師依 FBA 分析後認為功能為「逃避」，下列哪一項介入策略最能對應此功能假設？", options:["(A) 直接隔離幼兒，等哭鬧停止再繼續作業","(B) 完全取消該類作業，避免引發哭鬧","(C) 增加作業難度以磨練意志力","(D) 降低任務難度、提供選擇，並教導幼兒用手勢表達「需要協助」以取代哭鬧"], answer:"D", explanation:"功能為逃避時，應從前事調整（降低難度、給予選擇）與教導功能相當的替代溝通行為（表達需要協助）著手，而非隔離、加重難度或完全迴避任務。" },
+            { question: "5. 某生 IEP 中僅記載「行為問題：常尖叫」，未說明前事與功能假設即直接寫入「隔離處理」作為介入方案。此作法最主要違反下列何種原則？", options:["(A) 違反先假設後介入的行為功能分析邏輯","(B) 違反最少限制環境","(C) 違反轉銜服務規定","(D) 違反考試服務辦法"], answer:"A", explanation:"行為介入方案應建立在行為功能分析之上，先掌握行為的前事、功能假設，再設計對應介入；未評估功能就直接套用後果策略，違反先假設後介入的專業邏輯。" },
+            { question: "6. 一名學障學生同時申請「延長作答時間」與「報讀試題」，若學校僅同意其中一項而未載明於 IEP，最主要的問題是？", options:["(A) 沒有問題，考試服務可自由裁量不需記載","(B) 違反規定，考試服務項目應依個別需求評估並載明於 IEP 或個別化支持計畫","(C) 報讀不屬於合法的考試服務項目","(D) 延長時間不需要經過評估"], answer:"B", explanation:"依考試服務辦法，校內學習評量的考試服務項目應依學生個別需求評估後載明於 IEP 或個別化支持計畫，未評估、未載明即屬程序不完備。" },
+            { question: "7. 某大班幼兒即將升小一，其 IEP 除延續行為介入方案外，尚須新增下列何者以符合施行細則規定？", options:["(A) 增加額外的智力測驗次數","(B) 取消所有既有目標重新設計","(C) 轉銜輔導及服務內容，含資料移轉與跨階段銜接安排","(D) 改由普通班教師全權負責"], answer:"C", explanation:"大班幼兒即將升小一，正處於轉銜關鍵期，IEP 依法須納入轉銜輔導及服務內容，包含升學輔導、資料移轉時程與跨階段銜接安排。" },
+            { question: "8. 某教師主張「動態評量與課程本位評量本質相同，可以互相取代」。此說法的最主要錯誤是？", options:["(A) 完全正確","(B) 課程本位評量只能用於學前階段","(C) 兩者都不能用於身心障礙學生","(D) 混淆了兩者的核心焦點：動態評量重在評估學習潛能與中介歷程，課程本位評量重在以課程內容持續監控學習成效"], answer:"D", explanation:"動態評量核心在「評量—介入—再評量」以推估學習潛能（最近發展區）；課程本位評量核心在以實際課程教材持續蒐集資料、監控學習成效，兩者焦點不同，不可混為一談。" },
+            { question: "9. 某生鑑定為情緒行為障礙，其 IEP 需同時處理 FBA、可評量目標、考試調整與轉銜四項。下列統整方式何者最合理？", options:["(A) FBA 的功能假設應指引目標與介入方案設計，考試調整需考量其優勢管道，轉銜應延續已奏效的行為策略到下一階段","(B) 四項各自獨立設計，互不參照","(C) 只需完成 FBA，其餘三項可省略","(D) 轉銜與行為介入完全無關，應分開處理"], answer:"A", explanation:"四項概念應相互牽動：FBA 結果指引可評量目標與介入設計、考試調整依個別優勢管道評估、轉銜規劃則應延續有效的行為介入策略到新情境，體現跨概念整合。" },
+            { question: "10. 某校特推會審議一名自閉症幼兒的考試服務申請，家長要求「所有科目一律以口語作答」。最符合專業與法規的處理方式是？", options:["(A) 一律拒絕","(B) 依幼兒個別需求與科目特性評估後決議適配的作答方式調整，並載明於 IEP","(C) 無條件全部同意","(D) 完全交由家長決定，特推會不予審議"], answer:"B", explanation:"考試服務應衡酌考試科目特性、學生學習優勢管道與個別需求，經專業評估後決議，而非一概拒絕或照單全收；決議結果應載明於 IEP。" },
+            { question: "11. 一份 IEP 的教育目標寫為「提升專注力」，未說明情境、標準與評量方式。依施行細則第10條第三款要求，此目標的主要缺失是？", options:["(A) 沒有缺失，可直接使用","(B) 目標過於具體","(C) 缺乏情境條件、可觀察行為與可評量標準，無法據以評量達成度","(D) 目標與評量無關"], answer:"C", explanation:"第三款要求教育目標應有評量方式、日期及標準。「提升專注力」缺乏情境、可觀察行為與量化標準，無法檢核是否達成，屬不可評量目標。" },
+            { question: "12. 教師使用學生的美勞作品、寫字練習與定期學習紀錄，整理成長期學習歷程檔案，用以佐證其進步並作為 IEP 檢討的參考資料。此作法主要運用下列何種評量？", options:["(A) 常模參照測驗","(B) 篩選性評量","(C) 智力測驗","(D) 檔案評量"], answer:"D", explanation:"長期收集學生作品與學習紀錄、系統性整理成學習歷程檔案，作為進步佐證與檢討依據，正是檔案評量的典型應用。" },
+            { question: "13. 甲、FBA應先於行為介入方案設計　乙、可評量目標須包含標準與評量方式　丙、考試調整等同降低及格標準　丁、轉銜服務僅適用於國小以上學生。以上正確的是？", options:["(A) 甲乙","(B) 丙丁","(C) 甲丙","(D) 乙丁"], answer:"A", explanation:"丙錯誤，考試調整改變的是作答與呈現方式而非降低及格標準；丁錯誤，轉銜服務亦適用於學前大班升小一階段。甲、乙描述正確。" },
+            { question: "14. 某巡迴輔導幼兒的 IEP 現況描述僅抄錄醫學診斷與智力測驗分數，未描述其在普通班的參與情形。依情境判讀，此現況描述最主要的問題是？", options:["(A) 沒有問題，診斷分數已足夠","(B) 巡迴輔導強調融合情境下的支持，現況應描述普通班參與情形與環境障礙，僅抄診斷分數無法導出適切支持策略","(C) 現況欄不應包含任何測驗分數","(D) 應完全刪除現況欄"], answer:"B", explanation:"巡迴輔導服務的核心在融合情境中的支持，現況描述應涵蓋幼兒在普通班的參與情形與所遇環境障礙；僅抄診斷與分數無法對應到具體支持策略設計。" },
+            { question: "15. 某生於形成性評量階段多次表現不佳，教師據此調整教學策略；學期末再以總結性評量評定其學習成就。此作法主要體現何種評量觀念？", options:["(A) 只需要總結性評量即可","(B) 兩者功能完全相同，可互相取代","(C) 形成性與總結性評量功能不同、應交互運用以達診斷與總結雙重目的","(D) 形成性評量不應影響教學決策"], answer:"C", explanation:"形成性評量於教學過程中提供即時回饋、協助教師調整教學；總結性評量則於教學結束後總結學習成果，兩者功能互補而非互斥，應交互運用。" },
+            { question: "16. 某生同時具備學習障礙與情緒行為問題，其 IEP 之「行為功能介入方案」依規定應包含下列何者？", options:["(A) 僅需記載行為問題名稱","(B) 與現況評估完全無關的獨立內容","(C) 只需要懲罰措施","(D) 功能假設、前事／替代／後果策略及所需行政支援"], answer:"D", explanation:"行為功能介入方案依規定應包含功能假設（透過FBA）、前事調整、替代行為教導、後果策略，以及所需的行政支援（人力、環境調整等），且應與現況評估相呼應。" },
+            { question: "17. 一名教師誤將「報讀試題」歸類為「作答方式調整服務」。此分類錯誤的主要原因是？", options:["(A) 報讀處理的是試題呈現方式，應屬「試題（卷）調整服務」，而非學生表達答案方式的「作答方式調整服務」","(B) 分類正確，無錯誤","(C) 報讀不屬於任何考試服務類別","(D) 報讀只能用於視覺障礙學生"], answer:"A", explanation:"試題（卷）調整服務處理試題如何被呈現給學生（如報讀、放大、點字）；作答方式調整服務處理學生如何表達答案（如電腦作答、口語作答）。報讀屬前者，歸類錯誤。" },
+            { question: "18. 某鑑輔會決議將一名中度障礙學生安置於巡迴輔導而非集中式特教班，其安置決定最主要依循下列何種原則？", options:["(A) 隔離優先原則","(B) 最少限制環境（LRE）原則，優先考量融合可能性","(C) 完全依家長喜好決定，無需考量原則","(D) 依學校空間大小決定"], answer:"B", explanation:"LRE 原則要求身心障礙學生應優先安置於最少限制的環境，儘可能與非障礙同儕一起學習；巡迴輔導較集中式特教班限制更少，符合此原則的精神。" },
+            { question: "19. 某生的 IEP 五大內容中，「轉銜輔導及服務」與「行為功能介入方案」在適用範圍上最主要的差異是？", options:["(A) 兩者適用範圍完全相同","(B) 轉銜服務僅適用於國小以上學生","(C) 轉銜服務適用於所有身心障礙學生，行為功能介入方案僅適用於具情緒行為問題之學生","(D) 行為功能介入方案適用於所有學生"], answer:"C", explanation:"轉銜輔導及服務為所有身心障礙學生 IEP 的必要內容（第五款）；行為功能介入方案及行政支援則為條件式內容，僅具情緒與行為問題的學生才需納入（第四款）。" },
+            { question: "20. 綜合本次課程，下列哪一句最能貫穿「教檢應試準備」的核心策略？", options:["(A) 只需死記法條數字即可應付所有題型","(B) 教檢內容與課堂所學的實務知識無關","(C) 申論題與選擇題準備方式完全相同，不需區分","(D) 掌握高頻考點的定義與法源，搭配選擇題作答策略與跨概念整合練習，才能應對事實題與情境題"], answer:"D", explanation:"本次課程主線：教檢應試需同時掌握高頻考點的定義法源（因應事實辨識題）與選擇題作答策略、跨概念整合能力（因應情境應用題），兩者缺一不可，才能兼顧前測式基礎題與後測式情境題。" }
+        ];
+
+        function createQuestionElement(q, index, type) {
+            const card = document.createElement('div');
+            card.className = 'question-card rounded-lg overflow-hidden';
+            const header = document.createElement('div');
+            header.className = 'p-6 cursor-pointer';
+            header.innerHTML = `<h4 class="font-semibold leading-relaxed">${q.question}</h4>`;
+            const optionsList = document.createElement('div');
+            optionsList.className = 'px-6 pb-6 space-y-3';
+            q.options.forEach((opt, i) => {
+                const wrapper = document.createElement('div');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `${type}-q${index}`;
+                radio.id = `${type}-q${index}-opt${i}`;
+                radio.value = opt.match(/\(([^)]+)\)/)[1];
+                radio.className = 'hidden';
+                const label = document.createElement('label');
+                label.htmlFor = `${type}-q${index}-opt${i}`;
+                label.className = 'option-label';
+                label.textContent = opt;
+                wrapper.appendChild(radio);
+                wrapper.appendChild(label);
+                optionsList.appendChild(wrapper);
+            });
+            const panel = document.createElement('div');
+            panel.className = 'answer-panel bg-gray-50';
+            panel.innerHTML = `<div class="p-6"><p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p><p class="text-gray-800 leading-relaxed">${q.explanation}</p></div>`;
+            card.appendChild(header);
+            card.appendChild(optionsList);
+            card.appendChild(panel);
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '1.5rem' : '0';
+                panel.style.paddingBottom = panel.classList.contains('open') ? '1.5rem' : '0';
+            });
+            return card;
+        }
+
+        const preC = document.getElementById('pre-test-container');
+        preTestQuestions.forEach((q,i) => preC.appendChild(createQuestionElement(q,i,'pre')));
+        const postC = document.getElementById('post-test-container');
+        postTestQuestions.forEach((q,i) => postC.appendChild(createQuestionElement(q,i,'post')));
+
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        const modal = document.getElementById('score-modal');
+        let scoreChart = null;
+        document.getElementById('calculate-score').addEventListener('click', () => {
+            let pre = 0, post = 0;
+            preTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="pre-q${i}"]:checked`); if(s && s.value === q.answer) pre++; });
+            postTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="post-q${i}"]:checked`); if(s && s.value === q.answer) post++; });
+            document.getElementById('pre-score').textContent = `${pre} / 20`;
+            document.getElementById('post-score').textContent = `${post} / 20`;
+            const diff = post - pre, el = document.getElementById('score-diff');
+            if(diff > 0){ el.textContent = `進步分數：+${diff}`; el.className = 'text-lg font-semibold text-green-600'; }
+            else if(diff < 0){ el.textContent = `退步分數：${diff}`; el.className = 'text-lg font-semibold text-red-600'; }
+            else { el.textContent = '分數持平'; el.className = 'text-lg font-semibold text-gray-600'; }
+            modal.classList.remove('hidden');
+            if(scoreChart) scoreChart.destroy();
+            scoreChart = new Chart(document.getElementById('score-chart'), {
+                type: 'bar',
+                data: { labels:['前測','後測'], datasets:[{ label:'答對題數', data:[pre,post], backgroundColor:['rgba(59,130,246,0.6)','rgba(91,95,199,0.65)'], borderColor:['rgba(59,130,246,1)','rgba(74,78,176,1)'], borderWidth:1 }] },
+                options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:20, ticks:{ stepSize:5 } } }, plugins:{ legend:{ display:false } } }
+            });
+        });
+        document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學前特教與IEP實務：第六次 教檢題目提點與練習（兩小時教學版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover, .nav-link.active { color: #5B5FC7; border-bottom-color: #5B5FC7; }
+        .card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .flowchart-node { cursor: pointer; transition: background-color 0.3s, transform 0.3s; }
+        .flowchart-node:hover { transform: scale(1.03); background-color: #D5D7F5; }
+        .principle-card { cursor: pointer; transition: all 0.2s ease-in-out; }
+        .principle-card:hover { background-color: #ECEDFB; border-color: #9EA2E4; }
+        .reveal-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.4s ease-in-out; }
+        .reveal-panel.open { max-height: 1600px; }
+        .tab-btn { transition: all 0.2s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #5B5FC7; border-bottom-color: #5B5FC7; font-weight: 700; }
+        .flip-card { perspective: 1000px; cursor: pointer; height: 200px; }
+        .flip-inner { position: relative; width: 100%; height: 100%; transition: transform 0.6s; transform-style: preserve-3d; }
+        .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+        .flip-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 0.75rem; display: flex; flex-direction: column; justify-content: center; padding: 1.25rem; }
+        .flip-back { transform: rotateY(180deg); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
+            <h1 class="text-base md:text-xl font-bold text-[#5B5FC7] shrink-0">第六次：教檢題目提點與練習</h1>
+            <div class="hidden lg:flex space-x-5 text-sm">
+                <a href="#s1" class="nav-link font-medium pb-1">考點口訣</a>
+                <a href="#s2" class="nav-link font-medium pb-1">選擇題策略</a>
+                <a href="#s3" class="nav-link font-medium pb-1">申論rubric</a>
+                <a href="#s4" class="nav-link font-medium pb-1">模考命題</a>
+                <a href="#s5" class="nav-link font-medium pb-1">作品集</a>
+                <a href="#s6" class="nav-link font-medium pb-1">課堂演練</a>
+                <a href="iep_IEPT06.html" class="nav-link font-medium pb-1 text-[#5B5FC7]">測驗</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="lg:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white px-6 pb-4 grid grid-cols-2 gap-1">
+            <a href="#s1" class="block py-2 nav-link text-center">考點口訣</a>
+            <a href="#s2" class="block py-2 nav-link text-center">選擇題策略</a>
+            <a href="#s3" class="block py-2 nav-link text-center">申論rubric</a>
+            <a href="#s4" class="block py-2 nav-link text-center">模考命題</a>
+            <a href="#s5" class="block py-2 nav-link text-center">作品集</a>
+            <a href="#s6" class="block py-2 nav-link text-center">課堂演練</a>
+            <a href="iep_IEPT06.html" class="block py-2 nav-link text-center text-[#5B5FC7]">測驗</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-10 md:py-14 max-w-5xl">
+
+        <!-- 課程重點 -->
+        <section class="mb-14">
+            <div class="grid md:grid-cols-5 gap-8 items-center">
+                <div class="md:col-span-3">
+                    <p class="text-sm font-semibold text-[#5B5FC7] tracking-widest mb-2">第六次課程 · 三小時（含測驗）· 全課收束</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#5B5FC7] mb-4">教檢題目提點與練習</h2>
+                    <p class="text-gray-600 leading-relaxed">前五次建立了法源精神、學前vs小特差異、法令內容、轉銜、行為功能分析的完整知識地圖，這最後一次要把「會講」轉成「會寫」：整理成可快速回憶的<strong>高頻考點口訣</strong>、拆解<strong>選擇題作答策略</strong>、練習<strong>申論題的結構化寫作</strong>，並用半堂模考、半堂命題收束整門課，完成期末作品集發表。全程比照教師資格考試特殊教育科的題型與難度來設計練習。</p>
+                    <div class="mt-4 flex flex-wrap gap-2 text-xs">
+                        <span class="bg-[#D5D7F5] text-[#3C40A0] px-3 py-1 rounded-full">教檢特教科</span>
+                        <span class="bg-[#D5D7F5] text-[#3C40A0] px-3 py-1 rounded-full">課程教學與評量</span>
+                        <span class="bg-[#D5D7F5] text-[#3C40A0] px-3 py-1 rounded-full">申論結構化</span>
+                        <span class="bg-[#D5D7F5] text-[#3C40A0] px-3 py-1 rounded-full">期末作品集</span>
+                    </div>
+                </div>
+                <div class="md:col-span-2">
+                    <svg class="w-full rounded-2xl shadow-sm" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="教檢：把會講變會寫">
+  <defs><linearGradient id="h6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ECEDFB"/><stop offset="1" stop-color="#D3D6F3"/></linearGradient></defs>
+  <rect width="800" height="340" fill="url(#h6)"/>
+  <ellipse cx="400" cy="300" rx="380" ry="26" fill="#B7BAE8" opacity="0.5"/>
+  <text x="400" y="58" font-size="22" fill="#3C40A0" text-anchor="middle" font-family="sans-serif" font-weight="bold">把「會講」變「會寫」</text>
+  <!-- 講泡泡 -->
+  <g transform="translate(180,120)">
+    <rect x="0" y="0" width="150" height="90" rx="16" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="3"/><path d="M40 90 l0 24 l26 -24 z" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="3"/>
+    <rect x="20" y="24" width="110" height="9" rx="4" fill="#9EA2E4"/><rect x="20" y="44" width="86" height="8" rx="4" fill="#D5D7F5"/><rect x="20" y="62" width="98" height="8" rx="4" fill="#D5D7F5"/>
+    <text x="75" y="-8" font-size="14" fill="#3C40A0" text-anchor="middle" font-family="sans-serif">會講</text>
+  </g>
+  <path d="M355 165 L440 165" stroke="#5B5FC7" stroke-width="5" marker-end="url(#h6a)"/>
+  <defs><marker id="h6a" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#5B5FC7"/></marker></defs>
+  <!-- 答卷 -->
+  <g transform="translate(470,105)">
+    <rect x="0" y="0" width="150" height="120" rx="10" fill="#fff" stroke="#3C40A0" stroke-width="3"/>
+    <rect x="18" y="18" width="114" height="10" rx="5" fill="#5B5FC7"/>
+    <circle cx="30" cy="48" r="7" fill="#9EA2E4"/><rect x="46" y="43" width="80" height="9" rx="4" fill="#D5D7F5"/><circle cx="30" cy="70" r="7" fill="#9EA2E4"/><rect x="46" y="65" width="80" height="9" rx="4" fill="#D5D7F5"/><circle cx="30" cy="92" r="7" fill="#9EA2E4"/><rect x="46" y="87" width="80" height="9" rx="4" fill="#D5D7F5"/><circle cx="30" cy="114" r="7" fill="#9EA2E4"/><rect x="46" y="109" width="80" height="9" rx="4" fill="#D5D7F5"/>
+    <text x="75" y="-8" font-size="14" fill="#3C40A0" text-anchor="middle" font-family="sans-serif">會寫</text>
+  </g>
+</svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊一：高頻考點口訣卡 -->
+        <section id="s1" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9EA2E4] text-2xl font-black">①</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#5B5FC7]">高頻考點口訣卡</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="高頻考點口訣">
+  <rect width="300" height="200" fill="#ECEDFB" rx="12"/>
+  <rect x="60" y="45" width="180" height="110" rx="10" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2.5"/>
+  <rect x="80" y="62" width="140" height="9" rx="4" fill="#9EA2E4"/><rect x="80" y="82" width="122" height="9" rx="4" fill="#D5D7F5"/><rect x="80" y="102" width="104" height="9" rx="4" fill="#9EA2E4"/><rect x="80" y="122" width="86" height="9" rx="4" fill="#D5D7F5"/>
+  <path d="M210 60 l6 12 l13 2 l-9 9 l2 13 l-12 -7 l-12 7 l2 -13 l-9 -9 l13 -2 z" fill="#3C40A0"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">點每一張卡展開：考點內容、法源依據，以及一句「一句話記憶點」。這六組是歷屆教檢特教科「課程教學與評量」與「教育理念與實務」最常反覆出現的考點，考前十分鐘可以只看這一區。</p>
+            <div id="key-list" class="space-y-3"></div>
+        </section>
+
+        <!-- 區塊二：選擇題型策略卡 -->
+        <section id="s2" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9EA2E4] text-2xl font-black">②</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#5B5FC7]">選擇題型策略卡</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="選擇題策略">
+  <rect width="300" height="200" fill="#ECEDFB" rx="12"/>
+  <g transform="translate(70,50)"><circle cx="0" cy="0" r="10" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2"/><rect x="20" y="-5" width="140" height="10" rx="5" fill="#D5D7F5"/></g><g transform="translate(70,80)"><circle cx="0" cy="0" r="10" fill="#3C40A0" stroke="#5B5FC7" stroke-width="2"/><rect x="20" y="-5" width="140" height="10" rx="5" fill="#D5D7F5"/></g><g transform="translate(70,110)"><circle cx="0" cy="0" r="10" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2"/><rect x="20" y="-5" width="140" height="10" rx="5" fill="#D5D7F5"/></g><g transform="translate(70,140)"><circle cx="0" cy="0" r="10" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2"/><rect x="20" y="-5" width="140" height="10" rx="5" fill="#D5D7F5"/></g>
+  <path d="M60 79 l6 6 l12 -14" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">教檢選擇題常見五種「陷阱型」，切換頁籤看每種策略的操作方法與示範題，練習時計時，體會考場節奏。</p>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="strat-tab tab-btn active pb-2 text-sm md:text-base" data-tab="st1">關鍵字定位</button>
+                <button class="strat-tab tab-btn pb-2 text-sm md:text-base" data-tab="st2">選項互斥</button>
+                <button class="strat-tab tab-btn pb-2 text-sm md:text-base" data-tab="st3">最適切語氣題</button>
+                <button class="strat-tab tab-btn pb-2 text-sm md:text-base" data-tab="st4">甲乙丙丁組合</button>
+                <button class="strat-tab tab-btn pb-2 text-sm md:text-base" data-tab="st5">法條數字題</button>
+            </div>
+            <div id="strat-tab-content"></div>
+        </section>
+
+        <!-- 區塊三：申論題結構化寫作 rubric -->
+        <section id="s3" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9EA2E4] text-2xl font-black">③</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#5B5FC7]">申論題結構化寫作 rubric</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="申論結構化寫作">
+  <rect width="300" height="200" fill="#ECEDFB" rx="12"/>
+  <rect x="55" y="40" width="130" height="120" rx="9" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2.5"/>
+  <rect x="72" y="56" width="60" height="9" rx="4" fill="#9EA2E4"/><rect x="72" y="78" width="96" height="9" rx="4" fill="#D5D7F5"/><rect x="72" y="100" width="96" height="9" rx="4" fill="#D5D7F5"/><rect x="72" y="122" width="96" height="9" rx="4" fill="#D5D7F5"/>
+  <g transform="translate(210,60)"><rect x="0" y="0" width="42" height="90" rx="7" fill="#3C40A0"/><text x="21" y="30" font-size="12" fill="#fff" text-anchor="middle" font-family="sans-serif">評</text><text x="21" y="50" font-size="12" fill="#fff" text-anchor="middle" font-family="sans-serif">分</text><text x="21" y="70" font-size="12" fill="#fff" text-anchor="middle" font-family="sans-serif">表</text></g>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">教檢申論題評分看四個面向：<strong>定義</strong>、<strong>理論依據</strong>、<strong>實例應用</strong>、<strong>結構完整</strong>。以下用示範題演練「總—分—總」的條列化答題結構，點按鈕展開範文骨架。</p>
+            <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6" id="rubric-grid"></div>
+            <div class="bg-white border border-[#D0D3F3] rounded-xl p-6">
+                <p class="text-sm font-semibold text-[#3C40A0] mb-2">示範題</p>
+                <h4 class="font-bold text-gray-800 mb-3">請以行為功能分析（FBA）說明如何為一名逃避型行為的幼兒設計行為介入方案。</h4>
+                <button id="rubric-demo-btn" class="bg-[#5B5FC7] text-white text-sm font-semibold py-2 px-5 rounded-lg hover:bg-[#4A4EB0] transition-colors">展開「總—分—總」答題骨架</button>
+                <div id="rubric-demo-panel" class="reveal-panel mt-0">
+                    <div class="pt-5 space-y-3 text-sm text-gray-700 leading-relaxed">
+                        <div class="bg-[#ECEDFB] rounded-lg p-4"><span class="font-semibold text-[#3C40A0]">總（開頭定義＋立場）：</span>行為功能分析（FBA）主張問題行為並非無意義，而是具有溝通功能；逃避型行為的介入應先辨識功能，再設計符合功能的替代方案，而非僅處理行為表象。</div>
+                        <div class="bg-white border border-[#D0D3F3] rounded-lg p-4">
+                            <span class="font-semibold text-[#5B5FC7]">分（條列三段）：</span>
+                            <ol class="list-decimal list-inside mt-2 space-y-1">
+                                <li><strong>理論依據：</strong>行為的 ABC 模式（前事 Antecedent－行為 Behavior－後果 Consequence），以及行為具有逃避／獲得（注意、物品、感覺）等功能假設。</li>
+                                <li><strong>實例應用：</strong>觀察與訪談發現幼兒在「精細動作作業」前事下出現逃避行為，功能為逃避高難度任務；因此設計前事調整（降低任務難度、提供選擇）＋教導替代溝通（舉手說「我需要幫忙」）＋後果策略（逐步撤除協助並增強嘗試行為）。</li>
+                                <li><strong>行政與資源配合：</strong>需相關教師、家長共同記錄行為頻率，並定期於 IEP 會議檢討成效。</li>
+                            </ol>
+                        </div>
+                        <div class="bg-[#ECEDFB] rounded-lg p-4"><span class="font-semibold text-[#3C40A0]">總（結尾呼應）：</span>唯有先假設後介入，行為介入方案才能對症，逃避行為才可能被功能相當、社會可接受的替代行為取代，而非僅是暫時壓制。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊四：模考＋命題雙軌設計說明 -->
+        <section id="s4" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9EA2E4] text-2xl font-black">④</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#5B5FC7]">模考＋命題雙軌設計說明</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="模考與命題">
+  <rect width="300" height="200" fill="#ECEDFB" rx="12"/>
+  <circle cx="150" cy="100" r="52" fill="none" stroke="#D5D7F5" stroke-width="12"/>
+  <circle cx="150" cy="100" r="52" fill="none" stroke="#5B5FC7" stroke-width="12" stroke-dasharray="163 327" transform="rotate(-90 150 100)"/>
+  <text x="150" y="95" font-size="20" fill="#3C40A0" text-anchor="middle" font-family="sans-serif" font-weight="bold">1/2</text>
+  <text x="150" y="118" font-size="11" fill="#33367F" text-anchor="middle" font-family="sans-serif">模考｜命題</text>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">這堂課採「半堂模考、半堂命題」雙軌設計：前半限時作答，體會考場節奏；後半換角度出題，因為<strong>出題本身就是深化理解的最有效方式</strong>——要出好題，必須先徹底掌握概念的邊界與易混淆處。點步驟卡看操作方法。</p>
+            <div id="mock-steps" class="grid md:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- 區塊五：期末作品集發表區 -->
+        <section id="s5" class="mb-16 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9EA2E4] text-2xl font-black">⑤</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#5B5FC7]">期末作品集發表區</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="期末作品集">
+  <rect width="300" height="200" fill="#ECEDFB" rx="12"/>
+  <g transform="translate(70,55)"><rect x="0" y="0" width="110" height="80" rx="8" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2"/><rect x="14" y="16" width="70" height="8" rx="4" fill="#9EA2E4"/><rect x="14" y="32" width="82" height="7" rx="3" fill="#D5D7F5"/></g><g transform="translate(88,63)"><rect x="0" y="0" width="110" height="80" rx="8" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2"/><rect x="14" y="16" width="70" height="8" rx="4" fill="#9EA2E4"/><rect x="14" y="32" width="82" height="7" rx="3" fill="#D5D7F5"/></g><g transform="translate(106,71)"><rect x="0" y="0" width="110" height="80" rx="8" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2"/><rect x="14" y="16" width="70" height="8" rx="4" fill="#9EA2E4"/><rect x="14" y="32" width="82" height="7" rx="3" fill="#D5D7F5"/></g>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">收束六次課程的帶走產出，共六件作品。切換頁籤看每件作品的內容重點與發表方式；今天將逐一上台簡短發表（每件約3分鐘）。</p>
+            <div class="border-b border-gray-200 flex gap-6 mb-5 overflow-x-auto">
+                <button class="port-tab tab-btn active pb-2 text-sm md:text-base" data-tab="p1">①法規對照表</button>
+                <button class="port-tab tab-btn pb-2 text-sm md:text-base" data-tab="p2">②學前→小一轉換表</button>
+                <button class="port-tab tab-btn pb-2 text-sm md:text-base" data-tab="p3">③幼小轉銜計畫</button>
+                <button class="port-tab tab-btn pb-2 text-sm md:text-base" data-tab="p4">④ABC＋行為介入方案</button>
+                <button class="port-tab tab-btn pb-2 text-sm md:text-base" data-tab="p5">⑤自編試題</button>
+                <button class="port-tab tab-btn pb-2 text-sm md:text-base" data-tab="p6">⑥考取行動計畫</button>
+            </div>
+            <div id="port-tab-content" class="bg-white border border-[#D0D3F3] rounded-xl p-6"></div>
+        </section>
+
+        <!-- 區塊六：課堂演練 -->
+        <section id="s6" class="mb-10 scroll-mt-24">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="text-[#9EA2E4] text-2xl font-black">⑥</span>
+                <div class="flex-1 flex items-center justify-between gap-4">
+                    <h3 class="text-2xl font-bold text-[#5B5FC7]">課堂演練</h3>
+                    <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="期末發表">
+  <rect width="300" height="200" fill="#ECEDFB" rx="12"/>
+  <rect x="45" y="55" width="120" height="72" rx="14" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2.5"/><path d="M75 127 l0 22 l24 -22 z" fill="#F0F1FB" stroke="#5B5FC7" stroke-width="2.5"/>
+  <rect x="150" y="80" width="105" height="60" rx="14" fill="#9EA2E4"/><path d="M225 140 l0 20 l-22 -20 z" fill="#9EA2E4"/>
+  <rect x="60" y="72" width="80" height="7" rx="3" fill="#9EA2E4"/><rect x="60" y="86" width="64" height="7" rx="3" fill="#D5D7F5"/><rect x="60" y="100" width="72" height="7" rx="3" fill="#D5D7F5"/>
+</svg>
+                </div>
+            </div>
+            <p class="text-gray-600 mb-6">分組進行限時模考與命題演練，把整門課的知識轉成應試與教學雙重能力。每題先小組討論，再全班分享。</p>
+            <div id="discuss-cards" class="grid md:grid-cols-2 gap-5 mb-8"></div>
+            <div class="bg-[#5B5FC7] text-white rounded-2xl p-6 md:p-8">
+                <p class="text-sm font-semibold tracking-widest text-[#ECEDFB] mb-2">本次帶走的產出</p>
+                <h4 class="text-xl font-bold mb-3">模考申論一題＋自編選擇題一題與詳解＋期末作品集發表</h4>
+                <p class="text-[#D5D7F5] leading-relaxed text-sm">完成一份限時申論答題（依 rubric 自評結構完整度）、一題自編選擇題並附詳解（練習出題邏輯），並在課堂上完成六件期末作品集的簡短發表。這些產出整合了六次課程的法規、轉銜、行為功能分析與應試能力，是這門課最終的學習成果。</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 mt-8">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm mb-1">學前特殊教育與IEP實務 第六次課程 ｜ 主教材：林素貞《個別化教育計畫之實施》</p>
+            <p class="text-xs text-gray-400 mb-3">法源依據：教育部教師資格考試命題作業要點、特殊教育法施行細則第10條、特殊教育法第31條、身心障礙學生考試服務辦法。歷屆教檢特教科考點統整僅供教學與演示用途。</p>
+            <div class="flex justify-center gap-3">
+                <a href="iep_IEPT06.html" class="inline-block bg-[#5B5FC7] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#4A4EB0] transition-colors">前往第六次測驗</a>
+                <a href="iep_index.html" class="inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-5 rounded-lg hover:bg-gray-300 transition-colors">回課程入口</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // ===== 區塊一：高頻考點口訣卡 =====
+        const keyItems = [
+            { n:"1", title:"IEP 時程", law:"新生及轉學生：入學後一個月內訂定；其餘在學學生：開學前訂定；每學期至少檢討一次。", mnemonic:"一句話記憶：新轉一個月、舊生開學前、每學期至少檢討一次。" },
+            { n:"2", title:"IEP 參與人員", law:"應以團隊合作方式訂定，成員包括學校行政人員、特殊教育及相關教師、學生家長；必要時得邀請相關專業人員及學生本人參與。", mnemonic:"一句話記憶：行政＋特教相關教師＋家長是基本盤，必要時專業人員與學生本人加入。" },
+            { n:"3", title:"IEP 五大內容", law:"①能力現況、家庭狀況及需求評估 ②特殊教育、相關服務及支持策略 ③學年學期教育目標、評量方式、日期及標準 ④行為功能介入方案及行政支援（限有情緒行為問題者）⑤轉銜輔導及服務。", mnemonic:"一句話記憶：現況、服務、目標、行為（條件式）、轉銜，五項缺一不可（行為除外）。" },
+            { n:"4", title:"LRE 最少限制環境", law:"身心障礙學生應優先安置於最少限制的環境，盡可能與非障礙同儕一起接受教育，除非確有必要才安置於較隔離的環境。", mnemonic:"一句話記憶：先融合再隔離，隔離要有正當理由且定期檢討。" },
+            { n:"5", title:"FBA 行為功能分析", law:"介入行為問題前須先進行行為功能分析，掌握行為的前事、後果與功能假設（逃避／獲得），再據以設計介入方案，即「先假設後介入」。", mnemonic:"一句話記憶：先問「這個行為在說什麼」，再決定怎麼介入。" },
+            { n:"6", title:"轉銜服務六面向與通報時程", law:"轉銜服務涵蓋升學輔導、生活、就業、心理輔導、福利服務及其他相關專業服務六面向；身心障礙學生資料須於一定期限內通報轉銜服務資料庫並完成資料移轉。", mnemonic:"一句話記憶：六面向要寫全，通報與資料移轉不能拖到最後一刻。" }
+        ];
+        const keyList = document.getElementById('key-list');
+        keyItems.forEach(it => {
+            const card = document.createElement('div');
+            card.className = 'principle-card bg-white border border-[#D0D3F3] rounded-xl overflow-hidden';
+            card.innerHTML = `
+                <div class="flex items-center gap-4 p-5">
+                    <span class="shrink-0 w-9 h-9 rounded-full bg-[#9EA2E4] text-white flex items-center justify-center font-bold">${it.n}</span>
+                    <h4 class="font-semibold text-gray-800 flex-1">${it.title}</h4>
+                    <span class="toggle-icon text-[#9EA2E4] text-xl">＋</span>
+                </div>
+                <div class="reveal-panel px-5">
+                    <div class="pb-5 pl-13 space-y-3 text-sm">
+                        <div class="bg-[#ECEDFB] rounded-lg p-3"><span class="font-semibold text-[#3C40A0]">考點內容：</span><span class="text-gray-700">${it.law}</span></div>
+                        <div class="bg-[#D5D7F5] rounded-lg p-3"><span class="font-semibold text-[#3C40A0]">${it.mnemonic}</span></div>
+                    </div>
+                </div>`;
+            keyList.appendChild(card);
+            const head = card.querySelector('.flex.items-center');
+            head.style.cursor = 'pointer';
+            head.addEventListener('click', () => {
+                const panel = card.querySelector('.reveal-panel');
+                const icon = card.querySelector('.toggle-icon');
+                panel.classList.toggle('open');
+                const open = panel.classList.contains('open');
+                panel.style.paddingTop = open ? '0.25rem' : '0';
+                icon.textContent = open ? '－' : '＋';
+            });
+        });
+
+        // ===== 區塊二：選擇題型策略卡 =====
+        const stratData = {
+            st1: { title:"關鍵字定位法", desc:"先讀題幹找出「限定詞」（如：最先、唯一、不得、應、除外），這些字往往決定答案的排他性。定位後回頭比對選項用字是否精確對應。", demo:"示範題：依施行細則規定，新生及轉學生的 IEP 應於「入學後」多久內訂定？關鍵字「新生及轉學生」＋「入學後」立即鎖定「一個月內」，不與舊生的「開學前」混淆。" },
+            st2: { title:"選項互斥判斷", desc:"四個選項中若有兩個意思高度相似或互為子集，通常都不是答案；找出「性質上真正不同、彼此排他」的選項組合，答案常落在其中。", demo:"示範題：考試服務四分類選項中，若同時出現「延長作答時間」與「無障礙試場環境」兩個相似的『試場服務』選項，通常另有一個屬於「作答方式調整」的選項才是鑑別重點。" },
+            st3: { title:"「較符合／最適切」語氣題的取捨", desc:"題幹出現「最適切」「較符合專業倫理」時，代表多個選項可能都不算錯，但只有一個「最」，要比較選項間的專業程度與周全性，而非只挑「沒有錯」的選項。", demo:"示範題：「教師發現學生有情緒行為問題時，最適切的第一步是？」比起直接選「介入」，「先進行行為功能分析」才是最適切，因為介入必須以評估為前提。" },
+            st4: { title:"甲乙丙丁組合題刪去法", desc:"先逐一判斷每個子項的對錯（甲對、乙錯…），再回頭比對選項組合，用刪去法排除含有已知錯誤子項的選項，通常兩步就能鎖定答案。", demo:"示範題：「下列哪些屬於轉銜服務面向？甲、升學輔導 乙、生活 丙、學業成績排名 丁、就業」→丙非法定面向，先刪去含丙的選項，答案為「甲乙丁」。" },
+            st5: { title:"法條數字題記憶", desc:"時程、次數、天數類數字題最容易混淆，建議用時間軸方式記憶（何時做、多久一次），並特別留意「至少」「內」「前」等修飾詞是否被選項偷換。", demo:"示範題：「IEP 每學期至少應檢討幾次？」答案為「一次」；常見誤導選項會把「每學期」偷換成「每學年」，作答時務必核對時間單位。" }
+        };
+        function renderStrat(key) {
+            const d = stratData[key];
+            document.getElementById('strat-tab-content').innerHTML = `
+                <div class="bg-white border border-[#D0D3F3] rounded-xl p-6">
+                    <h5 class="font-bold text-gray-800 mb-2">${d.title}</h5>
+                    <p class="text-sm text-gray-600 leading-relaxed mb-4">${d.desc}</p>
+                    <div class="bg-[#ECEDFB] rounded-lg p-4 text-sm text-gray-700 leading-relaxed"><span class="font-semibold text-[#3C40A0]">示範：</span>${d.demo}</div>
+                </div>`;
+        }
+        document.querySelectorAll('.strat-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.strat-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderStrat(btn.dataset.tab);
+            });
+        });
+        renderStrat('st1');
+
+        // ===== 區塊三：申論 rubric 四面向卡 =====
+        const rubricItems = [
+            { title:"定義", color:"#5B5FC7", desc:"清楚寫出核心概念的定義，用專業術語而非口語描述。" },
+            { title:"理論依據", color:"#3C40A0", desc:"指出支撐論點的理論、模式或法條，展現學理基礎。" },
+            { title:"實例應用", color:"#9EA2E4", desc:"以具體情境或案例說明概念如何落實，避免空談。" },
+            { title:"結構完整", color:"#4A4EB0", desc:"採「總—分—總」，分點條列清楚，首尾呼應論點。" }
+        ];
+        const rubricGrid = document.getElementById('rubric-grid');
+        rubricItems.forEach(r => {
+            const el = document.createElement('div');
+            el.className = 'bg-white border border-[#D0D3F3] rounded-xl p-4 text-center';
+            el.innerHTML = `<span class="inline-block w-8 h-8 rounded-full mb-2" style="background:${r.color}"></span><h5 class="font-bold text-gray-800 mb-1">${r.title}</h5><p class="text-xs text-gray-500 leading-relaxed">${r.desc}</p>`;
+            rubricGrid.appendChild(el);
+        });
+        const rubricBtn = document.getElementById('rubric-demo-btn');
+        const rubricPanel = document.getElementById('rubric-demo-panel');
+        rubricBtn.addEventListener('click', () => {
+            rubricPanel.classList.toggle('open');
+            rubricBtn.textContent = rubricPanel.classList.contains('open') ? '收合答題骨架' : '展開「總—分—總」答題骨架';
+        });
+
+        // ===== 區塊四：模考＋命題步驟卡 =====
+        const mockSteps = [
+            { n:"1", title:"半堂模考：限時作答", desc:"發下20題教檢式選擇題，限時25分鐘作答，體會考場的時間壓力與節奏分配，作答完立即核對答案並標記錯題類型。" },
+            { n:"2", title:"錯題歸因", desc:"針對答錯題目，判斷錯誤原因屬於「概念不熟」「關鍵字看漏」還是「選項混淆」，分類記錄，作為個人複習重點。" },
+            { n:"3", title:"半堂命題：分組出題", desc:"每組依指定主題（如轉銜、FBA、考試調整）各出一題選擇題＋一題申論題，並撰寫詳解，訓練從出題者角度掌握概念邊界。" },
+            { n:"4", title:"組間互測與解析", desc:"各組交換試題互相作答，再由出題組講解命題意圖與正確答案的判斷依據，全班共同檢視題目品質與詳解嚴謹度。" }
+        ];
+        const mockWrap = document.getElementById('mock-steps');
+        mockSteps.forEach(s => {
+            const el = document.createElement('div');
+            el.className = 'card rounded-xl p-5 border-l-4 border-[#5B5FC7]';
+            el.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <span class="shrink-0 w-8 h-8 rounded-full bg-[#D5D7F5] text-[#3C40A0] flex items-center justify-center font-bold text-sm">${s.n}</span>
+                    <div class="flex-1">
+                        <h5 class="font-bold text-gray-800 mb-1">${s.title}</h5>
+                        <p class="text-sm text-gray-600 leading-relaxed">${s.desc}</p>
+                    </div>
+                </div>`;
+            mockWrap.appendChild(el);
+        });
+
+        // ===== 區塊五：期末作品集 tab =====
+        const portData = {
+            p1: { title:"①法規對照表（定稿）", desc:"第一、三次累積：施行細則第10條五大內容、考試調整四分類、集中式/巡迴表件差異，整理成「法條→表件欄位→學前填寫要點」對照表。", present:"發表重點：說明表格如何幫助新手教師快速定位法條落地的欄位。" },
+            p2: { title:"②學前→小一轉換表", desc:"第二次累積：學前與國小特教服務型態、法規適用、鑑定安置流程的差異對照，凸顯學前巡迴輔導與國小資源班的銜接落差。", present:"發表重點：舉一個真實情境說明轉換過程中最容易被忽略的落差。" },
+            p3: { title:"③幼小轉銜計畫", desc:"第四次累積：以一名大班幼兒為例，完成六面向轉銜計畫（升學輔導、生活、就業導向前技能、心理輔導、福利服務、資料移轉時程）。", present:"發表重點：說明轉銜計畫如何具體對應到施行細則第10條第五款。" },
+            p4: { title:"④ABC＋行為介入方案", desc:"第五次累積：以一名逃避型行為幼兒為例，完成行為功能分析（前事—行為—後果）與對應的介入方案設計。", present:"發表重點：說明如何從行為功能假設推導出介入策略的邏輯鏈。" },
+            p5: { title:"⑤自編試題", desc:"第六次課堂命題：自編一題選擇題＋一題申論題並附詳解，主題可自選六次課程中任一概念。", present:"發表重點：說明命題意圖、鑑別度設計與詳解撰寫的考量。" },
+            p6: { title:"⑥考取行動計畫", desc:"綜合六次課程，規劃個人教檢特教科的複習時程表：各章節複習優先順序、模考安排、弱點補強策略。", present:"發表重點：說明如何運用今天的考點口訣卡與選擇題策略安排最後衝刺。" }
+        };
+        function renderPort(key) {
+            const d = portData[key];
+            document.getElementById('port-tab-content').innerHTML = `
+                <h5 class="font-bold text-gray-800 text-lg mb-2">${d.title}</h5>
+                <p class="text-sm text-gray-600 leading-relaxed mb-4">${d.desc}</p>
+                <div class="bg-[#ECEDFB] rounded-lg p-4 text-sm text-[#3C40A0]"><span class="font-semibold">${d.present}</span></div>`;
+        }
+        document.querySelectorAll('.port-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.port-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderPort(btn.dataset.tab);
+            });
+        });
+        renderPort('p1');
+
+        // ===== 區塊六：課堂演練 =====
+        const discussItems = [
+            { q:"限時10分鐘，個人書寫一題申論：「請說明可評量教育目標應包含哪些要素，並舉一例說明。」寫完依 rubric 四面向自評。", hint:"提示：要素包含情境／條件、可觀察行為、標準（正確率或次數）、評量方式與日期；自評時特別檢查「結構完整」是否有總—分—總。" },
+            { q:"每組自編一題選擇題（主題：FBA、轉銜、考試調整任選）並附詳解，交換給隔壁組作答，再互評詳解是否清楚。", hint:"提示：好詳解應說明「為什麼對」也說明「其他選項為什麼錯」，而不是只重複題幹。" },
+            { q:"互評彼此第五次的『可評量目標改寫』作品，用今天的 rubric 判斷對方目標是否具備情境、標準與可觀察行為三要素。", hint:"提示：常見缺陷是只寫了行為動詞（如「會分享」），缺少情境條件與量化標準。" },
+            { q:"跨概念統整題：一名有情緒行為問題、即將升小一的幼兒，如何在同一份 IEP 中同時處理 FBA、可評量目標、考試調整與轉銜四個概念？請畫出四者的關聯圖。", hint:"提示：FBA 的功能假設會影響目標設計與介入方案；考試調整要考量該幼兒的優勢管道；轉銜要延續行為介入策略到小一情境，四者並非獨立而是相互牽動。" }
+        ];
+        const dWrap = document.getElementById('discuss-cards');
+        discussItems.forEach((it, i) => {
+            const el = document.createElement('div');
+            el.className = 'card rounded-xl p-5 border-l-4 border-[#9EA2E4]';
+            el.innerHTML = `
+                <div class="flex items-start gap-3">
+                    <span class="shrink-0 w-7 h-7 rounded-full bg-[#D5D7F5] text-[#3C40A0] flex items-center justify-center font-bold text-sm">${i+1}</span>
+                    <div class="flex-1">
+                        <p class="text-gray-800 font-medium leading-relaxed mb-3">${it.q}</p>
+                        <button class="hint-btn text-xs text-[#5B5FC7] font-semibold">顯示討論方向 ▾</button>
+                        <div class="hint-panel reveal-panel"><p class="text-sm text-gray-500 pt-2 leading-relaxed">${it.hint}</p></div>
+                    </div>
+                </div>`;
+            dWrap.appendChild(el);
+            const btn = el.querySelector('.hint-btn');
+            const panel = el.querySelector('.hint-panel');
+            btn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+                btn.textContent = panel.classList.contains('open') ? '收合討論方向 ▴' : '顯示討論方向 ▾';
+            });
+        });
+
+        // ===== 導覽：選單、平滑捲動、高亮 =====
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+        const sections = ['s1','s2','s3','s4','s5','s6'];
+        const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+        window.addEventListener('scroll', () => {
+            let cur = '';
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && window.scrollY >= el.offsetTop - 120) cur = id;
+            });
+            navLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+            });
+        });
+    });
+    </script>
+</body>
+</html>
