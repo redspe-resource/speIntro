@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第一次 法源基礎與精神：前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #C0846E; border-bottom-color: #C0846E; }
+        .question-card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: box-shadow 0.3s; }
+        .question-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .answer-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; }
+        .answer-panel.open { max-height: 800px; }
+        .option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-label:hover { background-color: #f7fafc; }
+        input[type="radio"]:checked + .option-label { background-color: #E6DCD6; border-color: #C0846E; }
+        .modal-overlay { transition: opacity 0.3s ease-in-out; }
+        .badge { font-size: 0.7rem; padding: 0.15rem 0.6rem; border-radius: 9999px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-lg md:text-2xl font-bold text-[#A8765E]">第一次：法源基礎與精神 · 測驗</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12 max-w-4xl">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#A8765E]">前測 <span class="badge bg-blue-100 text-blue-700 align-middle">基礎</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">前測評估您對特殊教育法源、模式理念與 IEP 基本原則的既有理解，偏概念與法條辨識，可作為課前快速診斷。請選擇最合適的答案，完成後點最下方按鈕看分數；也可隨時點題目卡片看詳解。</p>
+            <div id="pre-test-container" class="space-y-4"></div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#A8765E]">後測 <span class="badge bg-[#E6DCD6] text-[#A8765E] align-middle">碩士級</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">後測拉高到碩士層次：法律原則的彼此拉扯、IEP 會議主席的權衡判斷、模式論辯與法條—欄位的遷移應用。題目較長、需要分析與取捨，請選出最適當者。</p>
+            <div id="post-test-container" class="space-y-4"></div>
+        </section>
+
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#A8765E] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#C0846E] transition-colors duration-300">計算分數並比較</button>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm">學前特殊教育與IEP實務 第一次測驗 ｜ 主教材：林素貞《個別化教育計畫之實施》｜ 僅供教學與演示用途。</p>
+            <a href="iep_index.html" class="inline-block mt-3 bg-[#A8765E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C0846E] transition-colors">回課程入口</a>
+        </div>
+    </footer>
+
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-xl p-8">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="h-64 mx-auto mb-6"><canvas id="score-chart"></canvas></div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 20</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 20</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preTestQuestions = [
+            { question: "1. 有關個別化教育計畫(IEP)的性質，下列敘述何者最為正確？", options:["(A) IEP 只是教師自行參考的教學計畫，不具法律效力","(B) IEP 是法律定義的專有名詞，包含會議與書面文件","(C) IEP 是家長單方面提出的教育要求書","(D) IEP 僅適用於集中式特教班學生"], answer:"B", explanation:"IEP 是特殊教育法明定的專有名詞，必須依法訂定，包含「會議」與「書面文件」兩部分，並強調事先規劃而非事後補救。" },
+            { question: "2. 主張「障礙是社會環境中的物理、制度與態度障礙所造成」，將焦點從改變學生轉向改變環境的是？", options:["(A) 醫療模式","(B) 社會模式","(C) 慈善模式","(D) 缺陷模式"], answer:"B", explanation:"社會模式認為真正的障礙來自環境未提供適當設施、服務與接納態度，主張改變環境以支持個體，與醫療模式歸因於個體缺陷不同。" },
+            { question: "3. 明確指出具融合精神的普通學校是「對抗歧視態度、建立包容社會最有效工具」的國際文件是？", options:["(A) 世界人權宣言","(B) 薩拉曼卡宣言","(C) 兒童權利公約","(D) 融合指標"], answer:"B", explanation:"《薩拉曼卡宣言》為1994年UNESCO發布，是推動融合教育最具影響力的國際文件之一。" },
+            { question: "4. 依《特殊教育法》，學校應以何種方式為身心障礙學生訂定 IEP？", options:["(A) 由特教教師獨立完成","(B) 由行政人員決定","(C) 以團隊合作方式訂定","(D) 委由校外機構撰寫"], answer:"C", explanation:"特教法第31條明定應以團隊合作方式訂定 IEP，成員包含特教師、普通班師、行政、相關專業人員與家長。" },
+            { question: "5. 「在滿足特殊需求的前提下，盡可能讓學生與普通同儕一同在普通教育環境學習」指的是？", options:["(A) 零拒絕","(B) 免費適性公立教育(FAPE)","(C) 最少限制環境(LRE)","(D) 程序保障"], answer:"C", explanation:"最少限制環境(LRE)強調安置應追求最大程度融合，並提供從普通班到特殊班的安置連續體。" },
+            { question: "6. 我國將 CRPD（身心障礙者權利公約）內國法化的方式為？", options:["(A) 直接修訂憲法","(B) 制定 CRPD 施行法","(C) 納入教育部行政命令","(D) 由地方政府自訂"], answer:"B", explanation:"我國透過制定《身心障礙者權利公約施行法》使 CRPD 具國內法律效力，成為特教法規的上位精神。" },
+            { question: "7. IEP 團隊成員中，關於家長角色，下列敘述何者最正確？", options:["(A) 家長只需簽名，不參與決策","(B) 家長是團隊中平等夥伴，有權真實參與決策","(C) 家長意見僅供參考","(D) 家長不得出席 IEP 會議"], answer:"B", explanation:"特教法規保障家長作為團隊平等成員的權利，應共同參與 IEP 的發展與決策。" },
+            { question: "8. 依《特殊教育法施行細則》第10條，下列何者「不屬於」IEP 應載明的內容？", options:["(A) 學生能力現況與需求評估","(B) 學年與學期教育目標及評量方式","(C) 行為功能介入方案與行政支援","(D) 教師個人的年度考績評定"], answer:"D", explanation:"施行細則第10條規範 IEP 五大內容，不包含教師考績。教師考績屬人事行政，與 IEP 無關。" },
+            { question: "9. 「學校不得因學生的障礙而拒絕其入學或參與學校活動」指的是哪一項原則？", options:["(A) 零拒絕","(B) 最少限制環境","(C) 程序保障","(D) 個別化"], answer:"A", explanation:"零拒絕(Zero Reject)原則要求學校不得以障礙為由拒絕學生受教或參與活動。" },
+            { question: "10. IEP 的核心精神較偏向下列何者？", options:["(A) 事後補救與問題處理","(B) 事先規劃與預防","(C) 行政歸檔與備查","(D) 家長投訴的回應紀錄"], answer:"B", explanation:"IEP 不同於一般個案會議的事後處理，強調事先預防與規劃，是一份前瞻性的專業協議。" },
+            { question: "11. 依現行特教法規，學前教育階段身心障礙幼兒應訂定？", options:["(A) 個別化家庭服務計畫(IFSP)","(B) 個別化教育計畫(IEP)","(C) 個別輔導計畫","(D) 個別化支持計畫"], answer:"B", explanation:"我國學前特教仍以 IEP 為主體並邀請家長參與；IFSP 是美國早期療育(0–2歲)的概念，非我國學前法定計畫。" },
+            { question: "12. 醫療模式看待身心障礙的核心觀點是？", options:["(A) 障礙來自環境未提供支持","(B) 障礙是個體內部的損傷或缺陷","(C) 障礙應由社會共同承擔","(D) 障礙是一種文化建構"], answer:"B", explanation:"醫療模式將問題歸因於個體內部的損傷，焦點在治療與矯正孩子本身。" },
+            { question: "13. 各縣市負責特教學生鑑定、安置與教育需求最終決議的法定單位是？", options:["(A) 學校特教推行委員會","(B) 教育部國教署","(C) 縣市政府鑑輔會","(D) 個案管理教師"], answer:"C", explanation:"各縣市「特殊教育學生鑑定及就學輔導會」（鑑輔會）為法定權責單位，負責鑑定類別與安置方式的最終決議。" },
+            { question: "14. 下列何者屬於特教法規中的「程序保障」內涵？", options:["(A) 提供免費教材","(B) 家長對鑑定安置有申訴與救濟的權利","(C) 一律安置於普通班","(D) 教師自由選擇教學法"], answer:"B", explanation:"程序保障(Procedural Safeguards)確保家長與學生在鑑定、安置等過程享有知情、參與、申訴與救濟的權利。" },
+            { question: "15. 免費適性公立教育(FAPE)的核心意涵是？", options:["(A) 提供最昂貴的教育服務","(B) 由家長全額負擔費用","(C) 政府應提供免費且符合個別需求的公立教育","(D) 僅提供普通教育課程"], answer:"C", explanation:"FAPE 強調國家有義務免費提供符合學生個別需求（適性）的公立教育。" },
+            { question: "16. 「安置連續體」概念的主要目的是落實哪一項原則？", options:["(A) 最隔離的環境","(B) 最少限制環境(LRE)","(C) 最方便教師的安置","(D) 最低成本的安置"], answer:"B", explanation:"安置連續體提供從普通班到特殊學校等不同限制程度的選項，目的在落實 LRE，讓學生被安置於最能滿足需求又最能與同儕互動的環境。" },
+            { question: "17. 112年特殊教育法修法，關於學前特教的重要變革之一是？", options:["(A) 廢除學前特教","(B) 幼兒園得設特教班或特殊教育方案","(C) 取消家長參與","(D) IEP 改為選擇性訂定"], answer:"B", explanation:"112年修法明定幼兒園得設特教班或特殊教育方案，強化學前特教的法源基礎。" },
+            { question: "18. 下列何者最能體現社會模式對 IEP 現況描述的提醒？", options:["(A) 只記錄學生的醫學診斷","(B) 只列出學生不會的技能","(C) 同時描述環境障礙與所需支持","(D) 僅記錄智力測驗分數"], answer:"C", explanation:"社會模式提醒現況描述不應只寫缺陷，更要記錄環境障礙與所需支持，呈現孩子與環境互動的完整圖像。" },
+            { question: "19. IEP 依法應多久檢討一次？", options:["(A) 每學年一次","(B) 每學期至少一次","(C) 每三年一次","(D) 僅入學時訂定一次"], answer:"B", explanation:"依特教法規，IEP 每學期至少應檢討一次，以確保計畫符合學生當前需求。" },
+            { question: "20. 下列哪一組概念皆源自美國 IDEA、並成為我國 IEP 制度的重要比較對象？", options:["(A) FAPE、LRE、程序保障","(B) 九年一貫、能力指標","(C) 十二年國教、會考","(D) 教師專業評鑑、教師分級"], answer:"A", explanation:"美國 IDEA 建立了 FAPE、LRE、程序保障等原則，是我國 IEP 制度重要的跨國比較錨點（課本第二章）。" }
+        ];
+
+        const postTestQuestions = [
+            { question: "1. 一位重度肢體障礙幼兒，家長強烈希望安置普通幼兒園全日融合，但專業團隊評估其醫療照護需求高、普通園缺乏護理人力。此情境中，哪兩項法律原則最直接彼此拉扯？", options:["(A) 零拒絕 與 教師專業自主","(B) 最少限制環境(LRE) 與 免費適性公立教育(FAPE)","(C) 程序保障 與 家長選擇權","(D) 個別化 與 標準化"], answer:"B", explanation:"LRE 主張最大程度融合（傾向普通園），FAPE 則要求教育須真正符合個別需求（含必要醫療照護）。當融合環境無法提供適性支持時，兩原則產生張力，須以「加上支持後能否受益」為權衡核心，而非二選一。" },
+            { question: "2. 承上題，若你是 IEP 會議主席，下列何種處理最符合法理精神？", options:["(A) 直接以能力不足為由拒絕融合安置","(B) 無條件依家長意願安置，不做任何支持規劃","(C) 探討在普通園加上護理與人力支持後能否受益，據以權衡安置與支持配套","(D) 交由校長單方裁決"], answer:"C", explanation:"LRE 的判斷不是「能不能融合」的是非題，而是「加上合理支持後能否在該環境受益」。主席應先探討支持配套（護理、人力、環境調整），再據以權衡，兼顧融合精神與適性需求，並保障家長參與。" },
+            { question: "3. 有人主張「只要把孩子放進普通班就是融合」。從社會模式與 LRE 精神來看，此主張的最主要問題是？", options:["(A) 融合應完全排除特殊班","(B) 物理安置在普通班不等於融合，缺乏環境調整與支持只是形式安置","(C) 融合只適用於輕度障礙","(D) 融合不需要家長參與"], answer:"B", explanation:"社會模式強調改變環境、提供支持。單純物理安置（傾倒式融合）若缺乏課程調整、支持服務與接納氛圍，只是形式上的安置，並未真正落實融合的實質內涵。" },
+            { question: "4. 某 IEP 現況描述僅寫「個案為中度自閉症，社交能力差、常尖叫」。從模式論辯角度，此描述最應補強的是？", options:["(A) 增加更多醫學診斷編號","(B) 補充個案優勢、行為的情境脈絡與環境所需的支持調整","(C) 刪除所有行為描述","(D) 改用更嚴重的字眼描述缺陷"], answer:"B", explanation:"該描述偏醫療/缺陷模式。社會模式提醒應補上優勢、行為發生的情境脈絡（何時何地為何尖叫）與環境需提供的支持，才能導出對應的介入，而非只貼缺陷標籤。" },
+            { question: "5. 從法律位階來看，下列推論何者正確？", options:["(A) 縣市 IEP 表件位階高於施行細則","(B) 施行細則可牴觸母法而優先適用","(C) 表件欄位設計應以母法與施行細則為依據，不得牴觸上位規範","(D) CRPD 施行法與特教法無關"], answer:"C", explanation:"法律位階由上而下為憲法/CRPD施行法→母法→施行細則→子法→縣市表件。下位規範不得牴觸上位，表件欄位須以母法與施行細則為依據，是法規落地的形式。" },
+            { question: "6. 一位教師說：「我憑經驗覺得這孩子不用寫轉銜，先觀察再說。」此想法最違背 IEP 的哪一項核心精神？", options:["(A) 事後補救原則","(B) IEP 是法律定義的專有名詞，須依法行事而非憑教育直覺","(C) 標準化原則","(D) 成本效益原則"], answer:"B", explanation:"IEP 是依法必須訂定的法定文件，轉銜服務為法定內容之一。以個人直覺決定要不要做，違背「依法行事、事先規劃」的核心精神。" },
+            { question: "7. 比較我國 IEP 與美國 IDEA，下列敘述何者最為適當？", options:["(A) 兩者完全相同，可直接套用","(B) 兩者皆重視個別化與家長參與，但法源脈絡、名詞與適用階段存在差異，宜取其精神而非照搬條文","(C) 美國制度落後，不值得比較","(D) 我國並未受 IDEA 影響"], answer:"B", explanation:"兩套系統共享個別化、家長參與、最少限制等精神，但法源、名詞（如 IFSP/ITP）與階段劃分不同。碩士層次的比較應取其架構與精神作鷹架，而非逐條移植。" },
+            { question: "8. 「合理調整(reasonable accommodation)」與「降低標準」最關鍵的區別是？", options:["(A) 合理調整會改變學習目標的實質要求","(B) 合理調整改變達成方式與支持，但不降低核心學習目標的實質","(C) 兩者意義完全相同","(D) 合理調整只適用於考試"], answer:"B", explanation:"合理調整（如報讀、延長時間、輔具）改變的是「達成的方式與支持」，讓學生在公平條件下展現能力；降低標準則改變了目標本身的實質要求。CRPD 強調的是前者。" },
+            { question: "9. 從施行細則第10條五大內容檢視一份 IEP，發現它完整寫了現況、服務、目標與行為介入，卻完全沒有轉銜相關內容。對一位大班幼兒而言，此 IEP 的最主要法規問題是？", options:["(A) 沒有問題，學前不需轉銜","(B) 缺漏法定的轉銜輔導與服務內容，且大班正是幼小銜接的關鍵期","(C) 應刪除行為介入","(D) 目標寫太多"], answer:"B", explanation:"轉銜輔導與服務是施行細則第10條的法定內容之一。大班幼兒面臨幼小銜接關鍵期，缺漏轉銜內容不僅不符法規，也錯失最重要的銜接規劃時機。" },
+            { question: "10. 一場 IEP 會議只有特教教師與組長出席並簽名，家長與普通班教師皆未參與。此情形最嚴重違反的是？", options:["(A) 最少限制環境","(B) 團隊合作與家長平等參與原則","(C) 免費教育原則","(D) 保密原則"], answer:"B", explanation:"特教法第31條要求以團隊合作方式訂定 IEP，家長為平等夥伴、普通班教師負有共同擬定之責。僅特教端出席，違反團隊合作與家長平等參與的法律要求。" },
+            { question: "11. 下列哪一種情況最能說明「醫療模式與社會模式並非互斥、而可互補」？", options:["(A) 只做復健，不調整環境","(B) 只調整環境，完全否認生理需求","(C) 既提供必要的醫療/療育介入，也同時調整環境與提供支持","(D) 兩者擇一使用即可"], answer:"C", explanation:"成熟的專業觀點認為兩模式互補：生理損傷需要必要的醫療/療育（醫療模式的正當性），同時環境障礙也須調整與支持（社會模式的洞見）。IEP 實務常需兩者兼顧。" },
+            { question: "12. 某縣市表件新增一欄「環境支持與合理調整」。從法律位階與 CRPD 精神評估，此設計？", options:["(A) 牴觸母法，應刪除","(B) 逾越權限，違法","(C) 符合 CRPD 合理調整精神，是上位規範在表件層次的具體化，值得肯定","(D) 與 IEP 無關"], answer:"C", explanation:"CRPD 強調合理調整，母法與施行細則也重視支持策略。縣市表件將其具體化為明確欄位，是把上位精神落地的良好設計，並未牴觸上位規範。" },
+            { question: "13. 若要判斷一份學前 IEP 是否真正「以團隊合作方式」訂定，最有效的檢核點是？", options:["(A) 表件頁數多寡","(B) 是否有各類團隊成員（含家長）實質參與的紀錄與簽名，而非事後補簽","(C) 字體是否統一","(D) 是否使用電腦打字"], answer:"B", explanation:"團隊合作的實質在於各成員（特別是家長與普通班教師）的實質參與，而非形式簽名。事後補簽或代簽無法體現真正的協商與共同決策。" },
+            { question: "14. 一位家長主張「孩子有障礙，學校就該全部代勞」。從 FAPE 與最少限制/獨立性精神來看，最適當的回應立場是？", options:["(A) 完全代勞，滿足家長","(B) 拒絕提供任何服務","(C) 提供必要支持與引導以促進學生最大獨立，而非全面代替","(D) 交由家長自行處理"], answer:"C", explanation:"適性教育與支持服務的目的在促進學生「最大程度的獨立」，而非替學生完成一切。過度代勞反而剝奪學習機會，不符 FAPE 促進發展的精神。" },
+            { question: "15. 下列對「零拒絕」的理解，何者最為精確？", options:["(A) 所有學生都必須安置在普通班","(B) 學校不得以障礙程度為由拒絕受教或參與，並須思考如何提供支持使其參與","(C) 學校可自行決定收不收","(D) 只保障輕度障礙學生"], answer:"B", explanation:"零拒絕不等於一律普通班安置；其核心是「不得以障礙為由拒絕」，並要求學校主動思考支持配套（人力、調整）讓學生得以受教與參與。" },
+            { question: "16. 從課本「IEP＝會議＋書面文件」的觀點，下列哪種實務做法最偏離此精神？", options:["(A) 先開會協商、再據以完成文件","(B) 由一人閉門填完文件、再請成員補簽，未實際開會","(C) 會議中記錄各方意見並形成共識","(D) 文件內容反映會議決議"], answer:"B", explanation:"IEP 的正當性來自「會議協商」與「書面文件」的結合。閉門完成文件、事後補簽跳過了協商過程，使 IEP 淪為行政文書，違背其精神。" },
+            { question: "17. 針對「融合教育會拖累普通班學生」的質疑，從薩拉曼卡宣言的立場，最有力的回應是？", options:["(A) 承認融合有害，應全面隔離","(B) 融合學校是對抗歧視、建立包容社會最有效的工具，且適當支持下對所有學生皆有益","(C) 融合只對特教生有利","(D) 融合與普通生無關"], answer:"B", explanation:"薩拉曼卡宣言主張融合學校是建立包容社會最有效的工具。研究與宣言精神指出，在適當支持與差異化教學下，融合環境對特教生與普通生的社會與學習發展皆有正面效益。" },
+            { question: "18. 一份 IEP 把「行為介入方案」寫在最前面、卻把「現況與需求評估」放最後且內容空泛。從五大內容的邏輯關係評估，此問題在於？", options:["(A) 順序不影響專業品質","(B) 介入應建立在充分的現況與需求評估之上，評估空泛將使介入失去依據","(C) 應刪除現況描述","(D) 行為介入不需要評估"], answer:"B", explanation:"五大內容有內在邏輯：現況與需求評估是後續服務、目標與行為介入的基礎。評估空泛卻先寫介入，等於介入缺乏依據，是專業邏輯的倒置。" },
+            { question: "19. 若一個縣市完全比照他縣市 IEP 表件、未考量本地資源與學生特性，最可能的風險是？", options:["(A) 完全沒有風險","(B) 表件雖合法，但可能與在地實務脫節、欄位形同虛設，降低 IEP 的實用性","(C) 一定違反母法","(D) 家長無法簽名"], answer:"B", explanation:"表件合法性與實用性是兩件事。照搬他縣市格式雖不違法，但若未貼合在地資源與學生特性，欄位可能無法真實使用，使 IEP 流於形式。" },
+            { question: "20. 綜合本次課程，下列哪一句最能貫穿「法源精神」的核心？", options:["(A) IEP 是老師的私人備忘錄","(B) IEP 是把上位法規與國際人權精神，透過團隊協商落實到每個孩子身上的法律契約","(C) IEP 是一次性的行政表格","(D) IEP 只需符合格式即可"], answer:"B", explanation:"本次課程主線：IEP 承接憲法/CRPD 的人權精神、母法與施行細則的法定要求，經團隊協商轉化為對個別孩子的具體承諾，本質是一份「可執行、可檢核」的法律契約。" }
+        ];
+
+        function createQuestionElement(q, index, type) {
+            const card = document.createElement('div');
+            card.className = 'question-card rounded-lg overflow-hidden';
+            const header = document.createElement('div');
+            header.className = 'p-6 cursor-pointer';
+            header.innerHTML = `<h4 class="font-semibold leading-relaxed">${q.question}</h4>`;
+            const optionsList = document.createElement('div');
+            optionsList.className = 'px-6 pb-6 space-y-3';
+            q.options.forEach((opt, i) => {
+                const wrapper = document.createElement('div');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `${type}-q${index}`;
+                radio.id = `${type}-q${index}-opt${i}`;
+                radio.value = opt.match(/\(([^)]+)\)/)[1];
+                radio.className = 'hidden';
+                const label = document.createElement('label');
+                label.htmlFor = `${type}-q${index}-opt${i}`;
+                label.className = 'option-label';
+                label.textContent = opt;
+                wrapper.appendChild(radio);
+                wrapper.appendChild(label);
+                optionsList.appendChild(wrapper);
+            });
+            const panel = document.createElement('div');
+            panel.className = 'answer-panel bg-gray-50';
+            panel.innerHTML = `<div class="p-6"><p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p><p class="text-gray-800 leading-relaxed">${q.explanation}</p></div>`;
+            card.appendChild(header);
+            card.appendChild(optionsList);
+            card.appendChild(panel);
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '1.5rem' : '0';
+                panel.style.paddingBottom = panel.classList.contains('open') ? '1.5rem' : '0';
+            });
+            return card;
+        }
+
+        const preC = document.getElementById('pre-test-container');
+        preTestQuestions.forEach((q,i) => preC.appendChild(createQuestionElement(q,i,'pre')));
+        const postC = document.getElementById('post-test-container');
+        postTestQuestions.forEach((q,i) => postC.appendChild(createQuestionElement(q,i,'post')));
+
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        const modal = document.getElementById('score-modal');
+        let scoreChart = null;
+        document.getElementById('calculate-score').addEventListener('click', () => {
+            let pre = 0, post = 0;
+            preTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="pre-q${i}"]:checked`); if(s && s.value === q.answer) pre++; });
+            postTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="post-q${i}"]:checked`); if(s && s.value === q.answer) post++; });
+            document.getElementById('pre-score').textContent = `${pre} / 20`;
+            document.getElementById('post-score').textContent = `${post} / 20`;
+            const diff = post - pre, el = document.getElementById('score-diff');
+            if(diff > 0){ el.textContent = `進步分數：+${diff}`; el.className = 'text-lg font-semibold text-green-600'; }
+            else if(diff < 0){ el.textContent = `退步分數：${diff}`; el.className = 'text-lg font-semibold text-red-600'; }
+            else { el.textContent = '分數持平'; el.className = 'text-lg font-semibold text-gray-600'; }
+            modal.classList.remove('hidden');
+            if(scoreChart) scoreChart.destroy();
+            scoreChart = new Chart(document.getElementById('score-chart'), {
+                type: 'bar',
+                data: { labels:['前測','後測'], datasets:[{ label:'答對題數', data:[pre,post], backgroundColor:['rgba(59,130,246,0.6)','rgba(22,163,74,0.6)'], borderColor:['rgba(59,130,246,1)','rgba(22,163,74,1)'], borderWidth:1 }] },
+                options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:20, ticks:{ stepSize:5 } } }, plugins:{ legend:{ display:false } } }
+            });
+        });
+        document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
+    });
+    </script>
+</body>
+</html>
