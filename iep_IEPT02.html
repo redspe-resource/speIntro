@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第二次 學前 vs 小學特教 IEP 差異：前後測</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #C0846E; border-bottom-color: #C0846E; }
+        .question-card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: box-shadow 0.3s; }
+        .question-card:hover { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .answer-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; }
+        .answer-panel.open { max-height: 900px; }
+        .option-label { display: block; padding: 0.75rem 1rem; border: 1px solid #ddd; border-radius: 0.5rem; cursor: pointer; transition: background-color 0.2s, border-color 0.2s; }
+        .option-label:hover { background-color: #f4f8ef; }
+        input[type="radio"]:checked + .option-label { background-color: #E4EFD8; border-color: #6E9B4E; }
+        .modal-overlay { transition: opacity 0.3s ease-in-out; }
+        .badge { font-size: 0.7rem; padding: 0.15rem 0.6rem; border-radius: 9999px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-lg md:text-2xl font-bold text-[#A8765E]">第二次：學前 vs 小學 IEP 差異 · 測驗</h1>
+            <div class="hidden md:flex space-x-6">
+                <a href="#pre-test" class="nav-link font-medium pb-1">前測</a>
+                <a href="#post-test" class="nav-link font-medium pb-1">後測</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="md:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white px-6 pb-4">
+            <a href="#pre-test" class="block py-2 nav-link text-center">前測</a>
+            <a href="#post-test" class="block py-2 nav-link text-center">後測</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-8 md:py-12 max-w-4xl">
+
+        <section id="pre-test" class="mb-20 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#4d6b34]">前測 <span class="badge bg-blue-100 text-blue-700 align-middle">基礎</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">前測評估您對「學前特教與小學特教 IEP 差異」的既有理解：課程依據、現況描述語言、目標型態、評量方式、支持服務型態，以及幼小銜接的基本概念。偏概念辨識與名詞區分，可作為課前快速診斷。完成後點最下方按鈕看分數；也可隨時點題目卡片看詳解。</p>
+            <div id="pre-test-container" class="space-y-4"></div>
+        </section>
+
+        <section id="post-test" class="mb-12 scroll-mt-20">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-3xl font-bold text-[#4d6b34]">後測 <span class="badge bg-[#E4EFD8] text-[#4d6b34] align-middle">碩士級</span></h2>
+                <a href="#score-section" class="hidden md:inline-block bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 transition-colors">前往分數比較 &darr;</a>
+            </div>
+            <p class="text-left max-w-3xl text-gray-600 mb-10">後測拉高到碩士層次：學前 IEP 改寫成小一 IEP 的判斷、幼小銜接的診斷與規劃、六大領域與學習領域的遷移、支持服務型態的選擇、以及對常見迷思的批判。題目較長、需要分析與取捨，請選出最適當者。</p>
+            <div id="post-test-container" class="space-y-4"></div>
+        </section>
+
+        <div id="score-section" class="text-center mt-12 scroll-mt-24">
+            <button id="calculate-score" class="bg-[#6E9B4E] text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:bg-[#5c8340] transition-colors duration-300">計算分數並比較</button>
+        </div>
+    </main>
+
+    <footer class="bg-gray-100 mt-16">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm">學前特殊教育與IEP實務 第二次測驗 ｜ 主教材：林素貞《個別化教育計畫之實施》｜ 僅供教學與演示用途。</p>
+            <a href="iep_index.html" class="inline-block mt-3 bg-[#A8765E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C0846E] transition-colors">回課程入口</a>
+        </div>
+    </footer>
+
+    <div id="score-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-xl p-8">
+            <h3 class="text-2xl font-bold text-center mb-4">測驗結果比較</h3>
+            <div class="h-64 mx-auto mb-6"><canvas id="score-chart"></canvas></div>
+            <div class="text-center space-y-2">
+                <p class="text-lg">前測分數：<span id="pre-score" class="font-bold text-blue-600">0 / 20</span></p>
+                <p class="text-lg">後測分數：<span id="post-score" class="font-bold text-green-600">0 / 20</span></p>
+                <p id="score-diff" class="text-lg font-semibold"></p>
+            </div>
+            <div class="text-center mt-6">
+                <button id="close-modal" class="bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition-colors">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const preTestQuestions = [
+            { question: "1. 學前教育階段的課程主要依據下列何者？", options:["(A) 十二年國民基本教育課程綱要","(B) 幼兒園教保活動課程大綱","(C) 國民中小學九年一貫課程綱要","(D) 大學通識課程架構"], answer:"B", explanation:"學前階段依《幼兒園教保活動課程大綱》，以幼兒為主體、強調全人發展；小學階段才進入十二年國教課綱的學科學習領域。這是兩階段 IEP 最根本的差異來源。" },
+            { question: "2. 幼兒園教保活動課程大綱包含幾大領域？", options:["(A) 五大領域","(B) 六大領域","(C) 七大學習領域","(D) 八大領域"], answer:"B", explanation:"幼兒園課綱為六大領域：身體動作與健康、認知、語文、社會、情緒、美感。不以學科劃分，強調領域統整與生活情境。" },
+            { question: "3. 國小特殊教育課程綱要的學習領域架構為？", options:["(A) 六大領域","(B) 六大領域 + 特殊需求領域","(C) 七大學習領域 + 特殊需求領域（共八大）","(D) 只有特殊需求領域"], answer:"C", explanation:"國小特教課綱對接十二年國教，採七大學習領域再加上特殊需求領域，共八大，屬學科導向並有能力指標分段。" },
+            { question: "4. 學前 IEP 的「現況描述」通常以下列何種語言呈現？", options:["(A) 學科成績與段考分數","(B) 發展領域（如粗大動作、精細動作、語言溝通、社會情緒、生活自理等）","(C) 升學志願","(D) 考試排名"], answer:"B", explanation:"學前現況多以發展領域描述（感官知覺、粗大/精細動作、認知、語言溝通、社會情緒、生活自理），因為幼兒尚未進入分科學習。" },
+            { question: "5. 學前身心障礙幼兒的特殊教育，主要以何種形式辦理？", options:["(A) 資源班抽離","(B) 特殊教育方案（集中式特教班、巡迴輔導、普通班加巡迴輔導）","(C) 完全隔離的特殊學校","(D) 在家自學"], answer:"B", explanation:"學前以「特殊教育方案」辦理，常見型態包含集中式特教班、巡迴輔導、以及安置普通班加巡迴輔導；小學階段才普遍出現資源班的抽離與外加。" },
+            { question: "6. 學前 IEP 的評量方式，最常採用下列何者？", options:["(A) 紙筆測驗與段考","(B) 觀察、操作、指認、口說等多元方式","(C) 標準化學科成就測驗","(D) 會考與模擬考"], answer:"B", explanation:"學前評量以觀察、操作、指認、口說為主，貼近幼兒的發展與生活情境；小學才逐漸增加紙筆與學科成就評量。" },
+            { question: "7. 小學特教 IEP 的學期教育目標，通常較偏向下列何者？", options:["(A) 發展里程碑","(B) 對應學習領域能力指標的學科目標","(C) 家長期待清單","(D) 醫療復健目標"], answer:"B", explanation:"小學目標多對接學習領域的能力指標（如語文、數學），呈現學科導向；學前目標則多為發展性目標。" },
+            { question: "8. 學前與小學特教 IEP 的「法源」關係為何？", options:["(A) 完全不同的兩部法律","(B) 法源一致，皆依特殊教育法第31條與施行細則第10條，幼兒園準用","(C) 學前無法源依據","(D) 小學無需依法訂定"], answer:"B", explanation:"兩階段法源一致：母法第31條、施行細則第10條，幼兒園亦準用。差異在於落實到不同教育階段的課程與實務形貌，而非法源本身不同。" },
+            { question: "9. 「幼小銜接」的重點，最符合現行課綱精神的是？", options:["(A) 提前在幼兒園教注音、英文與加減法","(B) 培養學習興趣、生活自理、人際互動等核心素養與適應能力","(C) 讓幼兒先讀完小一課本","(D) 加強紙筆考試訓練"], answer:"B", explanation:"幼小銜接重點在培養核心素養與適應能力（學習興趣、生活自理、常規、人際），而非提前教學科內容。過度學科化反而違背幼兒發展。" },
+            { question: "10. 大班幼兒的 IEP 中，特別需要強化的法定內容是？", options:["(A) 升學輔導","(B) 轉銜輔導與服務（幼小銜接）","(C) 職業訓練","(D) 兵役說明"], answer:"B", explanation:"大班是幼小銜接關鍵期，IEP 應納入轉銜輔導與服務（施行細則第10條法定內容之一），規劃入小一的準備與銜接。" },
+            { question: "11. 下列何者屬於學前六大領域，而非小學的學習領域？", options:["(A) 數學","(B) 情緒","(C) 自然科學","(D) 社會（歷史地理公民）"], answer:"B", explanation:"「情緒」是幼兒園六大領域之一；數學、自然、社會（含歷史地理公民）屬小學的學習領域。這反映兩階段課程架構的本質不同。" },
+            { question: "12. 學前 IEP 的目標常寫成「能自行穿脫外套」「能與同儕輪流玩玩具」，這類目標屬於？", options:["(A) 學科能力指標","(B) 發展性／功能性目標","(C) 升學目標","(D) 考試目標"], answer:"B", explanation:"這類目標屬發展性／功能性目標，聚焦生活自理與社會情緒，是學前 IEP 的典型樣貌，與小學的學科能力指標目標不同。" },
+            { question: "13. 從學前到小學，特教服務型態的一個明顯變化是？", options:["(A) 由巡迴輔導/集中式，逐漸出現資源班抽離與外加","(B) 完全取消所有服務","(C) 由資源班改為在家教育","(D) 服務型態完全相同"], answer:"A", explanation:"學前常見巡迴輔導與集中式特教班；進入小學後，資源班的抽離（抽出普通班上特教課）與外加（額外時間）成為常見服務型態。" },
+            { question: "14. 學前 IEP 團隊中，除教師與家長外，常見的相關專業人員包括？", options:["(A) 律師與會計師","(B) 物理治療師、職能治療師、語言治療師等","(C) 升學顧問","(D) 房仲人員"], answer:"B", explanation:"學前常需物理治療師、職能治療師、語言治療師等相關專業人員參與，因幼兒的動作、感覺統合與語言發展需求較高。" },
+            { question: "15. 下列關於學前與小學 IEP 評量的比較，何者正確？", options:["(A) 學前重紙筆、小學重觀察","(B) 學前重觀察與操作、小學逐漸加入紙筆與學科評量","(C) 兩者皆只用標準化測驗","(D) 兩者皆不需評量"], answer:"B", explanation:"學前以觀察、操作等貼近發展的方式為主；小學則逐漸加入紙筆與學科成就評量，反映課程與目標型態的轉變。" },
+            { question: "16. 一份大班幼兒 IEP 要改寫成小一 IEP，最需要「轉換語言」的部分是？", options:["(A) 學生姓名","(B) 現況與目標：從發展領域語言轉為對應學習領域的學科語言","(C) 學校地址","(D) 家長電話"], answer:"B", explanation:"改寫的核心是把發展領域的現況與目標（如精細動作、語言溝通），轉譯成對應小學學習領域的語言（如國語文的識字、書寫），並延續必要的支持。" },
+            { question: "17. 「學前特教方案」與「小學資源班」最主要的差別在於？", options:["(A) 學前無教師","(B) 服務型態與課程依據不同：學前以方案與發展課程為主，小學以資源班與學科課程為主","(C) 小學不需 IEP","(D) 兩者完全一樣"], answer:"B", explanation:"差別在服務型態與課程依據：學前以特教方案（集中式/巡迴）搭配發展課程；小學以資源班（抽離/外加）搭配學科學習領域課程。" },
+            { question: "18. 下列何者是幼小銜接時，IEP 應優先延續的支持？", options:["(A) 立即中止所有支持，讓孩子自行適應","(B) 延續有效的支持策略與合理調整，並依小學環境調整","(C) 只保留學科補救","(D) 只保留獎懲制度"], answer:"B", explanation:"銜接不是砍掉重練，而是延續已被證實有效的支持與合理調整，再依小學的環境與課程特性做調整，確保孩子平順過渡。" },
+            { question: "19. 學前 IEP 較少出現、但小學 IEP 常見的內容是？", options:["(A) 家長參與","(B) 對應學科能力指標的學期教育目標","(C) 現況描述","(D) 團隊簽名"], answer:"B", explanation:"對應學科能力指標的學期目標是小學 IEP 的特色；學前因採發展課程，目標多為發展性而非學科能力指標。" },
+            { question: "20. 綜合來看，學前與小學特教 IEP 「最本質」的差異來源是？", options:["(A) 法源不同","(B) 課程依據不同（幼兒園課綱 vs 十二年國教特教課綱），連帶影響現況、目標、評量與服務","(C) 學生人數不同","(D) 教師薪水不同"], answer:"B", explanation:"最本質的差異來自課程依據不同：學前依幼兒園課綱（發展導向）、小學依十二年國教特教課綱（學科導向）。這個根源牽動現況語言、目標型態、評量方式與服務型態的全面差異。" }
+        ];
+
+        const postTestQuestions = [
+            { question: "1. 一位大班自閉症幼兒的 IEP 現況寫「精細動作弱、能仿說單詞、需口語提示如廁」。要改寫成小一 IEP，下列轉換何者最專業？", options:["(A) 直接刪除，重新從零評估","(B) 將精細動作連結到國語文書寫/美勞的握筆需求，仿說連結到口語表達與識字，如廁提示連結到生活自理支持，延續並學科化","(C) 只保留診斷名稱","(D) 全部改成段考成績目標"], answer:"B", explanation:"專業的改寫是「橋接」而非重寫：把發展領域的能力對應到小學學習領域的具體任務（精細動作→握筆書寫、仿說→口語與識字），同時延續有效支持，體現幼小銜接的連續性。" },
+            { question: "2. 有教師主張「幼兒園就該提前教注音和加減法，小一才跟得上」。從課綱精神與幼小銜接研究來看，最有力的反駁是？", options:["(A) 提前教學科完全正確","(B) 幼小銜接重在核心素養與適應能力（學習興趣、常規、人際、自理），提前學科化可能損害學習動機且違背幼兒發展","(C) 幼兒園不需要銜接","(D) 小一老師應降低所有標準"], answer:"B", explanation:"課綱與銜接研究強調培養核心素養與適應能力，而非提前灌輸學科。過早學科化易造成學習倦怠、揠苗助長，反而不利長期發展。" },
+            { question: "3. 同一個「不會扣鈕扣」的行為，在學前 IEP 與小學 IEP 的目標語言最可能如何不同？", options:["(A) 完全相同","(B) 學前寫成生活自理的發展性目標；小學可能連結到功能性技能並與美勞/生活課程或合理調整（如替代扣件）結合","(C) 小學不理會此行為","(D) 學前不需寫此目標"], answer:"B", explanation:"同一行為在不同階段有不同框架：學前以生活自理發展目標呈現；小學則可能連結課程情境與合理調整，反映目標型態隨課程依據轉變。" },
+            { question: "4. 一位 IEP 撰寫者把大班幼兒的目標全寫成「國語文能認讀100個生字、數學能做二位數加法」。此做法的最主要問題是？", options:["(A) 目標太簡單","(B) 以小學學科能力指標套用於學前，脫離幼兒園課綱的發展導向，不符學前 IEP 的目標型態","(C) 沒有寫家長姓名","(D) 字數太多"], answer:"B", explanation:"學前應以發展性目標為主。硬套小學學科能力指標，等於用錯課程依據，既不符幼兒園課綱，也可能造成不當的學科化壓力。" },
+            { question: "5. 評估一份「集中式學前特教班」IEP 與一份「小學資源班」IEP 的服務型態差異，下列敘述何者最精確？", options:["(A) 兩者服務型態完全相同","(B) 學前集中式以全日/半日的發展課程與方案為主；小學資源班以抽離/外加的學科補救與支持為主","(C) 學前沒有服務","(D) 小學不提供任何抽離服務"], answer:"B", explanation:"學前集中式多為全日或半日的發展課程；小學資源班則以抽離（離開普通班上特教課）與外加（額外時段）的學科支持為典型，反映課程與目標型態的差異。" },
+            { question: "6. 針對「巡迴輔導」，下列哪一項最能說明它在學前階段的角色？", options:["(A) 取代普通幼兒園教育","(B) 由巡迴輔導教師定期到園，支持在普通幼兒園就讀的身障幼兒及其教師，落實融合","(C) 只服務小學","(D) 是一種隔離安置"], answer:"B", explanation:"學前巡迴輔導讓身障幼兒得以留在普通幼兒園（融合環境），由巡輔教師定期入園支持幼兒與班級教師，是最少限制環境精神的具體實踐。" },
+            { question: "7. 一位家長擔心「孩子在幼兒園有巡迴輔導，上小學就沒人管了」。以幼小銜接與 IEP 連續性回應，最適當的是？", options:["(A) 確實如此，小學沒有任何支持","(B) 小學仍有特教服務（資源班/巡迴/相關專業），透過轉銜會議與 IEP 交接延續支持，服務型態會調整但不會中斷","(C) 請家長自行處理","(D) 建議孩子延後入學"], answer:"B", explanation:"銜接的關鍵是透過轉銜會議與 IEP 交接，把有效支持延續到小學（型態可能從巡迴改為資源班等），確保服務不中斷，回應家長的斷層焦慮。" },
+            { question: "8. 從「現況描述語言」的差異切入，下列哪一種寫法最能兼顧幼小銜接的雙向溝通？", options:["(A) 學前只寫發展、小學只寫學科，彼此不對話","(B) 學前現況可加註「與小學學習領域的可能連結」，小學現況可回溯「學前發展基礎」，形成銜接橋樑","(C) 兩階段都只寫診斷","(D) 都不寫現況"], answer:"B", explanation:"優良的銜接文件會做雙向連結：學前現況預示小學的學習連結，小學現況回溯學前的發展基礎，讓兩份 IEP 能對話，而非各說各話。" },
+            { question: "9. 一份大班 IEP 完整寫了現況、目標、服務與評量，卻沒有任何幼小銜接/轉銜內容。此 IEP 的最主要問題是？", options:["(A) 沒有問題","(B) 缺漏施行細則第10條的法定轉銜內容，且錯失大班這個幼小銜接的關鍵規劃期","(C) 目標太多","(D) 評量太細"], answer:"B", explanation:"轉銜輔導與服務是施行細則第10條法定內容之一；大班正是銜接關鍵期，缺漏轉銜不僅不符法規，也錯失最重要的銜接規劃時機。" },
+            { question: "10. 「學前重觀察評量、小學重紙筆評量」這句話，較嚴謹的修正是？", options:["(A) 完全正確，無須修正","(B) 學前以觀察/操作等多元評量為主；小學仍應多元評量，只是逐漸納入紙筆與學科成就，並非只靠紙筆","(C) 小學只能用紙筆","(D) 學前不能用任何評量"], answer:"B", explanation:"評量差異是「比重與型態」的漸變，而非二分。小學仍應多元評量並提供合理調整（如報讀、延時），不是全然紙筆化；把差異絕對化是常見迷思。" },
+            { question: "11. 從課程依據的根源分析，為何學前與小學 IEP 的「目標型態」會不同？", options:["(A) 因為教師習慣不同","(B) 因為課程依據不同：幼兒園課綱是發展導向的六大領域，小學特教課綱是學科導向的學習領域，目標自然隨之不同","(C) 因為學生智力不同","(D) 因為法源不同"], answer:"B", explanation:"目標型態的差異根源於課程依據：發展導向 vs 學科導向。理解這個根源，才能解釋現況語言、目標、評量、服務的一連串差異，而非歸因於表面因素。" },
+            { question: "12. 一位巡迴輔導教師同時服務學前與小學個案，最需要調整的專業能力是？", options:["(A) 只需學會填不同表格","(B) 需在發展導向（幼兒園課綱）與學科導向（十二年國教特教課綱）之間切換評估與目標設定的框架","(C) 不需任何調整","(D) 只需更換教具"], answer:"B", explanation:"跨階段服務的核心挑戰是課程框架的切換：對學前個案用發展領域思維，對小學個案用學習領域思維，並在銜接個案上同時掌握兩者，做出對應的評估與目標。" },
+            { question: "13. 針對「疑似生（尚未鑑定）」的幼兒，學前階段最適當的作法是？", options:["(A) 不做任何事，等鑑定確定","(B) 先實施教學介入方案（如三級預防的介入與觀察紀錄），蒐集反應資料作為後續鑑定與規劃依據","(C) 直接安置特教班","(D) 拒絕其入學"], answer:"B", explanation:"疑似生可先以教學介入方案介入並記錄反應（介入反應的精神），既提供及早支持，也蒐集客觀資料供鑑輔會判斷，避免延誤或誤判。" },
+            { question: "14. 一位大班幼兒即將入小一，IEP 轉銜規劃中，下列哪一項最能體現「以幼兒為主體」的銜接？", options:["(A) 只把文件寄到小學就結束","(B) 安排幼兒參訪小學、認識新環境與作息，並將其焦慮與適應需求納入 IEP 支持","(C) 要求幼兒暑假先讀完小一課本","(D) 讓家長自行處理適應問題"], answer:"B", explanation:"以幼兒為主體的銜接會顧及孩子的心理適應（參訪、認識環境、作息預告），把適應需求納入 IEP 支持，而非只做文件交接或提前學科訓練。" },
+            { question: "15. 比較學前六大領域與小學學習領域，下列對應何者最合理？", options:["(A) 幼兒園「語文」→ 小學「國語文」與溝通表達的基礎","(B) 幼兒園「情緒」→ 小學「數學」","(C) 幼兒園「美感」→ 小學「體育」","(D) 幼兒園「認知」→ 小學「音樂」"], answer:"A", explanation:"幼兒園「語文」領域（口語表達、圖像符號、閱讀萌發）是小學「國語文」與溝通表達的發展基礎；理解領域對應關係，是做好幼小銜接目標轉換的關鍵。" },
+            { question: "16. 有人說「學前 IEP 比較簡單，抄小學的改一改就好」。此觀念的最主要錯誤是？", options:["(A) 沒有錯，可以照抄","(B) 學前有其獨特的發展導向框架與評量方式，直接沿用小學學科導向框架會失真、不符幼兒園課綱","(C) 學前不需要 IEP","(D) 小學 IEP 比較簡單"], answer:"B", explanation:"學前不是小學的簡化版，而是不同框架（發展 vs 學科）。照抄小學會用錯課程依據，導致現況與目標失真，忽略幼兒的發展特性。" },
+            { question: "17. 一份小一新生 IEP 完全沒有參考其大班 IEP 與轉銜資料，重新評估撰寫。最主要的風險是？", options:["(A) 沒有風險，重新評估更好","(B) 忽略已知的有效支持與發展脈絡，可能重複試誤、造成支持斷層，違背銜接連續性","(C) 一定違法","(D) 家長無法簽名"], answer:"B", explanation:"雖然入學重新評估有其價值，但完全不參考大班 IEP 與轉銜資料，會遺失已被驗證的有效支持與發展脈絡，造成銜接斷層與重複試誤。" },
+            { question: "18. 從支持服務設計來看，學前到小學最需要「重新評估其適配性」的是？", options:["(A) 學生姓名","(B) 相關專業服務（如語言治療、職能治療）的頻率與型態，需依小學課程與作息重新規劃","(C) 學校名稱","(D) 家長職業"], answer:"B", explanation:"相關專業服務進入小學後，需配合學科課程與作息重新評估頻率與型態（如入班或抽離、堂數），確保支持仍能有效鑲嵌在新的學習環境中。" },
+            { question: "19. 下列哪一種 IEP 目標寫法，最符合「學前發展導向」且具可評量性？", options:["(A) 能在午餐時間，於教師提示下，自行使用湯匙進食完成八成餐點，連續兩週達成","(B) 提升生活自理","(C) 國語文月考達85分","(D) 變得更獨立"], answer:"A", explanation:"選項A具情境（午餐）、支持程度（教師提示）、行為（使用湯匙進食）、標準（八成、連續兩週），既是發展/功能性目標又可評量，符合學前 IEP 的良好目標寫法。" },
+            { question: "20. 綜合本次課程，下列哪一句最能貫穿「學前 vs 小學特教 IEP 差異」的核心？", options:["(A) 兩階段 IEP 完全一樣，可互相照抄","(B) 同一部法、同一個孩子，因課程依據不同而在現況、目標、評量、服務上呈現不同形貌，銜接的任務就是讓這份連續性不斷裂","(C) 學前 IEP 不重要","(D) 小學 IEP 不需要銜接"], answer:"B", explanation:"本次課程主線：法源相同、孩子相同，但課程依據（發展 vs 學科）的不同，帶動現況語言、目標型態、評量、服務的全面差異；幼小銜接的專業任務，正是維持這份連續性、讓孩子平順過渡。" }
+        ];
+
+        function createQuestionElement(q, index, type) {
+            const card = document.createElement('div');
+            card.className = 'question-card rounded-lg overflow-hidden';
+            const header = document.createElement('div');
+            header.className = 'p-6 cursor-pointer';
+            header.innerHTML = `<h4 class="font-semibold leading-relaxed">${q.question}</h4>`;
+            const optionsList = document.createElement('div');
+            optionsList.className = 'px-6 pb-6 space-y-3';
+            q.options.forEach((opt, i) => {
+                const wrapper = document.createElement('div');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `${type}-q${index}`;
+                radio.id = `${type}-q${index}-opt${i}`;
+                radio.value = opt.match(/\(([^)]+)\)/)[1];
+                radio.className = 'hidden';
+                const label = document.createElement('label');
+                label.htmlFor = `${type}-q${index}-opt${i}`;
+                label.className = 'option-label';
+                label.textContent = opt;
+                wrapper.appendChild(radio);
+                wrapper.appendChild(label);
+                optionsList.appendChild(wrapper);
+            });
+            const panel = document.createElement('div');
+            panel.className = 'answer-panel bg-gray-50';
+            panel.innerHTML = `<div class="p-6"><p class="font-bold text-green-700 mb-2">正確答案：${q.answer}</p><p class="text-gray-800 leading-relaxed">${q.explanation}</p></div>`;
+            card.appendChild(header);
+            card.appendChild(optionsList);
+            card.appendChild(panel);
+            header.addEventListener('click', (e) => {
+                e.stopPropagation();
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '1.5rem' : '0';
+                panel.style.paddingBottom = panel.classList.contains('open') ? '1.5rem' : '0';
+            });
+            return card;
+        }
+
+        const preC = document.getElementById('pre-test-container');
+        preTestQuestions.forEach((q,i) => preC.appendChild(createQuestionElement(q,i,'pre')));
+        const postC = document.getElementById('post-test-container');
+        postTestQuestions.forEach((q,i) => postC.appendChild(createQuestionElement(q,i,'post')));
+
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        const modal = document.getElementById('score-modal');
+        let scoreChart = null;
+        document.getElementById('calculate-score').addEventListener('click', () => {
+            let pre = 0, post = 0;
+            preTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="pre-q${i}"]:checked`); if(s && s.value === q.answer) pre++; });
+            postTestQuestions.forEach((q,i) => { const s = document.querySelector(`input[name="post-q${i}"]:checked`); if(s && s.value === q.answer) post++; });
+            document.getElementById('pre-score').textContent = `${pre} / 20`;
+            document.getElementById('post-score').textContent = `${post} / 20`;
+            const diff = post - pre, el = document.getElementById('score-diff');
+            if(diff > 0){ el.textContent = `進步分數：+${diff}`; el.className = 'text-lg font-semibold text-green-600'; }
+            else if(diff < 0){ el.textContent = `退步分數：${diff}`; el.className = 'text-lg font-semibold text-red-600'; }
+            else { el.textContent = '分數持平'; el.className = 'text-lg font-semibold text-gray-600'; }
+            modal.classList.remove('hidden');
+            if(scoreChart) scoreChart.destroy();
+            scoreChart = new Chart(document.getElementById('score-chart'), {
+                type: 'bar',
+                data: { labels:['前測','後測'], datasets:[{ label:'答對題數', data:[pre,post], backgroundColor:['rgba(59,130,246,0.6)','rgba(110,155,78,0.65)'], borderColor:['rgba(59,130,246,1)','rgba(92,131,64,1)'], borderWidth:1 }] },
+                options: { responsive:true, maintainAspectRatio:false, scales:{ y:{ beginAtZero:true, max:20, ticks:{ stepSize:5 } } }, plugins:{ legend:{ display:false } } }
+            });
+        });
+        document.getElementById('close-modal').addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => { if(e.target === modal) modal.classList.add('hidden'); });
+    });
+    </script>
+</body>
+</html>

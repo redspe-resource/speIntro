@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學前特教與IEP實務：第二次 學前 vs 小學特教 IEP 差異（兩小時教學版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover, .nav-link.active { color: #C0846E; border-bottom-color: #C0846E; }
+        .card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .flowchart-node { cursor: pointer; transition: background-color 0.3s, transform 0.3s; }
+        .flowchart-node:hover { transform: scale(1.03); background-color: #E6DCD6; }
+        .principle-card { cursor: pointer; transition: all 0.2s ease-in-out; }
+        .principle-card:hover { background-color: #F5F1ED; border-color: #C0846E; }
+        .reveal-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.4s ease-in-out; }
+        .reveal-panel.open { max-height: 1600px; }
+        .tab-btn { transition: all 0.2s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #A8765E; border-bottom-color: #A8765E; font-weight: 700; }
+        .stage-tab { transition: all 0.2s; }
+        .stage-tab.active { background-color: #A8765E; color: #fff; }
+        /* 拖曳分類 */
+        .drag-chip { cursor: grab; user-select: none; transition: box-shadow 0.2s, opacity 0.2s; }
+        .drag-chip:active { cursor: grabbing; }
+        .sortable-ghost { opacity: 0.4; }
+        .drop-zone { min-height: 90px; transition: background-color 0.2s, border-color 0.2s; }
+        .drop-zone.drag-over { background-color: #F5F1ED; }
+        .progress-badge { font-variant-numeric: tabular-nums; }
+        /* 轉換工作台 */
+        .convert-row { transition: background-color 0.2s; }
+        .convert-row:hover { background-color: #F9F5F1; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
+            <h1 class="text-base md:text-xl font-bold text-[#A8765E] shrink-0">第二次：學前 vs 小學 IEP 差異</h1>
+            <div class="hidden lg:flex space-x-5 text-sm">
+                <a href="#s1" class="nav-link font-medium pb-1">整體圖像</a>
+                <a href="#s2" class="nav-link font-medium pb-1">欄位對照</a>
+                <a href="#s3" class="nav-link font-medium pb-1">轉換工作台</a>
+                <a href="#s4" class="nav-link font-medium pb-1">迷思批判</a>
+                <a href="#s5" class="nav-link font-medium pb-1">案例研討</a>
+                <a href="#s6" class="nav-link font-medium pb-1">課堂演練</a>
+                <a href="iep_IEPT02.html" class="nav-link font-medium pb-1 text-[#C0846E]">測驗</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="lg:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white px-6 pb-4 grid grid-cols-2 gap-1">
+            <a href="#s1" class="block py-2 nav-link text-center">整體圖像</a>
+            <a href="#s2" class="block py-2 nav-link text-center">欄位對照</a>
+            <a href="#s3" class="block py-2 nav-link text-center">轉換工作台</a>
+            <a href="#s4" class="block py-2 nav-link text-center">迷思批判</a>
+            <a href="#s5" class="block py-2 nav-link text-center">案例研討</a>
+            <a href="#s6" class="block py-2 nav-link text-center">課堂演練</a>
+            <a href="iep_IEPT02.html" class="block py-2 nav-link text-center text-[#C0846E]">測驗</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-10 md:py-14 max-w-5xl">
+
+        <!-- 課程重點 -->
+        <section class="mb-14">
+            <div class="grid md:grid-cols-5 gap-8 items-center">
+                <div class="md:col-span-3">
+                    <p class="text-sm font-semibold text-[#C0846E] tracking-widest mb-2">第二次課程 · 三小時（含測驗）</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#A8765E] mb-4">學前特教 vs 小學特教 IEP 差異</h2>
+                    <p class="text-gray-600 leading-relaxed">同一部法（特教法第 31 條、施行細則第 10 條）落在<strong>不同教育階段</strong>，IEP 長得很不一樣。本次先建立「IEP 在不同階段長什麼樣」的整體圖像：課程依據、現況描述語言、目標型態、評量方式、支持服務設計，一路對照到「一位大班幼兒的學前 IEP 如何改寫成入小一 IEP」。有了這張跨階段地圖，後續三次的法令、轉銜、行為介入細節就有可對照的框架。</p>
+                </div>
+                <div class="md:col-span-2">
+                    <svg class="w-full rounded-2xl shadow-sm" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="學前與小學跨階段對照">
+  <defs><linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1F6EC"/><stop offset="1" stop-color="#E4EFD8"/></linearGradient></defs>
+  <rect width="800" height="340" fill="url(#sky2)"/>
+  <ellipse cx="400" cy="300" rx="360" ry="26" fill="#D6E4C4" opacity="0.6"/>
+  <!-- 左：幼兒園(積木/氣球) -->
+  <g transform="translate(120,120)">
+    <rect x="-20" y="90" width="42" height="42" rx="6" fill="#8BB36B"/>
+    <rect x="26" y="90" width="42" height="42" rx="6" fill="#A9C98A"/>
+    <rect x="3" y="46" width="42" height="42" rx="6" fill="#6E9B4E"/>
+    <circle cx="70" cy="30" r="20" fill="#E9A6A0"/><path d="M70 50 v30" stroke="#B98" stroke-width="2"/>
+    <text x="-8" y="120" font-size="24" fill="#fff" font-family="sans-serif">幼</text>
+  </g>
+  <!-- 幼兒 -->
+  <g transform="translate(230,150)">
+    <circle cx="0" cy="0" r="22" fill="#F0C9A8"/><path d="M-24 -3 a24 20 0 0 1 48 0 z" fill="#7A5240"/>
+    <rect x="-18" y="22" width="36" height="50" rx="14" fill="#8BB36B"/>
+  </g>
+  <!-- 中間箭頭 -->
+  <g transform="translate(360,150)">
+    <rect x="0" y="-6" width="70" height="12" rx="6" fill="#C0846E"/>
+    <path d="M70 -18 L96 0 L70 18 z" fill="#C0846E"/>
+    <text x="10" y="-20" font-size="15" fill="#A8765E" font-family="sans-serif">幼小銜接</text>
+  </g>
+  <!-- 小學生(背書包) -->
+  <g transform="translate(520,150)">
+    <circle cx="0" cy="0" r="22" fill="#F5D2B8"/><path d="M-24 -3 a24 20 0 0 1 48 0 z" fill="#3E2E24"/>
+    <rect x="-18" y="22" width="36" height="52" rx="14" fill="#5B84B1"/>
+    <rect x="14" y="26" width="18" height="30" rx="6" fill="#C0846E"/>
+  </g>
+  <!-- 右：小學(校舍) -->
+  <g transform="translate(600,120)">
+    <rect x="0" y="60" width="120" height="72" fill="#EDE3D6" stroke="#C9B8A6" stroke-width="2"/>
+    <path d="M-6 60 L60 22 L126 60 z" fill="#B98A6E"/>
+    <rect x="20" y="82" width="22" height="22" fill="#8FA9C4"/>
+    <rect x="78" y="82" width="22" height="22" fill="#8FA9C4"/>
+    <rect x="50" y="96" width="22" height="36" fill="#A8765E"/>
+    <path d="M60 22 v-14 M52 12 h16" stroke="#C0846E" stroke-width="3"/>
+  </g>
+  <circle cx="700" cy="60" r="30" fill="#F3D98E" opacity="0.7"/>
+</svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊① 整體圖像：五大差異軸 -->
+        <section id="s1" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-green-500">①</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">整體圖像：五大差異軸</h3>
+                </div>
+                <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="差異對照">
+  <rect width="240" height="160" rx="14" fill="#F1F6EC"/>
+  <rect x="26" y="30" width="80" height="100" rx="8" fill="#fff" stroke="#B7CE9E" stroke-width="3"/>
+  <rect x="134" y="30" width="80" height="100" rx="8" fill="#fff" stroke="#9FB8D6" stroke-width="3"/>
+  <g fill="#CFE0BC"><rect x="38" y="44" width="56" height="9" rx="4"/><rect x="38" y="62" width="42" height="9" rx="4"/><rect x="38" y="80" width="56" height="9" rx="4"/><rect x="38" y="98" width="36" height="9" rx="4"/></g>
+  <g fill="#C7D6EA"><rect x="146" y="44" width="56" height="9" rx="4"/><rect x="146" y="62" width="42" height="9" rx="4"/><rect x="146" y="80" width="56" height="9" rx="4"/><rect x="146" y="98" width="36" height="9" rx="4"/></g>
+  <text x="120" y="86" font-size="18" fill="#A8765E" text-anchor="middle" font-family="sans-serif" font-weight="bold">VS</text>
+</svg>
+            </div>
+            <p class="text-gray-600 mb-6">先掌握「哪些地方會變」。點擊每一張卡片展開學前與小學的具體差異與背後原因。這五軸就是本次的骨架。</p>
+            <div id="axis-grid" class="grid md:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- 區塊② 欄位對照 tab -->
+        <section id="s2" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-blue-500">②</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">學前 IEP vs 小一 IEP：欄位對照</h3>
+                </div>
+                <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="表單欄位">
+  <rect width="240" height="160" rx="14" fill="#F1F6EC"/>
+  <rect x="60" y="24" width="120" height="112" rx="8" fill="#fff" stroke="#B7CE9E" stroke-width="3"/>
+  <g><rect x="74" y="40" width="14" height="14" rx="3" fill="none" stroke="#6E9B4E" stroke-width="2.5"/><path d="M77 47 l3 4 l6 -8" fill="none" stroke="#6E9B4E" stroke-width="2.5" stroke-linecap="round"/><rect x="96" y="43" width="70" height="8" rx="4" fill="#D6E4C4"/></g>
+  <g><rect x="74" y="66" width="14" height="14" rx="3" fill="none" stroke="#6E9B4E" stroke-width="2.5"/><path d="M77 73 l3 4 l6 -8" fill="none" stroke="#6E9B4E" stroke-width="2.5" stroke-linecap="round"/><rect x="96" y="69" width="54" height="8" rx="4" fill="#D6E4C4"/></g>
+  <g><rect x="74" y="92" width="14" height="14" rx="3" fill="none" stroke="#C0A99E" stroke-width="2.5"/><rect x="96" y="95" width="70" height="8" rx="4" fill="#E6DCD6"/></g>
+  <g><rect x="74" y="116" width="14" height="14" rx="3" fill="none" stroke="#C0A99E" stroke-width="2.5"/><rect x="96" y="119" width="46" height="8" rx="4" fill="#E6DCD6"/></g>
+</svg>
+            </div>
+            <p class="text-gray-600 mb-6">同樣是「現況描述、目標、服務、評量」四大欄位，寫法差很多。切換分頁，看同一欄在兩個階段各長什麼樣。</p>
+
+            <div class="border-b border-gray-200 mb-6 flex flex-wrap gap-1" id="field-tabs"></div>
+            <div id="field-content" class="grid md:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- 區塊③ 轉換工作台 -->
+        <section id="s3" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-purple-500">③</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">轉換工作台：大班幼兒 → 入小一</h3>
+                </div>
+                <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="轉換">
+  <rect width="240" height="160" rx="14" fill="#F1F6EC"/>
+  <circle cx="78" cy="80" r="30" fill="#CFE0BC"/><text x="78" y="86" font-size="18" fill="#4d6b34" text-anchor="middle" font-family="sans-serif">學前</text>
+  <circle cx="162" cy="80" r="30" fill="#C7D6EA"/><text x="162" y="86" font-size="18" fill="#3a577d" text-anchor="middle" font-family="sans-serif">小一</text>
+  <path d="M110 66 q20 -14 40 0" fill="none" stroke="#A8765E" stroke-width="4" marker-end="url(#ah)"/>
+  <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#A8765E"/></marker></defs>
+</svg>
+            </div>
+            <p class="text-gray-600 mb-6">本次課堂作業的雛形。這是一位大班幼兒「小葳」的學前 IEP 片段，點「看小一改寫」逐列展開：進小一後同一項該怎麼調整、為什麼。</p>
+
+            <div class="bg-[#F5F1ED] rounded-lg p-5 mb-6">
+                <p class="text-sm font-semibold text-[#A8765E] mb-1">個案：小葳，大班，發展遲緩（語言溝通、精細動作、社會情緒）</p>
+                <p class="text-gray-600 text-sm">目前就讀公立幼兒園普通班，接受學前巡迴輔導。明年將入學區公立國小普通班，鑑輔會建議安置資源班。</p>
+            </div>
+            <div id="convert-table" class="space-y-3 mb-6"></div>
+            <button id="convert-toggle-all" class="px-5 py-2 bg-[#A8765E] text-white rounded-lg text-sm font-medium hover:bg-[#96674f] transition">全部展開／收合</button>
+        </section>
+
+        <!-- 區塊④ 迷思批判卡 -->
+        <section id="s4" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-yellow-500">④</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">IEP 常見迷思與現場困境</h3>
+                </div>
+                <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="迷思與省思">
+  <rect width="240" height="160" rx="14" fill="#F1F6EC"/>
+  <circle cx="88" cy="78" r="34" fill="#F0D9A8"/><text x="88" y="94" font-size="42" fill="#C0846E" text-anchor="middle" font-family="sans-serif" font-weight="bold">?</text>
+  <g transform="translate(150,50)">
+    <path d="M20 0 a24 24 0 0 1 8 46 l-16 0 a24 24 0 0 1 8 -46 z" fill="#F5E08A"/>
+    <rect x="12" y="46" width="16" height="10" rx="3" fill="#C9B36A"/>
+    <rect x="14" y="58" width="12" height="6" rx="3" fill="#B79E52"/>
+    <path d="M20 -10 v-8 M40 6 l7 -5 M0 6 l-7 -5" stroke="#E9C86A" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>
+            </div>
+            <p class="text-gray-600 mb-6">對照課本第四章「迷思與省思」。點卡片翻面，看「常見說法」錯在哪、法規或專業上正確理解是什麼，並區分行政督導／教師／家長三種角色視角。</p>
+            <div id="myth-grid" class="grid md:grid-cols-2 gap-5"></div>
+        </section>
+
+        <!-- 區塊⑤ 實務案例研討 -->
+        <section id="s5" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-red-500">⑤</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">案例研討：三種跨階段情境</h3>
+                </div>
+                <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="案例研討">
+  <rect width="240" height="160" rx="14" fill="#F1F6EC"/>
+  <rect x="40" y="34" width="120" height="70" rx="12" fill="#fff" stroke="#B7CE9E" stroke-width="3"/>
+  <path d="M64 104 l0 20 l22 -20 z" fill="#fff" stroke="#B7CE9E" stroke-width="3"/>
+  <g fill="#CFE0BC"><rect x="56" y="52" width="88" height="9" rx="4"/><rect x="56" y="70" width="66" height="9" rx="4"/><rect x="56" y="86" width="80" height="9" rx="4"/></g>
+  <circle cx="185" cy="96" r="22" fill="#F0C9A8"/><path d="M164 108 a21 18 0 0 1 42 0 z" fill="#8BB36B"/>
+</svg>
+            </div>
+            <p class="text-gray-600 mb-6">切換三個真實情境，先讀情境，再點「判斷重點」看服務型態選擇、IEP 改寫方向該注意什麼。用第①～④區塊剛學的概念實際套用。</p>
+            <div class="flex gap-3 mb-6 flex-wrap" id="case-tabs"></div>
+            <div id="case-content"></div>
+        </section>
+
+        <!-- 區塊⑥ 課堂演練與分組討論 -->
+        <section id="s6" class="mb-16 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-indigo-500">⑥</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">課堂演練與分組討論</h3>
+                </div>
+                <svg class="hidden sm:block w-28 md:w-36 shrink-0" viewBox="0 0 240 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="分組討論">
+  <rect width="240" height="160" rx="14" fill="#FBF3EC"/>
+  <rect x="34" y="40" width="90" height="58" rx="14" fill="#C0846E"/>
+  <path d="M54 98 l0 20 l22 -20 z" fill="#C0846E"/>
+  <rect x="116" y="66" width="90" height="58" rx="14" fill="#B8CBA3"/>
+  <path d="M186 124 l0 18 l-22 -18 z" fill="#B8CBA3"/>
+  <g fill="#fff" opacity="0.9"><circle cx="60" cy="69" r="5"/><circle cx="79" cy="69" r="5"/><circle cx="98" cy="69" r="5"/></g>
+  <g fill="#fff" opacity="0.9"><circle cx="142" cy="95" r="5"/><circle cx="161" cy="95" r="5"/><circle cx="180" cy="95" r="5"/></g>
+</svg>
+            </div>
+            <p class="text-gray-600 mb-6">收束階段。點題卡展開討論引導與參考要點，適合 2–3 人小組討論後全班分享。</p>
+            <div class="grid md:grid-cols-2 gap-4 mb-8" id="discuss-grid"></div>
+
+            <div class="bg-[#F5F1ED] rounded-xl p-6">
+                <h4 class="font-bold text-[#A8765E] mb-3">帶走作業</h4>
+                <ul class="list-disc list-inside space-y-2 text-gray-700 text-sm">
+                    <li>完成「學前 IEP → 小一 IEP 重點轉換表」初版：至少涵蓋現況描述、學年／學期目標、支持服務、評量方式四欄，各寫出「學前寫法」與「入小一調整」。</li>
+                    <li>期末可再回來精修，作為本門課作品集的一部分。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 底部導覽 -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-gray-200 pt-8">
+            <a href="iep_index.html" class="text-gray-500 hover:text-[#C0846E] transition">← 回課程入口</a>
+            <a href="iep_IEPT02.html" class="px-6 py-3 bg-[#A8765E] text-white rounded-lg font-medium hover:bg-[#96674f] transition">前往第二次測驗 →</a>
+        </div>
+
+    </main>
+
+    <footer class="text-center py-8 text-sm text-gray-400">
+        <p>學前特教與 IEP 實務課程 · 第二次｜資料來源：特教法第 31 條、施行細則第 10 條、幼兒園教保活動課程大綱、國民教育階段特殊教育課程大綱</p>
+    </footer>
+
+    <script>
+    // ===== 選單 =====
+    document.getElementById('menu-btn').addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // ===== 導覽高亮 =====
+    const sections = ['s1','s2','s3','s4','s5','s6'];
+    const navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', () => {
+        let cur = '';
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el && el.getBoundingClientRect().top <= 120) cur = id;
+        });
+        navLinks.forEach(l => {
+            l.classList.toggle('active', l.getAttribute('href') === '#' + cur);
+        });
+    });
+
+    // ===== 區塊① 五大差異軸 =====
+    const axes = [
+        { icon:'📚', title:'課程依據', pre:'幼兒園教保活動課程大綱「六大領域」（身體動作與健康、認知、語文、社會、情緒、美感），以幼兒為主體、全人發展，不以學科劃分。', post:'國民教育階段特殊教育課程大綱：七大學習領域＋特殊需求領域＝八大領域，對接十二年國教課綱，學科導向、有分段能力指標。', why:'學前強調「不是小學先修班」，重統整與生活經驗；小學須與普通教育課程接軌，能簡化／減量／分解／替代普教指標。' },
+        { icon:'📝', title:'現況描述語言', pre:'以「發展領域」描述：感官知覺、粗大動作、精細動作、認知、語言溝通、社會情緒、生活自理；多用觀察與發展量表。', post:'加入「學科能力」與「對普通班上課與生活之影響」：國語文、數學等學業現況，以及在原班的學習表現。', why:'幼兒尚未進入正式學科，用發展里程碑最貼切；小學生開始有學業表現，且須分析障礙對普通班的影響以決定調整。' },
+        { icon:'🎯', title:'目標型態', pre:'學年／學期目標以發展領域為軸，功能性、生活化（如：在學習區能拿出紅色教具，5 次中 4 次）。', post:'學年／學期目標對應（調整後的）領域能力指標，兼顧學業與特殊需求領域，強調可評量、對應普教進度。', why:'兩階段都用「學年／學期目標」（非長短期目標），但小學目標更常掛在能力指標下，並需標註簡化／減量等調整方式。' },
+        { icon:'📊', title:'評量方式', pre:'多元、以觀察為主：觀察、操作、口語發表、動作指認；建議每月評量，重質性描述。', post:'觀察、實作、口頭、紙筆並用；形成性＋總結性，並常涉及考試調整（試題／作答／試場／輔具）。', why:'幼兒以真實情境表現為準，紙筆意義小；小學進入評量與考試情境，替代性評量與考試調整開始重要。' },
+        { icon:'🤝', title:'支持服務設計', pre:'學前以「特殊教育方案」辦理：集中式特教班、學前巡迴輔導、普通班＋巡迴（教師入班共同設計）。', post:'資源班（抽離／外加）、集中式特教班、普通班接受特教服務；服務型態選項更多、更細。', why:'學前重「入班支持、親師合作」；小學進入分散式資源服務體系，抽離／外加的節數與課表安排成為重點。' }
+    ];
+    document.getElementById('axis-grid').innerHTML = axes.map((a,i) => `
+        <div class="card rounded-xl p-5 cursor-pointer principle-card" data-idx="${i}">
+            <div class="flex items-center gap-3 mb-2">
+                <span class="text-2xl">${a.icon}</span>
+                <h4 class="font-bold text-lg text-[#A8765E]">${a.title}</h4>
+                <span class="ml-auto text-xs text-gray-400 toggle-hint">點擊展開 ▾</span>
+            </div>
+            <div class="reveal-panel">
+                <div class="pt-2 space-y-3 text-sm">
+                    <div class="bg-green-50 rounded-lg p-3"><span class="font-bold text-green-700">學前：</span><span class="text-gray-700">${a.pre}</span></div>
+                    <div class="bg-blue-50 rounded-lg p-3"><span class="font-bold text-blue-700">小學：</span><span class="text-gray-700">${a.post}</span></div>
+                    <div class="border-l-4 border-[#C0846E] pl-3 text-gray-600"><span class="font-bold text-[#A8765E]">為什麼不同：</span>${a.why}</div>
+                </div>
+            </div>
+        </div>`).join('');
+    document.querySelectorAll('#axis-grid .principle-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const panel = card.querySelector('.reveal-panel');
+            const hint = card.querySelector('.toggle-hint');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) { panel.style.paddingTop='0.5rem'; hint.textContent='收合 ▴'; }
+            else { panel.style.paddingTop='0'; hint.textContent='點擊展開 ▾'; }
+        });
+    });
+
+    // ===== 區塊② 欄位對照 tab =====
+    const fields = [
+        { key:'現況描述', pre:'以發展領域勾選＋觀察紀錄。例：「語言溝通—能理解簡單指令，但主動口語以單詞為主；精細動作—握筆姿勢待建立。」資料來源多為鑑輔會安置資料、發展量表、教保員觀察。', post:'發展領域現況＋學科現況＋障礙對普通班上課與生活之影響。例：「國語文—注音符號拼讀待加強；數學—10 以內數概念穩定；上課易離座影響團體活動。」' },
+        { key:'學年／學期目標', pre:'掛在發展領域下，功能性、生活情境化。例：「1-1 在點心時間能用短句表達需求，5 次中 4 次。」建議每月評量。', post:'掛在（調整後）能力指標下，兼學業與特殊需求，標註調整方式。例：「能認讀常見字 20 個（簡化普教指標），80% 精熟。」形成性評量至少 3 次。' },
+        { key:'支持／服務', pre:'學前巡迴輔導（教師入班與教保服務人員共同設計策略）、相關專業服務（物理／職能／語言治療）、親職教育、無障礙與輔具。', post:'資源班抽離／外加課程、普通班合作教學、相關專業服務、考試調整、行政支援；需列課表、節數、抽離或外加、負責教師。' },
+        { key:'評量方式', pre:'觀察、操作、口語發表、動作指認為主；重質性描述與真實情境表現。', post:'觀察、實作、口頭、紙筆多元並用；形成性＋總結性；替代性評量與考試調整（報讀、延長時間、計算機等）開始納入。' },
+        { key:'轉銜', pre:'學前大班為轉銜關鍵年：召開幼小轉銜會議、通報網填報、資料移轉，銜接國小端。', post:'國小六年級為下一轉銜點；平時 IEP 內轉銜輔導聚焦升學、生活、心理、行政、福利、專業服務等面向。' }
+    ];
+    const fieldTabs = document.getElementById('field-tabs');
+    const fieldContent = document.getElementById('field-content');
+    function renderField(i) {
+        const f = fields[i];
+        fieldContent.innerHTML = `
+            <div class="card rounded-xl p-5">
+                <div class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold mb-3">學前 IEP</div>
+                <p class="text-gray-700 text-sm leading-relaxed">${f.pre}</p>
+            </div>
+            <div class="card rounded-xl p-5">
+                <div class="inline-block px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold mb-3">小一 IEP</div>
+                <p class="text-gray-700 text-sm leading-relaxed">${f.post}</p>
+            </div>`;
+        document.querySelectorAll('#field-tabs .tab-btn').forEach((b,idx) => b.classList.toggle('active', idx===i));
+    }
+    fieldTabs.innerHTML = fields.map((f,i) => `<button class="tab-btn px-4 py-2 text-sm">${f.key}</button>`).join('');
+    document.querySelectorAll('#field-tabs .tab-btn').forEach((b,i) => b.addEventListener('click', () => renderField(i)));
+    renderField(0);
+
+    // ===== 區塊③ 轉換工作台 =====
+    const convertRows = [
+        { field:'現況描述', pre:'語言溝通：主動口語以單詞為主，能理解兩步驟指令。（發展領域描述）', post:'保留發展現況，另加「對普通班上課與生活之影響」：如小組討論時較少主動發言、聽指令完成作業需提示。並補上入學後的注音／識字起點能力。', note:'從「發展里程碑」加寫「學科起點＋對普通班的影響」。' },
+        { field:'學年／學期目標', pre:'1-1 在學習區能用短句向同儕表達需求，5 次中 4 次。（功能性、生活化）', post:'對應語文領域（調整後）指標：如「能用完整句回答課堂提問，80% 達成」；仍保留生活溝通目標於特殊需求領域。', note:'目標從「生活情境」延伸到「學科課堂情境」，並掛能力指標。' },
+        { field:'支持服務', pre:'學前巡迴輔導入班，與教保服務人員共同設計溝通策略；語言治療。', post:'改為資源班（語文抽離＋外加社會技巧），普通班合作教學；語言治療視需求續留；列出課表與節數。', note:'服務型態從「入班巡迴」轉為「資源班抽離／外加」體系。' },
+        { field:'評量方式', pre:'觀察、口語發表、動作指認為主。', post:'加入紙筆與實作；形成性至少 3 次＋總結性；視需要提供替代性評量（報讀、延長時間）。', note:'評量從純觀察，擴充到多元＋考試調整。' },
+        { field:'安置與環境', pre:'公立幼兒園普通班＋學前巡迴輔導。', post:'學區國小普通班＋資源班服務；注意教室物理環境、座位安排、同儕支持。', note:'安置型態改變，須重新評估環境調整需求。' }
+    ];
+    const convertTable = document.getElementById('convert-table');
+    convertTable.innerHTML = convertRows.map((r,i) => `
+        <div class="card rounded-xl overflow-hidden convert-row">
+            <button class="w-full text-left px-5 py-4 flex items-center gap-3" data-idx="${i}">
+                <span class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center text-sm font-bold shrink-0">${i+1}</span>
+                <span class="font-semibold text-[#A8765E]">${r.field}</span>
+                <span class="ml-auto text-xs text-purple-500 conv-hint">看小一改寫 ▾</span>
+            </button>
+            <div class="reveal-panel">
+                <div class="px-5 pb-5 space-y-3 text-sm">
+                    <div class="bg-green-50 rounded-lg p-3"><span class="font-bold text-green-700">學前寫法：</span><span class="text-gray-700">${r.pre}</span></div>
+                    <div class="bg-blue-50 rounded-lg p-3"><span class="font-bold text-blue-700">入小一調整：</span><span class="text-gray-700">${r.post}</span></div>
+                    <div class="border-l-4 border-[#C0846E] pl-3 text-gray-600"><span class="font-bold text-[#A8765E]">轉換要點：</span>${r.note}</div>
+                </div>
+            </div>
+        </div>`).join('');
+    document.querySelectorAll('#convert-table button').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const panel = btn.nextElementSibling;
+            const hint = btn.querySelector('.conv-hint');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) { hint.textContent='收合 ▴'; }
+            else { hint.textContent='看小一改寫 ▾'; }
+        });
+    });
+    document.getElementById('convert-toggle-all').addEventListener('click', () => {
+        const panels = document.querySelectorAll('#convert-table .reveal-panel');
+        const anyClosed = Array.from(panels).some(p => !p.classList.contains('open'));
+        panels.forEach(p => {
+            const hint = p.previousElementSibling.querySelector('.conv-hint');
+            if (anyClosed) { p.classList.add('open'); hint.textContent='收合 ▴'; }
+            else { p.classList.remove('open'); hint.textContent='看小一改寫 ▾'; }
+        });
+    });
+
+    // ===== 區塊④ 迷思批判卡 =====
+    const myths = [
+        { role:'教師', myth:'「學前 IEP 比較簡單，隨便寫發展目標就好。」', truth:'學前 IEP 與小學同受第 31 條、施行細則第 10 條規範，五大內容一項不能少（含轉銜、行為介入）；幼兒園準用，法定效力相同。目標仍須可評量、對應需求。' },
+        { role:'家長', myth:'「幼小銜接就是提早教注音、英文，讓孩子跟得上小學。」', truth:'幼小銜接重點是培養六大核心素養與適應力，而非提前教學科。IEP 銜接的是「服務與支持不中斷」，不是把小學課程往前搬。' },
+        { role:'行政督導', myth:'「巡迴輔導的孩子沒有在特教班，IEP 可以簡略帶過。」', truth:'只要經鑑輔會鑑定通過，無論安置型態（集中式／巡迴／普通班）都須訂定完整 IEP；巡迴輔導同樣要有現況、目標、服務、評量與轉銜。' },
+        { role:'教師', myth:'「IEP 目標寫『能認識顏色』『能增進口語』就可以了。」', truth:'這類目標無法評量。應寫成「在什麼情況—做什麼—通過標準」，如「在學習區能說出 12 色中的 8 色，5 次中 4 次」。學前小學皆然。' },
+        { role:'家長', myth:'「IEP 是老師的事，家長簽名就好。」', truth:'第 31 條明定應邀請家長（及必要時學生本人）參與訂定；家長是團隊成員，對目標、安置、支持策略都有表意權。' },
+        { role:'行政督導', myth:'「同一班特教生 IEP 目標可以共用一份，比較好管理。」', truth:'IEP 的核心是「個別化」，同組目標不宜完全相同；共用一份違反個別化精神，也是評鑑常見缺失。' }
+    ];
+    const roleColor = { '教師':'bg-blue-100 text-blue-700', '家長':'bg-green-100 text-green-700', '行政督導':'bg-amber-100 text-amber-700' };
+    document.getElementById('myth-grid').innerHTML = myths.map((m,i) => `
+        <div class="card rounded-xl p-5 cursor-pointer principle-card" data-idx="${i}">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 rounded-full text-xs font-bold ${roleColor[m.role]}">${m.role}視角</span>
+                <span class="ml-auto text-xs text-gray-400 toggle-hint">看正解 ▾</span>
+            </div>
+            <p class="text-gray-800 font-medium mb-1">迷思：${m.myth}</p>
+            <div class="reveal-panel">
+                <div class="pt-2 border-l-4 border-red-300 pl-3 text-sm text-gray-700"><span class="font-bold text-red-500">正確理解：</span>${m.truth}</div>
+            </div>
+        </div>`).join('');
+    document.querySelectorAll('#myth-grid .principle-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const panel = card.querySelector('.reveal-panel');
+            const hint = card.querySelector('.toggle-hint');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) { panel.style.paddingTop='0.5rem'; hint.textContent='收合 ▴'; }
+            else { panel.style.paddingTop='0'; hint.textContent='看正解 ▾'; }
+        });
+    });
+
+    // ===== 區塊⑤ 案例研討 =====
+    const cases = [
+        { tab:'案例一：大班升小一', scenario:'小葳，大班，發展遲緩（語言溝通、精細動作、社會情緒）。就讀公立幼兒園普通班＋學前巡迴輔導。明年入學區國小，鑑輔會建議資源班。', points:[
+            ['服務型態判斷','從「巡迴輔導入班」轉為「資源班抽離／外加」。需評估抽離哪些領域、外加社會技巧的節數，並規劃普通班合作教學。'],
+            ['現況與目標改寫','發展領域現況加寫學科起點與對普通班影響；目標從生活情境延伸到課堂情境，掛（調整後）能力指標。'],
+            ['轉銜銜接','大班須召開幼小轉銜會議、通報網填報、資料移轉；確保語言治療等服務不中斷。'],
+            ['家長溝通','向家長說明「銜接的是支持而非提前教學科」，並邀請參與新 IEP 訂定。']
+        ]},
+        { tab:'案例二：學前集中式', scenario:'小宇，4 歲，疑似自閉症光譜，就讀公立幼兒園學前集中式特教班。口語以單詞為主，團體轉換易哭鬧、離座。', points:[
+            ['服務型態判斷','集中式特教班仍須完整 IEP；重點在班內結構化教學＋融合時段規劃（建議至少一節融合或合作教學）。'],
+            ['現況描述','以發展領域為主：語言溝通、社會情緒、生活自理；具體描述行為頻率與情境。'],
+            ['行為介入','團體轉換哭鬧離座屬情緒行為問題，需含行為功能介入方案與行政支援（第 10 條第四項）。'],
+            ['小學前瞻','雖尚未升學，仍應在現況中累積資料，為未來幼小轉銜與安置評估鋪路。']
+        ]},
+        { tab:'案例三：疑似生', scenario:'小恩，中班，教保員觀察疑似發展遲緩，尚未經鑑輔會鑑定，園方已啟動教學介入方案。', points:[
+            ['是否需要 IEP','未經鑑定通過者，尚不適用 IEP；此階段以「疑似生教學介入方案」記錄介入與觀察，作為後續鑑定佐證。'],
+            ['介入方向','以發展領域為軸設計介入活動，蒐集觀察資料；必要時轉介鑑輔會。'],
+            ['與 IEP 差異','教學介入方案不具 IEP 法定要件，但精神一致：先評估、設目標、記錄成效。'],
+            ['家長溝通','以觀察事實與具體策略與家長溝通，避免過早貼標籤，同時把握早期介入時機。']
+        ]}
+    ];
+    const caseTabs = document.getElementById('case-tabs');
+    const caseContent = document.getElementById('case-content');
+    function renderCase(i) {
+        const c = cases[i];
+        caseContent.innerHTML = `
+            <div class="card rounded-xl p-6">
+                <div class="bg-[#F5F1ED] rounded-lg p-4 mb-5">
+                    <p class="text-sm font-semibold text-[#A8765E] mb-1">情境</p>
+                    <p class="text-gray-700 text-sm leading-relaxed">${c.scenario}</p>
+                </div>
+                <div class="space-y-2">
+                    ${c.points.map(p => `
+                        <div class="border border-gray-200 rounded-lg overflow-hidden">
+                            <button class="w-full text-left px-4 py-3 flex items-center justify-between case-btn">
+                                <span class="font-semibold text-gray-800">${p[0]}</span>
+                                <span class="text-gray-400 text-sm">＋</span>
+                            </button>
+                            <div class="reveal-panel"><p class="px-4 pb-4 text-sm text-gray-600">${p[1]}</p></div>
+                        </div>`).join('')}
+                </div>
+            </div>`;
+        caseContent.querySelectorAll('.case-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const panel = btn.nextElementSibling;
+                panel.classList.toggle('open');
+                btn.querySelector('span:last-child').textContent = panel.classList.contains('open') ? '－' : '＋';
+            });
+        });
+        document.querySelectorAll('#case-tabs .stage-tab').forEach((b,idx) => b.classList.toggle('active', idx===i));
+    }
+    caseTabs.innerHTML = cases.map((c,i) => `<button class="stage-tab px-4 py-2 rounded-lg text-sm font-medium border border-gray-200 ${i===0?'':'bg-white'}">${c.tab}</button>`).join('');
+    document.querySelectorAll('#case-tabs .stage-tab').forEach((b,i) => b.addEventListener('click', () => renderCase(i)));
+    renderCase(0);
+
+    // ===== 區塊⑥ 分組討論題卡 =====
+    const discussions = [
+        { q:'一位大班發展遲緩幼兒升小一，你認為「最容易在幼小銜接斷裂」的服務是哪一項？為什麼？', guide:'可從語言治療等相關專業服務的接手、資源班與巡迴輔導的體系差異、家長資訊落差切入。斷裂常發生在「服務型態轉換」與「資料移轉時效」。' },
+        { q:'學前 IEP 目標常被評鑑指出「不可評量」。請各組挑一個模糊目標，改寫成含「情境—行為—標準」的可評量目標。', guide:'示範：「能增進口語」→「在點心時間能用完整句表達想要的食物，5 次中 4 次」。強調可觀察、可測量。' },
+        { q:'集中式、巡迴輔導、普通班＋巡迴三種學前服務型態，各適合什麼樣的幼兒？IEP 撰寫重點有何不同？', guide:'從障礙程度、融合需求、支持強度討論。集中式重班內結構＋融合時段；巡迴重入班策略與親師合作。' },
+        { q:'家長堅持「幼小銜接就是要提早教注音」，身為特教教師你會如何回應並調整 IEP 溝通策略？', guide:'肯定家長的焦慮，說明六大核心素養與適應力才是關鍵；把家長期待轉化為可寫入 IEP 的適應性目標。' }
+    ];
+    document.getElementById('discuss-grid').innerHTML = discussions.map((d,i) => `
+        <div class="card rounded-xl p-5 cursor-pointer principle-card" data-idx="${i}">
+            <div class="flex items-start gap-3 mb-2">
+                <span class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm font-bold shrink-0">${i+1}</span>
+                <p class="text-gray-800 font-medium">${d.q}</p>
+            </div>
+            <div class="reveal-panel">
+                <div class="pt-2 border-l-4 border-indigo-300 pl-3 text-sm text-gray-600"><span class="font-bold text-indigo-500">討論引導：</span>${d.guide}</div>
+            </div>
+            <p class="text-xs text-gray-400 mt-2 toggle-hint">點擊看討論引導 ▾</p>
+        </div>`).join('');
+    document.querySelectorAll('#discuss-grid .principle-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const panel = card.querySelector('.reveal-panel');
+            const hint = card.querySelector('.toggle-hint');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) { panel.style.paddingTop='0.5rem'; hint.textContent='收合 ▴'; }
+            else { panel.style.paddingTop='0'; hint.textContent='點擊看討論引導 ▾'; }
+        });
+    });
+    </script>
+</body>
+</html>
