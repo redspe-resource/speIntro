@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學前特教與IEP實務：第一次 法源基礎與精神（兩小時教學版）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #FDFBF8; color: #4A4A4A; }
+        .nav-link { transition: color 0.3s, border-bottom-color 0.3s; border-bottom: 2px solid transparent; white-space: nowrap; }
+        .nav-link:hover, .nav-link.active { color: #C0846E; border-bottom-color: #C0846E; }
+        .card { background-color: #FFFFFF; border: 1px solid #EAEAEA; transition: transform 0.3s, box-shadow 0.3s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.05); }
+        .flowchart-node { cursor: pointer; transition: background-color 0.3s, transform 0.3s; }
+        .flowchart-node:hover { transform: scale(1.03); background-color: #E6DCD6; }
+        .flowchart-arrow { width: 2px; height: 28px; background-color: #C0A99E; margin: 0 auto; position: relative; }
+        .flowchart-arrow::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #C0A99E; }
+        .principle-card { cursor: pointer; transition: all 0.2s ease-in-out; }
+        .principle-card:hover { background-color: #F5F1ED; border-color: #C0846E; }
+        .reveal-panel { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.4s ease-in-out; }
+        .reveal-panel.open { max-height: 1200px; }
+        .match-law { cursor: pointer; transition: all 0.2s; border: 1px solid #E5E0DA; }
+        .match-law:hover { background-color: #F5F1ED; }
+        .match-law.active { background-color: #A8765E; color: #fff; border-color: #A8765E; }
+        .match-field { transition: all 0.3s; border: 1px dashed #D8CFC7; }
+        .match-field.highlight { background-color: #E6DCD6; border-color: #A8765E; border-style: solid; }
+        .tab-btn { transition: all 0.2s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { color: #A8765E; border-bottom-color: #A8765E; font-weight: 700; }
+        /* 拖曳分類 */
+        .drag-chip { cursor: grab; user-select: none; transition: box-shadow 0.2s, opacity 0.2s; }
+        .drag-chip:active { cursor: grabbing; }
+        .sortable-ghost { opacity: 0.4; }
+        .drop-zone { min-height: 90px; transition: background-color 0.2s, border-color 0.2s; }
+        .drop-zone.drag-over { background-color: #F5F1ED; }
+        /* 排序練習 */
+        .order-item { cursor: grab; user-select: none; transition: box-shadow 0.2s; }
+        .order-item:active { cursor: grabbing; }
+        .progress-badge { font-variant-numeric: tabular-nums; }
+        .step-pill { transition: all 0.2s; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center">
+            <h1 class="text-base md:text-xl font-bold text-[#A8765E] shrink-0">第一次：法源基礎與精神</h1>
+            <div class="hidden lg:flex space-x-5 text-sm">
+                <a href="#s1" class="nav-link font-medium pb-1">核心理念</a>
+                <a href="#s2" class="nav-link font-medium pb-1">法律位階</a>
+                <a href="#s3" class="nav-link font-medium pb-1">國際框架</a>
+                <a href="#s4" class="nav-link font-medium pb-1">欄位對讀</a>
+                <a href="#s5" class="nav-link font-medium pb-1">案例研討</a>
+                <a href="#s6" class="nav-link font-medium pb-1">課堂演練</a>
+                <a href="iep_IEPT01.html" class="nav-link font-medium pb-1 text-[#C0846E]">測驗</a>
+                <a href="iep_index.html" class="nav-link font-medium pb-1 text-gray-500">回入口</a>
+            </div>
+            <button id="menu-btn" class="lg:hidden p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white px-6 pb-4 grid grid-cols-2 gap-1">
+            <a href="#s1" class="block py-2 nav-link text-center">核心理念</a>
+            <a href="#s2" class="block py-2 nav-link text-center">法律位階</a>
+            <a href="#s3" class="block py-2 nav-link text-center">國際框架</a>
+            <a href="#s4" class="block py-2 nav-link text-center">欄位對讀</a>
+            <a href="#s5" class="block py-2 nav-link text-center">案例研討</a>
+            <a href="#s6" class="block py-2 nav-link text-center">課堂演練</a>
+            <a href="iep_IEPT01.html" class="block py-2 nav-link text-center text-[#C0846E]">測驗</a>
+            <a href="iep_index.html" class="block py-2 nav-link text-center text-gray-500">回入口</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-10 md:py-14 max-w-5xl">
+
+        <!-- 課程重點 -->
+        <section class="mb-14">
+            <div class="grid md:grid-cols-5 gap-8 items-center">
+                <div class="md:col-span-3">
+                    <p class="text-sm font-semibold text-[#C0846E] tracking-widest mb-2">第一次課程 · 三小時（含測驗）</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-[#A8765E] mb-4">法源基礎與精神</h2>
+                    <p class="text-gray-600 leading-relaxed">IEP 是<strong>法律定義的專有名詞</strong>，必須依法行事，而非憑教育直覺或行政習慣。它同時包含「會議」與「書面文件」兩部分，核心精神在於<strong>事先規劃與預防</strong>，而非事後補救。六個區塊帶您從模式理念、法律位階、國際框架，一路對讀到臺東縣 IEP 表件的每一個欄位，並以真實案例與課堂演練收束。每個區塊都設計了互動練習，可在課堂上實際操作。</p>
+                </div>
+                <div class="md:col-span-2">
+                    <img src="img/hero.svg" alt="學前融合教育情境插畫" class="w-full rounded-2xl shadow-sm" loading="lazy">
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊① 醫療 vs 社會模式 -->
+        <section id="s1" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-blue-500">①</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">醫療模式 vs 社會模式</h3>
+                </div>
+                <img src="img/models.svg" alt="兩種模式插畫" class="hidden sm:block w-28 md:w-36 shrink-0" loading="lazy">
+            </div>
+            <p class="text-gray-600 mb-6">同一個孩子、同一個情境，兩種模式看見完全不同的「問題」與「解法」。這決定了 IEP「現況描述」怎麼寫。</p>
+
+            <div class="bg-[#F5F1ED] rounded-lg p-5 mb-6 text-center">
+                <p class="text-gray-700 mb-1 text-sm">情境（點按鈕輪播 4 個學前實例）</p>
+                <p class="text-gray-800 text-lg font-semibold" id="scenario-text">一位坐輪椅的幼兒無法進入教室。</p>
+                <button id="toggle-model" class="mt-3 bg-[#A8765E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C0846E] transition-colors">切換情境</button>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-5 mb-8">
+                <div id="medical-card" class="card rounded-lg p-6 border-2 border-transparent">
+                    <h4 class="font-bold text-lg text-gray-800 mb-3">醫療模式 (Medical Model)</h4>
+                    <ul class="space-y-2 text-gray-700 list-disc list-inside">
+                        <li>問題定位在<strong>個體損傷</strong></li>
+                        <li>焦點：治療、矯正孩子</li>
+                        <li>介入語言：復健、缺陷補救、正常化</li>
+                        <li>看待情境：<span class="med-line">「這孩子腳不方便，需要復健。」</span></li>
+                    </ul>
+                </div>
+                <div id="social-card" class="card rounded-lg p-6 border-2 border-transparent">
+                    <h4 class="font-bold text-lg text-gray-800 mb-3">社會模式 (Social Model)</h4>
+                    <ul class="space-y-2 text-gray-700 list-disc list-inside">
+                        <li>問題定位在<strong>環境障礙</strong></li>
+                        <li>焦點：改變環境、支持孩子參與</li>
+                        <li>介入語言：無障礙、合理調整、接納</li>
+                        <li>看待情境：<span class="soc-line">「教室沒有斜坡，環境需要調整。」</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <div class="card rounded-lg overflow-hidden">
+                    <div class="p-5 cursor-pointer flex justify-between items-center reveal-trigger">
+                        <span class="font-semibold text-[#A8765E]">這對 IEP 現況描述的意義？（點擊展開）</span>
+                        <span class="text-[#A8765E] text-xl">＋</span>
+                    </div>
+                    <div class="reveal-panel bg-[#FBF8F4] px-5">
+                        <div class="py-4 text-gray-700 space-y-2">
+                            <p>IEP 的<strong>現況描述</strong>若只用醫療模式語言，容易只寫下孩子的缺陷；社會模式提醒我們，現況描述應<strong>同時記錄環境障礙與所需支持</strong>。</p>
+                            <p class="text-sm bg-white rounded p-3 border-l-4 border-red-300"><strong class="text-red-500">缺陷式寫法：</strong>「個案語言發展遲緩，構音不清，無法表達需求。」</p>
+                            <p class="text-sm bg-white rounded p-3 border-l-4 border-green-400"><strong class="text-green-600">支持導向寫法：</strong>「個案能以單詞及手勢表達基本需求；在提供圖卡與放慢語速的環境下，可完成兩步驟指令。需持續提供視覺提示與語言治療。」</p>
+                            <p class="text-sm">好的 IEP 不只描述孩子「不能做什麼」，更要描述孩子「在什麼支持下能做到什麼」——這正是後續第三次課「現況描述怎麼寫」的伏筆。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 拖曳分類練習 -->
+            <div class="bg-white border-2 border-[#E9C9BB] rounded-xl p-6">
+                <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
+                    <h4 class="font-bold text-[#A8765E] text-lg">🖐 課堂練習 1｜把語句拖進正確的模式</h4>
+                    <span id="drag-score" class="progress-badge text-sm font-semibold text-gray-500">已分類 0 / 8</span>
+                </div>
+                <p class="text-gray-500 text-sm mb-4">把下方語句拖到「醫療模式」或「社會模式」欄。放對會變綠、放錯會變紅。完成後按檢查。</p>
+
+                <div id="chip-pool" class="flex flex-wrap gap-2 p-3 bg-[#FBF8F4] rounded-lg mb-4 min-h-[70px]"></div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <p class="font-semibold text-gray-700 mb-2 text-center">醫療模式</p>
+                        <div id="zone-med" data-zone="med" class="drop-zone border-2 border-dashed border-gray-300 rounded-lg p-3 flex flex-wrap gap-2 content-start"></div>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-700 mb-2 text-center">社會模式</p>
+                        <div id="zone-soc" data-zone="soc" class="drop-zone border-2 border-dashed border-gray-300 rounded-lg p-3 flex flex-wrap gap-2 content-start"></div>
+                    </div>
+                </div>
+                <div class="flex gap-3 mt-4">
+                    <button id="drag-check" class="bg-[#A8765E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C0846E] transition-colors">檢查答案</button>
+                    <button id="drag-reset" class="bg-gray-200 text-gray-700 font-semibold py-2 px-5 rounded-lg hover:bg-gray-300 transition-colors">重來</button>
+                </div>
+                <p id="drag-feedback" class="mt-3 font-semibold text-sm"></p>
+            </div>
+        </section>
+
+        <!-- 區塊② 法律位階時間軸 -->
+        <section id="s2" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-green-500">②</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">IEP 法律位階與 112 修法</h3>
+                </div>
+                <img src="img/law.svg" alt="法律位階插畫" class="hidden sm:block w-28 md:w-36 shrink-0" loading="lazy">
+            </div>
+            <p class="text-gray-600 mb-6">臺東縣那張 IEP 表件不是憑空來的，是一路從母法落下來的。點擊每個節點，看它規範什麼、對 IEP 的直接影響。</p>
+
+            <div class="space-y-1 max-w-2xl mx-auto mb-10">
+                <div class="flowchart-node card rounded-lg p-4 text-center" data-target="lvl1">
+                    <span class="font-bold text-gray-800">憲法增修條文 ／ CRPD 施行法</span>
+                    <span class="block text-sm text-gray-500">最上位精神</span>
+                </div>
+                <div class="reveal-panel px-4"><div class="py-3 text-gray-700 text-sm bg-[#FBF8F4] rounded p-3" id="lvl1">保障身心障礙者受教育權與平等權，是所有特教法規的憲法與國際公約基礎。我國於 2014 年制定《身心障礙者權利公約施行法》，將 CRPD 內國法化。IEP 的存在，本質上是為了落實「不歧視」與「合理調整」的憲法層級承諾。</div></div>
+                <div class="flowchart-arrow"></div>
+                <div class="flowchart-node card rounded-lg p-4 text-center" data-target="lvl2">
+                    <span class="font-bold text-gray-800">特殊教育法（母法）</span>
+                    <span class="block text-sm text-gray-500">第 31 條：IEP 訂定／第 10 條：融合精神</span>
+                </div>
+                <div class="reveal-panel px-4"><div class="py-3 text-gray-700 text-sm bg-[#FBF8F4] rounded p-3" id="lvl2"><strong>第 31 條</strong>明定：學校應以<strong>團隊合作方式</strong>訂定 IEP、訂定時應邀請學生本人及法定代理人／實際照顧者參與、規範訂定時程與檢討頻率（每學期至少一次），並明訂<strong>幼兒園準用</strong>。<strong>第 10 條</strong>則要求相關服務與設施應符合融合目標，納入通用設計、合理調整、可及性精神。這是 IEP 之所以「必須做」的法律依據。</div></div>
+                <div class="flowchart-arrow"></div>
+                <div class="flowchart-node card rounded-lg p-4 text-center" data-target="lvl3">
+                    <span class="font-bold text-gray-800">特殊教育法施行細則</span>
+                    <span class="block text-sm text-gray-500">第 10 條：IEP 五大內容</span>
+                </div>
+                <div class="reveal-panel px-4"><div class="py-3 text-gray-700 text-sm bg-[#FBF8F4] rounded p-3" id="lvl3">施行細則第 10 條把 IEP 內容<strong>結構化為五大項</strong>：①能力現況、家庭狀況與需求評估 ②特教與相關服務及支持策略 ③學年與學期教育目標、評量方式、日期及標準 ④具情緒與行為問題學生之行為功能介入方案及行政支援 ⑤轉銜輔導及服務內容。並明訂<strong>幼兒園為身心障礙幼兒訂定 IEP 時準用第一項規定</strong>。表件的每一段幾乎都對應其中一項。</div></div>
+                <div class="flowchart-arrow"></div>
+                <div class="flowchart-node card rounded-lg p-4 text-center" data-target="lvl4">
+                    <span class="font-bold text-gray-800">相關子法與辦法</span>
+                    <span class="block text-sm text-gray-500">鑑定基準、轉銜、支持服務辦法</span>
+                </div>
+                <div class="reveal-panel px-4"><div class="py-3 text-gray-700 text-sm bg-[#FBF8F4] rounded p-3" id="lvl4">各項辦法補充母法未盡之處，例如身心障礙及資賦優異學生鑑定辦法、各教育階段身心障礙學生轉銜輔導及服務辦法、身心障礙學生支持服務辦法（第 38 條所列八項支持服務）等，直接規範 IEP 中各欄位的填寫依據。</div></div>
+                <div class="flowchart-arrow"></div>
+                <div class="flowchart-node card rounded-lg p-4 text-center" data-target="lvl5">
+                    <span class="font-bold text-gray-800">臺東縣 IEP 表件</span>
+                    <span class="block text-sm text-gray-500">115 學年度學前集中式／巡迴輔導</span>
+                </div>
+                <div class="reveal-panel px-4"><div class="py-3 text-gray-700 text-sm bg-[#FBF8F4] rounded p-3" id="lvl5">縣市表件是法規落地的最終形式：每個簽名欄、每段現況／服務／目標／行為介入／轉銜，都在回應上位法規的要求。填表不是行政填空，而是履行法律與專業責任。學前教育階段依特教法採「特殊教育方案」辦理，這也是學前與國中小表件在名稱與結構上的差異來源（第二次課主題）。</div></div>
+            </div>
+
+            <!-- 112 修法前後對照 tab -->
+            <div class="border-2 border-[#E9C9BB] rounded-xl overflow-hidden">
+                <div class="bg-[#FDF3EE] px-5 pt-4">
+                    <h4 class="font-bold text-[#A8765E] mb-3">112 年特教法修法：修法前 vs 修法後</h4>
+                    <div class="flex gap-4 border-b border-[#E9C9BB]">
+                        <button class="tab-btn active pb-2 text-sm" data-tab="t-time">訂定時程</button>
+                        <button class="tab-btn pb-2 text-sm" data-tab="t-part">參與者與表意權</button>
+                        <button class="tab-btn pb-2 text-sm" data-tab="t-pre">學前法源</button>
+                        <button class="tab-btn pb-2 text-sm" data-tab="t-idea">理念用語</button>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="tab-content" data-tab="t-time">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 rounded-lg p-4"><p class="font-semibold text-gray-500 mb-2">修法前</p><p class="text-sm text-gray-700">新生及轉學生於入學後一個月內訂定；其餘在學學生於開學前訂定。每學期至少檢討一次。</p></div>
+                            <div class="bg-[#F5F1ED] rounded-lg p-4"><p class="font-semibold text-[#A8765E] mb-2">112 修法後</p><p class="text-sm text-gray-700"><strong>應於開學前訂定</strong>；轉學生入學後一個月內訂定；<strong>新生應於開學前訂定「初步 IEP」，並於開學後一個月內檢討修正</strong>。每學期至少檢討一次。強調銜接前一階段轉銜資料。</p></div>
+                        </div>
+                    </div>
+                    <div class="tab-content hidden" data-tab="t-part">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 rounded-lg p-4"><p class="font-semibold text-gray-500 mb-2">修法前</p><p class="text-sm text-gray-700">參與人員包括學校行政、特教及相關教師、學生家長；必要時得邀請相關專業人員及學生本人。</p></div>
+                            <div class="bg-[#F5F1ED] rounded-lg p-4"><p class="font-semibold text-[#A8765E] mb-2">112 修法後</p><p class="text-sm text-gray-700">訂定時<strong>應邀請學生本人</strong>，以及<strong>法定代理人或實際照顧者</strong>參與（「家長」概念擴大為實際照顧者）。經評估有需求時應邀請相關專業人員提供合作諮詢。強化學生<strong>表意權</strong>。</p></div>
+                        </div>
+                    </div>
+                    <div class="tab-content hidden" data-tab="t-pre">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 rounded-lg p-4"><p class="font-semibold text-gray-500 mb-2">修法前</p><p class="text-sm text-gray-700">學前特教法源相對零散，幼兒園辦理特教之依據較不明確。</p></div>
+                            <div class="bg-[#F5F1ED] rounded-lg p-4"><p class="font-semibold text-[#A8765E] mb-2">112 修法後</p><p class="text-sm text-gray-700">明訂<strong>幼兒園準用第 31 條為身心障礙幼兒訂定 IEP</strong>；幼兒園得設特教班或以特殊教育方案辦理；學前特教以<strong>融合教育為原則</strong>，教材教法與評量保持彈性。</p></div>
+                        </div>
+                    </div>
+                    <div class="tab-content hidden" data-tab="t-idea">
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 rounded-lg p-4"><p class="font-semibold text-gray-500 mb-2">修法前</p><p class="text-sm text-gray-700">無障礙、適性化等用語為主。</p></div>
+                            <div class="bg-[#F5F1ED] rounded-lg p-4"><p class="font-semibold text-[#A8765E] mb-2">112 修法後</p><p class="text-sm text-gray-700">明文納入 CRPD／CRC 精神：<strong>通用設計、合理調整、可及性、不歧視、學生表意權</strong>，並要求相關服務與設施符合融合目標。</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 區塊③ 國際框架 -->
+        <section id="s3" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-purple-500">③</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">國際框架：CRPD／薩拉曼卡宣言／IDEA</h3>
+                </div>
+                <img src="img/global.svg" alt="國際框架插畫" class="hidden sm:block w-28 md:w-36 shrink-0" loading="lazy">
+            </div>
+            <p class="text-gray-600 mb-6">把抽象國際公約連回具體表件。點擊卡片展開「這份文件主張什麼、它如何體現在你手上的 IEP」。</p>
+
+            <div class="grid md:grid-cols-3 gap-5 mb-8">
+                <div class="principle-card card rounded-lg p-5">
+                    <h4 class="font-bold text-gray-800 mb-2">CRPD 身心障礙者權利公約</h4>
+                    <p class="text-sm text-gray-500 mb-3">2006 聯合國．合理調整．不歧視．融合教育權</p>
+                    <div class="reveal-panel"><div class="pt-3 text-sm text-gray-700 border-t border-gray-100 space-y-2"><p>主張身心障礙者享有平等受教權，國家須提供「合理調整」（reasonable accommodation），拒絕提供即構成歧視。第 24 條專章保障融合教育。</p><p>我國以《CRPD 施行法》內國法化，成為特教法上位精神——IEP 中的各項支持與調整，正是「合理調整」的具體落實。</p></div></div>
+                    <p class="text-xs text-[#A8765E] mt-2 toggle-hint">點擊展開 ▾</p>
+                </div>
+                <div class="principle-card card rounded-lg p-5">
+                    <h4 class="font-bold text-gray-800 mb-2">薩拉曼卡宣言</h4>
+                    <p class="text-sm text-gray-500 mb-3">1994 UNESCO．融合教育里程碑</p>
+                    <div class="reveal-panel"><div class="pt-3 text-sm text-gray-700 border-t border-gray-100 space-y-2"><p>明確指出具融合精神的普通學校是「對抗歧視態度、創造友善社區、建立包容社會最有效的工具」。</p><p>這奠定了「零拒絕」與「融合安置」的理念基礎，反映在 IEP 對<strong>最少限制環境（LRE）</strong>的安置考量，以及學前特教「以融合為原則」的立場。</p></div></div>
+                    <p class="text-xs text-[#A8765E] mt-2 toggle-hint">點擊展開 ▾</p>
+                </div>
+                <div class="principle-card card rounded-lg p-5">
+                    <h4 class="font-bold text-gray-800 mb-2">IDEA ／ 美國 IEP</h4>
+                    <p class="text-sm text-gray-500 mb-3">1975/1990 美國．制度比較錨點（課本第二章）</p>
+                    <div class="reveal-panel"><div class="pt-3 text-sm text-gray-700 border-t border-gray-100 space-y-2"><p>美國 IDEA 建立了 <strong>FAPE</strong>（免費適性公立教育）、<strong>LRE</strong>（最少限制環境）、程序保障（due process）等原則，是我國 IEP 制度重要的比較對象。</p><p>特別注意其 3–5 歲學前對應 IEP、0–2 歲對應 <strong>IFSP</strong>（個別化家庭服務計畫），家庭中心取向與我國學前 IEP 的家庭需求評估可相互對照。</p></div></div>
+                    <p class="text-xs text-[#A8765E] mt-2 toggle-hint">點擊展開 ▾</p>
+                </div>
+            </div>
+
+            <!-- 三方比較表 -->
+            <div class="overflow-x-auto card rounded-xl p-1">
+                <table class="w-full text-sm text-left">
+                    <thead>
+                        <tr class="bg-[#F5F1ED] text-[#A8765E]">
+                            <th class="p-3 font-bold rounded-tl-lg">比較面向</th>
+                            <th class="p-3 font-bold">CRPD</th>
+                            <th class="p-3 font-bold">薩拉曼卡宣言</th>
+                            <th class="p-3 font-bold rounded-tr-lg">IDEA（美國）</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-gray-700">
+                        <tr><td class="p-3 font-semibold text-gray-800">性質</td><td class="p-3">具法律拘束力之國際公約</td><td class="p-3">國際宣言（政治承諾）</td><td class="p-3">美國國內聯邦法律</td></tr>
+                        <tr class="bg-[#FBF8F4]"><td class="p-3 font-semibold text-gray-800">核心主張</td><td class="p-3">合理調整、不歧視、融合教育權</td><td class="p-3">融合學校對抗歧視、全民教育</td><td class="p-3">FAPE、LRE、程序保障、IEP</td></tr>
+                        <tr><td class="p-3 font-semibold text-gray-800">對我國影響</td><td class="p-3">施行法內國法化，最上位精神</td><td class="p-3">融合與零拒絕理念來源</td><td class="p-3">IEP 制度設計的比較藍本</td></tr>
+                        <tr class="bg-[#FBF8F4]"><td class="p-3 font-semibold text-gray-800">體現在 IEP</td><td class="p-3">各項支持＝合理調整</td><td class="p-3">最少限制環境安置</td><td class="p-3">五大內容結構、家長參與</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 區塊④ 法規欄位對讀 + 排序練習 -->
+        <section id="s4" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-yellow-500">④</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">一句法條 → 一個表格欄位</h3>
+                </div>
+                <img src="img/match.svg" alt="法條欄位對讀插畫" class="hidden sm:block w-28 md:w-36 shrink-0" loading="lazy">
+            </div>
+            <p class="text-gray-600 mb-6">本頁重頭戲，也是本次課堂作業「法規—欄位對照表」的骨架。點擊左側法條，右側對應的表件欄位會高亮並跳出說明。</p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-10">
+                <div class="space-y-3">
+                    <p class="font-semibold text-gray-500 text-sm">法條（點擊）</p>
+                    <div class="match-law rounded-lg p-4" data-field="f1"><span class="font-semibold">特教法第 31 條</span><span class="block text-sm">「應以團隊合作方式訂定 IEP，邀請本人與家長參與」</span></div>
+                    <div class="match-law rounded-lg p-4" data-field="f2"><span class="font-semibold">施行細則第 10 條（一）</span><span class="block text-sm">「學生能力現況、家庭狀況及需求評估」</span></div>
+                    <div class="match-law rounded-lg p-4" data-field="f3"><span class="font-semibold">施行細則第 10 條（二）</span><span class="block text-sm">「所需特殊教育、相關服務及支持策略」</span></div>
+                    <div class="match-law rounded-lg p-4" data-field="f4"><span class="font-semibold">施行細則第 10 條（三）</span><span class="block text-sm">「學年與學期教育目標、評量方式、日期及標準」</span></div>
+                    <div class="match-law rounded-lg p-4" data-field="f5"><span class="font-semibold">施行細則第 10 條（四）</span><span class="block text-sm">「行為功能介入方案及行政支援」</span></div>
+                    <div class="match-law rounded-lg p-4" data-field="f6"><span class="font-semibold">施行細則第 10 條（五）</span><span class="block text-sm">「轉銜輔導及服務內容」</span></div>
+                </div>
+
+                <div class="space-y-3">
+                    <p class="font-semibold text-gray-500 text-sm">臺東縣 IEP 表件對應欄位</p>
+                    <div id="f1" class="match-field rounded-lg p-4"><span class="font-semibold text-gray-800">IEP 會議參與人員簽名欄</span><div class="match-detail hidden mt-2 text-sm text-gray-700">團隊合作以簽名欄呈現：特教師、普通班師（教保員）、行政、相關專業與家長／實際照顧者皆須簽署。<strong class="text-red-500">常見錯誤</strong>：只有特教師簽名、家長欄空白，即違反團隊合作與家長平等參與精神。</div></div>
+                    <div id="f2" class="match-field rounded-lg p-4"><span class="font-semibold text-gray-800">現況描述與需求評估欄</span><div class="match-detail hidden mt-2 text-sm text-gray-700">記錄能力現況、家庭狀況與需求評估。<strong class="text-red-500">常見錯誤</strong>：只寫診斷標籤或缺陷，未寫優勢與環境支持需求（呼應區塊①）。</div></div>
+                    <div id="f3" class="match-field rounded-lg p-4"><span class="font-semibold text-gray-800">特教與相關服務、支持策略欄</span><div class="match-detail hidden mt-2 text-sm text-gray-700">記錄所需特教服務、相關專業服務（語治、職治、物治）與支持策略。<strong class="text-red-500">常見錯誤</strong>：服務與現況需求脫節，寫了服務卻沒對應到現況欄的需求。</div></div>
+                    <div id="f4" class="match-field rounded-lg p-4"><span class="font-semibold text-gray-800">學年／學期目標與評量欄</span><div class="match-detail hidden mt-2 text-sm text-gray-700">記錄可測量的目標、評量方式、日期與通過標準。<strong class="text-red-500">常見錯誤</strong>：目標不可測量（如「增進語言能力」），缺少評量標準與日期。</div></div>
+                    <div id="f5" class="match-field rounded-lg p-4"><span class="font-semibold text-gray-800">行為功能介入方案欄</span><div class="match-detail hidden mt-2 text-sm text-gray-700">記錄行為功能假設與介入方案及行政支援。<strong class="text-red-500">常見錯誤</strong>：跳過功能評量直接寫策略，導致介入與功能不對齊（第五次課主題）。</div></div>
+                    <div id="f6" class="match-field rounded-lg p-4"><span class="font-semibold text-gray-800">個別化轉銜服務計畫欄</span><div class="match-detail hidden mt-2 text-sm text-gray-700">記錄升學／生活／心理／福利／專業等轉銜服務。<strong class="text-red-500">常見錯誤</strong>：畢業前才填、未召開轉銜會議、未於通報網登錄（第四次課主題）。</div></div>
+                </div>
+            </div>
+
+            <!-- 排序練習 -->
+            <div class="bg-white border-2 border-[#E9C9BB] rounded-xl p-6">
+                <div class="flex items-center justify-between mb-1 flex-wrap gap-2">
+                    <h4 class="font-bold text-[#A8765E] text-lg">🖐 課堂練習 2｜把 IEP 訂定流程排出正確順序</h4>
+                    <span id="order-status" class="progress-badge text-sm font-semibold text-gray-500"></span>
+                </div>
+                <p class="text-gray-500 text-sm mb-4">依 112 修法後的規定，把下列步驟拖曳排成正確時序（拖動卡片上下移動）。完成後按檢查。</p>
+                <ul id="order-list" class="space-y-2"></ul>
+                <div class="flex gap-3 mt-4">
+                    <button id="order-check" class="bg-[#A8765E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C0846E] transition-colors">檢查順序</button>
+                    <button id="order-reset" class="bg-gray-200 text-gray-700 font-semibold py-2 px-5 rounded-lg hover:bg-gray-300 transition-colors">打亂重來</button>
+                </div>
+                <p id="order-feedback" class="mt-3 font-semibold text-sm"></p>
+            </div>
+
+            <div class="mt-8 bg-[#F5F1ED] rounded-lg p-5 text-center">
+                <p class="text-gray-700">課堂作業：完成後把六組對讀整理成一張「法規—欄位對照表」，即為本次課的帶走產出。</p>
+            </div>
+        </section>
+
+        <!-- 區塊⑤ 實務案例研討 -->
+        <section id="s5" class="mb-20 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-red-500">⑤</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">實務案例研討：臺東縣三種表件情境</h3>
+                </div>
+                <img src="img/case.svg" alt="案例研討插畫" class="hidden sm:block w-28 md:w-36 shrink-0" loading="lazy">
+            </div>
+            <p class="text-gray-600 mb-6">切換三個真實情境（集中式／巡迴輔導／疑似生），先讀情境，再點「逐欄判斷」看每一欄該注意什麼。用第①～④區塊剛學的概念實際套用。</p>
+
+            <div class="flex gap-3 mb-6 flex-wrap">
+                <button class="case-btn active bg-[#A8765E] text-white font-semibold py-2 px-4 rounded-lg text-sm" data-case="c1">案例一：學前集中式</button>
+                <button class="case-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg text-sm" data-case="c2">案例二：巡迴輔導</button>
+                <button class="case-btn bg-gray-200 text-gray-700 font-semibold py-2 px-4 rounded-lg text-sm" data-case="c3">案例三：疑似生</button>
+            </div>
+
+            <div id="case-box" class="card rounded-xl p-6"></div>
+        </section>
+
+        <!-- 區塊⑥ 課堂演練與分組討論 -->
+        <section id="s6" class="mb-16 scroll-mt-24">
+            <div class="flex items-center justify-between gap-4 mb-2">
+                <div class="flex items-baseline gap-3">
+                    <span class="text-3xl font-black text-indigo-500">⑥</span>
+                    <h3 class="text-2xl font-bold text-[#A8765E]">課堂演練與分組討論</h3>
+                </div>
+                <img src="img/discuss.svg" alt="分組討論插畫" class="hidden sm:block w-28 md:w-36 shrink-0" loading="lazy">
+            </div>
+            <p class="text-gray-600 mb-6">收束階段。點擊題卡展開討論引導與參考要點，適合 2–3 人小組討論後全班分享。</p>
+
+            <div class="grid md:grid-cols-2 gap-4 mb-8" id="discuss-grid"></div>
+
+            <div class="bg-[#FDF3EE] border border-[#E9C9BB] rounded-xl p-6">
+                <h4 class="font-bold text-[#A8765E] text-lg mb-3">📎 本次帶走作業</h4>
+                <ul class="space-y-2 text-gray-700 list-disc list-inside">
+                    <li>完成一張「法規—欄位對照表」：把施行細則第 10 條五大內容，逐一對應到臺東縣學前 IEP 表件的實際欄位。</li>
+                    <li>選一段你手邊 IEP 的「現況描述」，用社會模式／支持導向重新改寫一次。</li>
+                    <li>閱讀林素貞《個別化教育計畫之實施》第一、二章，準備下次「學前 vs 國中小 IEP 差異」的比較。</li>
+                </ul>
+                <a href="iep_IEPT01.html" class="inline-block mt-4 bg-[#A8765E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C0846E] transition-colors">前往第一次前後測 →</a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-100 mt-8">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-600">
+            <p class="text-sm">學前特殊教育與IEP實務 第一次課程 ｜ 主教材：林素貞《個別化教育計畫之實施》｜ 僅供教學與演示用途。</p>
+            <p class="text-xs text-gray-400 mt-1">法源依據：特殊教育法（112 修正）、特殊教育法施行細則第 10 條、CRPD 施行法。</p>
+            <a href="iep_index.html" class="inline-block mt-3 bg-[#A8765E] text-white font-semibold py-2 px-5 rounded-lg hover:bg-[#C0846E] transition-colors">回課程入口</a>
+        </div>
+    </footer>
+
+    <script>
+        // 手機選單
+        document.getElementById('menu-btn').addEventListener('click', () => {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        // 平滑捲動
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                const el = document.querySelector(this.getAttribute('href'));
+                if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth'}); document.getElementById('mobile-menu').classList.add('hidden'); }
+            });
+        });
+        // nav 高亮
+        const sections = ['s1','s2','s3','s4','s5','s6'];
+        window.addEventListener('scroll', () => {
+            let cur = '';
+            sections.forEach(id => { const el = document.getElementById(id); if(el && el.getBoundingClientRect().top < 150) cur = id; });
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#'+cur));
+        });
+
+        // ① 醫療 vs 社會模式 情境輪播
+        const scenarios = [
+            { text: '一位坐輪椅的幼兒無法進入教室。', med: '這孩子腳不方便，需要復健。', soc: '教室沒有斜坡，環境需要調整。' },
+            { text: '一位自閉症幼兒在團體活動中大聲尖叫。', med: '這孩子行為異常，需要矯正。', soc: '環境刺激過多且缺乏預告，需要結構化與視覺提示。' },
+            { text: '一位聽障幼兒聽不清楚老師的口語指令。', med: '這孩子聽力受損，需配戴輔具並治療。', soc: '教室缺乏視覺化指令與友善溝通環境，需調整教學方式。' },
+            { text: '一位發展遲緩幼兒無法跟上團體轉換活動。', med: '這孩子動作與認知落後，需加強訓練。', soc: '轉換沒有預告與流程圖示，需提供結構與同儕協助。' }
+        ];
+        let sIdx = 0;
+        const scenarioText = document.getElementById('scenario-text');
+        const medLine = document.querySelector('.med-line');
+        const socLine = document.querySelector('.soc-line');
+        const medCard = document.getElementById('medical-card');
+        const socCard = document.getElementById('social-card');
+        function renderScenario(){
+            const s = scenarios[sIdx];
+            scenarioText.textContent = s.text;
+            medLine.textContent = '「' + s.med + '」';
+            socLine.textContent = '「' + s.soc + '」';
+            [medCard, socCard].forEach(c => { c.classList.add('border-[#C0846E]'); setTimeout(()=>c.classList.remove('border-[#C0846E]'), 600); });
+        }
+        document.getElementById('toggle-model').addEventListener('click', () => { sIdx = (sIdx + 1) % scenarios.length; renderScenario(); });
+
+        // 通用 reveal
+        document.querySelectorAll('.reveal-trigger').forEach(t => {
+            t.addEventListener('click', () => {
+                const panel = t.nextElementSibling;
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '0.25rem' : '0';
+                panel.style.paddingBottom = panel.classList.contains('open') ? '0.25rem' : '0';
+                const sign = t.querySelector('span:last-child');
+                if(sign) sign.textContent = panel.classList.contains('open') ? '－' : '＋';
+            });
+        });
+
+        // ② 流程圖節點
+        document.querySelectorAll('.flowchart-node').forEach(node => {
+            node.addEventListener('click', () => {
+                const panel = node.nextElementSibling;
+                if(panel && panel.classList.contains('reveal-panel')){
+                    panel.classList.toggle('open');
+                    panel.style.paddingTop = panel.classList.contains('open') ? '0.25rem' : '0';
+                    panel.style.paddingBottom = panel.classList.contains('open') ? '0.25rem' : '0';
+                }
+            });
+        });
+        // ② tab 切換
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tab = btn.getAttribute('data-tab');
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('hidden', c.getAttribute('data-tab') !== tab));
+            });
+        });
+
+        // ③ principle-card
+        document.querySelectorAll('.principle-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const panel = card.querySelector('.reveal-panel');
+                const hint = card.querySelector('.toggle-hint');
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '0.5rem' : '0';
+                if(hint) hint.textContent = panel.classList.contains('open') ? '點擊收合 ▴' : '點擊展開 ▾';
+            });
+        });
+
+        // ④ 法條—欄位配對
+        const laws = document.querySelectorAll('.match-law');
+        const fields = document.querySelectorAll('.match-field');
+        laws.forEach(law => {
+            law.addEventListener('click', () => {
+                laws.forEach(l => l.classList.remove('active'));
+                law.classList.add('active');
+                const targetId = law.getAttribute('data-field');
+                fields.forEach(f => { f.classList.remove('highlight'); const d = f.querySelector('.match-detail'); if(d) d.classList.add('hidden'); });
+                const target = document.getElementById(targetId);
+                target.classList.add('highlight');
+                const d = target.querySelector('.match-detail'); if(d) d.classList.remove('hidden');
+                target.scrollIntoView({behavior:'smooth', block:'center'});
+            });
+        });
+
+        // 課堂練習1：拖曳分類
+        const chips = [
+            { t:'孩子構音不清，需接受語言治療矯正', a:'med' },
+            { t:'教室提供圖卡與視覺時間表', a:'soc' },
+            { t:'孩子動作發展遲緩，需加強復健', a:'med' },
+            { t:'活動流程加入預告與同儕協助', a:'soc' },
+            { t:'診斷為自閉症，需行為矯正訓練', a:'med' },
+            { t:'降低環境噪音與過度刺激', a:'soc' },
+            { t:'孩子聽損，需配戴助聽器治療', a:'med' },
+            { t:'老師改用手勢與視覺化指令溝通', a:'soc' }
+        ];
+        const chipPool = document.getElementById('chip-pool');
+        function makeChip(c, i){
+            const el = document.createElement('div');
+            el.className = 'drag-chip bg-white border border-[#D8CFC7] rounded-lg px-3 py-2 text-sm text-gray-700 shadow-sm';
+            el.textContent = c.t; el.dataset.a = c.a; el.dataset.i = i;
+            return el;
+        }
+        function initDrag(){
+            chipPool.innerHTML=''; document.getElementById('zone-med').innerHTML=''; document.getElementById('zone-soc').innerHTML='';
+            const shuffled = chips.map((c,i)=>({c,i})).sort(()=>Math.random()-0.5);
+            shuffled.forEach(({c,i}) => chipPool.appendChild(makeChip(c,i)));
+            document.getElementById('drag-feedback').textContent='';
+            updateDragScore();
+            [chipPool, document.getElementById('zone-med'), document.getElementById('zone-soc')].forEach(z => {
+                new Sortable(z, { group:'chips', animation:150, ghostClass:'sortable-ghost', onSort: updateDragScore });
+            });
+        }
+        function updateDragScore(){
+            const placed = document.getElementById('zone-med').children.length + document.getElementById('zone-soc').children.length;
+            document.getElementById('drag-score').textContent = '已分類 ' + placed + ' / 8';
+        }
+        document.getElementById('drag-check').addEventListener('click', () => {
+            let correct = 0, total = chips.length;
+            ['zone-med','zone-soc'].forEach(zid => {
+                const zone = zid === 'zone-med' ? 'med' : 'soc';
+                [...document.getElementById(zid).children].forEach(ch => {
+                    ch.classList.remove('border-green-400','border-red-400','bg-green-50','bg-red-50');
+                    if(ch.dataset.a === zone){ ch.classList.add('border-green-400','bg-green-50'); correct++; }
+                    else { ch.classList.add('border-red-400','bg-red-50'); }
+                });
+            });
+            const fb = document.getElementById('drag-feedback');
+            if(correct === total){ fb.textContent = '✓ 全對！8 題全部分類正確。'; fb.className='mt-3 font-semibold text-sm text-green-600'; }
+            else { fb.textContent = '答對 ' + correct + ' / ' + total + '。綠色正確、紅色需再想想（提示：焦點在孩子身上＝醫療；焦點在環境調整＝社會）。'; fb.className='mt-3 font-semibold text-sm text-[#C0846E]'; }
+        });
+        document.getElementById('drag-reset').addEventListener('click', initDrag);
+        initDrag();
+
+        // 課堂練習2：流程排序
+        const correctOrder = [
+            '取得前一階段轉銜服務資料，作為初步 IEP 依據',
+            '開學前訂定「初步 IEP」（新生）',
+            '召開 IEP 會議，邀請本人、家長／實際照顧者、相關專業參與',
+            '開學後一個月內檢討修正 IEP',
+            '依 IEP 實施教學與相關服務',
+            '每學期至少檢討一次，必要時修正'
+        ];
+        const orderList = document.getElementById('order-list');
+        function makeOrderItem(text){
+            const li = document.createElement('li');
+            li.className = 'order-item card rounded-lg p-3 flex items-center gap-3 text-sm text-gray-700';
+            li.dataset.text = text;
+            li.innerHTML = '<span class="text-[#C0A99E]">⠿</span><span>' + text + '</span>';
+            return li;
+        }
+        function initOrder(){
+            orderList.innerHTML='';
+            correctOrder.map(t=>t).sort(()=>Math.random()-0.5).forEach(t => orderList.appendChild(makeOrderItem(t)));
+            document.getElementById('order-feedback').textContent='';
+            document.getElementById('order-status').textContent='';
+            new Sortable(orderList, { animation:150, ghostClass:'sortable-ghost' });
+        }
+        document.getElementById('order-check').addEventListener('click', () => {
+            const cur = [...orderList.children].map(li => li.dataset.text);
+            let firstWrong = -1;
+            for(let i=0;i<cur.length;i++){ if(cur[i] !== correctOrder[i]){ firstWrong = i; break; } }
+            [...orderList.children].forEach((li,i) => {
+                li.classList.remove('border-green-400','border-red-400','bg-green-50','bg-red-50');
+                if(cur[i] === correctOrder[i]) li.classList.add('border-green-400','bg-green-50');
+                else li.classList.add('border-red-400','bg-red-50');
+            });
+            const fb = document.getElementById('order-feedback');
+            if(firstWrong === -1){ fb.textContent='✓ 順序完全正確！這就是 112 修法後的 IEP 訂定時序。'; fb.className='mt-3 font-semibold text-sm text-green-600'; }
+            else { fb.textContent='第 ' + (firstWrong+1) + ' 個位置起順序有誤，再調整看看。'; fb.className='mt-3 font-semibold text-sm text-[#C0846E]'; }
+        });
+        document.getElementById('order-reset').addEventListener('click', initOrder);
+        initOrder();
+
+        // ⑤ 案例研討
+        const cases = {
+            c1: {
+                title:'案例一：學前集中式特教班',
+                scene:'小宇，4 歲，發展遲緩（疑似自閉症光譜），就讀公立幼兒園學前集中式特教班。口語以單詞為主，團體轉換時常哭鬧、離座。母親為主要照顧者，父親長期在外工作。',
+                rows:[
+                    ['參與人員簽名','特教班兩位教師、園長、母親須簽名；因有轉換行為問題，宜邀請專業團隊（臨床心理／職能）提供合作諮詢。<strong class="text-red-500">檢查</strong>：父親長期在外，家長欄應由「實際照顧者」母親簽署即可。'],
+                    ['現況描述','避免只寫「語言遲緩、情緒不穩」；應寫「能以單詞與手勢表達需求；在圖卡與預告支持下可完成轉換」。'],
+                    ['服務與支持','語言治療、視覺提示系統（PECS／時間表）、團體活動結構化。'],
+                    ['行為功能介入','轉換時哭鬧需先做功能評量（逃避？獲得注意？），再設計介入，不可直接寫「給予增強」。'],
+                    ['轉銜','明年即將轉銜國小，本學年下學期應啟動幼小轉銜、召開轉銜會議並於通報網登錄。']
+                ]
+            },
+            c2: {
+                title:'案例二：巡迴輔導（融合班安置）',
+                scene:'小恩，5 歲，中度聽覺障礙，配戴人工電子耳，就讀一般幼兒園普通班，由學前巡迴輔導教師每週入班服務 2 次。班級導師為教保員。',
+                rows:[
+                    ['參與人員簽名','巡迴輔導教師、班級教保員、園方行政、家長皆須簽名。<strong class="text-red-500">檢查</strong>：巡迴生的 IEP 常漏掉「普通班教保員」簽名，違反團隊合作。'],
+                    ['現況描述','記錄聽能與溝通現況，並寫明「在 FM 系統與視覺提示下可參與團體討論」——強調環境支持（社會模式）。'],
+                    ['服務與支持','聽覺輔具維護、FM 調頻系統、教室座位安排、對班級教保員的諮詢服務。'],
+                    ['行為功能介入','若無情緒行為問題，此欄可註明「無需求」，但不可整欄空白未評估。'],
+                    ['轉銜','巡迴輔導重點在支持融合，轉銜時須把成功的環境調整策略寫入轉銜資料，供國小延續。']
+                ]
+            },
+            c3: {
+                title:'案例三：疑似生（尚未取得鑑定身分）',
+                scene:'小葳，3 歲半，語言與社會互動明顯落後，家長尚在猶豫是否送鑑定，目前無特教身分。園方觀察其團體適應困難。',
+                rows:[
+                    ['計畫性質','疑似生「不使用正式 IEP」，而是依國教署決議擬定「教育與評估計畫（疑似生服務計畫）」，可參考施行細則第 10 條 IEP 應含內容，就需求擇要擬訂。'],
+                    ['現況描述','以園方觀察與初篩結果描述現況與需求，作為後續是否提報鑑定的依據。'],
+                    ['服務與支持','在未取得身分前仍可提供班級層級的支持與教學調整，並記錄介入後反應（RTI 精神）。'],
+                    ['行為／評估','安排「教育與評估計畫執行會議」與「介入後評估建議」，決定是否提報鑑輔會。'],
+                    ['轉銜／後續','若介入後仍有明顯需求，應與家長溝通提報鑑定；家長溝通紀錄要留存。']
+                ]
+            }
+        };
+        const caseBox = document.getElementById('case-box');
+        function renderCase(key){
+            const c = cases[key];
+            let html = '<h4 class="font-bold text-[#A8765E] text-lg mb-2">'+c.title+'</h4>';
+            html += '<p class="text-gray-700 bg-[#FBF8F4] rounded-lg p-4 text-sm mb-4">'+c.scene+'</p>';
+            html += '<div class="space-y-2">';
+            c.rows.forEach((r,i) => {
+                html += '<div class="border border-[#E5E0DA] rounded-lg overflow-hidden">'
+                     + '<div class="case-row-trigger cursor-pointer flex justify-between items-center p-3 hover:bg-[#F5F1ED]"><span class="font-semibold text-gray-800 text-sm">'+r[0]+'</span><span class="text-[#A8765E]">＋</span></div>'
+                     + '<div class="case-row-panel reveal-panel px-3"><p class="py-3 text-sm text-gray-700">'+r[1]+'</p></div></div>';
+            });
+            html += '</div>';
+            caseBox.innerHTML = html;
+            caseBox.querySelectorAll('.case-row-trigger').forEach(t => {
+                t.addEventListener('click', () => {
+                    const panel = t.nextElementSibling;
+                    panel.classList.toggle('open');
+                    panel.style.paddingTop = panel.classList.contains('open') ? '0.25rem' : '0';
+                    panel.style.paddingBottom = panel.classList.contains('open') ? '0.25rem' : '0';
+                    t.querySelector('span:last-child').textContent = panel.classList.contains('open') ? '－' : '＋';
+                });
+            });
+        }
+        document.querySelectorAll('.case-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.case-btn').forEach(b => { b.classList.remove('active','bg-[#A8765E]','text-white'); b.classList.add('bg-gray-200','text-gray-700'); });
+                btn.classList.add('active','bg-[#A8765E]','text-white'); btn.classList.remove('bg-gray-200','text-gray-700');
+                renderCase(btn.getAttribute('data-case'));
+            });
+        });
+        renderCase('c1');
+
+        // ⑥ 分組討論題卡
+        const discussions = [
+            { q:'IEP 為什麼是「法律文件」而非「教學參考」？若沒依法訂定會有什麼後果？', hint:'從特教法第 31 條的強制性、家長申訴與程序保障、以及未依法可能衍生的行政與法律責任切入。' },
+            { q:'學前 IEP「以融合為原則」，但集中式特教班看似不融合，如何理解這個張力？', hint:'融合是原則不是唯一形式；安置應依最少限制環境（LRE）與個別需求連續光譜考量，集中式是必要時的選項之一。' },
+            { q:'112 修法把「家長」擴大為「法定代理人或實際照顧者」，對實務簽名欄有何影響？', hint:'隔代教養、寄養、父母離異等情況下，誰是實際照顧者？簽名代表誰的意見？如何確保表意權。' },
+            { q:'如果你只能改寫一份 IEP 的一個欄位，你會選哪一欄、為什麼？', hint:'多數人會選「現況描述」——因為它是所有目標與服務的源頭，寫得好壞決定整份 IEP 的品質。' }
+        ];
+        const dg = document.getElementById('discuss-grid');
+        discussions.forEach((d,i) => {
+            const card = document.createElement('div');
+            card.className = 'card rounded-xl p-5 cursor-pointer';
+            card.innerHTML = '<p class="font-semibold text-gray-800 mb-2">討論 '+(i+1)+'</p>'
+                + '<p class="text-gray-700 text-sm mb-3">'+d.q+'</p>'
+                + '<div class="reveal-panel"><p class="pt-2 border-t border-gray-100 text-sm text-gray-600"><strong class="text-[#A8765E]">引導要點：</strong>'+d.hint+'</p></div>'
+                + '<p class="text-xs text-[#A8765E] mt-2 d-hint">點擊看引導要點 ▾</p>';
+            card.addEventListener('click', () => {
+                const panel = card.querySelector('.reveal-panel');
+                const hint = card.querySelector('.d-hint');
+                panel.classList.toggle('open');
+                panel.style.paddingTop = panel.classList.contains('open') ? '0.5rem' : '0';
+                hint.textContent = panel.classList.contains('open') ? '收合 ▴' : '點擊看引導要點 ▾';
+            });
+            dg.appendChild(card);
+        });
+    </script>
+</body>
+</html>
