@@ -587,6 +587,7 @@
             <label>↔️ 左右轉頭 <input type="range" id="camYawSlider" min="-75" max="75" step="1" value="0"></label>
             <button id="switchCamBtn">📷 切換視角</button>
             <button id="resetBtn">🔄 重設</button>
+            <button id="retryBtn" type="button">↻ 重來一次</button>
             <button id="closePanelBtn" style="background: linear-gradient(180deg, #ffb3c6, #ff8fa8); color: #7a1f3d; box-shadow: 0 5px 0 #e06a8c, 0 9px 16px rgba(91,75,138,0.22);">✖️ 關閉面板</button>
         </div>
     </div>
@@ -855,9 +856,9 @@
             }
         }
         let resetBtn = document.getElementById('resetBtn');
-        if(resetBtn) {
-            resetBtn.addEventListener('click', performFullReset);
-        }
+        if (resetBtn) resetBtn.addEventListener('click', performFullReset);
+        const retryBtn = document.getElementById('retryBtn');
+        if (retryBtn) retryBtn.addEventListener('click', performFullReset);
 
         // 八字水平圓失格判定：機體與最近圓心距離超出外側6M虛線（目標5M路徑+1M容許邊界）即失格，
         // 顯示失格提示，3秒後自動重新回到H點並重設本次考科進度。不設內側限制。
@@ -1298,11 +1299,7 @@
             coneStripeMesh2.position.y = 0.28;
             group.add(coneStripeMesh2);
 
-            const poleGeo2 = new THREE.CylinderGeometry(0.035, 0.035, targetAlt, 8);
-            const poleMat2 = new THREE.MeshLambertMaterial({ color: 0xC9BFE0, transparent: true, opacity: 0.55 });
-            const poleMesh2 = new THREE.Mesh(poleGeo2, poleMat2);
-            poleMesh2.position.y = targetAlt / 2;
-            group.add(poleMesh2);
+            // 考科航點不建立垂直支柱。
 
             const markerMat2 = new THREE.MeshLambertMaterial({ color: COLOR_NORMAL });
             const markerMesh2 = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 16), markerMat2);
@@ -1327,14 +1324,10 @@
         const FIG8_R = 6;
         const H_POINT_RADIUS = 1;
         const figure8Coords = [
-            { x: 0, z: -6, label: 'P4 交叉點（進入，距H點6M）' },
-            { x: -6, z: -12, label: 'P1 左圓遠點（P1–P3間隔12M）' },
-            { x: -12, z: -6, label: 'P2 左圓外側（P2–P4間隔12M）' },
-            { x: -6, z: 0, label: 'P3 左圓近點（與H、P7同水平線）' },
-            { x: 0, z: -6, label: 'P4 交叉點（中途）' },
-            { x: 6, z: -12, label: 'P5 右圓遠點（P5–P7間隔12M）' },
-            { x: 12, z: -6, label: 'P6 右圓外側（P4–P6間隔12M）' },
-            { x: 6, z: 0, label: 'P7 右圓近點（與P3、H同水平線）' },
+            { x: 0, z: -6, label: 'P4 交叉點（進入，距H點6M）' }, { x: -6, z: -12, label: 'P1 左圓遠點' },
+            { x: -12, z: -6, label: 'P2 左圓外側' }, { x: -6, z: 0, label: 'P3 左圓近點' },
+            { x: 0, z: -6, label: 'P4 交叉點（中途）' }, { x: 6, z: -12, label: 'P5 右圓遠點' },
+            { x: 12, z: -6, label: 'P6 右圓外側' }, { x: 6, z: 0, label: 'P7 右圓近點' },
             { x: 0, z: -6, label: 'P4 交叉點（完成）' }
         ];
         // 依使用者精確口述航線重新定義（取代先前依參考圖描點的版本）：
@@ -1342,15 +1335,13 @@
         // B左轉90度，飛80M抵達C；C左轉90度，飛20M抵達D；D左轉90度、飛回H降落。
         // 世界座標「前方」＝ -Z（與現有八字圓場地方向一致），「右方」＝ +X。
         // 換算後得到一個以H為底邊中點的矩形航線：H(0,0)→A(40,0)→B(40,-20)→C(-40,-20)→D(-40,0)→(回H)。
-        // P3、P7 為高度 8M 的新增通過點；ABCD 四點皆須保持 20M 高度，H 僅為地面起降參考點。
+        // ABCD 四點皆須保持 20M 高度（見 COURSE_ALT_BY_TYPE.fiveleg），H 僅為地面起降參考點。
         const fivelegCoords = [
-            { x: 0,   z: 0,   alt: 1.5, label: 'H（起降點，穩定高度1~2M即可，為飛行起始點）' },
-            { x: -6,  z: 0,   alt: 8, label: 'P3（上方8M通過點）' },
-            { x: 6,   z: 0,   alt: 8, label: 'P7（上方8M通過點）' },
-            { x: 40,  z: 0,   label: 'A（右轉90度後前飛40M，第1角）' },
-            { x: 40,  z: -20, label: 'B（左轉90度後飛20M，第2角）' },
-            { x: -40, z: -20, label: 'C（左轉90度後飛80M，第3角）' },
-            { x: -40, z: 0,   label: 'D（左轉90度後飛20M，第4角，最終將左轉90度飛回H降落）' }
+            { x: 0, z: 0, alt: 1.5, label: 'H（起降點，穩定高度1~2M即可）' },
+            { x: -6, z: 0, alt: 8, label: 'P3（上方8M通過點）' },
+            { x: 6, z: 0, alt: 8, label: 'P7（上方8M通過點）' },
+            { x: 40, z: 0, label: 'A（第1角）' }, { x: 40, z: -20, label: 'B（第2角）' },
+            { x: -40, z: -20, label: 'C（第3角）' }, { x: -40, z: 0, label: 'D（第4角，最終飛回H降落）' }
         ];
         // 依官方「圖10、側面懸停及前進、後退示意圖」及「D.側面懸停及前進、後退」測驗準則重新定義：
         // H 為世界座標原點，P3 在左（機頭朝左時的前方）、P7 在右，三點與 H 共線（z=0）。
@@ -1393,8 +1384,9 @@
         // 並依 setActiveCourse() 切換項目時顯示/隱藏，以展現完整八字圓與五邊形狀，
         // 不只靠各獨的目標圓標點。
         const TRACK_LINE_COLOR = 0x8a79b0; // 五邊飛行：紫色單線邊界
-        const FIG8_TRACK_COLOR = 0xc22a3e;  // 八字水平圓：紅色實線（目標路徑）—虛線（外側容許邊界）
-        const FIG8_OUTER_R = FIG8_R + 1; // 外側虛線（機身一半不得超越的容許邊界，較目標路徑向外偏移1M，依使用者確認）
+        const FIG8_TRACK_COLOR = 0xc22a3e;
+        const FIG8_INNER_R = FIG8_R - 1;
+        const FIG8_OUTER_R = FIG8_R + 1;
         const TRACK_LINE_Y = 0.03;
         function makeTrackLineFromPoints(pts, closed, color) {
             const verts = [];
@@ -1452,15 +1444,14 @@
             });
         }
         const figure8TrackGroup = new THREE.Group();
-        // 實線：目標飛行路徑（半徑5M，依官方測場圖直徑10M）
-        figure8TrackGroup.add(makeTrackCircle(-5, -8, FIG8_R, 64, FIG8_TRACK_COLOR, false));
-        figure8TrackGroup.add(makeTrackCircle(5, -8, FIG8_R, 64, FIG8_TRACK_COLOR, false));
-        // 外側虛線（半徑6M）：機身一半不得超越，超出即失格
-        figure8TrackGroup.add(makeTrackCircle(-5, -8, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
-        figure8TrackGroup.add(makeTrackCircle(5, -8, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
-        // 方向箭頭：左圓逆時針、右圓順時針（對應官方口令「先向左逆時針、再向右順時針」）
-        addFig8LobeArrows(figure8TrackGroup, -5, -8, FIG8_R, -1);
-        addFig8LobeArrows(figure8TrackGroup, 5, -8, FIG8_R, 1);
+        figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_R, 64, FIG8_TRACK_COLOR, false));
+        figure8TrackGroup.add(makeTrackCircle(6, -6, FIG8_R, 64, FIG8_TRACK_COLOR, false));
+        figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_INNER_R, 64, FIG8_TRACK_COLOR, true));
+        figure8TrackGroup.add(makeTrackCircle(6, -6, FIG8_INNER_R, 64, FIG8_TRACK_COLOR, true));
+        figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
+        figure8TrackGroup.add(makeTrackCircle(6, -6, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
+        addFig8LobeArrows(figure8TrackGroup, -6, -6, FIG8_R, -1);
+        addFig8LobeArrows(figure8TrackGroup, 6, -6, FIG8_R, 1);
         figure8TrackGroup.visible = false;
         scene.add(figure8TrackGroup);
 
@@ -1890,25 +1881,24 @@
                         }
                     }
                 });
-            const mapBoundX = 34.5;
-            const mapBoundZ = 84.0; // 已放大以容納五邊飛行 80M 深度航線
-            if(droneLogic.x > mapBoundX) { droneLogic.x = mapBoundX; droneLogic.vx = 0; }
-            if(droneLogic.x < -mapBoundX) { droneLogic.x = -mapBoundX; droneLogic.vx = 0; }
-            if(droneLogic.z > mapBoundZ) { droneLogic.z = mapBoundZ; droneLogic.vz = 0; }
-            if(droneLogic.z < -mapBoundZ) { droneLogic.z = -mapBoundZ; droneLogic.vz = 0; }
+            // 五邊飛行最外側航點為 A/B 的 +40M 與 C/D 的 -40M；地圖邊界留足 10M 緩衝。
+            const mapBoundX = 50;
+            const mapBoundZ = 50;
+            if (droneLogic.x > mapBoundX) { droneLogic.x = mapBoundX; droneLogic.vx = 0; }
+            if (droneLogic.x < -mapBoundX) { droneLogic.x = -mapBoundX; droneLogic.vx = 0; }
+            if (droneLogic.z > mapBoundZ) { droneLogic.z = mapBoundZ; droneLogic.vz = 0; }
+            if (droneLogic.z < -mapBoundZ) { droneLogic.z = -mapBoundZ; droneLogic.vz = 0; }
 
             droneGroup.position.x = droneLogic.x; droneGroup.position.y = droneLogic.y; droneGroup.position.z = droneLogic.z;
 
             if (task.type === 'figure8' && armed && !fig8Disqualified) {
-                const distLeft = Math.hypot(droneLogic.x - (-5), droneLogic.z - (-8));
-                const distRight = Math.hypot(droneLogic.x - 5, droneLogic.z - (-8));
-                const nearestDist = Math.min(distLeft, distRight);
+                const nearestDist = Math.min(Math.hypot(droneLogic.x + 6, droneLogic.z + 6), Math.hypot(droneLogic.x - 6, droneLogic.z + 6));
+                const halfDrone = 0.2;
+                const innerDisqualifyR = FIG8_INNER_R + halfDrone;
+                const outerDisqualifyR = FIG8_OUTER_R - halfDrone;
                 if (!fig8Entered) {
-                    // 尚在從 H 點進場途中，進入容許带後才開始判失格
-                    if (nearestDist <= FIG8_OUTER_R) fig8Entered = true;
-                } else if (nearestDist > FIG8_OUTER_R) {
-                    triggerFig8Disqualify();
-                }
+                    if (nearestDist >= innerDisqualifyR && nearestDist <= outerDisqualifyR) fig8Entered = true;
+                } else if (nearestDist < innerDisqualifyR || nearestDist > outerDisqualifyR) triggerFig8Disqualify();
             }
 
             let showArrowBtn = document.getElementById('showArrowBtn');
@@ -1933,17 +1923,13 @@
             const camYawRad = camYawOffset * Math.PI / 180;
             const isFivelegView = task.type === 'fiveleg';
             if (currentCamView === 1) {
-                // 五邊飛行採後退、廣角視角，讓寬80M航線與8M通過點都能保持在視野內。
-                const viewZ = isFivelegView ? 28 : 7;
-                const lookR1 = isFivelegView ? 94 : 37;
-                const lookY = isFivelegView ? 10 : 5;
+                const viewZ = isFivelegView ? 28 : 7, lookR = isFivelegView ? 94 : 37;
                 camera.position.set(0, isFivelegView ? 6 : 1.65, viewZ);
-                camera.lookAt(Math.sin(camYawRad) * lookR1, lookY + camAngleOffset * 1.5, viewZ - Math.cos(camYawRad) * lookR1);
+                camera.lookAt(Math.sin(camYawRad) * lookR, (isFivelegView ? 10 : 5) + camAngleOffset * 1.5, viewZ - Math.cos(camYawRad) * lookR);
             } else {
-                const viewZ = isFivelegView ? 48 : 20;
-                const lookR2 = isFivelegView ? 300 : 220;
+                const viewZ = isFivelegView ? 48 : 20, lookR = isFivelegView ? 300 : 220;
                 camera.position.set(0, isFivelegView ? 14 : dynamicCameraY / 3, viewZ);
-                camera.lookAt(Math.sin(camYawRad) * lookR2, isFivelegView ? -25 + camAngleOffset * 2 : -40 + camAngleOffset * 2, viewZ - Math.cos(camYawRad) * lookR2);
+                camera.lookAt(Math.sin(camYawRad) * lookR, (isFivelegView ? -25 : -40) + camAngleOffset * 2, viewZ - Math.cos(camYawRad) * lookR);
             }
 
             const skyTime = performance.now() * 0.001;
