@@ -1321,7 +1321,7 @@
         // 依官方「圖10、2公斤以下無人直昇機與多旋翼機測場及空域規劃示意圖」重新逐點量測像素座標精算：
         // 兩圓半徑皆為 5M（非先前誤植的6M），圓心相距10M、於P4外切，H 為世界座標原點、
         // 圓心位於 H 前方(z=-8)。P1/P3/P5/P7為圓上下點、P2/P6為圓最外側點，P4為左右圓切點。
-        // 八字實線半徑6M（通過角錐）；內虛線5M，外虛線7M。P4距H點6M。
+        // 八字：內虛線5M、實線6M（通過角錐）、外虛線7M；P4距H點6M。
         const FIG8_R = 6;
         const H_POINT_RADIUS = 1;
         const figure8Coords = [
@@ -1445,7 +1445,7 @@
             });
         }
         const figure8TrackGroup = new THREE.Group();
-        // 每個八字圓皆明確繪製：內虛線5M、實線6M、外虛線7M。
+        // 每個八字圓明確繪製內虛線5M、實線6M與外虛線7M。
         figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_INNER_R, 64, FIG8_TRACK_COLOR, true));
         figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_R, 64, FIG8_TRACK_COLOR, false));
         figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
@@ -1602,7 +1602,7 @@
             const arm = new THREE.Mesh(armGeo, currentArmMat); arm.rotation.z = Math.PI / 2; arm.rotation.y = pos.angle; arm.position.set(pos.x / 2, 0, pos.z / 2); arm.castShadow = true; droneTiltGroup.add(arm);
             const motor = new THREE.Mesh(motorGeo, matMotor); motor.position.set(pos.x, 0.06, pos.z); motor.castShadow = true; droneTiltGroup.add(motor);
             const prop = new THREE.Mesh(propGeo, matProp); prop.position.set(pos.x, 0.13, pos.z); prop.castShadow = true; droneTiltGroup.add(prop); spinningProps.push(prop); 
-            // 馬達下方導航燈：前方兩顆紅燈、後方兩顆綠燈。
+            // 馬達下方導航燈：機頭前方兩顆紅燈、機尾後方兩顆綠燈。
             const led = new THREE.Mesh(new THREE.SphereGeometry(0.075, 16, 16), pos.led);
             led.position.set(pos.x, -0.025, pos.z);
             droneTiltGroup.add(led);
@@ -1900,11 +1900,17 @@
 
             if (task.type === 'figure8' && armed && !fig8Disqualified) {
                 const nearestDist = Math.min(Math.hypot(droneLogic.x + 6, droneLogic.z + 6), Math.hypot(droneLogic.x - 6, droneLogic.z + 6));
-                const innerDisqualifyR = FIG8_INNER_R + 0.2;
-                const outerDisqualifyR = FIG8_OUTER_R - 0.2;
+                const droneRadius = 0.4;
+                const halfDroneRadius = droneRadius / 2;
+                // 觸碰虛線不失格；僅在機身跨過虛線超過自身半徑的一半（0.2M）時失格。
+                // 內線5M：中心<4.8M才失格；外線7M：中心>7.2M才失格。
+                const innerDisqualifyR = FIG8_INNER_R - halfDroneRadius;
+                const outerDisqualifyR = FIG8_OUTER_R + halfDroneRadius;
                 if (!fig8Entered) {
-                    if (nearestDist >= innerDisqualifyR && nearestDist <= outerDisqualifyR) fig8Entered = true;
-                } else if (nearestDist < innerDisqualifyR || nearestDist > outerDisqualifyR) triggerFig8Disqualify();
+                    if (nearestDist >= FIG8_INNER_R && nearestDist <= FIG8_OUTER_R) fig8Entered = true;
+                } else if (nearestDist < innerDisqualifyR || nearestDist > outerDisqualifyR) {
+                    triggerFig8Disqualify();
+                }
             }
 
             let showArrowBtn = document.getElementById('showArrowBtn');
