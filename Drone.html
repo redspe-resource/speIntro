@@ -1321,6 +1321,7 @@
         // 依官方「圖10、2公斤以下無人直昇機與多旋翼機測場及空域規劃示意圖」重新逐點量測像素座標精算：
         // 兩圓半徑皆為 5M（非先前誤植的6M），圓心相距10M、於P4外切，H 為世界座標原點、
         // 圓心位於 H 前方(z=-8)。P1/P3/P5/P7為圓上下點、P2/P6為圓最外側點，P4為左右圓切點。
+        // 八字實線半徑6M（通過角錐）；內虛線5M，外虛線7M。P4距H點6M。
         const FIG8_R = 6;
         const H_POINT_RADIUS = 1;
         const figure8Coords = [
@@ -1336,12 +1337,12 @@
         // 世界座標「前方」＝ -Z（與現有八字圓場地方向一致），「右方」＝ +X。
         // 換算後得到一個以H為底邊中點的矩形航線：H(0,0)→A(40,0)→B(40,-20)→C(-40,-20)→D(-40,0)→(回H)。
         // ABCD 四點皆須保持 20M 高度（見 COURSE_ALT_BY_TYPE.fiveleg），H 僅為地面起降參考點。
+        // 五邊飛行順序：H → P3 → A → B → C → D → P7 → H。
         const fivelegCoords = [
-            { x: 0, z: 0, alt: 1.5, label: 'H（起降點，穩定高度1~2M即可）' },
-            { x: -6, z: 0, alt: 8, label: 'P3（上方8M通過點）' },
-            { x: 6, z: 0, alt: 8, label: 'P7（上方8M通過點）' },
-            { x: 40, z: 0, label: 'A（第1角）' }, { x: 40, z: -20, label: 'B（第2角）' },
-            { x: -40, z: -20, label: 'C（第3角）' }, { x: -40, z: 0, label: 'D（第4角，最終飛回H降落）' }
+            { x: 0, z: 0, alt: 1.5, label: 'H（起飛點）' }, { x: -6, z: 0, alt: 8, label: 'P3（高度8M通過點）' },
+            { x: 40, z: 0, label: 'A（高度20M，第1角）' }, { x: 40, z: -20, label: 'B（高度20M，第2角）' },
+            { x: -40, z: -20, label: 'C（高度20M，第3角）' }, { x: -40, z: 0, label: 'D（高度20M，第4角）' },
+            { x: 6, z: 0, alt: 8, label: 'P7（高度8M通過點）' }, { x: 0, z: 0, alt: 1.5, label: 'H（返航點，降落）' }
         ];
         // 依官方「圖10、側面懸停及前進、後退示意圖」及「D.側面懸停及前進、後退」測驗準則重新定義：
         // H 為世界座標原點，P3 在左（機頭朝左時的前方）、P7 在右，三點與 H 共線（z=0）。
@@ -1385,8 +1386,8 @@
         // 不只靠各獨的目標圓標點。
         const TRACK_LINE_COLOR = 0x8a79b0; // 五邊飛行：紫色單線邊界
         const FIG8_TRACK_COLOR = 0xc22a3e;
-        const FIG8_INNER_R = FIG8_R - 1;
-        const FIG8_OUTER_R = FIG8_R + 1;
+        const FIG8_INNER_R = 5;
+        const FIG8_OUTER_R = 7;
         const TRACK_LINE_Y = 0.03;
         function makeTrackLineFromPoints(pts, closed, color) {
             const verts = [];
@@ -1444,11 +1445,12 @@
             });
         }
         const figure8TrackGroup = new THREE.Group();
-        figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_R, 64, FIG8_TRACK_COLOR, false));
-        figure8TrackGroup.add(makeTrackCircle(6, -6, FIG8_R, 64, FIG8_TRACK_COLOR, false));
+        // 每個八字圓皆明確繪製：內虛線5M、實線6M、外虛線7M。
         figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_INNER_R, 64, FIG8_TRACK_COLOR, true));
-        figure8TrackGroup.add(makeTrackCircle(6, -6, FIG8_INNER_R, 64, FIG8_TRACK_COLOR, true));
+        figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_R, 64, FIG8_TRACK_COLOR, false));
         figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
+        figure8TrackGroup.add(makeTrackCircle(6, -6, FIG8_INNER_R, 64, FIG8_TRACK_COLOR, true));
+        figure8TrackGroup.add(makeTrackCircle(6, -6, FIG8_R, 64, FIG8_TRACK_COLOR, false));
         figure8TrackGroup.add(makeTrackCircle(6, -6, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
         addFig8LobeArrows(figure8TrackGroup, -6, -6, FIG8_R, -1);
         addFig8LobeArrows(figure8TrackGroup, 6, -6, FIG8_R, 1);
@@ -1600,7 +1602,13 @@
             const arm = new THREE.Mesh(armGeo, currentArmMat); arm.rotation.z = Math.PI / 2; arm.rotation.y = pos.angle; arm.position.set(pos.x / 2, 0, pos.z / 2); arm.castShadow = true; droneTiltGroup.add(arm);
             const motor = new THREE.Mesh(motorGeo, matMotor); motor.position.set(pos.x, 0.06, pos.z); motor.castShadow = true; droneTiltGroup.add(motor);
             const prop = new THREE.Mesh(propGeo, matProp); prop.position.set(pos.x, 0.13, pos.z); prop.castShadow = true; droneTiltGroup.add(prop); spinningProps.push(prop); 
-            const led = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 16), pos.led); led.position.set(pos.x, 0.10, pos.z); droneTiltGroup.add(led);
+            // 馬達下方導航燈：前方兩顆紅燈、後方兩顆綠燈。
+            const led = new THREE.Mesh(new THREE.SphereGeometry(0.075, 16, 16), pos.led);
+            led.position.set(pos.x, -0.025, pos.z);
+            droneTiltGroup.add(led);
+            const ledGlow = new THREE.PointLight(pos.isFront ? 0xff2638 : 0x20e070, 0.7, 2.2);
+            ledGlow.position.set(pos.x, -0.04, pos.z);
+            droneTiltGroup.add(ledGlow);
         });
 
         const legGeo = new THREE.CylinderGeometry(0.02, 0.01, 0.2, 8); const legPositions = [ { x: 0.12, z: -0.15 }, { x: -0.12, z: -0.15 }, { x: 0.12, z: 0.15 }, { x: -0.12, z: 0.15 } ];
@@ -1881,7 +1889,6 @@
                         }
                     }
                 });
-            // 五邊飛行最外側航點為 A/B 的 +40M 與 C/D 的 -40M；地圖邊界留足 10M 緩衝。
             const mapBoundX = 50;
             const mapBoundZ = 50;
             if (droneLogic.x > mapBoundX) { droneLogic.x = mapBoundX; droneLogic.vx = 0; }
@@ -1893,9 +1900,8 @@
 
             if (task.type === 'figure8' && armed && !fig8Disqualified) {
                 const nearestDist = Math.min(Math.hypot(droneLogic.x + 6, droneLogic.z + 6), Math.hypot(droneLogic.x - 6, droneLogic.z + 6));
-                const halfDrone = 0.2;
-                const innerDisqualifyR = FIG8_INNER_R + halfDrone;
-                const outerDisqualifyR = FIG8_OUTER_R - halfDrone;
+                const innerDisqualifyR = FIG8_INNER_R + 0.2;
+                const outerDisqualifyR = FIG8_OUTER_R - 0.2;
                 if (!fig8Entered) {
                     if (nearestDist >= innerDisqualifyR && nearestDist <= outerDisqualifyR) fig8Entered = true;
                 } else if (nearestDist < innerDisqualifyR || nearestDist > outerDisqualifyR) triggerFig8Disqualify();
@@ -1921,15 +1927,16 @@
             // 左右轉頭共用旋轉公式：飽身位置不動，僅以原本直視方向（-Z）為基準，
             // 依 camYawOffset（度）旋轉出新的水平看向方向，不影響俯仰（Y）。
             const camYawRad = camYawOffset * Math.PI / 180;
-            const isFivelegView = task.type === 'fiveleg';
             if (currentCamView === 1) {
-                const viewZ = isFivelegView ? 28 : 7, lookR = isFivelegView ? 94 : 37;
-                camera.position.set(0, isFivelegView ? 6 : 1.65, viewZ);
-                camera.lookAt(Math.sin(camYawRad) * lookR, (isFivelegView ? 10 : 5) + camAngleOffset * 1.5, viewZ - Math.cos(camYawRad) * lookR);
+                // P點視角：依官方測場圖【H點到場地底緣的距離7M】，考生站在H點後方7M處；
+                // 看飛機視角依178公分考生推算（自地面眼高≈身高×0.93≈165公分）。
+                camera.position.set(0, 1.65, 7);
+                const lookR1 = 37; // 原本目標點 z=-30，與飽身Z=7相差37，作為旋轉半徑
+                camera.lookAt(Math.sin(camYawRad) * lookR1, 5 + camAngleOffset * 1.5, 7 - Math.cos(camYawRad) * lookR1);
             } else {
-                const viewZ = isFivelegView ? 48 : 20, lookR = isFivelegView ? 300 : 220;
-                camera.position.set(0, isFivelegView ? 14 : dynamicCameraY / 3, viewZ);
-                camera.lookAt(Math.sin(camYawRad) * lookR, (isFivelegView ? -25 : -40) + camAngleOffset * 2, viewZ - Math.cos(camYawRad) * lookR);
+                camera.position.set(0, dynamicCameraY / 3, 20);
+                const lookR2 = 220; // 原本目標點 z=-200，與飽身Z=20相差220
+                camera.lookAt(Math.sin(camYawRad) * lookR2, -40 + camAngleOffset * 2, 20 - Math.cos(camYawRad) * lookR2);
             }
 
             const skyTime = performance.now() * 0.001;
