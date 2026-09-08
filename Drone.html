@@ -843,6 +843,7 @@
         function performFullReset() {
             droneLogic.x = 0; droneLogic.y = 0.2; droneLogic.z = 0; droneLogic.vx = 0; droneLogic.vz = 0; droneLogic.yaw = 0;
             armed = false; armGesture.timer = 0; awaitingCenterAfterArm = false;
+            fig8BoundaryExceededSince = null;
             const armEl = document.getElementById('armStatus');
             if (armEl) { armEl.classList.remove('armed-ok'); updateArmStatusUI(0); }
             updateWind();
@@ -863,7 +864,9 @@
         // 八字水平圓失格判定：機體與最近圓心距離超出外側6M虛線（目標5M路徑+1M容許邊界）即失格，
         // 顯示失格提示，3秒後自動重新回到H點並重設本次考科進度。不設內側限制。
         let fig8Disqualified = false;
-        let fig8Entered = false; // 這輪是否已實際進入八字圓容許帶內（進入前尚在進場中，不視為失格）
+        let fig8Entered = false; // 進入合法航帶後才開始檢核
+        let fig8BoundaryExceededSince = null; // 越界連續計時起點
+        const FIG8_DISQUALIFY_DELAY_MS = 200;
         function showDisqualifyAlert(text) {
             const el = document.getElementById('disqualifyAlert');
             if (!el) return;
@@ -1321,7 +1324,7 @@
         // 依官方「圖10、2公斤以下無人直昇機與多旋翼機測場及空域規劃示意圖」重新逐點量測像素座標精算：
         // 兩圓半徑皆為 5M（非先前誤植的6M），圓心相距10M、於P4外切，H 為世界座標原點、
         // 圓心位於 H 前方(z=-8)。P1/P3/P5/P7為圓上下點、P2/P6為圓最外側點，P4為左右圓切點。
-        // 八字：內虛線5M、實線6M（通過角錐）、外虛線7M；P4距H點6M。
+        // 八字：內虛線5M、實線6M、外虛線7M；P4距H點6M。
         const FIG8_R = 6;
         const H_POINT_RADIUS = 1;
         const figure8Coords = [
@@ -1445,7 +1448,7 @@
             });
         }
         const figure8TrackGroup = new THREE.Group();
-        // 每個八字圓明確繪製內虛線5M、實線6M與外虛線7M。
+        // 左右兩圓採完全相同規則：內虛線5M、實線6M、外虛線7M。
         figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_INNER_R, 64, FIG8_TRACK_COLOR, true));
         figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_R, 64, FIG8_TRACK_COLOR, false));
         figure8TrackGroup.add(makeTrackCircle(-6, -6, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
@@ -1602,7 +1605,7 @@
             const arm = new THREE.Mesh(armGeo, currentArmMat); arm.rotation.z = Math.PI / 2; arm.rotation.y = pos.angle; arm.position.set(pos.x / 2, 0, pos.z / 2); arm.castShadow = true; droneTiltGroup.add(arm);
             const motor = new THREE.Mesh(motorGeo, matMotor); motor.position.set(pos.x, 0.06, pos.z); motor.castShadow = true; droneTiltGroup.add(motor);
             const prop = new THREE.Mesh(propGeo, matProp); prop.position.set(pos.x, 0.13, pos.z); prop.castShadow = true; droneTiltGroup.add(prop); spinningProps.push(prop); 
-            // 馬達下方導航燈：機頭前方兩顆紅燈、機尾後方兩顆綠燈。
+            // 馬達下方導航燈：前方兩顆紅燈，後方兩顆綠燈。
             const led = new THREE.Mesh(new THREE.SphereGeometry(0.075, 16, 16), pos.led);
             led.position.set(pos.x, -0.025, pos.z);
             droneTiltGroup.add(led);
@@ -1899,18 +1902,26 @@
             droneGroup.position.x = droneLogic.x; droneGroup.position.y = droneLogic.y; droneGroup.position.z = droneLogic.z;
 
             if (task.type === 'figure8' && armed && !fig8Disqualified) {
+                // 左右圓均以其各自圓心計算，再取最近圓距離，因此內外規則完全一致。
                 const nearestDist = Math.min(Math.hypot(droneLogic.x + 6, droneLogic.z + 6), Math.hypot(droneLogic.x - 6, droneLogic.z + 6));
                 const droneRadius = 0.4;
-                const halfDroneRadius = droneRadius / 2;
-                // 觸碰虛線不失格；僅在機身跨過虛線超過自身半徑的一半（0.2M）時失格。
-                // 內線5M：中心<4.8M才失格；外線7M：中心>7.2M才失格。
-                const innerDisqualifyR = FIG8_INNER_R - halfDroneRadius;
-                const outerDisqualifyR = FIG8_OUTER_R + halfDroneRadius;
+                const allowedCrossing = droneRadius * (2 / 3);
+                // 機身需越過5M/7M虛線達本體半徑2/3才進入失格候選區：中心<4.733M或>7.267M。
+                const innerDisqualifyR = FIG8_INNER_R - allowedCrossing;
+                const outerDisqualifyR = FIG8_OUTER_R + allowedCrossing;
+                const isBeyondBoundary = nearestDist < innerDisqualifyR || nearestDist > outerDisqualifyR;
                 if (!fig8Entered) {
                     if (nearestDist >= FIG8_INNER_R && nearestDist <= FIG8_OUTER_R) fig8Entered = true;
-                } else if (nearestDist < innerDisqualifyR || nearestDist > outerDisqualifyR) {
-                    triggerFig8Disqualify();
+                    fig8BoundaryExceededSince = null;
+                } else if (isBeyondBoundary) {
+                    if (fig8BoundaryExceededSince === null) fig8BoundaryExceededSince = performance.now();
+                    if (performance.now() - fig8BoundaryExceededSince >= FIG8_DISQUALIFY_DELAY_MS) triggerFig8Disqualify();
+                } else {
+                    // 在0.2秒內回到合法範圍，重新計時，不失格。
+                    fig8BoundaryExceededSince = null;
                 }
+            } else {
+                fig8BoundaryExceededSince = null;
             }
 
             let showArrowBtn = document.getElementById('showArrowBtn');
