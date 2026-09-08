@@ -1,0 +1,2091 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="screen-orientation" content="landscape">
+    <meta name="x5-orientation" content="landscape">
+    <title>無人機抗風特訓</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+	<link rel="preload" as="image" href="./assets/grasslight-big.webp">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hud-bg: rgba(255, 251, 240, 0.88);
+            --hud-border: #ffffff;
+            --hud-glow: rgba(255, 203, 77, 0.45);
+            --accent: #57c7f5;
+            --accent-strong: #2fb3f0;
+            --warning: #ffcb4d;
+            --danger: #ff8fa8;
+            --panel-text: #5b4b8a;
+            --muted: #8577b3;
+            --mint: #6be0ae;
+            --font-display: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+            --font-cute-zh: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+            --font-body: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #bdeeff 0%, #8fe1ff 45%, #6fd1f5 100%);
+            color: var(--panel-text);
+            font-family: var(--font-body);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            background:
+                radial-gradient(ellipse 120px 46px at 8% 12%, rgba(255,255,255,0.85), transparent 70%),
+                radial-gradient(ellipse 90px 36px at 14% 15%, rgba(255,255,255,0.85), transparent 70%),
+                radial-gradient(ellipse 140px 50px at 88% 8%, rgba(255,255,255,0.75), transparent 70%),
+                radial-gradient(ellipse 100px 40px at 94% 11%, rgba(255,255,255,0.75), transparent 70%),
+                radial-gradient(ellipse 110px 42px at 50% 6%, rgba(255,255,255,0.6), transparent 70%);
+            opacity: 0.9;
+        }
+        
+        #togglePanelBtn {
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top));
+            right: 16px;
+            z-index: 40;
+            font-size: 15px;
+            font-family: var(--font-cute-zh);
+            box-shadow: 0 5px 0 #d9a6c2, 0 8px 16px rgba(91,75,138,0.25);
+            background: linear-gradient(180deg, #ffc2d9, #ff9dbd);
+            border: 3px solid #ffffff;
+            color: #7a3b57;
+        }
+        #toggleInfoBtn {
+            position: fixed;
+            right: 16px;
+            bottom: max(14px, env(safe-area-inset-bottom));
+            z-index: 30;
+            width: 40px; height: 40px; padding: 0; border-radius: 999px;
+            font-size: 16px;
+            box-shadow: 0 5px 0 #d9a6c2, 0 8px 16px rgba(91,75,138,0.25);
+            background: linear-gradient(180deg, #ffc2d9, #ff9dbd);
+            border: 3px solid #ffffff;
+            color: #7a3b57; cursor: pointer;
+        }
+        #info-panel.collapsed { display: none !important; }
+
+        #scoreDisplay {
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top));
+            left: 16px;
+            z-index: 40;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(180deg, #fffdf6, #fff2c9);
+            border: 3px solid #ffffff;
+            padding: 7px 18px 7px 14px;
+            border-radius: 999px;
+            font-size: 18px;
+            font-weight: 800;
+            font-family: var(--font-cute-zh);
+            color: #b5790a;
+            box-shadow: 0 5px 0 #f0c86a, 0 10px 18px rgba(91,75,138,0.22);
+        }
+
+        #scoreDisplay::before {
+            content: "⭐";
+            font-size: 20px;
+            filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+        }
+
+        #controls {
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top));
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px 14px;
+            width: min(1180px, calc(100vw - 24px));
+            padding: 14px 20px;
+            justify-content: center;
+            align-items: center;
+            z-index: 30;
+            background: var(--hud-bg);
+            border: 3px solid var(--hud-border);
+            border-radius: 26px;
+            box-shadow: 0 10px 0 rgba(180,150,220,0.28), 0 18px 32px rgba(91,75,138,0.22);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        #controls.collapsed {
+            transform: translate(-50%, -150%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #controls label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 34px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.55);
+            color: var(--muted);
+            font-weight: 700;
+            font-family: var(--font-body);
+            white-space: nowrap;
+        }
+
+        #controls .row-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px 14px;
+        }
+
+        #info-panel {
+            position: fixed;
+            left: 50%;
+            bottom: max(14px, env(safe-area-inset-bottom));
+            transform: translateX(-50%);
+            width: min(1120px, calc(100vw - 230px));
+            padding: 12px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 25;
+            background: var(--hud-bg);
+            border: 3px solid var(--hud-border);
+            border-radius: 22px;
+            box-shadow: 0 8px 0 rgba(180,150,220,0.22), 0 14px 28px rgba(91,75,138,0.2);
+            font-size: 13px;
+            font-family: var(--font-body);
+            color: var(--panel-text);
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        #info-panel span {
+            display: inline-flex;
+            align-items: center;
+            margin: 2px 3px;
+            padding: 4px 10px;
+            border: none;
+            border-radius: 999px;
+            background: rgba(91,75,138,0.08);
+            font-weight: 700;
+        }
+
+        #windStatusText {
+            background: rgba(255,143,168,0.18) !important;
+            color: #d1497a !important;
+        }
+
+        #gameArea {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            background: linear-gradient(180deg, #bdeeff 0%, #6fcdf2 100%);
+            box-shadow: inset 0 0 90px rgba(255,255,255,0.15);
+        }
+
+        canvas {
+            position: relative;
+            z-index: 2;
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        #crashAlert {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #b5462f;
+            font-size: 30px;
+            font-weight: 800;
+            font-family: var(--font-cute-zh);
+            display: none;
+            z-index: 100;
+            padding: 12px 26px;
+            border: 3px solid #ffffff;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #ffe0c2, #ffc48f);
+            box-shadow: 0 6px 0 #e8a366, 0 14px 26px rgba(91,75,138,0.28);
+            pointer-events: none;
+            animation: crashPulse 0.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes crashPulse {
+            from { transform: translate(-50%, -50%) rotate(-2deg) scale(0.98); }
+            to { transform: translate(-50%, -50%) rotate(2deg) scale(1.04); }
+        }
+
+        #armStatus {
+            position: fixed;
+            bottom: 150px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            color: #3a2e57;
+            font-size: 15px;
+            font-weight: 700;
+            font-family: var(--font-cute-zh);
+            z-index: 100;
+            padding: 8px 20px;
+            border: 3px solid #ffffff;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #fff3d6, #ffe08a);
+            box-shadow: 0 6px 0 #e0b23f, 0 12px 22px rgba(91,75,138,0.28);
+            pointer-events: none;
+            text-align: center;
+            max-width: 92%;
+            white-space: normal;
+        }
+        #armStatus.armed-ok {
+            background: linear-gradient(180deg, #d6fbe6, #a8f0c6);
+            box-shadow: 0 6px 0 #4bb887, 0 12px 22px rgba(91,75,138,0.28);
+            color: #1f6e4a;
+        }
+        @media (max-width: 640px) {
+            #armStatus { font-size: 12.5px; padding: 6px 14px; }
+        }
+
+        #taskCompleteAlert {
+            position: absolute;
+            top: 28%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #1f6e4a;
+            font-size: 26px;
+            font-weight: 800;
+            font-family: var(--font-cute-zh);
+            display: none;
+            z-index: 100;
+            padding: 14px 28px;
+            border: 3px solid #ffffff;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #d6fbe6, #a8f0c6);
+            box-shadow: 0 6px 0 #4bb887, 0 14px 26px rgba(91,75,138,0.28);
+            pointer-events: none;
+            text-align: center;
+            white-space: pre-line;
+        }
+        #disqualifyAlert {
+            position: absolute;
+            top: 28%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #7a1420;
+            font-size: 26px;
+            font-weight: 700;
+            font-family: var(--font-body);
+            display: none;
+            z-index: 101;
+            padding: 14px 28px;
+            border: 3px solid #ffffff;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #ffe1e1, #ffb3b8);
+            box-shadow: 0 6px 0 #d34a55, 0 14px 26px rgba(120,20,30,0.28);
+            pointer-events: none;
+            text-align: center;
+            white-space: pre-line;
+        }
+
+        #scoreAnim {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 56px;
+            font-weight: 800;
+            font-family: var(--font-display);
+            color: #ffffff;
+            -webkit-text-stroke: 2px #3aab7a;
+            text-shadow: 0 0 18px rgba(110, 240, 166, 0.9), 0 4px 0 #3aab7a;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .score-popup {
+            animation: popUpFade 1s ease-out forwards;
+        }
+
+        @keyframes popUpFade {
+            0% { opacity: 0; transform: translate(-50%, -30%) scale(0.5); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -100%) scale(1); }
+        }
+
+        #joystick-zone,
+        #joystick-left-zone {
+            position: absolute;
+            bottom: 20px;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            touch-action: none;
+            cursor: crosshair;
+            z-index: 28;
+            background:
+                radial-gradient(circle, transparent 40%, rgba(255,255,255,0.5) 41%, transparent 43%),
+                radial-gradient(circle at 35% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.15) 60%),
+                linear-gradient(180deg, rgba(255,225,140,0.55), rgba(87,199,245,0.45));
+            border: 3px solid #ffffff;
+            box-shadow: 0 8px 0 rgba(180,150,220,0.28), 0 14px 24px rgba(91,75,138,0.28);
+        }
+
+        #joystick-zone { right: 20px; }
+        #joystick-left-zone { left: 20px; }
+
+        #joystick-zone::before,
+        #joystick-left-zone::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255,255,255,0.65);
+            pointer-events: none;
+        }
+
+        #joystick-stick,
+        #joystick-left-stick {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            background: radial-gradient(circle at 32% 30%, #ffffff 0%, #ffe9f2 30%, #ff9dbd 65%, #ff6f9c 100%);
+            border: 3px solid #ffffff;
+            box-shadow: 0 6px 0 #e880a6, 0 10px 16px rgba(91,75,138,0.32);
+            transition: transform 0.05s ease-out;
+        }
+
+        button, select, input {
+            padding: 6px 10px;
+            font-size: 14px;
+            border-radius: 999px;
+            border: 2px solid #ffffff;
+            font-family: var(--font-cute-zh);
+        }
+
+        select {
+            min-height: 36px;
+            color: #4a3d70;
+            background: #ffffff;
+            outline: none;
+            font-weight: 700;
+        }
+        
+        option {
+            background-color: #ffffff; 
+            color: #4a3d70;
+        }
+
+        button {
+            min-height: 36px;
+            padding: 6px 16px;
+            background: linear-gradient(180deg, #7bd8ff, #4bb8f2);
+            color: #ffffff;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 5px 0 #2f95c9, 0 9px 16px rgba(91,75,138,0.22);
+            transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+        }
+
+        button:hover {
+            filter: brightness(1.06);
+        }
+
+        button:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #2f95c9, 0 3px 8px rgba(91,75,138,0.22);
+        }
+
+        #switchCamBtn {
+            background: linear-gradient(180deg, #ffe08a, #ffc94d);
+            color: #7a5a10;
+            box-shadow: 0 5px 0 #e0a52c, 0 9px 16px rgba(91,75,138,0.22);
+        }
+
+        #resetBtn {
+            background: linear-gradient(180deg, #a8f0c6, #6be0ae);
+            color: #1f6e4a;
+            box-shadow: 0 5px 0 #4bb887, 0 9px 16px rgba(91,75,138,0.22);
+        }
+
+        #retryBtn {
+            background: linear-gradient(180deg, #ffe08a, #ffbf4d);
+            color: #76500a;
+            box-shadow: 0 5px 0 #df9c26, 0 9px 16px rgba(91,75,138,0.22);
+        }
+
+        input[type="range"] {
+            width: 150px;
+            padding: 0;
+            border: 0;
+            cursor: pointer;
+            background: transparent;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            height: 8px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #7bd8ff, #ffcb4d);
+            box-shadow: inset 0 1px 3px rgba(91,75,138,0.25);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            margin-top: -6px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            background: #ff8fa8;
+            box-shadow: 0 2px 6px rgba(91,75,138,0.35);
+        }
+
+        input[type="range"]::-moz-range-track {
+            height: 8px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #7bd8ff, #ffcb4d);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid #ffffff;
+            background: #ff8fa8;
+            box-shadow: 0 2px 6px rgba(91,75,138,0.35);
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            cursor: pointer;
+            user-select: none;
+            color: #e0608a;
+            font-weight: 800;
+            font-family: var(--font-body);
+        }
+
+        .checkbox-label.joystick-toggle { color: #37a874; }
+
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--accent-strong);
+        }
+
+        @media (max-width: 900px), (max-height: 560px) {
+            #scoreDisplay { font-size: 14px; padding: 6px 12px; }
+            #info-panel { display: none !important; }
+            #togglePanelBtn {
+                font-size: 13px;
+                top: max(8px, env(safe-area-inset-top));
+                right: 8px;
+            }
+            #controls {
+                top: max(45px, env(safe-area-inset-top)); 
+                width: calc(100vw - 16px);
+                padding: 8px 10px;
+                gap: 7px;
+                justify-content: center;
+            }
+            #controls label { font-size: 12px; min-height: 30px; }
+            button, select, input { font-size: 12px; }
+            input[type="range"] { width: 112px; }
+            #controls .row-group {
+                max-width: 100%;
+                overflow-x: auto;
+                padding-bottom: 2px;
+            }
+            #joystick-zone { width: 115px; height: 115px; bottom: 15px; right: 20px; }
+            #joystick-left-zone { width: 115px; height: 115px; bottom: 15px; left: 20px; }
+            #crashAlert { font-size: 24px; top: 16%; }
+        }
+
+        /* 跨裝置補強：安全區、動態視窗高度與觸控操作 */
+        html, body {
+            width: 100%;
+            min-height: 100%;
+            min-height: 100dvh;
+            overscroll-behavior: none;
+        }
+        body {
+            height: 100vh;
+            height: 100dvh;
+        }
+        #gameArea { min-height: 0; }
+        #simCanvas {
+            width: 100% !important;
+            height: 100% !important;
+            touch-action: none;
+        }
+        button, select, input { max-width: 100%; -webkit-tap-highlight-color: transparent; }
+        #joystick-zone, #joystick-left-zone {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        @media (max-width: 900px), (max-height: 560px) {
+            #controls {
+                max-height: min(42dvh, 250px);
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                -webkit-overflow-scrolling: touch;
+            }
+            #togglePanelBtn, #toggleInfoBtn { min-width: 44px; min-height: 44px; }
+            #joystick-zone, #joystick-left-zone {
+                width: clamp(94px, 22vw, 124px);
+                height: clamp(94px, 22vw, 124px);
+                bottom: max(12px, env(safe-area-inset-bottom));
+            }
+            #joystick-left-zone { left: max(12px, env(safe-area-inset-left)); }
+            #joystick-zone { right: max(12px, env(safe-area-inset-right)); }
+        }
+        @media (orientation: portrait) and (max-width: 900px) {
+            #controls {
+                top: max(52px, env(safe-area-inset-top));
+                width: calc(100vw - 16px);
+                border-radius: 18px;
+            }
+            #scoreDisplay {
+                left: max(8px, env(safe-area-inset-left));
+                top: max(8px, env(safe-area-inset-top));
+                font-size: 13px;
+            }
+            #togglePanelBtn {
+                right: max(8px, env(safe-area-inset-right));
+                top: max(8px, env(safe-area-inset-top));
+            }
+            #joystick-zone, #joystick-left-zone {
+                width: clamp(92px, 27vw, 120px);
+                height: clamp(92px, 27vw, 120px);
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <button id="togglePanelBtn">⚙️ 顯示設定</button>
+    <button id="toggleInfoBtn" title="隱藏/顯示下方說明">🙈</button>
+
+    <div id="scoreDisplay">(正面穿越目標圓圈)分數: 0</div>
+
+    <div id="controls">
+        <label>練習項目:
+            <select id="taskSelect">
+                <option value="free" selected>抗風自由訓練</option>
+                <option value="figure8">水平八字圓</option>
+                <option value="fiveleg">保持高度五邊飛行</option>
+                <option value="sidehover">側面懸停及前進、後退</option>
+            </select>
+        </label>
+        <label>搖桿模式:
+            <select id="gamepadMode">
+                <option value="auto" selected>自動偵測</option>
+                <option value="xinput">標準配置 (XInput / Xbox)</option>
+                <option value="direct">原生配置 (DirectInput / PS)</option>
+            </select>
+        </label>
+        <label>飛行模式:
+            <select id="flightModeSelect">
+                <option value="attitude" selected>姿態模式（手動抗風）</option>
+                <option value="gps">一般模式（GPS 自穩抗風）</option>
+            </select>
+        </label>
+        <label>風速 <input type="range" id="windSpeed" min="0" max="0.08" step="0.01" value="0"></label>
+        <label>風向:
+            <select id="windDir">
+                <option value="NONE" selected>無風</option>
+                <option value="RANDOM">隨機陣風</option>
+                <option value="E">東風</option>
+                <option value="W">西風</option>
+                <option value="S">南風</option>
+                <option value="N">北風</option>
+                <option value="NE">東北風</option>
+                <option value="NW">西北風</option>
+                <option value="SE">東南風</option>
+                <option value="SW">西南風</option>
+            </select>
+        </label>
+        <label class="checkbox-label">🌪️<input type="checkbox" id="showArrowBtn" > 顯示風向箭頭</label>
+        <label class="checkbox-label joystick-toggle">🕹️<input type="checkbox" id="showJoystickBtn" checked> 顯示雙搖桿</label>
+        <div class="row-group">
+            <label>🔍 縮放視野 <input type="range" id="camZoomSlider" min="20" max="80" step="1" value="45"></label>
+            <label>🎥 視角角度 <input type="range" id="camAngleSlider" min="-15" max="15" step="1" value="0"></label>
+            <label>↔️ 左右轉頭 <input type="range" id="camYawSlider" min="-75" max="75" step="1" value="0"></label>
+            <button id="switchCamBtn">📷 切換視角</button>
+            <button id="resetBtn">🔄 重設</button>
+            <button id="retryBtn" type="button" title="重新開始目前練習">↻ 重來一次</button>
+            <button id="closePanelBtn" style="background: linear-gradient(180deg, #ffb3c6, #ff8fa8); color: #7a1f3d; box-shadow: 0 5px 0 #e06a8c, 0 9px 16px rgba(91,75,138,0.22);">✖️ 關閉面板</button>
+        </div>
+    </div>
+
+    <div id="info-panel">
+        <div class="info-row">
+            <div>
+                <span style="color: #e0608a;">🚩 H 起降點</span> | 
+                <span style="color: #8a79b0;">🟣 五邊航線邊界／側面懸停P3–H–P7直線</span> | 
+                <span style="color: #c22a3e;">🔴 八字水平圓：實線目標路徑（半徑5M）／外側虛線容許邊界（半徑6M，超出即失格）</span> | 
+                <span style="color: #d1a300;">🟡 黃色為目標圈</span> | 
+                <span style="color: #8a99b8;">🔵 灰藍色圈不可觸碰</span> 
+            </div>
+            <div id="windStatusText" style="padding: 4px 10px; border-radius: 999px;"></div>
+        </div>
+        <div class="info-row" style="color: var(--panel-text); font-size: 13px;">
+            <div>🕹️ <strong>控制:</strong> 左搖桿控制升降與轉向 (油門/偏航)，右搖桿控制前後左右平移 (俯仰/滾轉)</div>
+            <div>💡 <strong>目標:</strong> 若實體右搖桿無反應，請於上方切換「搖桿模式」。</div>
+            <div id="taskHint" style="display:none;">🎯 <strong>考科練習:</strong> 依序飛過黃色目標圈（灰藍＝尚未輪到，黃＝目前目標，綠＝已完成），並盡量維持在目標高度，完成全部目標點即算通過。</div>
+            <div id="sidehoverStatus" style="display:none;">🧭 <strong>側面懸停:</strong> 依「H(朝左)→P3→P7→H→定點轉向朝右→H→P7→P3→H→朝外結束」順序，機頭需維持側面朝向（朝左／朝右）才算完成該點。<span id="sidehoverYawInfo" style="font-weight:600;"></span></div>
+            <div>🔓 <strong>起飛解鎖:</strong> 雙搖桿同時「內八」下壓（左搖桿壓右下、右搖桿壓左下）並持續約 0.6 秒即可解鎖起槳（鍵盤可直接按 Enter）；解鎖後只是熱車，請先放回雙搖桿至中心，再推左搖桿才會真正起飛。</div>
+            <div>👀 <strong>轉頭看周圍:</strong> 按鍵盤 ←/→ 方向鍵（或拖動上方「左右轉頭」滑桿）可左右轉頭，飽身位置不變，方便保持高度五邊飛行時看到寬80M場地內的所有轉彎點。</div>
+        </div>
+    </div>
+
+    <div id="gameArea">
+        <div id="scoreAnim">+1</div>
+        <div id="crashAlert">碰撞警告</div>
+        <div id="taskCompleteAlert">🎉 任務完成！</div>
+    <div id="disqualifyAlert"></div>
+        <div id="armStatus">🔒 尚未起飛：雙搖桿同時「內八」下壓（左搖桿右下、右搖桿左下）或按 Enter 解鎖起飛</div>
+        <canvas id="simCanvas"></canvas>
+        <div id="joystick-left-zone" style="display: block;">
+            <div id="joystick-left-stick"></div>
+        </div>
+        <div id="joystick-zone" style="display: block;">
+            <div id="joystick-stick"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentScore = 0; 
+        
+        // --- 顏色設定 ---
+        const COLOR_NORMAL = 0xB8C4D9; // 非目標（灰藍色）
+        const COLOR_TARGET = 0xFFCB4D; // 指定目標（陽光黃）
+        const COLOR_SUCCESS = 0x6BE0AE; // 成功通過（薄荷綠）
+        const COLOR_FAIL = 0xFF8FA8; // 穿錯目標（珊瑚粉）
+
+        // --- 考科練習任務狀態（新增：水平八字圓、保持高度五邊飛行）---
+        // 兩項考科的目標高度不同：水平八字圓維持原低高度目視練習；保持高度五邊飛行依使用者指示，
+        // ABCD 四個轉彎點皆須保持 20 公尺高度（起降點 H 為地面起降，不受此高度限制）。
+        const COURSE_ALT_BY_TYPE = { figure8: 3, fiveleg: 20, sidehover: 1.5 };
+        const COURSE_ALT = 3; // 相容舊用途（僅水平八字圓仍直接參考此常數）
+        const COURSE_ALT_TOL = 0.6; // 高度容許誤差（公尺）
+        const COURSE_CAPTURE_R = 1.3; // 水平捕獲半徑（公尺）
+        const YAW_TOL = 0.35; // 機頭朝向容許誤差（弧度，約20度），僅側面懸停考科需檢核朝向
+        const TASK_NAMES = { free: '抗風自由訓練', figure8: '水平八字圓', fiveleg: '保持高度五邊飛行', sidehover: '側面懸停及前進、後退' };
+        let task = { type: 'free', wpIndex: 0, altDevMax: 0, done: false };
+        let courses = {}; // 在場景建立後填入 figure8 / fiveleg 的 waypoint 資料
+
+        const togglePanelBtn = document.getElementById('togglePanelBtn');
+        const controlsPanel = document.getElementById('controls');
+        const closePanelBtn = document.getElementById('closePanelBtn');
+
+        function togglePanel() {
+            const isCollapsed = controlsPanel.classList.toggle('collapsed');
+            togglePanelBtn.innerHTML = isCollapsed ? '⚙️ 顯示設定' : '❌ 隱藏設定';
+        }
+
+        if (togglePanelBtn) {
+            togglePanelBtn.addEventListener('click', togglePanel);
+        }
+
+        const toggleInfoBtn = document.getElementById('toggleInfoBtn');
+        const infoPanelEl = document.getElementById('info-panel');
+        if (toggleInfoBtn && infoPanelEl) {
+            toggleInfoBtn.addEventListener('click', () => {
+                const hidden = infoPanelEl.classList.toggle('collapsed');
+                toggleInfoBtn.innerHTML = hidden ? '👁️' : '🙈';
+                repositionArmStatus();
+            });
+        }
+
+        if (closePanelBtn) {
+            closePanelBtn.addEventListener('click', () => {
+                controlsPanel.classList.add('collapsed');
+                togglePanelBtn.innerHTML = '⚙️ 顯示設定';
+            });
+        }
+
+        const stick = document.getElementById('joystick-stick');
+        const zone = document.getElementById('joystick-zone');
+        const leftStick = document.getElementById('joystick-left-stick');
+        const leftZone = document.getElementById('joystick-left-zone');
+        const windStatusText = document.getElementById('windStatusText');
+        const showJoystickBtn = document.getElementById('showJoystickBtn');
+        const switchCamBtn = document.getElementById('switchCamBtn');
+        
+        let joyDx = 0; let joyDy = 0; let isTouching = false; 
+        let joyLeftDx = 0; let joyLeftDy = 0; let isLeftTouching = false;
+        let keys = {};
+        let currentWind = { x: 0, z: 0 }; 
+        let targetWind = { x: 0, z: 0 }; 
+        let windTimer = null;
+        let windArrow3D;
+        // 飛行模式：姿態（attitude）＝風力直接完整作用於速度，需人工修正；一般（gps）＝飛控自穩，靜止時自動抵消風飄移，行進時僅有少量干擾。
+        let flightMode = 'attitude';
+        let gpsHoldActive = false; // GPS模式下、搖桿回中立時是否已進入定位持穩
+        let gpsHoldX = 0, gpsHoldZ = 0;
+        const flightModeSelectEl = document.getElementById('flightModeSelect');
+        if (flightModeSelectEl) {
+            flightMode = flightModeSelectEl.value;
+            flightModeSelectEl.addEventListener('change', () => { flightMode = flightModeSelectEl.value; gpsHoldActive = false; if (typeof updateWind === 'function') updateWind(); });
+        }
+        
+        let currentCamView = 1;
+        const colliders = [];
+
+        // 視野縮放 (FOV) 與 視角角度 (俯仰) 控制用變數
+        let camZoomFov = 45;
+        let camAngleOffset = 0;
+        // 左右轉頭（水平 yaw）控制用變數：不改動饱身位置，僅旋轉視線方向，
+        // 方便在保持高度五邊飛行（寬80M）時轉頭看到所有轉彎點。即使未解鎖起飛也可轉頭。
+        let camYawOffset = 0;
+        const CAM_YAW_MAX = 75; // 左右各最多可轉 75 度
+        const CAM_YAW_SPEED = 1.4; // 方向鍵每幀轉動速度（度）
+
+        showJoystickBtn.addEventListener('change', (e) => {
+            zone.style.display = e.target.checked ? 'block' : 'none';
+            leftZone.style.display = e.target.checked ? 'block' : 'none';
+        });
+
+        switchCamBtn.addEventListener('click', () => {
+            currentCamView = (currentCamView === 1) ? 2 : 1;
+        });
+
+        const camZoomSlider = document.getElementById('camZoomSlider');
+        const camAngleSlider = document.getElementById('camAngleSlider');
+        if (camZoomSlider) {
+            camZoomSlider.addEventListener('input', (e) => {
+                camZoomFov = parseFloat(e.target.value);
+                if (typeof updateDynamicHeight === 'function') updateDynamicHeight();
+            });
+        }
+        if (camAngleSlider) {
+            camAngleSlider.addEventListener('input', (e) => {
+                camAngleOffset = parseFloat(e.target.value);
+            });
+        }
+        const camYawSlider = document.getElementById('camYawSlider');
+        if (camYawSlider) {
+            camYawSlider.addEventListener('input', (e) => {
+                camYawOffset = parseFloat(e.target.value);
+            });
+        }
+
+        window.addEventListener('keydown', e => {
+            keys[e.key.toLowerCase()] = true;
+            // 左右方向鍵用於轉頭時，若當前未聚焦在滑桿等表單控件上，阻止進行頁面捲動
+            const tag = document.activeElement && document.activeElement.tagName;
+            if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && tag !== 'INPUT' && tag !== 'SELECT' && tag !== 'TEXTAREA') {
+                e.preventDefault();
+            }
+        });
+        window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+        function updateStickTarget(clientX, clientY) {
+            const rect = zone.getBoundingClientRect();
+            if(rect.width === 0) return; 
+            const currentMaxStickRadius = rect.width / 2 - stick.offsetWidth / 2;
+            const centerX = rect.left + rect.width / 2; const centerY = rect.top + rect.height / 2;
+            let dx = clientX - centerX; let dy = clientY - centerY;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance > currentMaxStickRadius) { dx = (dx / distance) * currentMaxStickRadius; dy = (dy / distance) * currentMaxStickRadius; }
+            joyDx = (dx / currentMaxStickRadius) * 60; joyDy = (dy / currentMaxStickRadius) * 60;
+            stick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        }
+
+        function updateLeftStickTarget(clientX, clientY) {
+            const rect = leftZone.getBoundingClientRect();
+            if(rect.width === 0) return; 
+            const currentMaxStickRadius = rect.width / 2 - leftStick.offsetWidth / 2;
+            const centerX = rect.left + rect.width / 2; const centerY = rect.top + rect.height / 2;
+            let dx = clientX - centerX; let dy = clientY - centerY;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance > currentMaxStickRadius) { dx = (dx / distance) * currentMaxStickRadius; dy = (dy / distance) * currentMaxStickRadius; }
+            joyLeftDx = (dx / currentMaxStickRadius) * 60; joyLeftDy = (dy / currentMaxStickRadius) * 60;
+            leftStick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+        }
+
+        zone.addEventListener('mousemove', (e) => { isTouching = true; updateStickTarget(e.clientX, e.clientY); });
+        zone.addEventListener('mouseleave', () => { isTouching = false; joyDx = 0; joyDy = 0; stick.style.transform = `translate(-50%, -50%)`; });
+        zone.addEventListener('touchstart', (e) => { e.preventDefault(); isTouching = true; updateStickTarget(e.targetTouches[0].clientX, e.targetTouches[0].clientY); }, { passive: false });
+        zone.addEventListener('touchmove', (e) => { e.preventDefault(); isTouching = true; updateStickTarget(e.targetTouches[0].clientX, e.targetTouches[0].clientY); }, { passive: false });
+        zone.addEventListener('touchend', (e) => { e.preventDefault(); isTouching = false; joyDx = 0; joyDy = 0; stick.style.transform = `translate(-50%, -50%)`; }, { passive: false });
+
+        leftZone.addEventListener('mousemove', (e) => { isLeftTouching = true; updateLeftStickTarget(e.clientX, e.clientY); });
+        leftZone.addEventListener('mouseleave', () => { isLeftTouching = false; joyLeftDx = 0; joyLeftDy = 0; leftStick.style.transform = `translate(-50%, -50%)`; });
+        leftZone.addEventListener('touchstart', (e) => { e.preventDefault(); isLeftTouching = true; updateLeftStickTarget(e.targetTouches[0].clientX, e.targetTouches[0].clientY); }, { passive: false });
+        leftZone.addEventListener('touchmove', (e) => { e.preventDefault(); isLeftTouching = true; updateLeftStickTarget(e.targetTouches[0].clientX, e.targetTouches[0].clientY); }, { passive: false });
+        leftZone.addEventListener('touchend', (e) => { e.preventDefault(); isLeftTouching = false; joyLeftDx = 0; joyLeftDy = 0; leftStick.style.transform = `translate(-50%, -50%)`; }, { passive: false });
+
+        function releaseRightStick() {
+            isTouching = false; joyDx = 0; joyDy = 0;
+            stick.style.transform = `translate(-50%, -50%)`;
+        }
+        function releaseLeftStick() {
+            isLeftTouching = false; joyLeftDx = 0; joyLeftDy = 0;
+            leftStick.style.transform = `translate(-50%, -50%)`;
+        }
+        zone.addEventListener('touchcancel', releaseRightStick, { passive: true });
+        leftZone.addEventListener('touchcancel', releaseLeftStick, { passive: true });
+        window.addEventListener('blur', () => { releaseRightStick(); releaseLeftStick(); });
+
+        function updateWind() {
+            let speedText = document.getElementById('windSpeed').value;
+            let speed = speedText ? parseFloat(speedText) : 0; 
+            let dirSelect = document.getElementById('windDir');
+            let dir = dirSelect ? dirSelect.value : 'NONE';
+            const modeSuffix = (flightMode === 'gps') ? `｜一般模式(GPS自穩，靜止自動抗風)` : `｜姿態模式(需自行修正風飄移)`;
+
+            if (dir === 'NONE') {
+                windStatusText.innerText = `目前無風：環境穩定` + modeSuffix;
+                targetWind.x = 0; targetWind.z = 0;
+            } else if (dir === 'RANDOM') {
+                windStatusText.innerText = `隨機陣風模式：風向與強度會持續變化` + modeSuffix;
+            } else {
+                windStatusText.innerText = `固定風向：風速 ${(speed * 200).toFixed(0)} 級` + modeSuffix;
+                let wx = 0, wz = 0;
+                if (dir.includes('E')) wx = 1; if (dir.includes('W')) wx = -1;
+                if (dir.includes('S')) wz = 1; if (dir.includes('N')) wz = -1;
+                if (wx !== 0 && wz !== 0) { wx *= 0.8; wz *= 0.8; }
+                targetWind.x = wx * speed; targetWind.z = wz * speed;
+            }
+        }
+        
+        function triggerRandomWind() {
+            let dirSelect = document.getElementById('windDir');
+            if (!dirSelect || dirSelect.value !== 'RANDOM') return;
+            const baseSpeed = parseFloat(document.getElementById('windSpeed').value) || 0;
+            const dirs = ['E', 'W', 'S', 'N', 'NE', 'NW', 'SE', 'SW'];
+            let nextDuration = 1500 + Math.random() * 3500; 
+            let stateRoll = Math.random();
+            if (stateRoll < 0.3) { targetWind.x = 0; targetWind.z = 0; } else {
+                let dirStr = dirs[Math.floor(Math.random() * dirs.length)];
+                let wx = 0, wz = 0;
+                if (dirStr.includes('E')) wx = 1; if (dirStr.includes('W')) wx = -1;
+                if (dirStr.includes('S')) wz = 1; if (dirStr.includes('N')) wz = -1;
+                if (wx !== 0 && wz !== 0) { wx *= 0.8; wz *= 0.8; }
+                let multiplier = (stateRoll < 0.7) ? (0.2 + Math.random() * 0.4) : (0.8 + Math.random() * 0.8);
+                targetWind.x = wx * baseSpeed * multiplier; targetWind.z = wz * baseSpeed * multiplier;
+            }
+            clearTimeout(windTimer); windTimer = setTimeout(triggerRandomWind, nextDuration);
+        }
+
+        let windSpeedEl = document.getElementById('windSpeed');
+        let windDirEl = document.getElementById('windDir');
+        if(windSpeedEl) windSpeedEl.addEventListener('input', updateWind);
+        if(windDirEl) windDirEl.addEventListener('change', () => {
+            clearTimeout(windTimer);
+            if (windDirEl.value === 'RANDOM') { updateWind(); triggerRandomWind(); } else { updateWind(); }
+        });
+        
+        function performFullReset() {
+            droneLogic.x = 0; droneLogic.y = 0.2; droneLogic.z = 0; droneLogic.vx = 0; droneLogic.vz = 0; droneLogic.yaw = 0;
+            armed = false; armGesture.timer = 0; awaitingCenterAfterArm = false;
+            const armEl = document.getElementById('armStatus');
+            if (armEl) { armEl.classList.remove('armed-ok'); updateArmStatusUI(0); }
+            updateWind();
+
+            currentScore = 0;
+            document.getElementById('scoreDisplay').innerText = `(正面穿越目標圓圈)分數: 0`;
+            if (task.type === 'free') {
+                assignNewTarget(); // 重新隨機產生目標
+            } else if (typeof setActiveCourse === 'function') {
+                setActiveCourse(task.type); // 重設考科任務進度與目標圓顏色（已包含重設 fig8Entered）
+            }
+        }
+        let resetBtn = document.getElementById('resetBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', performFullReset);
+        }
+        const retryBtn = document.getElementById('retryBtn');
+        if (retryBtn) {
+            retryBtn.addEventListener('click', performFullReset);
+        }
+
+        // 八字水平圓失格判定：機體與最近圓心距離超出外側6M虛線（目標5M路徑+1M容許邊界）即失格，
+        // 顯示失格提示，3秒後自動重新回到H點並重設本次考科進度。不設內側限制。
+        let fig8Disqualified = false;
+        let fig8Entered = false; // 這輪是否已實際進入八字圓容許帶內（進入前尚在進場中，不視為失格）
+        function showDisqualifyAlert(text) {
+            const el = document.getElementById('disqualifyAlert');
+            if (!el) return;
+            el.innerText = text;
+            el.style.display = 'block';
+        }
+        function hideDisqualifyAlert() {
+            const el = document.getElementById('disqualifyAlert');
+            if (el) el.style.display = 'none';
+        }
+        function triggerFig8Disqualify() {
+            if (fig8Disqualified) return;
+            fig8Disqualified = true;
+            armed = false;
+            showDisqualifyAlert('❌ 超出邊界，失格！\n3 秒後重新回到 H 點');
+            setTimeout(() => {
+                performFullReset();
+                fig8Disqualified = false;
+                hideDisqualifyAlert();
+            }, 3000);
+        }
+
+        const canvas = document.getElementById('simCanvas');
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+        renderer.setClearColor(0x000000, 0);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+        scene.add(ambientLight);
+        
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        dirLight.position.set(20, 80, 20);
+        dirLight.castShadow = true;
+        dirLight.shadow.camera.left = -50; dirLight.shadow.camera.right = 50;
+        dirLight.shadow.camera.top = 50; dirLight.shadow.camera.bottom = -50;
+        dirLight.shadow.camera.near = 0.5; dirLight.shadow.camera.far = 200;
+        dirLight.shadow.mapSize.width = 2048; dirLight.shadow.mapSize.height = 2048;
+        scene.add(dirLight);
+
+        const textureLoader = new THREE.TextureLoader();
+
+        function createCanvasTexture(width, height, draw) {
+            const skyCanvas = document.createElement('canvas');
+            skyCanvas.width = width;
+            skyCanvas.height = height;
+            const ctx = skyCanvas.getContext('2d');
+            draw(ctx, width, height);
+            const texture = new THREE.CanvasTexture(skyCanvas);
+            texture.needsUpdate = true;
+            return texture;
+        }
+
+	    scene.fog = new THREE.Fog(0xBFEAFB, 34, 130);
+
+        const sunGlow = new THREE.Sprite(new THREE.SpriteMaterial({
+            map: createCanvasTexture(256, 256, (ctx, width, height) => {
+                const glow = ctx.createRadialGradient(width * 0.5, height * 0.5, 2, width * 0.5, height * 0.5, width * 0.5);
+                glow.addColorStop(0, 'rgba(255,255,255,0.95)');
+                glow.addColorStop(0.18, 'rgba(255,240,190,0.8)');
+                glow.addColorStop(0.42, 'rgba(255,203,77,0.28)');
+                glow.addColorStop(1, 'rgba(255,203,77,0)');
+                ctx.fillStyle = glow;
+                ctx.fillRect(0, 0, width, height);
+            }),
+            transparent: true,
+            depthWrite: false,
+            depthTest: false,
+            opacity: 0.85
+        }));
+        sunGlow.position.set(72, 72, -118);
+        sunGlow.scale.set(46, 46, 1);
+        scene.add(sunGlow);
+
+        const ridgeGroup = new THREE.Group();
+        const ridgeMatBack = new THREE.MeshBasicMaterial({ color: 0xc9b6ec, transparent: true, opacity: 0.38, depthWrite: false });
+        const ridgeMatFront = new THREE.MeshBasicMaterial({ color: 0xa7c6ec, transparent: true, opacity: 0.32, depthWrite: false });
+        function addRidge(material, z, y, scaleY) {
+            const shape = new THREE.Shape();
+            shape.moveTo(-120, -10);
+            shape.lineTo(-120, 0);
+            for (let x = -120; x <= 120; x += 16) {
+                const peak = Math.sin(x * 0.055 + z * 0.01) * 4 + Math.cos(x * 0.033) * 2;
+                shape.lineTo(x, peak * scaleY);
+            }
+            shape.lineTo(120, -10);
+            shape.lineTo(-120, -10);
+            const mesh = new THREE.Mesh(new THREE.ShapeGeometry(shape), material);
+            mesh.position.set(0, y, z);
+            ridgeGroup.add(mesh);
+        }
+        addRidge(ridgeMatBack, -128, 13, 0.9);
+        addRidge(ridgeMatFront, -105, 9, 0.65);
+        scene.add(ridgeGroup);
+
+        function createCloudTexture() {
+            return createCanvasTexture(256, 128, (ctx, width, height) => {
+                ctx.clearRect(0, 0, width, height);
+                const blobs = [
+                    [64, 70, 38], [102, 54, 46], [143, 64, 42],
+                    [178, 72, 34], [119, 78, 58], [78, 84, 26]
+                ];
+                blobs.forEach(([x, y, r]) => {
+                    const cloud = ctx.createRadialGradient(x, y, 2, x, y, r);
+                    cloud.addColorStop(0, 'rgba(255,255,255,0.68)');
+                    cloud.addColorStop(0.65, 'rgba(255,255,255,0.36)');
+                    cloud.addColorStop(1, 'rgba(255,255,255,0)');
+                    ctx.fillStyle = cloud;
+                    ctx.beginPath();
+                    ctx.arc(x, y, r, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            });
+        }
+
+        const cloudTexture = createCloudTexture();
+        const clouds = [];
+        [
+            { x: -62, y: 44, z: -92, s: 22, drift: 0.012 },
+            { x: 10, y: 58, z: -118, s: 30, drift: 0.009 },
+            { x: 68, y: 38, z: -82, s: 18, drift: 0.014 },
+            { x: -8, y: 34, z: -64, s: 16, drift: 0.011 }
+        ].forEach(data => {
+            const cloud = new THREE.Sprite(new THREE.SpriteMaterial({ map: cloudTexture, transparent: true, opacity: 0.5, depthWrite: false }));
+            cloud.position.set(data.x, data.y, data.z);
+            cloud.scale.set(data.s * 2.4, data.s, 1);
+            cloud.userData.baseX = data.x;
+            cloud.userData.drift = data.drift;
+            clouds.push(cloud);
+            scene.add(cloud);
+        });
+
+        const skyGeo = new THREE.PlaneGeometry(800, 400);
+        const skyTextureImage = createCanvasTexture(1024, 512, (ctx, width, height) => {
+            const sky = ctx.createLinearGradient(0, 0, 0, height);
+            sky.addColorStop(0, '#7fd0ff');
+            sky.addColorStop(0.45, '#b7e9ff');
+            sky.addColorStop(0.78, '#ffe9d6');
+            sky.addColorStop(1, '#fff6e8');
+            ctx.fillStyle = sky;
+            ctx.fillRect(0, 0, width, height);
+
+            // 太陽
+            const sunGrad = ctx.createRadialGradient(width * 0.82, height * 0.22, 4, width * 0.82, height * 0.22, 90);
+            sunGrad.addColorStop(0, 'rgba(255,255,255,0.95)');
+            sunGrad.addColorStop(0.4, 'rgba(255,222,140,0.85)');
+            sunGrad.addColorStop(1, 'rgba(255,222,140,0)');
+            ctx.fillStyle = sunGrad;
+            ctx.fillRect(0, 0, width, height);
+
+            // 可愛雲朵
+            function puffyCloud(cx, cy, s) {
+                const blobs = [[0,0,1],[0.7,-0.15,0.7],[-0.7,-0.1,0.65],[1.3,0.05,0.5],[-1.3,0.05,0.5]];
+                blobs.forEach(([dx,dy,r]) => {
+                    ctx.beginPath();
+                    ctx.arc(cx + dx*s, cy + dy*s, r*s, 0, Math.PI*2);
+                    ctx.fillStyle = 'rgba(255,255,255,0.92)';
+                    ctx.fill();
+                });
+            }
+            puffyCloud(width*0.18, height*0.28, 34);
+            puffyCloud(width*0.42, height*0.18, 26);
+            puffyCloud(width*0.62, height*0.36, 30);
+            puffyCloud(width*0.08, height*0.5, 22);
+            puffyCloud(width*0.9, height*0.46, 24);
+        });
+        const skyMat = new THREE.MeshBasicMaterial({ 
+            map: skyTextureImage, 
+            fog: false,
+            side: THREE.DoubleSide
+        });
+        const skyPlane = new THREE.Mesh(skyGeo, skyMat);
+        skyPlane.position.set(0, 60, -200);
+        scene.add(skyPlane);
+
+        const grassTexture = createCanvasTexture(512, 512, (ctx, width, height) => {
+            const base = ctx.createLinearGradient(0, 0, 0, height);
+            base.addColorStop(0, '#a3e8b0');
+            base.addColorStop(1, '#8fdf9f');
+            ctx.fillStyle = base;
+            ctx.fillRect(0, 0, width, height);
+
+            // 深淺草地斑塊，增加層次
+            for (let i = 0; i < 60; i++) {
+                const x = Math.random() * width, y = Math.random() * height, r = 18 + Math.random() * 34;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, Math.PI * 2);
+                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.10)' : 'rgba(60,150,90,0.10)';
+                ctx.fill();
+            }
+
+            // 可愛小花點綴
+            const flowerColors = ['#ffd6e6', '#fff3b0', '#ffffff', '#c9b6ec'];
+            for (let i = 0; i < 90; i++) {
+                const x = Math.random() * width, y = Math.random() * height;
+                const c = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+                ctx.fillStyle = c;
+                for (let p = 0; p < 4; p++) {
+                    const ang = (p / 4) * Math.PI * 2;
+                    ctx.beginPath();
+                    ctx.arc(x + Math.cos(ang) * 3, y + Math.sin(ang) * 3, 2.6, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.fillStyle = '#ffd166';
+                ctx.beginPath();
+                ctx.arc(x, y, 1.6, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        });
+        grassTexture.wrapS = THREE.RepeatWrapping;
+        grassTexture.wrapT = THREE.RepeatWrapping;
+        grassTexture.repeat.set(10, 5); 
+
+        const groundGeo = new THREE.PlaneGeometry(400, 200); 
+        const groundMat = new THREE.MeshLambertMaterial({ map: grassTexture }); 
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        function createRunwayArea() {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshLambertMaterial({ color: 0xFCE1A8 }); 
+            const topGeo = new THREE.PlaneGeometry(36, 5.4);
+            const topMesh = new THREE.Mesh(topGeo, mat); topMesh.rotation.x = -Math.PI / 2; topMesh.position.set(0, 0.015, -9.5); topMesh.receiveShadow = true;
+            const botGeo = new THREE.PlaneGeometry(36, 5.4);
+            const botMesh = new THREE.Mesh(botGeo, mat); botMesh.rotation.x = -Math.PI / 2; botMesh.position.set(0, 0.015, 0); botMesh.receiveShadow = true;
+            const leftGeo = new THREE.PlaneGeometry(5.4, 4.1);
+            const leftMesh = new THREE.Mesh(leftGeo, mat); leftMesh.rotation.x = -Math.PI / 2; leftMesh.position.set(-15.3, 0.015, -4.75); leftMesh.receiveShadow = true;
+            const rightGeo = new THREE.PlaneGeometry(5.4, 4.1); 
+            const rightMesh = new THREE.Mesh(rightGeo, mat); rightMesh.rotation.x = -Math.PI / 2; rightMesh.position.set(15.3, 0.015, -4.75); rightMesh.receiveShadow = true;
+            group.add(topMesh, botMesh, leftMesh, rightMesh); return group;
+        }
+        scene.add(createRunwayArea());
+
+        const grassShape = new THREE.Shape();
+        grassShape.moveTo(-0.2, 0);
+        grassShape.lineTo(-0.25, 0.4); 
+        grassShape.lineTo(0, 0.15);    
+        grassShape.lineTo(0.25, 0.4);  
+        grassShape.lineTo(0.2, 0);     
+        grassShape.lineTo(-0.2, 0);    
+        const grassGeo = new THREE.ShapeGeometry(grassShape);
+        
+        const grassMat = new THREE.MeshBasicMaterial({ color: 0x6FDD9A, side: THREE.DoubleSide }); 
+        
+        const grassCount = 100; 
+        const grassInstanced = new THREE.InstancedMesh(grassGeo, grassMat, grassCount);
+        grassInstanced.receiveShadow = true;
+        grassInstanced.castShadow = true;
+
+        const dummy = new THREE.Object3D();
+        let placed = 0;
+        while(placed < grassCount) {
+            let gx = (Math.random() - 0.5) * 90; 
+            let gz = (Math.random() - 0.5) * 46; 
+
+            // 依官方圖10（操作空域80M寬×20M深，H點在深度方向的邊緣，往前20M到z=-20）
+            // 避免裝飾用小草長在真正的飛行操作空域內。
+            let isTrack = (gx > -41 && gx < 41 && gz > -21 && gz < 1);
+            let distToH = Math.sqrt(gx*gx + gz*gz);
+            let inHPad = distToH < 3.5;
+
+            if(!isTrack && !inHPad) {
+                dummy.position.set(gx, 0, gz);
+                dummy.rotation.y = 0; 
+                let scale = 0.5 + Math.random() * 1.0;
+                dummy.scale.set(scale, scale, scale);
+                dummy.updateMatrix();
+                grassInstanced.setMatrixAt(placed, dummy.matrix);
+                placed++;
+            }
+        }
+        scene.add(grassInstanced);
+
+        function createThickRect(minX, maxX, minZ, maxZ, thickness) {
+            const group = new THREE.Group();
+            const mat = new THREE.MeshBasicMaterial({ color: 0x63528b });
+            const widthX = maxX - minX; const lengthZ = maxZ - minZ;
+            const cx = (maxX + minX) / 2; const cz = (maxZ + minZ) / 2;
+            const hGeo = new THREE.PlaneGeometry(widthX + thickness, thickness);
+            const top = new THREE.Mesh(hGeo, mat); top.rotation.x = -Math.PI / 2; top.position.set(cx, 0.03, minZ);
+            const bottom = new THREE.Mesh(hGeo, mat); bottom.rotation.x = -Math.PI / 2; bottom.position.set(cx, 0.03, maxZ);
+            const vGeo = new THREE.PlaneGeometry(thickness, lengthZ - thickness);
+            const left = new THREE.Mesh(vGeo, mat); left.rotation.x = -Math.PI / 2; left.position.set(minX, 0.03, cz);
+            const right = new THREE.Mesh(vGeo, mat); right.rotation.x = -Math.PI / 2; right.position.set(maxX, 0.03, cz);
+            group.add(top, bottom, left, right); return group;
+        }
+
+        const LINE_THICKNESS = 0.2; 
+        // 依官方圖10（2公斤以下無人直昇機與多旋翼機測場及空域規劃示意圖）重新校正邊界線：
+        // 內圈：黑邊實體測驗場地，30M寬x23M深（x: -15~15，z: -16~7，H為世界原點）。
+        // 外圈：操作空域，80M寬x20M深（x: -40~40，z: -20~0，H點恰在後邊緣）。
+        scene.add(createThickRect(-15, 15, -16, 7, LINE_THICKNESS));
+        scene.add(createThickRect(-40, 40, -20, 0, LINE_THICKNESS));
+
+        const hPadGroup = new THREE.Group();
+        hPadGroup.position.set(0, 0.04, 0);
+
+        // 可愛底墊（純裝飾，無碰撞）
+        const padBaseMat = new THREE.MeshLambertMaterial({ color: 0xFFFDF6 });
+        const padBase = new THREE.Mesh(new THREE.CircleGeometry(3.1, 40), padBaseMat);
+        padBase.rotation.x = -Math.PI / 2; padBase.position.y = -0.01; padBase.receiveShadow = true;
+        hPadGroup.add(padBase);
+
+        const ringGeo = new THREE.RingGeometry(2.5, 2.7, 32);
+        const redMat = new THREE.MeshBasicMaterial({ color: 0xFF8FA8, side: THREE.DoubleSide });
+        const ringMesh = new THREE.Mesh(ringGeo, redMat); ringMesh.rotation.x = -Math.PI / 2; hPadGroup.add(ringMesh);
+        const hBarMat = new THREE.MeshBasicMaterial({ color: 0xFF8FA8 });
+        const vBarGeo = new THREE.PlaneGeometry(0.45, 2.1); const hBarGeo = new THREE.PlaneGeometry(1.5, 0.45);
+        const leftBar = new THREE.Mesh(vBarGeo, hBarMat); leftBar.position.set(-0.75, 0.01, 0); leftBar.rotation.x = -Math.PI/2;
+        const rightBar = new THREE.Mesh(vBarGeo, hBarMat); rightBar.position.set(0.75, 0.01, 0); rightBar.rotation.x = -Math.PI/2;
+        const midBar = new THREE.Mesh(hBarGeo, hBarMat); midBar.position.set(0, 0.01, 0); midBar.rotation.x = -Math.PI/2;
+        hPadGroup.add(leftBar, rightBar, midBar);
+
+        // 小花裝飾一圈（純裝飾，無碰撞）
+        const petalMat = new THREE.MeshLambertMaterial({ color: 0x000000 });
+        const petalGeo = new THREE.CircleGeometry(0.16, 10);
+        for (let i = 0; i < 10; i++) {
+            const ang = (i / 10) * Math.PI * 2;
+            const petal = new THREE.Mesh(petalGeo, petalMat);
+            petal.rotation.x = -Math.PI / 2;
+            petal.position.set(Math.cos(ang) * 2.95, -0.005, Math.sin(ang) * 2.95);
+            hPadGroup.add(petal);
+        }
+        scene.add(hPadGroup);
+
+        function createTrafficCone() {
+            const coneGroup = new THREE.Group();
+            const matConeOrange = new THREE.MeshLambertMaterial({ color: 0xFF9E80 });
+            const matConeWhite = new THREE.MeshLambertMaterial({ color: 0xFFFDF6 });
+            const base = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.06, 1.0), matConeOrange); base.position.y = 0.03; base.castShadow = true; coneGroup.add(base);
+            const heights = [0.4, 0.25, 0.25, 0.35]; const colors = [matConeOrange, matConeWhite, matConeOrange, matConeWhite];
+            let currentY = 0.06; let currentRadius = 0.4;
+            for(let i = 0; i < 4; i++) {
+                let nextRadius = currentRadius - (0.35 * (heights[i] / 1.25));
+                if(i === 3) nextRadius = 0.04; 
+                const seg = new THREE.Mesh(new THREE.CylinderGeometry(nextRadius, currentRadius, heights[i], 16), colors[i]);
+                seg.position.y = currentY + heights[i]/2; seg.castShadow = true; coneGroup.add(seg);
+                currentY += heights[i]; currentRadius = nextRadius;
+            } return coneGroup;
+        }
+
+        const conePositions = [ { x: -15.3, z: 0 }, { x: 15.3, z: 0 }, { x: -15.3, z: -9.5 }, { x: 15.3, z: -9.5 } ];
+        conePositions.forEach(pos => { 
+            const cone = createTrafficCone(); 
+            cone.position.set(pos.x, 0, pos.z); 
+            scene.add(cone); 
+            colliders.push({ type: 'cylinder', x: pos.x, z: pos.z, r: 0.5, yMin: 0, yMax: 1.3 });
+        });
+
+        // 綁定基礎狀態資料
+        const goalData = [
+            { x: -7, y: 3, z: -4.75, radius: 1.5, tube: 0.15, passed: false, isTarget: false }, 
+            { x: 0,  y: 5, z: -4.75, radius: 1.5, tube: 0.15, passed: false, isTarget: false }, 
+            { x: 7,  y: 7, z: -4.75, radius: 1.5, tube: 0.15, passed: false, isTarget: false }  
+        ];
+
+        goalData.forEach(g => {
+            const ringGeo = new THREE.TorusGeometry(g.radius, g.tube, 16, 32);
+            const ringMat = new THREE.MeshLambertMaterial({ color: COLOR_NORMAL });
+            const ring = new THREE.Mesh(ringGeo, ringMat);
+            ring.position.set(g.x, g.y, g.z);
+            ring.castShadow = true;
+            scene.add(ring);
+            
+            g.mesh = ring; // 儲存模型實體供後續變色用
+            colliders.push({ type: 'torus', x: g.x, y: g.y, z: g.z, r: g.radius, tube: g.tube });
+
+            const poleHeight = g.y - g.radius;
+            if(poleHeight > 0) {
+                const poleGeo = new THREE.CylinderGeometry(0.1, 0.1, poleHeight, 8);
+                const poleMat = new THREE.MeshLambertMaterial({ color: 0xC9BFE0 });
+                const pole = new THREE.Mesh(poleGeo, poleMat);
+                pole.position.set(g.x, poleHeight / 2, g.z);
+                pole.castShadow = true;
+                scene.add(pole);
+                g.poleMesh = pole; // 儲存支柱模型實體，便於切換項目時可一同隱藏（只在抗風自由訓練模式下顯示）
+                
+                colliders.push({ type: 'cylinder', x: g.x, z: g.z, r: 0.15, yMin: 0, yMax: poleHeight });
+            }
+        });
+
+        // --- 隨機產生下一個目標函數 ---
+        let lastTargetIdx = -1;
+        function assignNewTarget() {
+            // 重置所有圈圈
+            goalData.forEach(g => {
+                g.isTarget = false;
+                g.passed = false;
+                g.mesh.material.color.setHex(COLOR_NORMAL);
+            });
+            
+            let randIdx;
+            // 確保不會連續兩次抽到同一個圈圈，增加遊戲性
+            do {
+                randIdx = Math.floor(Math.random() * goalData.length);
+            } while (randIdx === lastTargetIdx && goalData.length > 1);
+            
+            lastTargetIdx = randIdx;
+            goalData[randIdx].isTarget = true;
+            goalData[randIdx].mesh.material.color.setHex(COLOR_TARGET);
+        }
+
+        // 初始化第一次目標
+        assignNewTarget();
+
+        // --- 新增考科任務：水平八字圓 / 保持高度五邊飛行 ---
+        // 坐標作法與現場風向閃圈相同（x/z 平面），標記點位於地面、並在 COURSE_ALT 高度處放一顆目標小球，下方用網柱連到地面方便目測。
+        function createCourseWaypoint(x, z, label, alt) {
+            const targetAlt = (typeof alt === 'number') ? alt : COURSE_ALT;
+            const group = new THREE.Group();
+            group.position.set(x, 0, z);
+
+            const ringGeo2 = new THREE.RingGeometry(0.95, 1.15, 32);
+            const ringMat2 = new THREE.MeshBasicMaterial({ color: COLOR_NORMAL, side: THREE.DoubleSide, transparent: true, opacity: 0.9 });
+            const ringMesh2 = new THREE.Mesh(ringGeo2, ringMat2);
+            ringMesh2.rotation.x = -Math.PI / 2;
+            ringMesh2.position.y = 0.03;
+            group.add(ringMesh2);
+
+            // 地面角錐（官方測場圖中的实體角錐標記）：與上方變色圓圈/球位並存，不取代。
+            const coneGeo2 = new THREE.ConeGeometry(0.45, 0.7, 16);
+            const coneMat2 = new THREE.MeshLambertMaterial({ color: 0xFF6A1A });
+            const coneMesh2 = new THREE.Mesh(coneGeo2, coneMat2);
+            coneMesh2.position.y = 0.35;
+            coneMesh2.castShadow = true;
+            group.add(coneMesh2);
+            const coneStripeGeo2 = new THREE.TorusGeometry(0.27, 0.045, 8, 24);
+            const coneStripeMat2 = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const coneStripeMesh2 = new THREE.Mesh(coneStripeGeo2, coneStripeMat2);
+            coneStripeMesh2.rotation.x = Math.PI / 2;
+            coneStripeMesh2.position.y = 0.28;
+            group.add(coneStripeMesh2);
+
+            // 考科航點採地面圓環、角錐與空中標記顯示；不建立垂直支柱。
+
+            const markerMat2 = new THREE.MeshLambertMaterial({ color: COLOR_NORMAL });
+            const markerMesh2 = new THREE.Mesh(new THREE.SphereGeometry(0.28, 16, 16), markerMat2);
+            markerMesh2.position.y = targetAlt;
+            group.add(markerMesh2);
+
+            scene.add(group);
+            group.visible = false;
+            return { x, z, label, group, ringMat: ringMat2, markerMat: markerMat2, state: 'pending' };
+        }
+
+        function setWaypointState(wp, state) {
+            wp.state = state;
+            const colorHex = state === 'target' ? COLOR_TARGET : (state === 'done' ? COLOR_SUCCESS : COLOR_NORMAL);
+            wp.ringMat.color.setHex(colorHex);
+            wp.markerMat.color.setHex(colorHex);
+        }
+
+        // 依官方「圖10、2公斤以下無人直昇機與多旋翼機測場及空域規劃示意圖」重新逐點量測像素座標精算：
+        // 兩圓半徑皆為 5M（非先前誤植的6M），圓心相距10M、於P4外切，H 為世界座標原點、
+        // 圓心位於 H 前方(z=-8)。P1/P3/P5/P7為圓上下點、P2/P6為圓最外側點，P4為左右圓切點。
+        const FIG8_R = 5; // 目標飛行圓半徑（官方測場圖：直徑10M）
+        const figure8Coords = [
+            { x: 0, z: -8, label: 'P4 交叉點（進入）' },
+            { x: -5, z: -13, label: 'P1 左圓遠點' },
+            { x: -10, z: -8, label: 'P2 左圓外側' },
+            { x: -5, z: -3, label: 'P3 左圓近點' },
+            { x: 0, z: -8, label: 'P4 交叉點（中途）' },
+            { x: 5, z: -13, label: 'P5 右圓遠點' },
+            { x: 10, z: -8, label: 'P6 右圓外側' },
+            { x: 5, z: -3, label: 'P7 右圓近點' },
+            { x: 0, z: -8, label: 'P4 交叉點（完成）' }
+        ];
+        // 依使用者精確口述航線重新定義（取代先前依參考圖描點的版本）：
+        // 從 H 出發右轉90度，前飛40M抵達A；A左轉90度，飛20M抵達B；
+        // B左轉90度，飛80M抵達C；C左轉90度，飛20M抵達D；D左轉90度、飛回H降落。
+        // 世界座標「前方」＝ -Z（與現有八字圓場地方向一致），「右方」＝ +X。
+        // 換算後得到一個以H為底邊中點的矩形航線：H(0,0)→A(40,0)→B(40,-20)→C(-40,-20)→D(-40,0)→(回H)。
+        // ABCD 四點皆須保持 20M 高度（見 COURSE_ALT_BY_TYPE.fiveleg），H 僅為地面起降參考點。
+        const fivelegCoords = [
+            { x: 0,   z: 0,   alt: 1.5, label: 'H（起降點，穩定高度1~2M即可，為飛行起始點）' },
+            { x: 40,  z: 0,   label: 'A（右轉90度後前飛40M，第1角）' },
+            { x: 40,  z: -20, label: 'B（左轉90度後飛20M，第2角）' },
+            { x: -40, z: -20, label: 'C（左轉90度後飛80M，第3角）' },
+            { x: -40, z: 0,   label: 'D（左轉90度後飛20M，第4角，最終將左轉90度飛回H降落）' }
+        ];
+        // 依官方「圖10、側面懸停及前進、後退示意圖」及「D.側面懸停及前進、後退」測驗準則重新定義：
+        // H 為世界座標原點，P3 在左（機頭朝左時的前方）、P7 在右，三點與 H 共線（z=0）。
+        // 「各級別後退飛行距離」：I 為 12M、II 為 18M、III 為 24M（此處採使用者確認之 I 級 12M，
+        // 故 H 到 P3／P7 各距 6M）。yaw 座標換算（機頭方向 N(yaw)=(-sin(yaw),0,-cos(yaw))）：
+        // yaw=0 → 機頭朝外（-Z，遠離操作者，與其他考科起始朝向一致）；
+        // yaw=+90°(π/2) → 機頭朝左（-X）；yaw=-90°(-π/2) → 機頭朝右（+X）。
+        // 依官方飛行順序圖：❶H→P3 ❷倒退→P7 ❸P7→H（機頭朝左）→定點轉向機頭朝右→
+        // ❹H→P7 ❺倒退→P3 ❻P3→H（機頭朝右）→轉機頭朝外、結束。共9個檢核點。
+        const SIDEHOVER_HALF = 6; // P3-P7 距離 12M（I級）之半，H 為中點
+        const sidehoverCoords = [
+            { x: 0, z: 0, yaw: Math.PI / 2, label: 'H（旋轉機頭朝左，側面定點懸停）' },
+            { x: -SIDEHOVER_HALF, z: 0, yaw: Math.PI / 2, label: 'P3（前進飛行，機頭朝左）' },
+            { x: SIDEHOVER_HALF, z: 0, yaw: Math.PI / 2, label: 'P7（後退飛行，機頭朝左）' },
+            { x: 0, z: 0, yaw: Math.PI / 2, label: 'H（前進飛行回正，機頭朝左）' },
+            { x: 0, z: 0, yaw: -Math.PI / 2, label: 'H（定點等高旋轉，機頭朝右）' },
+            { x: SIDEHOVER_HALF, z: 0, yaw: -Math.PI / 2, label: 'P7（前進飛行，機頭朝右）' },
+            { x: -SIDEHOVER_HALF, z: 0, yaw: -Math.PI / 2, label: 'P3（後退飛行，機頭朝右）' },
+            { x: 0, z: 0, yaw: -Math.PI / 2, label: 'H（前進飛行回正，機頭朝右）' },
+            { x: 0, z: 0, yaw: 0, label: 'H（轉機頭朝外，結束）' }
+        ];
+        const waypointCache = {};
+        function getOrCreateWaypointVisual(x, z, alt) {
+            const key = x.toFixed(2) + ',' + z.toFixed(2) + ',' + alt.toFixed(2);
+            if (!waypointCache[key]) waypointCache[key] = createCourseWaypoint(x, z, undefined, alt);
+            return waypointCache[key];
+        }
+        function buildCoursePoints(coordList, alt) {
+            return coordList.map(c => {
+                const ptAlt = (typeof c.alt === 'number') ? c.alt : alt;
+                const visual = getOrCreateWaypointVisual(c.x, c.z, ptAlt);
+                return { x: c.x, z: c.z, label: c.label, yaw: c.yaw, alt: ptAlt, group: visual.group, ringMat: visual.ringMat, markerMat: visual.markerMat, state: 'pending' };
+            });
+        }
+        courses.figure8 = { points: buildCoursePoints(figure8Coords, COURSE_ALT_BY_TYPE.figure8) };
+        courses.fiveleg = { points: buildCoursePoints(fivelegCoords, COURSE_ALT_BY_TYPE.fiveleg) };
+        courses.sidehover = { points: buildCoursePoints(sidehoverCoords, COURSE_ALT_BY_TYPE.sidehover) };
+
+        // 地面航線線段（對應上方圖例「🟣 紫色航線邊界」）：這些線段固定畫在地上，
+        // 並依 setActiveCourse() 切換項目時顯示/隱藏，以展現完整八字圓與五邊形狀，
+        // 不只靠各獨的目標圓標點。
+        const TRACK_LINE_COLOR = 0x8a79b0; // 五邊飛行：紫色單線邊界
+        const FIG8_TRACK_COLOR = 0xc22a3e;  // 八字水平圓：紅色實線（目標路徑）—虛線（外側容許邊界）
+        const FIG8_OUTER_R = FIG8_R + 1; // 外側虛線（機身一半不得超越的容許邊界，較目標路徑向外偏移1M，依使用者確認）
+        const TRACK_LINE_Y = 0.03;
+        function makeTrackLineFromPoints(pts, closed, color) {
+            const verts = [];
+            pts.forEach(p => verts.push(p.x, TRACK_LINE_Y, p.z));
+            if (closed) verts.push(pts[0].x, TRACK_LINE_Y, pts[0].z);
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+            const mat = new THREE.LineBasicMaterial({ color: color || TRACK_LINE_COLOR, linewidth: 3, transparent: true, opacity: 0.85 });
+            return new THREE.Line(geo, mat);
+        }
+        function makeTrackCircle(cx, cz, radius, segments, color, dashed) {
+            const pts = [];
+            for (let i = 0; i <= segments; i++) {
+                const a = (i / segments) * Math.PI * 2;
+                pts.push({ x: cx + Math.cos(a) * radius, z: cz + Math.sin(a) * radius });
+            }
+            if (!dashed) return makeTrackLineFromPoints(pts, false, color);
+            // 內圈以虛線繪製，對應實照中「外圈實線邊界＋內圈虛線建議飛行路徑」的雙圈樣式
+            const verts = [];
+            pts.forEach(p => verts.push(p.x, TRACK_LINE_Y, p.z));
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+            const mat = new THREE.LineDashedMaterial({ color: color || TRACK_LINE_COLOR, linewidth: 2, dashSize: 0.8, gapSize: 0.55, transparent: true, opacity: 0.9 });
+            const line = new THREE.Line(geo, mat);
+            line.computeLineDistances();
+            return line;
+        }
+        // 依使用者確認：實線＝目標飛行路徑（半徑5M），外側虛線＝容許邊界（半徑6M，較目標路徑向外1M，
+        // 對應「機身一半不得超越」規則）。超過外側虛線即失格；不設內側限制。
+        function makeDirArrow(cx, cz, radius, angleDeg, tx, tz, color) {
+            const a = THREE.MathUtils.degToRad(angleDeg);
+            const x = cx + Math.cos(a) * radius, z = cz + Math.sin(a) * radius;
+            const len = Math.hypot(tx, tz); const ux = tx / len, uz = tz / len;
+            const px = -uz, pz = ux;
+            const tipX = x + ux * 0.55, tipZ = z + uz * 0.55;
+            const baseLX = x - ux * 0.35 + px * 0.32, baseLZ = z - uz * 0.35 + pz * 0.32;
+            const baseRX = x - ux * 0.35 - px * 0.32, baseRZ = z - uz * 0.35 - pz * 0.32;
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.Float32BufferAttribute([
+                tipX, TRACK_LINE_Y + 0.02, tipZ,
+                baseLX, TRACK_LINE_Y + 0.02, baseLZ,
+                baseRX, TRACK_LINE_Y + 0.02, baseRZ
+            ], 3));
+            geo.computeVertexNormals();
+            const mat = new THREE.MeshBasicMaterial({ color, side: THREE.DoubleSide, transparent: true, opacity: 0.95 });
+            return new THREE.Mesh(geo, mat);
+        }
+        function addFig8LobeArrows(group, cx, cz, radius, ccwSign) {
+            // 左圓沿角度遞減方向前進（逆時針視角）、右圓沿角度遞增方向前進（順時針視角），
+            // 已依已核准之 P1→P2→P3→P4 航點順序反推正確切線方向。
+            [45, 135, 225, 315].forEach(angleDeg => {
+                const a = THREE.MathUtils.degToRad(angleDeg);
+                const tx = ccwSign * Math.sin(a), tz = -ccwSign * Math.cos(a);
+                group.add(makeDirArrow(cx, cz, radius, angleDeg, tx, tz, FIG8_TRACK_COLOR));
+            });
+        }
+        const figure8TrackGroup = new THREE.Group();
+        // 實線：目標飛行路徑（半徑5M，依官方測場圖直徑10M）
+        figure8TrackGroup.add(makeTrackCircle(-5, -8, FIG8_R, 64, FIG8_TRACK_COLOR, false));
+        figure8TrackGroup.add(makeTrackCircle(5, -8, FIG8_R, 64, FIG8_TRACK_COLOR, false));
+        // 外側虛線（半徑6M）：機身一半不得超越，超出即失格
+        figure8TrackGroup.add(makeTrackCircle(-5, -8, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
+        figure8TrackGroup.add(makeTrackCircle(5, -8, FIG8_OUTER_R, 64, FIG8_TRACK_COLOR, true));
+        // 方向箭頭：左圓逆時針、右圓順時針（對應官方口令「先向左逆時針、再向右順時針」）
+        addFig8LobeArrows(figure8TrackGroup, -5, -8, FIG8_R, -1);
+        addFig8LobeArrows(figure8TrackGroup, 5, -8, FIG8_R, 1);
+        figure8TrackGroup.visible = false;
+        scene.add(figure8TrackGroup);
+
+        const fivelegTrackGroup = new THREE.Group();
+        fivelegTrackGroup.add(makeTrackLineFromPoints(fivelegCoords, true));
+        fivelegTrackGroup.visible = false;
+        scene.add(fivelegTrackGroup);
+
+        const sidehoverTrackGroup = new THREE.Group();
+        // 直線：P3—H—P7（開放線段，非封閉航線）
+        sidehoverTrackGroup.add(makeTrackLineFromPoints([
+            { x: -SIDEHOVER_HALF, z: 0 }, { x: 0, z: 0 }, { x: SIDEHOVER_HALF, z: 0 }
+        ], false, TRACK_LINE_COLOR));
+        sidehoverTrackGroup.visible = false;
+        scene.add(sidehoverTrackGroup);
+
+        const courseTrackGroups = { figure8: figure8TrackGroup, fiveleg: fivelegTrackGroup, sidehover: sidehoverTrackGroup };
+
+        function updateScoreDisplayText() {
+            const scoreEl = document.getElementById('scoreDisplay');
+            if (!scoreEl) return;
+            if (task.type === 'free') {
+                scoreEl.innerText = `(正面穿越目標圓圈)分數: ${currentScore}`;
+            } else {
+                const total = courses[task.type].points.length;
+                scoreEl.innerText = `🎯 ${TASK_NAMES[task.type]} 進度 ${Math.min(task.wpIndex, total)}/${total}`;
+            }
+        }
+
+        function showTaskComplete() {
+            const el = document.getElementById('taskCompleteAlert');
+            if (!el) return;
+            el.innerText = `🎉 ${TASK_NAMES[task.type]} 完成！\n最大高度偏差：${task.altDevMax.toFixed(2)} m`;
+            el.style.display = 'block';
+            if (window.taskCompleteTimer) clearTimeout(window.taskCompleteTimer);
+            window.taskCompleteTimer = setTimeout(() => { el.style.display = 'none'; }, 4000);
+        }
+
+        function setActiveCourse(type) {
+            task.type = type; task.wpIndex = 0; task.altDevMax = 0; task.done = false;
+            fig8Entered = false;
+            const alertEl = document.getElementById('taskCompleteAlert');
+            if (alertEl) alertEl.style.display = 'none';
+            const hintEl = document.getElementById('taskHint');
+            if (hintEl) hintEl.style.display = (type === 'free') ? 'none' : 'block';
+
+            goalData.forEach(g => { g.mesh.visible = (type === 'free'); if (g.poleMesh) g.poleMesh.visible = (type === 'free'); });
+
+            ['figure8', 'fiveleg', 'sidehover'].forEach(name => {
+                const isActive = (type === name);
+                courses[name].points.forEach(wp => { wp.group.visible = isActive; });
+                courseTrackGroups[name].visible = isActive;
+                if (isActive) {
+                    const priority = { pending: 0, done: 1, target: 2 };
+                    const bestState = new Map();
+                    courses[name].points.forEach((wp, idx) => {
+                        const s = idx === 0 ? 'target' : 'pending';
+                        const cur = bestState.get(wp.ringMat);
+                        if (!cur || priority[s] > priority[cur]) bestState.set(wp.ringMat, s);
+                    });
+                    courses[name].points.forEach(wp => { setWaypointState(wp, bestState.get(wp.ringMat)); });
+                }
+            });
+
+            if (type === 'free') { assignNewTarget(); }
+            const yawStatusEl = document.getElementById('sidehoverStatus');
+            if (yawStatusEl) yawStatusEl.style.display = (type === 'sidehover') ? 'block' : 'none';
+            updateScoreDisplayText();
+            repositionArmStatus();
+        }
+
+        // 側面懸停考科：將 yaw 弧度換算為口語化機頭朝向標籤（依現有 yaw 座標慣例）
+        function yawLabel(yaw) {
+            const norm = Math.atan2(Math.sin(yaw), Math.cos(yaw));
+            if (Math.abs(norm) < YAW_TOL) return '機頭朝外';
+            if (Math.abs(norm - Math.PI / 2) < YAW_TOL) return '機頭朝左';
+            if (Math.abs(norm + Math.PI / 2) < YAW_TOL) return '機頭朝右';
+            if (Math.abs(Math.abs(norm) - Math.PI) < YAW_TOL) return '機頭朝內';
+            return '朝向調整中';
+        }
+
+        // 讓「尚未起飛」提示浮條的位置永遠貼在下方面板（#info-panel）正上方，
+        // 避免面板列數因模式切換（例如考科練習會多顯示一行提示）而改變高度時互相重疊。
+        function repositionArmStatus() {
+            const armEl = document.getElementById('armStatus');
+            const panelEl = document.getElementById('info-panel');
+            if (!armEl || !panelEl) return;
+            const panelRect = panelEl.getBoundingClientRect();
+            const gap = 14;
+            if (panelRect.height > 0 && panelEl.style.display !== 'none') {
+                armEl.style.bottom = (window.innerHeight - panelRect.top + gap) + 'px';
+            } else {
+                armEl.style.bottom = '20px';
+            }
+        }
+
+        const taskSelect = document.getElementById('taskSelect');
+        if (taskSelect) {
+            taskSelect.addEventListener('change', (e) => { setActiveCourse(e.target.value); });
+        }
+        window.addEventListener('load', repositionArmStatus);
+        window.addEventListener('resize', repositionArmStatus);
+        repositionArmStatus();
+
+        function updateCourseProgress() {
+            if (task.done) return;
+            const pts = courses[task.type].points;
+            if (task.wpIndex >= pts.length) { task.done = true; showTaskComplete(); return; }
+            const wp = pts[task.wpIndex];
+            const dx = droneLogic.x - wp.x; const dz = droneLogic.z - wp.z;
+            const horizDist = Math.sqrt(dx * dx + dz * dz);
+            const altDev = Math.abs(droneLogic.y - (typeof wp.alt === 'number' ? wp.alt : COURSE_ALT_BY_TYPE[task.type]));
+            task.altDevMax = Math.max(task.altDevMax, altDev);
+            // 側面懸停考科需額外檢核機頭朝向（wp.yaw 有定義時），八字圓／五邊飛行不檢核朝向，保持現行行為
+            let yawOk = true;
+            if (typeof wp.yaw === 'number') {
+                const yawDiff = Math.atan2(Math.sin(droneLogic.yaw - wp.yaw), Math.cos(droneLogic.yaw - wp.yaw));
+                yawOk = Math.abs(yawDiff) < YAW_TOL;
+            }
+            if (horizDist < COURSE_CAPTURE_R && altDev < COURSE_ALT_TOL && yawOk) {
+                setWaypointState(wp, 'done');
+                task.wpIndex++;
+                if (task.wpIndex < pts.length) { setWaypointState(pts[task.wpIndex], 'target'); }
+                updateScoreDisplayText();
+                if (task.wpIndex >= pts.length) { task.done = true; showTaskComplete(); }
+            }
+        }
+
+        const droneGroup = new THREE.Group(); const droneTiltGroup = new THREE.Group(); droneGroup.add(droneTiltGroup); scene.add(droneGroup);
+        const matBodyWhite = new THREE.MeshLambertMaterial({ color: 0xecf0f1 }); const matBodyDark = new THREE.MeshLambertMaterial({ color: 0x2d3436 }); 
+        const matMotor = new THREE.MeshStandardMaterial({ color: 0xbdc3c7, metalness: 0.8, roughness: 0.2 }); const matProp = new THREE.MeshLambertMaterial({ color: 0x111111, transparent: true, opacity: 0.5, side: THREE.DoubleSide }); 
+        const matLens = new THREE.MeshStandardMaterial({ color: 0x0984e3, metalness: 0.9, roughness: 0.1 }); const matRedLED = new THREE.MeshBasicMaterial({ color: 0xff4757 }); 
+        const matGreenLED = new THREE.MeshBasicMaterial({ color: 0x2ecc71 }); const matArmFront = new THREE.MeshLambertMaterial({ color: 0xff4757 }); 
+
+        const body = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.15, 0.6), matBodyWhite); body.castShadow = true; droneTiltGroup.add(body);
+        const battery = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.08, 0.35), matBodyDark); battery.position.set(0, 0.11, 0.05); battery.castShadow = true; droneTiltGroup.add(battery);
+        const gimbal = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.15, 0.15), matBodyDark); gimbal.position.set(0, -0.05, -0.32); gimbal.castShadow = true; droneTiltGroup.add(gimbal);
+        const lens = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 16), matLens); lens.position.set(0, 0, -0.08); gimbal.add(lens);
+
+        const armGeo = new THREE.CylinderGeometry(0.03, 0.04, 0.65, 16); const motorGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.12, 16); const propGeo = new THREE.CylinderGeometry(0.35, 0.35, 0.01, 24); 
+        const spinningProps = [];
+        const propPositions = [ { x: 0.45, z: -0.45, led: matRedLED, angle: -Math.PI / 4, isFront: true }, { x: -0.45, z: -0.45, led: matRedLED, angle: Math.PI / 4, isFront: true }, { x: 0.45, z: 0.45, led: matGreenLED, angle: Math.PI / 4, isFront: false }, { x: -0.45, z: 0.45, led: matGreenLED, angle: -Math.PI / 4, isFront: false } ];
+
+        propPositions.forEach(pos => {
+            const currentArmMat = pos.isFront ? matArmFront : matBodyDark;
+            const arm = new THREE.Mesh(armGeo, currentArmMat); arm.rotation.z = Math.PI / 2; arm.rotation.y = pos.angle; arm.position.set(pos.x / 2, 0, pos.z / 2); arm.castShadow = true; droneTiltGroup.add(arm);
+            const motor = new THREE.Mesh(motorGeo, matMotor); motor.position.set(pos.x, 0.06, pos.z); motor.castShadow = true; droneTiltGroup.add(motor);
+            const prop = new THREE.Mesh(propGeo, matProp); prop.position.set(pos.x, 0.13, pos.z); prop.castShadow = true; droneTiltGroup.add(prop); spinningProps.push(prop); 
+            const led = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 16), pos.led); led.position.set(pos.x, 0.10, pos.z); droneTiltGroup.add(led);
+        });
+
+        const legGeo = new THREE.CylinderGeometry(0.02, 0.01, 0.2, 8); const legPositions = [ { x: 0.12, z: -0.15 }, { x: -0.12, z: -0.15 }, { x: 0.12, z: 0.15 }, { x: -0.12, z: 0.15 } ];
+        legPositions.forEach(pos => { const leg = new THREE.Mesh(legGeo, matBodyDark); leg.position.set(pos.x, -0.15, pos.z); leg.castShadow = true; droneTiltGroup.add(leg); });
+        const topArrow = new THREE.Mesh(new THREE.ConeGeometry(0.1, 0.25, 3), matRedLED); topArrow.rotation.x = -Math.PI / 2; topArrow.position.set(0, 0.16, -0.12); topArrow.castShadow = true; droneTiltGroup.add(topArrow);
+
+        windArrow3D = new THREE.ArrowHelper(new THREE.Vector3(1, 0, 0), new THREE.Vector3(0, 5.0, 10), 3, 0x3498db, 1.5, 0.8); scene.add(windArrow3D);
+
+        let droneLogic = { x: 0, y: 0.2, z: 0, vx: 0, vz: 0, yaw: 0 }; 
+        droneGroup.position.y = droneLogic.y; 
+
+        // --- 搖桿內八起飛（解鎖）手勢 ---
+        let armed = false; // 未解鎖前：飛行控制輸入均被忽略，無人機結存於地面
+        // 解鎖（內八手勢完成）後，只是「起槳」熱車：螺旋槫怠速轉動，但無人機仍停在地面，
+        // 不會因為手還停在內八角落位置而被誤判成飛行指令。必須讓雙搖桿先回到中心，
+        // 才會真正把搖桿輸入視為起飛/飛行控制。
+        let awaitingCenterAfterArm = false;
+        const CENTER_DEADZONE_RATIO = 0.12; // 回中判定：搖桿需回到最大行程 12% 以內才算已回中
+        const armGesture = { timer: 0, required: 0.6 }; // 需持續保持手勢 0.6 秒
+        const ARM_STICK_RATIO = 0.65; // 雙搖桿各軸需達到最大行行量的 65%（兩軸同時满足即算內八）
+        function updateArmStatusUI(progressRatio) {
+            const el = document.getElementById('armStatus');
+            if (!el) return;
+            if (armed) { return; } // 解鎖後的顯示/隱藏由解鎖瞬間的提示流程自行控制
+            el.classList.remove('armed-ok');
+            el.style.display = 'block';
+            if (progressRatio > 0.02) {
+                el.innerText = `🔓 偵測到內八解鎖動作：${Math.round(Math.min(1, progressRatio) * 100)}%，請持續保持即可起飛`;
+            } else {
+                el.innerText = '🔒 尚未起飛：雙搖桿同時「內八」下壓（左搖桿右下、右搖桿左下）或按 Enter 解鎖起飛';
+            }
+        }
+        function triggerArmed() {
+            if (armed) return;
+            armed = true;
+            awaitingCenterAfterArm = true; // 剛解鎖：只是起槳熱車，還不接受飛行控制輸入
+            armGesture.timer = armGesture.required;
+            const el = document.getElementById('armStatus');
+            if (el) {
+                el.classList.add('armed-ok');
+                el.innerText = '🔄 已起槳熱車中：請先將雙搖桿放回中心，再推左搖桿起飛';
+            el.style.display = 'block';
+            clearTimeout(window.armStatusHideTimer);
+            }
+        }
+        function markLiftoffReady() {
+            const el = document.getElementById('armStatus');
+            if (!el) return;
+            el.innerText = '✅ 熱車完成！推左搖桿即可起飛';
+            clearTimeout(window.armStatusHideTimer);
+            window.armStatusHideTimer = setTimeout(() => { el.style.display = 'none'; }, 1600);
+        }
+
+        let dynamicCameraY = 25; 
+        function updateDynamicHeight() {
+            dynamicCameraY = 25; 
+            const baseFov = camZoomFov;      
+            const baseAspect = 1.6;  
+
+            if (camera.aspect < baseAspect) {
+                const cameraHeight = Math.tan(THREE.MathUtils.degToRad(baseFov / 2));
+                const currentCameraHeight = cameraHeight * (baseAspect / camera.aspect);
+                camera.fov = THREE.MathUtils.radToDeg(Math.atan(currentCameraHeight)) * 2;
+            } else {
+                camera.fov = baseFov;
+            }
+            camera.updateProjectionMatrix();
+        }
+
+        function resizeCanvasToDisplaySize() {
+            const container = document.getElementById('gameArea');
+            if (!container) return;
+            const width = Math.max(1, container.clientWidth);
+            const height = Math.max(1, container.clientHeight);
+            const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+            renderer.setPixelRatio(pixelRatio);
+            const expectedWidth = Math.round(width * pixelRatio);
+            const expectedHeight = Math.round(height * pixelRatio);
+            if (canvas.width !== expectedWidth || canvas.height !== expectedHeight) {
+                renderer.setSize(width, height, false);
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                updateDynamicHeight();
+            }
+        }
+        window.addEventListener('resize', resizeCanvasToDisplaySize, { passive: true });
+        window.addEventListener('orientationchange', () => window.setTimeout(resizeCanvasToDisplaySize, 180), { passive: true });
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', resizeCanvasToDisplaySize, { passive: true });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            resizeCanvasToDisplaySize();
+
+            if (typeof spinningProps !== 'undefined') { spinningProps.forEach(prop => { prop.rotation.y += 0.8; }); }
+
+            if (armed && !awaitingCenterAfterArm) {
+                if (keys['a']) droneLogic.yaw += 0.025; 
+                if (keys['d']) droneLogic.yaw -= 0.025;
+            }
+
+            // 左右轉頭（方向鍵）：不受解鎖/起飛狀態影響，隨時可轉頭查看周圍。
+            if (keys['arrowleft']) camYawOffset = Math.max(-CAM_YAW_MAX, camYawOffset - CAM_YAW_SPEED);
+            if (keys['arrowright']) camYawOffset = Math.min(CAM_YAW_MAX, camYawOffset + CAM_YAW_SPEED);
+            if ((keys['arrowleft'] || keys['arrowright']) && camYawSlider) camYawSlider.value = camYawOffset;
+            
+            const gamepads = navigator.getGamepads ? navigator.getGamepads() : []; const gp = gamepads[0]; 
+            if (gp) {
+                const deadzone = 0.1; 
+                
+                let leftX = 0; let leftY = 0;
+                if(gp.axes.length >= 2) {
+                    leftX = Math.abs(gp.axes[0]) > deadzone ? gp.axes[0] : 0; 
+                    leftY = Math.abs(gp.axes[1]) > deadzone ? gp.axes[1] : 0;
+                }
+                
+                let rightX = 0; 
+                let rightY = 0;
+
+                const modeSelect = document.getElementById('gamepadMode');
+                const mode = modeSelect ? modeSelect.value : 'auto';
+                
+                let useDirectInput = false;
+
+                if (mode === 'direct') {
+                    useDirectInput = true;
+                } else if (mode === 'xinput') {
+                    useDirectInput = false;
+                } else {
+                    useDirectInput = (gp.mapping !== 'standard' && gp.axes.length > 5);
+                }
+
+                if (useDirectInput && gp.axes.length > 5) {
+                    rightX = Math.abs(gp.axes[5]) > deadzone ? gp.axes[5] : 0; 
+                    rightY = Math.abs(gp.axes[2]) > deadzone ? gp.axes[2] : 0; 
+                } else if (gp.axes.length > 3) {
+                    rightX = Math.abs(gp.axes[2]) > deadzone ? gp.axes[2] : 0; 
+                    rightY = Math.abs(gp.axes[3]) > deadzone ? gp.axes[3] : 0; 
+                }
+
+                if (!isLeftTouching) {
+                    if (leftX !== 0 || leftY !== 0) {
+                        joyLeftDx = leftX * 60; joyLeftDy = leftY * 60;
+                        if (leftZone.style.display !== 'none') {
+                            const r = (leftZone.clientWidth / 2) - (leftStick.offsetWidth / 2);
+                            leftStick.style.transform = `translate(calc(-50% + ${leftX * r}px), calc(-50% + ${leftY * r}px))`;
+                        }
+                    } else { joyLeftDx = 0; joyLeftDy = 0; if (leftZone.style.display !== 'none') leftStick.style.transform = `translate(-50%, -50%)`; }
+                }
+
+                if (!isTouching) {
+                    if (rightX !== 0 || rightY !== 0) {
+                        joyDx = rightX * 80; joyDy = rightY * 80;
+                        if (zone.style.display !== 'none') {
+                            const r = (zone.clientWidth / 2) - (stick.offsetWidth / 2);
+                            stick.style.transform = `translate(calc(-50% + ${rightX * r}px), calc(-50% + ${rightY * r}px))`;
+                        }
+                    } else { joyDx = 0; joyDy = 0; if (zone.style.display !== 'none') stick.style.transform = `translate(-50%, -50%)`; }
+                }
+            }
+
+            // --- 內八解鎖手勢偵測（需在 joyLeftDx/Dy 、joyDx/Dy 本幀更新後、實際控制應用前判定） ---
+            if (!armed) {
+                const leftIn = (joyLeftDy > 60 * ARM_STICK_RATIO) && (joyLeftDx > 60 * ARM_STICK_RATIO);
+                const rightIn = (joyDy > 80 * ARM_STICK_RATIO) && (joyDx < -80 * ARM_STICK_RATIO);
+                if (keys['enter']) {
+                    triggerArmed();
+                } else if (leftIn && rightIn) {
+                    armGesture.timer += 1 / 60;
+                    if (armGesture.timer >= armGesture.required) { triggerArmed(); }
+                } else {
+                    armGesture.timer = 0;
+                }
+                updateArmStatusUI(armGesture.timer / armGesture.required);
+                droneLogic.vx = 0; droneLogic.vz = 0; droneLogic.y = 0.2;
+            }
+
+            // 剛解鎖（起槳熱車中）：確認雙搖桿都已回到接近中心後，才真正解除體飛行控制鎖定，
+            // 避免手還留在內八角落位置就被當成飛行指令。
+            if (armed && awaitingCenterAfterArm) {
+                const centered = Math.abs(joyLeftDx) < 60 * CENTER_DEADZONE_RATIO &&
+                                  Math.abs(joyLeftDy) < 60 * CENTER_DEADZONE_RATIO &&
+                                  Math.abs(joyDx) < 80 * CENTER_DEADZONE_RATIO &&
+                                  Math.abs(joyDy) < 80 * CENTER_DEADZONE_RATIO;
+                if (centered) {
+                    awaitingCenterAfterArm = false;
+                    markLiftoffReady();
+                }
+                droneLogic.vx = 0; droneLogic.vz = 0; droneLogic.y = 0.2; // 熱車中：僅螺旋槫怠速轉動，不接受任何飛行控制
+            }
+
+            if (armed && !awaitingCenterAfterArm) {
+                if (joyLeftDx !== 0) { droneLogic.yaw -= (joyLeftDx / 60) * 0.025; }
+                if (joyLeftDy !== 0) { droneLogic.y -= (joyLeftDy / 60) * 0.08; }
+            }
+
+            if (droneLogic.y < 0.2) droneLogic.y = 0.2; 
+            if (droneLogic.y > 20) droneLogic.y = 19.5; 
+
+            currentWind.x += (targetWind.x - currentWind.x) * 0.02;
+            currentWind.z += (targetWind.z - currentWind.z) * 0.02;
+
+            droneGroup.rotation.y = droneLogic.yaw;
+
+            let maxTilt = 0.2; 
+            let targetPitch = (armed && !awaitingCenterAfterArm) ? (joyDy / 60) * maxTilt : 0; 
+            let targetRoll = (armed && !awaitingCenterAfterArm) ? -(joyDx / 60) * maxTilt : 0;
+            droneTiltGroup.rotation.x += (targetPitch - droneTiltGroup.rotation.x) * 0.12; 
+            droneTiltGroup.rotation.z += (targetRoll - droneTiltGroup.rotation.z) * 0.12;
+
+            let accel = 0.004; 
+            let thrustX = (armed && !awaitingCenterAfterArm) ? (joyDx / 60) * accel : 0; 
+            let thrustZ = (armed && !awaitingCenterAfterArm) ? (joyDy / 60) * accel : 0;
+
+            let worldAccX = thrustX * Math.cos(droneLogic.yaw) + thrustZ * Math.sin(droneLogic.yaw);
+            let worldAccZ = -thrustX * Math.sin(droneLogic.yaw) + thrustZ * Math.cos(droneLogic.yaw);
+
+            // GPS（一般）模式：風力大幅衰減（模擬飛控主動抗風），且搖桿回中立時會鎖定水平位置、
+            // 主動抵消殘餘風飄移；搖桿仍在輸入（前進中）時，僅保留小幅風干擾，不做位置鎖定。
+            const isGPSMode = (flightMode === 'gps');
+            const stickNeutral = armed && Math.abs(joyDx) < 3 && Math.abs(joyDy) < 3;
+            const windScale = isGPSMode ? 0.2 : 1.0;
+            let windForceX = currentWind.x * 0.05 * windScale; let windForceZ = currentWind.z * 0.05 * windScale;
+            droneLogic.vx += worldAccX + windForceX; droneLogic.vz += worldAccZ + windForceZ;
+            let drag = 0.95;
+            if (isGPSMode && armed) {
+                if (stickNeutral) {
+                    if (!gpsHoldActive) { gpsHoldActive = true; gpsHoldX = droneLogic.x; gpsHoldZ = droneLogic.z; }
+                    droneLogic.vx += (gpsHoldX - droneLogic.x) * 0.02;
+                    droneLogic.vz += (gpsHoldZ - droneLogic.z) * 0.02;
+                    drag = 0.85; // 定位持穩時加大阻尼，加快收斂
+                } else {
+                    gpsHoldActive = false;
+                }
+            }
+            droneLogic.vx *= drag; droneLogic.vz *= drag;
+            
+            let nextX = droneLogic.x + droneLogic.vx;
+            let nextZ = droneLogic.z + droneLogic.vz;
+            
+            const droneRadius = 0.4; 
+            let collisionHit = false;
+
+            for (let c of colliders) {
+                if (c.type === 'cylinder') { 
+                    let dx = nextX - c.x;
+                    let dz = nextZ - c.z;
+                    let dist2 = dx*dx + dz*dz;
+                    let minDist = droneRadius + c.r;
+                    if (dist2 < minDist*minDist && droneLogic.y >= c.yMin && droneLogic.y - 0.2 <= c.yMax) {
+                        collisionHit = true; break;
+                    }
+                } else if (c.type === 'torus' && task.type === 'free') { 
+                    let dZ = Math.abs(nextZ - c.z);
+                    let dx = nextX - c.x;
+                    let dy = droneLogic.y - c.y;
+                    let dXY = Math.sqrt(dx*dx + dy*dy);
+                    
+                    if (dZ < droneRadius + c.tube) {
+                        let distToRingCenter = Math.abs(dXY - c.r);
+                        if (distToRingCenter < droneRadius + c.tube) {
+                            collisionHit = true; break;
+                        }
+                    }
+                }
+            }
+
+            if (collisionHit) {
+                droneLogic.vx *= -0.8;
+                droneLogic.vz *= -0.8;
+                
+                let crashAlertEl = document.getElementById('crashAlert');
+                if(crashAlertEl) crashAlertEl.style.display = 'block';
+                if(window.crashTimer) clearTimeout(window.crashTimer);
+                window.crashTimer = setTimeout(() => { if(crashAlertEl) crashAlertEl.style.display = 'none'; }, 600);
+            } else {
+                let prevZ = droneLogic.z; 
+                droneLogic.x = nextX;
+                droneLogic.z = nextZ;
+
+                if (task.type !== 'free') { updateCourseProgress(); }
+                if (task.type === 'sidehover') {
+                    const yawInfoEl = document.getElementById('sidehoverYawInfo');
+                    if (yawInfoEl) {
+                        const pts = courses.sidehover.points;
+                        const cur = yawLabel(droneLogic.yaw);
+                        if (task.wpIndex < pts.length && typeof pts[task.wpIndex].yaw === 'number') {
+                            yawInfoEl.innerText = ` 目前：${cur}，需要：${yawLabel(pts[task.wpIndex].yaw)}`;
+                        } else {
+                            yawInfoEl.innerText = ` 目前：${cur}`;
+                        }
+                    }
+                }
+
+                // 穿越圈圈與隨機目標判定（僅於自由訓練模式套用）
+                if (task.type === 'free') goalData.forEach(g => {
+                    if (!g.passed && prevZ > g.z && nextZ <= g.z) {
+                        let dx = droneLogic.x - g.x;
+                        let dy = droneLogic.y - g.y;
+                        let dXY = Math.sqrt(dx*dx + dy*dy);
+                        
+                        // 判定在圈內
+                        if (dXY <= g.radius) { 
+                            g.passed = true; // 鎖定該圈圈
+                            
+                            if (g.isTarget) {
+                                // 穿過正確的目標
+                                currentScore += 1;
+                                document.getElementById('scoreDisplay').innerText = `(正面穿越目標圓圈)分數: ${currentScore}`;
+                                g.mesh.material.color.setHex(COLOR_SUCCESS); 
+                                
+                                let scoreAnim = document.getElementById('scoreAnim');
+                                scoreAnim.innerText = '+1'; // 確保顯示 +1
+                                scoreAnim.classList.remove('score-popup');
+                                void scoreAnim.offsetWidth; 
+                                scoreAnim.classList.add('score-popup');
+                                
+                                // 為避免立刻刷新太快，稍微延遲 0.8 秒後產生新目標
+                                goalData.forEach(ring => ring.passed = true); // 鎖定所有圈，防止延遲期間繼續得分
+                                setTimeout(assignNewTarget, 800);
+                            } else {
+                                // 穿錯目標
+                                g.mesh.material.color.setHex(COLOR_FAIL);
+                            }
+                        }
+                    }
+                });
+            }
+            
+            const mapBoundX = 34.5;
+            const mapBoundZ = 84.0; // 已放大以容納五邊飛行 80M 深度航線
+            if(droneLogic.x > mapBoundX) { droneLogic.x = mapBoundX; droneLogic.vx = 0; }
+            if(droneLogic.x < -mapBoundX) { droneLogic.x = -mapBoundX; droneLogic.vx = 0; }
+            if(droneLogic.z > mapBoundZ) { droneLogic.z = mapBoundZ; droneLogic.vz = 0; }
+            if(droneLogic.z < -mapBoundZ) { droneLogic.z = -mapBoundZ; droneLogic.vz = 0; }
+
+            droneGroup.position.x = droneLogic.x; droneGroup.position.y = droneLogic.y; droneGroup.position.z = droneLogic.z;
+
+            if (task.type === 'figure8' && armed && !fig8Disqualified) {
+                const distLeft = Math.hypot(droneLogic.x - (-5), droneLogic.z - (-8));
+                const distRight = Math.hypot(droneLogic.x - 5, droneLogic.z - (-8));
+                const nearestDist = Math.min(distLeft, distRight);
+                if (!fig8Entered) {
+                    // 尚在從 H 點進場途中，進入容許带後才開始判失格
+                    if (nearestDist <= FIG8_OUTER_R) fig8Entered = true;
+                } else if (nearestDist > FIG8_OUTER_R) {
+                    triggerFig8Disqualify();
+                }
+            }
+
+            let showArrowBtn = document.getElementById('showArrowBtn');
+            let showArrow = showArrowBtn ? showArrowBtn.checked : false;
+            if (windArrow3D) {
+                let windSpeedMag = Math.sqrt(currentWind.x**2 + currentWind.z**2);
+                if (windSpeedMag > 0.005 && showArrow) { 
+                    windArrow3D.visible = true;
+                    let wVector = new THREE.Vector3(currentWind.x, 0, currentWind.z).normalize();
+                    let arrowLen = 3 + windSpeedMag * 30; 
+                    windArrow3D.setDirection(wVector); windArrow3D.setLength(arrowLen, 0.5, 0.4);
+                    let offsetDistance = 1.2; 
+                    let tipPos = droneGroup.position.clone().sub(wVector.multiplyScalar(offsetDistance));
+                    tipPos.y = droneGroup.position.y; 
+                    let originPos = tipPos.clone().sub(wVector.multiplyScalar(arrowLen));
+                    windArrow3D.position.copy(originPos);
+                } else { windArrow3D.visible = false; }
+            }
+
+            // 左右轉頭共用旋轉公式：飽身位置不動，僅以原本直視方向（-Z）為基準，
+            // 依 camYawOffset（度）旋轉出新的水平看向方向，不影響俯仰（Y）。
+            const camYawRad = camYawOffset * Math.PI / 180;
+            if (currentCamView === 1) {
+                // P點視角：依官方測場圖【H點到場地底緣的距離7M】，考生站在H點後方7M處；
+                // 看飛機視角依178公分考生推算（自地面眼高≈身高×0.93≈165公分）。
+                camera.position.set(0, 1.65, 7);
+                const lookR1 = 37; // 原本目標點 z=-30，與飽身Z=7相差37，作為旋轉半徑
+                camera.lookAt(Math.sin(camYawRad) * lookR1, 5 + camAngleOffset * 1.5, 7 - Math.cos(camYawRad) * lookR1);
+            } else {
+                camera.position.set(0, dynamicCameraY / 3, 20);
+                const lookR2 = 220; // 原本目標點 z=-200，與飽身Z=20相差220
+                camera.lookAt(Math.sin(camYawRad) * lookR2, -40 + camAngleOffset * 2, 20 - Math.cos(camYawRad) * lookR2);
+            }
+
+            const skyTime = performance.now() * 0.001;
+            clouds.forEach((cloud, index) => {
+                cloud.position.x = cloud.userData.baseX + Math.sin(skyTime * cloud.userData.drift + index) * 5;
+                cloud.material.opacity = 0.44 + Math.sin(skyTime * 0.12 + index) * 0.06;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        let windDirElForInit = document.getElementById('windDir');
+        if (windDirElForInit && windDirElForInit.value === 'RANDOM') { triggerRandomWind(); }
+        
+        updateDynamicHeight(); updateWind(); animate();
+    </script>
+</body>
+</html>
