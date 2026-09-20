@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#b91c1c" />
+  <title>急難現場傷情回報模組</title>
+  <style>
+    :root { --primary:#b91c1c; --primary-dark:#7f1d1d; --primary-bg:#fff1f2; --primary-line:#fecdd3; --safe:#087c56; --safe-bg:#e8f8ef; --safe-line:#a8e3c1; --ink:#2b1d1d; --muted:#715b5b; --line:#ecd9d9; --blue:#2563eb; --shadow:0 18px 46px rgba(100,25,25,.16); }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; padding:24px; color:var(--ink); font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif; background:radial-gradient(circle at 8% 8%,rgba(251,113,133,.25),transparent 28%),radial-gradient(circle at 92% 5%,rgba(251,146,60,.15),transparent 25%),#fff5f5; }
+    main { width:min(960px,100%); margin:0 auto; overflow:hidden; background:rgba(255,255,255,.98); border:1px solid rgba(255,255,255,.85); border-radius:28px; box-shadow:var(--shadow); }
+    header { padding:34px 38px 28px; color:#fff; background:linear-gradient(135deg,var(--primary-dark),var(--primary)); }
+    h1 { margin:0 0 9px; font-size:clamp(1.65rem,4vw,2.3rem); }
+    header p { margin:0; line-height:1.65; opacity:.94; }
+    .contact { margin-top:12px; font-size:.93rem; opacity:.93; }
+    .contact a { color:#fff; font-weight:750; }
+    .content { padding:30px 38px 36px; }
+    .intro { margin:0 0 24px; padding:14px 16px; color:#7f1d1d; background:var(--primary-bg); border-left:5px solid var(--primary); border-radius:10px; line-height:1.65; font-weight:700; }
+    .section-title { margin:28px 0 14px; padding-bottom:9px; color:var(--primary-dark); border-bottom:2px solid var(--primary-line); font-size:1.12rem; }
+    .section-title:first-of-type { margin-top:0; }
+    .form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+    .field.full { grid-column:1 / -1; }
+    label { display:block; margin-bottom:8px; font-weight:800; }
+    input, select, textarea { width:100%; min-height:51px; padding:12px 14px; color:var(--ink); border:2px solid var(--line); border-radius:12px; background:#fff; font:inherit; font-size:1.04rem; outline:none; transition:border-color .2s,box-shadow .2s; }
+    textarea { min-height:100px; resize:vertical; line-height:1.55; }
+    input:focus,select:focus,textarea:focus { border-color:var(--primary); box-shadow:0 0 0 4px rgba(185,28,28,.12); }
+    .hint { margin:7px 0 0; color:var(--muted); font-size:.88rem; line-height:1.5; }
+    .vitals { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; padding:18px; border:1px solid var(--line); border-radius:16px; background:#fffafa; }
+    .vitals .field.full { grid-column:1 / -1; }
+    .actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:28px; }
+    button { min-height:54px; padding:15px 18px; border:0; border-radius:12px; color:#fff; background:var(--primary); font:inherit; font-size:1.03rem; font-weight:850; cursor:pointer; transition:transform .15s,background .2s,opacity .2s; }
+    button:hover { background:var(--primary-dark); }
+    button:active { transform:translateY(1px); }
+    button.secondary { color:var(--primary-dark); background:var(--primary-bg); border:2px solid var(--primary-line); }
+    button.secondary:hover { color:#fff; background:var(--primary); }
+    button.next { background:var(--blue); }
+    button.next:hover { background:#1d4ed8; }
+    button:disabled { cursor:not-allowed; opacity:.6; }
+    .save-status { display:none; margin-top:16px; padding:13px 15px; border-radius:12px; text-align:center; font-weight:750; line-height:1.55; }
+    .save-status.show { display:block; }
+    .save-status.success { color:var(--safe); background:var(--safe-bg); border:1px solid var(--safe-line); }
+    .save-status.error { color:var(--primary-dark); background:var(--primary-bg); border:1px solid var(--primary-line); }
+    .save-status.loading { color:#765000; background:#fff9df; border:1px solid #f0d478; }
+    .report { display:none; margin-top:28px; border:2px solid var(--primary-line); border-radius:20px; overflow:hidden; background:#fff; }
+    .report.show { display:block; }
+    .report-head { padding:17px 20px; color:var(--primary-dark); background:var(--primary-bg); font-size:1.15rem; font-weight:900; text-align:center; }
+    .report-body { padding:24px; }
+    .report-person { margin:0 0 18px; color:var(--muted); text-align:center; line-height:1.65; }
+    .report-person strong { color:var(--ink); font-size:1.15rem; }
+    .report-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .report-item { padding:16px; border:1px solid var(--line); border-radius:14px; background:#fffafa; }
+    .report-item.full { grid-column:1 / -1; }
+    .report-item span { display:block; margin-bottom:6px; color:var(--muted); font-size:.9rem; font-weight:800; }
+    .report-item p { margin:0; white-space:pre-wrap; line-height:1.65; font-weight:650; }
+    .notice { margin-top:25px; padding-top:20px; border-top:1px solid var(--line); color:var(--muted); font-size:.9rem; line-height:1.72; }
+    .notice strong { color:var(--ink); }
+    @media (max-width:720px) { body { padding:14px; } header,.content { padding-left:21px; padding-right:21px; } .form-grid,.vitals,.report-grid,.actions { grid-template-columns:1fr; } .field.full,.vitals .field.full,.report-item.full { grid-column:auto; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>急難現場傷情回報模組</h1>
+      <p>用於現場初步紀錄人員傷情、生命徵象、處置情形與後續動向，並可送出至指定 Google 試算表彙整。</p>
+      <p class="contact">聯絡信箱：<a href="mailto:mpasta-layoff-1r@icloud.com">mpasta-layoff-1r@icloud.com</a></p>
+    </header>
+
+    <section class="content" aria-label="傷情回報表單">
+      <p class="intro">請依現場實際評估與單位流程填寫。本模組用於回報與紀錄，不能取代醫療評估、緊急救護或醫囑。</p>
+
+      <h2 class="section-title">基本資料</h2>
+      <div class="form-grid">
+        <div>
+          <label for="registrar">登記者（選填）</label>
+          <input id="registrar" type="text" maxlength="30" placeholder="請輸入登記者姓名或代號" />
+        </div>
+        <div>
+          <label for="reportTime">回報時間</label>
+          <input id="reportTime" type="datetime-local" />
+          <p class="hint">預設為目前時間，可依實際事件時間調整。</p>
+        </div>
+        <div>
+          <label for="name">人員姓名</label>
+          <input id="name" type="text" maxlength="30" autocomplete="name" placeholder="例如：林國仁" />
+        </div>
+        <div>
+          <label for="unit">所屬單位</label>
+          <input id="unit" type="text" maxlength="60" placeholder="例如：現場怪手司機" />
+        </div>
+      </div>
+
+      <h2 class="section-title">傷情與生命徵象</h2>
+      <div class="form-grid">
+        <div class="field full">
+          <label for="injury">人員傷情</label>
+          <textarea id="injury" maxlength="500" placeholder="例如：吸入濃煙、胸悶、胸痛"></textarea>
+        </div>
+      </div>
+      <div class="vitals">
+        <div><label for="systolic">血壓－收縮壓（mmHg）</label><input id="systolic" type="number" min="40" max="300" inputmode="numeric" placeholder="例如：146" /></div>
+        <div><label for="diastolic">血壓－舒張壓（mmHg）</label><input id="diastolic" type="number" min="20" max="200" inputmode="numeric" placeholder="例如：103" /></div>
+        <div><label for="spo2">SpO₂（%）</label><input id="spo2" type="number" min="0" max="100" step="1" inputmode="numeric" placeholder="例如：100" /></div>
+        <div><label for="temperature">體溫（°C）</label><input id="temperature" type="number" min="30" max="45" step="0.1" inputmode="decimal" placeholder="例如：36.7" /></div>
+        <div><label for="bloodGlucose">血糖（mg/dL）</label><input id="bloodGlucose" type="number" min="1" max="1000" step="1" inputmode="numeric" placeholder="例如：107" /></div>
+        <div><label for="pulse">脈搏（下／分鐘，選填）</label><input id="pulse" type="number" min="1" max="300" inputmode="numeric" placeholder="例如：88" /></div>
+        <div class="field full"><label for="medicalHistory">過去病史</label><input id="medicalHistory" type="text" maxlength="300" placeholder="例如：無" /></div>
+      </div>
+
+      <h2 class="section-title">處置與後續動向</h2>
+      <div class="form-grid">
+        <div class="field full"><label for="treatment">處置情形</label><textarea id="treatment" maxlength="800" placeholder="例如：給 NRM／15 L/min；EKG：鄭醫師判讀非 STEMI"></textarea></div>
+        <div class="field full"><label for="followUp">後續動向</label><textarea id="followUp" maxlength="800" placeholder="例如：10:30 再次觀察"></textarea></div>
+      </div>
+
+      <div class="actions">
+        <button id="preview" type="button">檢視傷情回報</button>
+        <button id="save" class="secondary" type="button" disabled>儲存本次回報</button>
+        <button id="next" class="next" type="button" disabled>下一筆回報</button>
+      </div>
+      <div id="saveStatus" class="save-status" aria-live="polite"></div>
+
+      <section id="report" class="report" aria-live="polite">
+        <div class="report-head">傷情回報摘要</div>
+        <div class="report-body">
+          <p id="reportPerson" class="report-person"></p>
+          <div class="report-grid">
+            <article class="report-item full"><span>人員傷情</span><p id="reportInjury">—</p></article>
+            <article class="report-item"><span>生命徵象</span><p id="reportVitals">—</p></article>
+            <article class="report-item"><span>過去病史</span><p id="reportHistory">—</p></article>
+            <article class="report-item full"><span>處置情形</span><p id="reportTreatment">—</p></article>
+            <article class="report-item full"><span>後續動向</span><p id="reportFollowUp">—</p></article>
+          </div>
+        </div>
+      </section>
+
+      <aside class="notice"><strong>安全提醒：</strong>若出現意識改變、明顯呼吸困難、持續或加劇的胸痛／胸悶、嚴重外傷、生命徵象異常或其他緊急狀況，請立即依現場指揮與緊急醫療流程處置。本頁僅供紀錄與通報使用。</aside>
+    </section>
+  </main>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwjzndLPXX-25_dc8B0FyuNkMEK94vHMSZJK8erbkUxB-BVkGxEly9-Rn0gZ0hZmaIxvA/exec';
+    const SUBMIT_TOKEN = 'J8r#V4m!Q2xL7@pN5kT9cW1dF6sH3yA0';
+    const $ = id => document.getElementById(id);
+    const fields = ['registrar','reportTime','name','unit','injury','systolic','diastolic','spo2','temperature','bloodGlucose','pulse','medicalHistory','treatment','followUp'].map($);
+    const reportTime = $('reportTime');
+    const nameInput = $('name');
+    const unitInput = $('unit');
+    const injuryInput = $('injury');
+    const report = $('report');
+    const saveButton = $('save');
+    const nextButton = $('next');
+    const saveStatus = $('saveStatus');
+    let currentRecord = null;
+    let savedFingerprint = '';
+
+    function localDateTimeNow() {
+      const now = new Date();
+      const offset = now.getTimezoneOffset() * 60000;
+      return new Date(now - offset).toISOString().slice(0, 16);
+    }
+    reportTime.value = localDateTimeNow();
+    function setSaveStatus(type, text) { saveStatus.className = `save-status show ${type}`; saveStatus.textContent = text; }
+    function resetSaveStatus() { saveStatus.className = 'save-status'; saveStatus.textContent = ''; }
+    function text(id) { return $(id).value.trim(); }
+    function optionalNumber(id) { const value = text(id); return value === '' ? '' : Number(value); }
+    function validOptionalRange(value, min, max) { return value === '' || (Number.isFinite(value) && value >= min && value <= max); }
+
+    function validate() {
+      const data = { registrar:text('registrar'), reportTime:reportTime.value, name:text('name'), unit:text('unit'), injury:text('injury'), systolic:optionalNumber('systolic'), diastolic:optionalNumber('diastolic'), spo2:optionalNumber('spo2'), temperature:optionalNumber('temperature'), bloodGlucose:optionalNumber('bloodGlucose'), pulse:optionalNumber('pulse'), medicalHistory:text('medicalHistory'), treatment:text('treatment'), followUp:text('followUp') };
+      if (!data.name) return { error:'請輸入人員姓名。', focus:nameInput };
+      if (!data.unit) return { error:'請輸入所屬單位。', focus:unitInput };
+      if (!data.injury) return { error:'請輸入人員傷情。', focus:injuryInput };
+      if (!data.reportTime) return { error:'請確認回報時間。', focus:reportTime };
+      if (!validOptionalRange(data.systolic,40,300)) return { error:'收縮壓請輸入 40 至 300 mmHg。', focus:$('systolic') };
+      if (!validOptionalRange(data.diastolic,20,200)) return { error:'舒張壓請輸入 20 至 200 mmHg。', focus:$('diastolic') };
+      if (!validOptionalRange(data.spo2,0,100)) return { error:'SpO₂ 請輸入 0 至 100%。', focus:$('spo2') };
+      if (!validOptionalRange(data.temperature,30,45)) return { error:'體溫請輸入 30.0 至 45.0°C。', focus:$('temperature') };
+      if (!validOptionalRange(data.bloodGlucose,1,1000)) return { error:'血糖請輸入 1 至 1000 mg/dL。', focus:$('bloodGlucose') };
+      if (!validOptionalRange(data.pulse,1,300)) return { error:'脈搏請輸入 1 至 300 下／分鐘。', focus:$('pulse') };
+      return data;
+    }
+    function formatDateTime(value) { if (!value) return '—'; const [date,time] = value.split('T'); return `${date.replaceAll('-', '/')} ${time}`; }
+    function displayValue(value) { return value === '' || value === null || value === undefined ? '未提供' : value; }
+    function buildVitals(data) {
+      const bp = data.systolic !== '' || data.diastolic !== '' ? `血壓：${displayValue(data.systolic)}/${displayValue(data.diastolic)} mmHg` : '';
+      const values = [bp, data.spo2 !== '' ? `SpO₂：${data.spo2}%` : '', data.temperature !== '' ? `體溫：${data.temperature.toFixed(1)}°C` : '', data.bloodGlucose !== '' ? `血糖：${data.bloodGlucose} mg/dL` : '', data.pulse !== '' ? `脈搏：${data.pulse} 下／分鐘` : ''].filter(Boolean);
+      return values.length ? values.join('\n') : '未提供生命徵象資料';
+    }
+    function showPreview() {
+      const data = validate();
+      if (data.error) { setSaveStatus('error',data.error); data.focus.focus(); return; }
+      currentRecord = data;
+      const fingerprint = JSON.stringify(data); saveButton.disabled = fingerprint === savedFingerprint; nextButton.disabled = true;
+      $('reportPerson').innerHTML = `<strong>${escapeHtml(data.name)}</strong><br>${escapeHtml(data.unit)}<br>回報時間：${escapeHtml(formatDateTime(data.reportTime))}${data.registrar ? `<br>登記者：${escapeHtml(data.registrar)}` : ''}`;
+      $('reportInjury').textContent = data.injury; $('reportVitals').textContent = buildVitals(data); $('reportHistory').textContent = data.medicalHistory || '未提供'; $('reportTreatment').textContent = data.treatment || '未提供'; $('reportFollowUp').textContent = data.followUp || '未提供';
+      report.classList.add('show'); if (fingerprint !== savedFingerprint) resetSaveStatus(); report.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+    async function saveReport() {
+      if (!currentRecord) { setSaveStatus('error','請先按「檢視傷情回報」，確認內容後再儲存。'); return; }
+      const fingerprint = JSON.stringify(currentRecord);
+      if (fingerprint === savedFingerprint) { setSaveStatus('success','此筆回報已儲存。請按「下一筆回報」開始新的紀錄。'); nextButton.disabled = false; return; }
+      saveButton.disabled = true; nextButton.disabled = true; setSaveStatus('loading','正在儲存至 Google 試算表…');
+      try {
+        const payload = { token:SUBMIT_TOKEN, ...currentRecord };
+        await fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body:JSON.stringify(payload) });
+        savedFingerprint = fingerprint; nextButton.disabled = false; setSaveStatus('success','已送出儲存要求。確認已寫入試算表後，請按「下一筆回報」。');
+      } catch (error) { saveButton.disabled = false; nextButton.disabled = true; setSaveStatus('error','送出失敗，請檢查網路連線後再試一次。'); }
+    }
+    function nextReport() {
+      fields.forEach(field => { if (field.id !== 'reportTime') field.value = ''; });
+      reportTime.value = localDateTimeNow(); currentRecord = null; savedFingerprint = ''; saveButton.disabled = true; nextButton.disabled = true; report.classList.remove('show'); resetSaveStatus(); nameInput.focus(); window.scrollTo({ top:0, behavior:'smooth' });
+    }
+    function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, char => ({ '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;' }[char])); }
+    $('preview').addEventListener('click',showPreview); saveButton.addEventListener('click',saveReport); nextButton.addEventListener('click',nextReport);
+    fields.forEach(field => { field.addEventListener('input', () => { if (currentRecord) { saveButton.disabled=false; nextButton.disabled=true; resetSaveStatus(); } }); field.addEventListener('change', () => { if (currentRecord) { saveButton.disabled=false; nextButton.disabled=true; resetSaveStatus(); } }); });
+  </script>
+</body>
+</html>
