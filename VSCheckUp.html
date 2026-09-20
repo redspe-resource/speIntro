@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#087c56" />
+  <title>警消心率與體溫安全檢核</title>
+  <style>
+    :root {
+      --safe: #087c56;
+      --safe-dark: #05603f;
+      --safe-bg: #e8f8ef;
+      --safe-line: #a8e3c1;
+      --alert: #bd1f2d;
+      --alert-dark: #8e1520;
+      --alert-bg: #fff0f1;
+      --alert-line: #ffc1c7;
+      --ink: #17312b;
+      --muted: #59726b;
+      --line: #d5e6df;
+      --shadow: 0 18px 46px rgba(17, 65, 51, .15);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px;
+      color: var(--ink);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+      background: #edf7f2;
+      transition: background .35s ease;
+    }
+    body.safe-page { background: radial-gradient(circle at 8% 8%, rgba(52,211,153,.25), transparent 28%), radial-gradient(circle at 92% 5%, rgba(45,212,191,.15), transparent 25%), #edf7f2; }
+    body.alert-page { background: radial-gradient(circle at 8% 8%, rgba(251,113,133,.35), transparent 30%), radial-gradient(circle at 92% 5%, rgba(239,68,68,.2), transparent 28%), #fff1f2; }
+    main { width: min(900px, 100%); margin: 0 auto; overflow: hidden; background: rgba(255,255,255,.97); border: 1px solid rgba(255,255,255,.85); border-radius: 28px; box-shadow: var(--shadow); }
+    header { padding: 34px 38px 28px; color: #fff; background: linear-gradient(135deg, var(--safe-dark), var(--safe)); transition: background .35s ease; }
+    body.alert-page header { background: linear-gradient(135deg, var(--alert-dark), var(--alert)); }
+    h1 { margin: 0 0 9px; font-size: clamp(1.7rem, 4vw, 2.3rem); }
+    header p { margin: 0; line-height: 1.65; opacity: .94; }
+    .content { padding: 30px 38px 36px; }
+    .formula { margin: 0 0 24px; padding: 13px 16px; color: #075b42; background: var(--safe-bg); border-left: 5px solid var(--safe); border-radius: 10px; font-weight: 750; text-align: center; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .field.full { grid-column: 1 / -1; }
+    label { display: block; margin-bottom: 8px; font-weight: 800; }
+    input, select { width: 100%; min-height: 51px; padding: 12px 14px; color: var(--ink); border: 2px solid var(--line); border-radius: 12px; background: #fff; font: inherit; font-size: 1.05rem; outline: none; transition: border-color .2s, box-shadow .2s; }
+    input:focus, select:focus { border-color: var(--safe); box-shadow: 0 0 0 4px rgba(8,124,86,.15); }
+    .hint { margin: 7px 0 0; color: var(--muted); font-size: .88rem; line-height: 1.5; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 25px; }
+    button { min-height: 54px; padding: 15px 18px; border: 0; border-radius: 12px; color: #fff; background: var(--safe); font: inherit; font-size: 1.06rem; font-weight: 850; cursor: pointer; transition: transform .15s, background .2s, opacity .2s; }
+    button:hover { background: var(--safe-dark); }
+    button:active { transform: translateY(1px); }
+    button.secondary { color: var(--safe-dark); background: #edf8f3; border: 2px solid var(--safe-line); }
+    button.secondary:hover { color: #fff; background: var(--safe); }
+    button:disabled { cursor: not-allowed; opacity: .6; }
+    .save-status { display: none; margin-top: 16px; padding: 13px 15px; border-radius: 12px; text-align: center; font-weight: 750; line-height: 1.55; }
+    .save-status.show { display: block; }
+    .save-status.success { color: var(--safe-dark); background: var(--safe-bg); border: 1px solid var(--safe-line); }
+    .save-status.error { color: var(--alert-dark); background: var(--alert-bg); border: 1px solid var(--alert-line); }
+    .save-status.loading { color: #765000; background: #fff9df; border: 1px solid #f0d478; }
+    .result { display: none; margin-top: 26px; border: 2px solid var(--safe-line); border-radius: 20px; overflow: hidden; background: #fff; }
+    .result.show { display: block; }
+    .result.safe { border-color: var(--safe-line); }
+    .result.alert { border-color: var(--alert-line); }
+    .result-banner { padding: 17px 20px; color: var(--safe-dark); background: var(--safe-bg); font-size: 1.15rem; font-weight: 900; text-align: center; }
+    .result.alert .result-banner { color: var(--alert-dark); background: var(--alert-bg); }
+    .result-body { padding: 22px; }
+    .person { margin: 0 0 18px; color: var(--muted); text-align: center; line-height: 1.65; }
+    .person strong { color: var(--ink); font-size: 1.1rem; }
+    .metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .metric { padding: 18px 15px; border: 1px solid var(--line); border-radius: 14px; text-align: center; }
+    .metric.alert { background: var(--alert-bg); border-color: var(--alert-line); }
+    .metric.safe { background: var(--safe-bg); border-color: var(--safe-line); }
+    .metric .name { display: block; color: var(--muted); font-weight: 750; }
+    .metric strong { display: block; margin: 5px 0; font-size: clamp(1.7rem, 6vw, 2.5rem); line-height: 1.1; }
+    .metric.safe strong { color: var(--safe); }
+    .metric.alert strong { color: var(--alert); }
+    .metric small { color: var(--muted); }
+    .message { margin: 18px 0 0; padding: 15px 17px; border-radius: 12px; font-weight: 750; line-height: 1.65; text-align: center; }
+    .message.safe { color: var(--safe-dark); background: var(--safe-bg); }
+    .message.alert { color: var(--alert-dark); background: var(--alert-bg); }
+    .standards { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; line-height: 1.72; }
+    .standards h2 { margin: 0 0 8px; color: var(--ink); font-size: 1rem; }
+    .standards ul { margin: 0; padding-left: 1.3em; }
+    .standards p { margin: 10px 0 0; }
+    @media (max-width: 580px) { body { padding: 14px; } header, .content { padding-left: 21px; padding-right: 21px; } .form-grid, .metrics, .actions { grid-template-columns: 1fr; } .field.full { grid-column: auto; } }
+  </style>
+</head>
+<body class="safe-page">
+  <main>
+    <header>
+      <h1>警消心率與體溫安全檢核</h1>
+      <p>依年齡計算 75% 心率門檻，並檢核目前心跳與體溫；超過任一標準時，畫面將切換為紅色警示。</p>
+    </header>
+
+    <section class="content" aria-label="安全檢核表單">
+      <p class="formula">心率門檻 =（220 − 年齡）× 75%</p>
+      <div class="form-grid">
+        <div class="field full">
+          <label for="name">姓名</label>
+          <input id="name" type="text" maxlength="30" autocomplete="name" placeholder="請輸入姓名" />
+        </div>
+        <div>
+          <label for="identity">身分</label>
+          <select id="identity">
+            <option value="" selected disabled>請選擇身分</option>
+            <option>警消</option>
+            <option>義消</option>
+          </select>
+        </div>
+        <div>
+          <label for="unit">單位</label>
+          <select id="unit">
+            <option value="" selected disabled>請選擇單位</option>
+            <option>特搜</option><option>大豐</option><option>台東</option><option>太麻里</option><option>南王</option><option>豐田</option><option>知本</option><option>泰源</option><option>都蘭</option><option>鹿野</option><option>延平</option><option>東河</option><option>科技</option><option>安檢</option><option>救護義消分隊</option>
+          </select>
+        </div>
+        <div>
+          <label for="age">年齡（歲）</label>
+          <input id="age" type="number" min="1" max="120" inputmode="numeric" placeholder="例如：35" />
+        </div>
+        <div>
+          <label for="heartRate">目前心跳（下／分鐘）</label>
+          <input id="heartRate" type="number" min="1" max="300" inputmode="numeric" placeholder="例如：128" />
+        </div>
+        <div class="field full">
+          <label for="temperature">體溫（°C）</label>
+          <input id="temperature" type="number" min="30" max="45" step="0.1" inputmode="decimal" placeholder="例如：37.2" />
+          <p class="hint">體溫超過 37.5°C 即為警示；此值可依單位規範調整。</p>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="calculate" type="button">進行安全檢核</button>
+        <button id="save" class="secondary" type="button" disabled>儲存本次量測紀錄</button>
+      </div>
+      <div id="saveStatus" class="save-status" aria-live="polite"></div>
+
+      <section id="result" class="result" aria-live="polite">
+        <div id="resultBanner" class="result-banner">安全檢核結果</div>
+        <div class="result-body">
+          <p id="person" class="person"></p>
+          <div class="metrics">
+            <article id="heartMetric" class="metric"><span class="name">心率狀態</span><strong id="heartValue">—</strong><small id="heartDetail">—</small></article>
+            <article id="tempMetric" class="metric"><span class="name">體溫狀態</span><strong id="tempValue">—</strong><small id="tempDetail">—</small></article>
+          </div>
+          <p id="message" class="message"></p>
+        </div>
+      </section>
+
+      <aside class="standards">
+        <h2>本頁使用的判定標準</h2>
+        <ul>
+          <li>心率警示：目前心跳大於（220 − 年齡）× 75%。</li>
+          <li>體溫警示：目前體溫大於 37.5°C。</li>
+        </ul>
+        <p><strong>安全提醒：</strong>本工具供現場初步自我檢核與紀錄使用，非醫療診斷或個別運動／勤務處方。若有胸痛、暈眩、意識改變、明顯呼吸困難、心悸或其他不適，應立即停止活動、通報並依單位緊急醫療流程處置。</p>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7JBWkxOYqZRJhAvdNb5Z0yW3Lt_9I58zRgxMDSjsycTRetDy1_8B0R-Ltr9DKzvta8A/exec';
+    const SUBMIT_TOKEN = 'Q7v!N2xR9#kL4mT8@wC6pY1dF3sH5jA0';
+    const TEMP_ALERT = 37.5;
+    const $ = id => document.getElementById(id);
+    const nameInput = $('name');
+    const identity = $('identity');
+    const unit = $('unit');
+    const ageInput = $('age');
+    const heartRateInput = $('heartRate');
+    const temperatureInput = $('temperature');
+    const result = $('result');
+    const resultBanner = $('resultBanner');
+    const person = $('person');
+    const heartMetric = $('heartMetric');
+    const tempMetric = $('tempMetric');
+    const heartValue = $('heartValue');
+    const heartDetail = $('heartDetail');
+    const tempValue = $('tempValue');
+    const tempDetail = $('tempDetail');
+    const message = $('message');
+    const saveButton = $('save');
+    const saveStatus = $('saveStatus');
+    let currentRecord = null;
+    let savedFingerprint = '';
+
+    function setSaveStatus(type, text) {
+      saveStatus.className = `save-status show ${type}`;
+      saveStatus.textContent = text;
+    }
+
+    function resetSaveStatus() {
+      saveStatus.className = 'save-status';
+      saveStatus.textContent = '';
+    }
+
+    function invalid(text, focusElement) {
+      currentRecord = null;
+      saveButton.disabled = true;
+      result.className = 'result show alert';
+      document.body.className = 'alert-page';
+      resultBanner.textContent = '請確認輸入資料';
+      person.textContent = '';
+      heartMetric.className = 'metric alert';
+      tempMetric.className = 'metric alert';
+      heartValue.textContent = '—';
+      tempValue.textContent = '—';
+      heartDetail.textContent = text;
+      tempDetail.textContent = '請完成所有欄位後再檢核。';
+      message.className = 'message alert';
+      message.textContent = text;
+      resetSaveStatus();
+      if (focusElement) focusElement.focus();
+    }
+
+    function collectAndValidate() {
+      const name = nameInput.value.trim();
+      const age = Number(ageInput.value);
+      const heartRate = Number(heartRateInput.value);
+      const temperature = Number(temperatureInput.value);
+      if (!name) return { error: '請輸入姓名。', focus: nameInput };
+      if (!identity.value) return { error: '請選擇身分。', focus: identity };
+      if (!unit.value) return { error: '請選擇單位。', focus: unit };
+      if (!Number.isFinite(age) || age < 1 || age > 120) return { error: '請輸入 1 至 120 歲之間的有效年齡。', focus: ageInput };
+      if (!Number.isFinite(heartRate) || heartRate < 1 || heartRate > 300) return { error: '請輸入 1 至 300 下／分鐘之間的有效心跳。', focus: heartRateInput };
+      if (!Number.isFinite(temperature) || temperature < 30 || temperature > 45) return { error: '請輸入 30.0 至 45.0°C 之間的有效體溫。', focus: temperatureInput };
+      return { name, identity: identity.value, unit: unit.value, age, heartRate, temperature };
+    }
+
+    function checkSafety() {
+      const data = collectAndValidate();
+      if (data.error) return invalid(data.error, data.focus);
+      const threshold = (220 - data.age) * 0.75;
+      const roundedThreshold = Math.round(threshold);
+      const heartAlert = data.heartRate > threshold;
+      const tempAlert = data.temperature > TEMP_ALERT;
+      const overallAlert = heartAlert || tempAlert;
+      currentRecord = { ...data, heartThreshold: roundedThreshold, heartAlert, tempAlert, overallAlert };
+      const fingerprint = JSON.stringify(data);
+      saveButton.disabled = fingerprint === savedFingerprint;
+      result.className = `result show ${overallAlert ? 'alert' : 'safe'}`;
+      document.body.className = overallAlert ? 'alert-page' : 'safe-page';
+      resultBanner.textContent = overallAlert ? '⚠ 注意：已超過警示標準' : '✓ 安全：目前數值未超過設定標準';
+      person.innerHTML = `<strong>${escapeHtml(data.name)}</strong><br>${escapeHtml(data.identity)}｜${escapeHtml(data.unit)}　年齡：${data.age} 歲`;
+      heartMetric.className = `metric ${heartAlert ? 'alert' : 'safe'}`;
+      heartValue.textContent = `${data.heartRate} 下`;
+      heartDetail.textContent = heartAlert ? `超過心率門檻 ${roundedThreshold} 下／分鐘` : `心率門檻為 ${roundedThreshold} 下／分鐘`;
+      tempMetric.className = `metric ${tempAlert ? 'alert' : 'safe'}`;
+      tempValue.textContent = `${data.temperature.toFixed(1)}°C`;
+      tempDetail.textContent = tempAlert ? `超過體溫警示 ${TEMP_ALERT.toFixed(1)}°C` : `未超過體溫警示 ${TEMP_ALERT.toFixed(1)}°C`;
+      if (overallAlert) {
+        message.className = 'message alert';
+        const reasons = [heartAlert ? '心率' : '', tempAlert ? '體溫' : ''].filter(Boolean).join('及');
+        message.textContent = `${reasons}已超過設定標準。請先停止或降低活動強度、休息並持續觀察；如有不適或症狀加劇，請立即通報並依單位流程處置。`;
+      } else {
+        message.className = 'message safe';
+        message.textContent = '心率與體溫目前均未超過設定標準。請持續補充水分、留意身體感受，並依勤務現場規範進行後續監測。';
+      }
+      if (fingerprint !== savedFingerprint) resetSaveStatus();
+    }
+
+    async function saveRecord() {
+      if (!currentRecord) {
+        setSaveStatus('error', '請先完成安全檢核，再儲存紀錄。');
+        return;
+      }
+      const fingerprint = JSON.stringify({ name: currentRecord.name, identity: currentRecord.identity, unit: currentRecord.unit, age: currentRecord.age, heartRate: currentRecord.heartRate, temperature: currentRecord.temperature });
+      if (fingerprint === savedFingerprint) {
+        setSaveStatus('success', '此筆資料已儲存，請修改資料後再建立新的紀錄。');
+        return;
+      }
+      saveButton.disabled = true;
+      setSaveStatus('loading', '正在儲存至 Google 試算表…');
+      try {
+        const payload = {
+          token: SUBMIT_TOKEN,
+          name: currentRecord.name,
+          identity: currentRecord.identity,
+          unit: currentRecord.unit,
+          age: currentRecord.age,
+          heartRate: currentRecord.heartRate,
+          temperature: currentRecord.temperature
+        };
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+        savedFingerprint = fingerprint;
+        setSaveStatus('success', '已送出儲存要求。請至 Google 試算表確認是否已新增本筆紀錄。');
+      } catch (error) {
+        saveButton.disabled = false;
+        setSaveStatus('error', '送出失敗，請檢查網路連線後再試一次。');
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
+    }
+
+    $('calculate').addEventListener('click', checkSafety);
+    saveButton.addEventListener('click', saveRecord);
+    [nameInput, identity, unit, ageInput, heartRateInput, temperatureInput].forEach(element => {
+      element.addEventListener('input', () => {
+        if (currentRecord) { saveButton.disabled = false; resetSaveStatus(); }
+      });
+      element.addEventListener('keydown', event => { if (event.key === 'Enter') checkSafety(); });
+    });
+  </script>
+</body>
+</html>
