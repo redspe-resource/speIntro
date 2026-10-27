@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>第 5 週｜獎章分級（學生使用版）</title>
+<style>
+:root{
+  --bg:#f5f2ec; --surface:#ffffff; --surface-2:#faf8f4;
+  --ink:#1d2b3a; --ink-soft:#43566b; --ink-faint:#6b7a8c;
+  --teal:#0d6e6a; --teal-deep:#0a4f4c; --teal-tint:#e0efed; --teal-line:#b7d9d6;
+  --amber:#a05a0a; --amber-tint:#fbeed9; --amber-line:#e6cfa4;
+  --pass:#256b34; --pass-tint:#e3f1e4; --fail:#a3362c; --fail-tint:#fae5e2;
+  --code-bg:#132535; --code-ink:#eaf2f7;
+  --border:#ddd6c8; --divider:#e7e2d7;
+  --radius:14px;
+  --shadow:0 1px 2px rgba(29,43,58,.05),0 4px 14px rgba(29,43,58,.06);
+  --font-body:"Microsoft JhengHei","PingFang TC","Noto Sans TC",system-ui,-apple-system,sans-serif;
+  --font-code:Consolas,"Courier New","Microsoft JhengHei",monospace;
+}
+*{box-sizing:border-box}
+html{font-size:20px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);line-height:1.7}
+button,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:6px}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+
+/* ── app shell ─────────────────────────── */
+.app{height:100vh;height:100dvh;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto}
+header{background:linear-gradient(135deg,#12333f,#0d4a48);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:.8em;padding:.55em 1.2em;box-shadow:0 2px 10px rgba(18,51,63,.25)}
+.brand{display:flex;align-items:center;gap:.7em;min-width:0}
+.brand-mark{flex:none;width:2.2em;height:2.2em;border-radius:.6em;background:rgba(255,255,255,.14);display:grid;place-items:center;font-size:.9em;font-weight:700;letter-spacing:.05em}
+.brand-text{min-width:0}
+.brand-week{font-size:.72em;font-weight:700;letter-spacing:.14em;color:#9fd6cf;text-transform:uppercase}
+.brand-title{font-size:.95em;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tools{display:flex;align-items:center;gap:.4em;flex:none}
+.tools button{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:.55em;padding:.3em .65em;font-size:.8em;cursor:pointer;transition:background .18s}
+.tools button:hover{background:rgba(255,255,255,.25)}
+
+main{min-height:0;overflow:auto;padding:1.4em 1.2em 2.6em;scrollbar-width:thin}
+.slide{display:none;max-width:60em;margin:0 auto}
+.slide.active{display:block}
+
+footer{background:#12333f;color:#fff}
+.progress{height:.28em;background:rgba(255,255,255,.18)}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#2fb3a6,#e8b04b);border-radius:0 99em 99em 0;transition:width .25s ease}
+.footer-bar{display:flex;align-items:center;justify-content:space-between;gap:.6em;padding:.55em 1.2em;flex-wrap:wrap}
+.footer-bar button{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:.55em;padding:.35em .8em;font-size:.85em;cursor:pointer;transition:background .18s}
+.footer-bar button:hover:not(:disabled){background:rgba(255,255,255,.28)}
+.footer-bar button:disabled{opacity:.35;cursor:default}
+.jump-wrap{flex:1;min-width:8em;max-width:22em}
+.jump-wrap select{width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:.55em;padding:.35em .5em;font-size:.8em;cursor:pointer}
+.jump-wrap select option{color:#1d2b3a;background:#fff}
+#count{font-size:.8em;color:#bcd9d6;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ── slide content ─────────────────────── */
+.kicker{font-size:.72em;font-weight:700;letter-spacing:.18em;color:var(--teal);margin:0 0 .6em}
+.kicker::before{content:"";display:inline-block;width:1.6em;height:.22em;background:var(--teal);border-radius:99em;margin-right:.55em;vertical-align:middle}
+h1{font-size:1.75em;line-height:1.3;margin:0 0 .65em;color:#16334a;text-wrap:balance}
+h1 small{display:block;font-size:.55em;font-weight:500;color:var(--ink-faint);margin-top:.35em;letter-spacing:.04em}
+p{margin:.7em 0}
+.lead{font-size:1.12em}
+.hint-line{font-size:.75em;color:var(--ink-faint);margin-top:1.6em}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.1em 1.25em;margin:1em 0}
+.card > :first-child{margin-top:0}
+.card > :last-child{margin-bottom:0}
+
+.goal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(13em,1fr));gap:.8em;margin:1.2em 0}
+.goal{background:var(--surface);border:1px solid var(--border);border-left:.4em solid var(--teal);border-radius:12px;padding:.85em 1em;box-shadow:var(--shadow)}
+.goal-top{display:flex;align-items:center;gap:.55em;margin-bottom:.3em}
+.goal-num{flex:none;width:1.55em;height:1.55em;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:.75em;font-weight:700}
+.goal strong{font-size:.92em}
+.goal p{margin:.15em 0 0;font-size:.8em;color:var(--ink-soft);line-height:1.6}
+
+.callout{background:var(--teal-tint);border:1px solid var(--teal-line);border-left:.4em solid var(--teal);border-radius:12px;padding:.9em 1.1em;margin:1.1em 0;font-size:.95em}
+.callout strong{color:var(--teal-deep)}
+.threshold{background:var(--amber-tint);border:1px solid var(--amber-line);border-left:.4em solid var(--amber);border-radius:12px;padding:.9em 1.1em;margin:1.1em 0;font-size:.95em}
+.threshold strong{color:var(--amber)}
+.sample{background:var(--surface-2);border:1px dashed var(--border);border-radius:12px;padding:.85em 1.1em;margin:1.1em 0;font-size:.9em}
+.sample .io{font-family:var(--font-code);font-size:.95em;background:#fff;border:1px solid var(--border);border-radius:8px;padding:.35em .7em;display:inline-block;margin:.2em .3em .2em 0}
+
+/* number line */
+.numline{margin:1.4em 0;display:flex;align-items:stretch;gap:0}
+.nl-zone{flex:1;display:flex;align-items:center;justify-content:center;gap:.9em;padding:.9em .4em;font-family:var(--font-code);font-size:1em}
+.nl-zone.no{background:var(--fail-tint);border:1px solid #e8bcb6;border-radius:12px 0 0 12px;color:var(--fail)}
+.nl-zone.yes{background:var(--pass-tint);border:1px solid #bcd8bd;border-radius:0 12px 12px 0;color:var(--pass)}
+.nl-zone em{font-family:var(--font-body);font-style:normal;font-weight:700;font-size:.78em}
+.nl-mark{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2em;background:var(--amber);color:#fff;font-weight:700;padding:.55em .95em;margin:0 -.35em;z-index:1;box-shadow:0 4px 12px rgba(160,90,10,.35);border-radius:10px}
+.nl-mark b{font-family:var(--font-code);font-size:1.25em;line-height:1}
+.nl-mark span{font-size:.62em;letter-spacing:.1em}
+
+/* if/else branch */
+.branch{margin:1.3em 0;text-align:center}
+.branch-q{display:inline-block;background:#16334a;color:#fff;border-radius:99em;padding:.45em 1.3em;font-family:var(--font-code);font-size:.95em;box-shadow:var(--shadow)}
+.branch-q::before{content:"if ("}.branch-q::after{content:")"}
+.branch-paths{display:grid;grid-template-columns:1fr 1fr;gap:.8em;margin-top:1em}
+.path{border-radius:12px;padding:.8em .9em;text-align:center;border:1px solid}
+.path .path-label{display:inline-block;font-weight:700;font-size:.8em;border-radius:99em;padding:.15em .95em;margin-bottom:.45em}
+.path.yes{background:var(--pass-tint);border-color:#bcd8bd}
+.path.yes .path-label{background:var(--pass);color:#fff}
+.path.no{background:var(--fail-tint);border-color:#e8bcb6}
+.path.no .path-label{background:var(--fail);color:#fff}
+.path-body{font-family:var(--font-code);font-size:.95em}
+
+/* rule chips */
+.rule-demo{display:grid;grid-template-columns:repeat(auto-fit,minmax(10em,1fr));gap:.8em;margin:1.2em 0}
+.rule-item{border-radius:12px;padding:.9em 1em;text-align:center;border:1px solid}
+.rule-item .rule-pts{display:block;font-family:var(--font-code);font-size:1.5em;font-weight:700;line-height:1.1}
+.rule-item .rule-word{display:inline-block;margin-top:.4em;font-weight:700;font-size:.85em;border-radius:99em;padding:.2em 1em;color:#fff}
+.rule-item.pass{background:var(--pass-tint);border-color:#bcd8bd}
+.rule-item.pass .rule-word{background:var(--pass)}
+.rule-item.fail{background:var(--fail-tint);border-color:#e8bcb6}
+.rule-item.fail .rule-word{background:var(--fail)}
+.rule-item small{display:block;font-size:.7em;color:var(--ink-faint);margin-top:.45em}
+
+/* code block */
+.code{position:relative;background:var(--code-bg);border-radius:var(--radius);margin:1.1em 0;box-shadow:var(--shadow);overflow:hidden}
+.code-lang{position:absolute;left:.9em;top:.7em;font-size:.62em;font-weight:700;letter-spacing:.16em;color:#7fb8c9;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:99em;padding:.2em .8em}
+.copy{position:absolute;right:.7em;top:.6em;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#eaf2f7;border-radius:8px;padding:.25em .7em;font-size:.68em;cursor:pointer;transition:background .18s}
+.copy:hover{background:rgba(255,255,255,.22)}
+.code pre{overflow:auto;color:var(--code-ink);padding:2.6em 1.2em 1.1em;margin:0;font-family:var(--font-code);font-size:.88em;line-height:1.65;-webkit-overflow-scrolling:touch}
+.code pre code{font:inherit}
+.code .hl{color:#e8b04b}
+.code .kw{color:#6fd3c5}
+.code .st{color:#f4a4a0}
+
+/* table */
+.table{overflow:auto;margin:1.1em 0;border-radius:12px;border:1px solid var(--border);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;background:var(--surface);font-size:.88em}
+td,th{border-bottom:1px solid var(--divider);padding:.65em .85em;text-align:left;vertical-align:top}
+th{background:#eef3f0;color:#16334a;font-size:.92em;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+td.num,th.num{font-family:var(--font-code);white-space:nowrap}
+td .tag{display:inline-block;font-size:.78em;font-weight:700;border-radius:6px;padding:.08em .55em}
+td .tag.p{background:var(--pass-tint);color:var(--pass)}
+td .tag.f{background:var(--fail-tint);color:var(--fail)}
+td .tag.g{background:#f9f0d2;color:#6d5400}
+
+/* details */
+details{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin:.8em 0;box-shadow:var(--shadow);overflow:hidden}
+summary{cursor:pointer;font-weight:700;padding:.8em 1.1em;display:flex;align-items:center;gap:.55em;font-size:.92em;color:var(--teal-deep);background:var(--surface-2);border-bottom:1px solid transparent;list-style:none;user-select:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"＋";flex:none;width:1.5em;height:1.5em;border-radius:50%;background:var(--teal-tint);color:var(--teal-deep);display:grid;place-items:center;font-weight:700;font-size:.85em;transition:transform .18s}
+details[open] summary::before{content:"－"}
+details[open] summary{border-bottom-color:var(--divider)}
+details > div, details > p{padding:.9em 1.15em;margin:0}
+details > :last-child{padding-bottom:1.05em}
+details .code{margin:.6em 0}
+
+
+/* tier + trace (week5) */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:.7em;margin:1.1em 0}
+.tier{border-radius:12px;padding:.85em 1em;text-align:center;border:1px solid}
+.tier b{display:block;font-size:1.08em}
+.tier .rng{display:block;font-size:.82em;margin-top:.25em}
+.tier small{display:block;color:var(--ink-faint);font-size:.72em;margin-top:.35em}
+.tier.gold{background:#f9f0d2;border-color:#e0cc93;color:#6d5400}
+.tier.silver{background:#e9edf3;border-color:#c4cfdd;color:#3d4c66}
+.tier.none{background:var(--fail-tint);border-color:#e8bcb6;color:var(--fail)}
+.trace{margin:1em 0}
+.trace-head{font-weight:700;margin:.9em 0 .4em}
+.tstep{display:flex;align-items:center;justify-content:space-between;gap:.8em;border-radius:10px;padding:.55em .95em;border:1px solid;font-family:var(--font-code);font-size:.88em;margin:.45em 0;flex-wrap:wrap}
+.tstep .verdict{font-family:var(--font-body);font-weight:700;font-size:.85em;white-space:nowrap}
+.tstep.miss{background:var(--surface-2);border-color:var(--border);color:var(--ink-soft)}
+.tstep.miss .verdict{color:var(--fail)}
+.tstep.hit{background:var(--pass-tint);border-color:#bcd8bd;color:var(--pass)}
+.tstep.hit .verdict{color:var(--pass)}
+/* quiz */
+.quiz{margin:1em 0}
+.quiz fieldset{border:1px solid var(--border);border-radius:12px;margin:.8em 0;background:var(--surface);box-shadow:var(--shadow);padding:0;overflow:hidden}
+.quiz legend{font-weight:700;padding:.75em 1.05em .45em;font-size:.92em;width:100%}
+.quiz label{display:flex;align-items:flex-start;gap:.55em;padding:.5em 1.05em;cursor:pointer;font-size:.88em;border-top:1px solid var(--divider);margin:0;transition:background .15s}
+.quiz label:hover{background:var(--surface-2)}
+.quiz input{margin-top:.32em;accent-color:var(--teal);flex:none}
+.quiz-actions{display:flex;align-items:center;gap:.7em;flex-wrap:wrap;margin-top:.6em}
+.btn{background:var(--teal);color:#fff;border:none;border-radius:10px;padding:.55em 1.25em;font-weight:700;font-size:.9em;cursor:pointer;box-shadow:var(--shadow);transition:background .18s}
+.btn:hover{background:var(--teal-deep)}
+.btn.ghost{background:transparent;color:var(--teal-deep);border:1px solid var(--teal-line);box-shadow:none}
+#feedback{font-weight:700;font-size:.9em}
+#feedback.ok{color:var(--pass)}
+#feedback.no{color:var(--fail)}
+
+ol,ul{padding-left:1.5em}
+li{margin:.4em 0}
+code.inline{background:#eef0e9;border:1px solid var(--border);border-radius:6px;padding:.08em .4em;font-family:var(--font-code);font-size:.9em}
+
+.fill{font-family:var(--font-code);letter-spacing:.06em}
+
+@media (max-width:640px){
+  html{font-size:17px}
+  .brand-title{font-size:.85em}
+  .tools button .lbl{display:none}
+  main{padding:1em .85em 2.2em}
+  .branch-paths{grid-template-columns:1fr}
+  .nl-zone{flex-wrap:wrap}
+  .footer-bar{flex-wrap:nowrap;gap:.45em}
+  .footer-bar button{padding:.35em .5em;font-size:.78em;white-space:nowrap}
+  .jump-wrap{min-width:0}
+  #count{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<header>
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true">W5</div>
+    <div class="brand-text">
+      <div class="brand-week">第 5 週｜Code::Blocks・C++</div>
+      <div class="brand-title">獎章分級：金牌、銀牌、未過關</div>
+    </div>
+  </div>
+  <div class="tools">
+    <button id="fminus" type="button" aria-label="縮小字體"><span class="lbl">字體</span>−</button>
+    <button id="fplus" type="button" aria-label="放大字體"><span class="lbl">字體</span>＋</button>
+    <button id="fs" type="button"><span class="lbl">全螢幕</span>⛶</button>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="slide" id="slide-1" data-title="今日目標">
+  <p class="kicker">第 5 週｜學生使用版</p>
+  <h1>獎章分級<small>校園闖關點數計算器（四）</small></h1>
+  <p class="lead">第四週的計算和判斷全部保留，本週把兩路判斷升級成三路：<strong>金牌、銀牌、未過關</strong>。</p>
+  <div class="goal-grid">
+    <div class="goal"><div class="goal-top"><span class="goal-num">1</span><strong>說出新規則</strong></div><p>90 以上（含）金牌、60–89 銀牌、未達 60 未過關。</p></div>
+    <div class="goal"><div class="goal-top"><span class="goal-num">2</span><strong>使用 else if</strong></div><p>if / else if / else：三個分支只走一個。</p></div>
+    <div class="goal"><div class="goal-top"><span class="goal-num">3</span><strong>說明檢查順序</strong></div><p>由上往下檢查，第一個成立的條件贏。</p></div>
+    <div class="goal"><div class="goal-top"><span class="goal-num">4</span><strong>用邊界資料測試</strong></div><p>59、60、89、90 四個邊界都要試。</p></div>
+  </div>
+  <div class="callout"><strong>為什麼重要：</strong>獎章分級、成績等第、遊戲段位，都是同一種寫法。</div>
+  <p class="hint-line">操作：底部按鈕或鍵盤 ← → 翻頁；手機可左右滑動；內容過長時在當頁向下捲動。</p>
+</section>
+
+<section class="slide" id="slide-2" data-title="先回顧：你還記得嗎？">
+  <p class="kicker">回顧</p>
+  <h1>先回顧：你還記得嗎？</h1>
+  <p>第四週的判斷是兩路的：</p>
+  <div class="code"><span class="code-lang">C++</span><button class="copy" type="button">複製</button><pre><code><span class="kw">if</span> (totalPoints <span class="hl">>=</span> 60) {
+    cout << <span class="st">"過關"</span> << endl;
+} <span class="kw">else</span> {
+    cout << <span class="st">"未過關"</span> << endl;
+}</code></pre></div>
+  <div class="card">
+    <p><strong>問題一：</strong>輸入 <code class="inline">20 25 18</code>，總點數是多少？畫面印出什麼？</p>
+    <details><summary>核對答案</summary><p>總點數 68（20+25+18=63，加 5），印出「過關」。</p></details>
+    <p><strong>問題二：</strong>if 和 else 各在什麼時候執行？</p>
+    <details><summary>核對答案</summary><p>條件成立（總點數達 60）走 if，不成立走 else。每次執行只走一邊。</p></details>
+  </div>
+</section>
+
+<section class="slide" id="slide-3" data-title="本週新規則：三個等級">
+  <p class="kicker">新規則</p>
+  <h1>本週新規則：三個等級</h1>
+  <div class="card">
+    <p>校園闖關的分級規則：</p>
+    <div class="tiers">
+      <div class="tier gold"><b>金牌</b><span class="rng">總點數 90 以上（含）</span><small>例如：95、100、305</small></div>
+      <div class="tier silver"><b>銀牌</b><span class="rng">總點數 60–89</span><small>例如：68、75、89</small></div>
+      <div class="tier none"><b>未過關</b><span class="rng">總點數未達 60</span><small>例如：41、59</small></div>
+    </div>
+  </div>
+  <div class="threshold"><strong>注意：</strong>門檻有兩個——90 和 60。獎勵仍然固定加 5 點。總點數可能超過 100：輸入 100 100 100 得到 305，一樣是金牌。</div>
+  <div class="card">
+    <p><strong>用 IPO 看這一週的任務：</strong></p>
+    <div class="table"><table>
+      <tr><th>Input 輸入</th><th>Process 處理</th><th>Output 輸出</th></tr>
+      <tr><td>三項任務點數，讀進三個變數</td><td>三項相加 → 加 5 點獎勵 → 依序比較 90、60</td><td>只印一個結果：金牌、銀牌或未過關</td></tr>
+    </table></div>
+  </div>
+  <div class="callout"><strong>寫法上的變化：</strong>兩路變三路，只是多了一個 <code class="inline">else if</code>。</div>
+</section>
+
+<section class="slide" id="slide-4" data-title="新語法：if / else if / else">
+  <p class="kicker">新語法</p>
+  <h1>新語法：if / else if / else</h1>
+  <p>把第四週的 if / else 區塊，換成這個三級版本：</p>
+  <div class="code"><span class="code-lang">C++</span><button class="copy" type="button">複製</button><pre><code><span class="kw">if</span> (totalPoints <span class="hl">>=</span> 90) {
+    cout << <span class="st">"金牌"</span> << endl;
+} <span class="kw">else if</span> (totalPoints <span class="hl">>=</span> 60) {
+    cout << <span class="st">"銀牌"</span> << endl;
+} <span class="kw">else</span> {
+    cout << <span class="st">"未過關"</span> << endl;
+}</code></pre></div>
+  <ul>
+    <li>第一個條件成立（總點數 ≥ 90）→ 印「金牌」，<strong>後面全部跳過</strong>。</li>
+    <li>第一個不成立，才檢查第二個：總點數 ≥ 60 → 印「銀牌」。</li>
+    <li>兩個都不成立 → 走 <code class="inline">else</code>：印「未過關」。</li>
+  </ul>
+  <div class="callout"><strong>記住：</strong>else if 可以有很多個，但每次執行只會走其中一個分支。</div>
+</section>
+
+<section class="slide" id="slide-5" data-title="由上往下檢查：第一個成立的贏">
+  <p class="kicker">核心觀念</p>
+  <h1>由上往下檢查：第一個成立的贏</h1>
+  <div class="trace">
+    <div class="trace-head">追蹤一：總點數 68</div>
+    <div class="tstep miss"><span>68 >= 90 ?</span><span class="verdict">不成立，往下一個</span></div>
+    <div class="tstep hit"><span>68 >= 60 ?</span><span class="verdict">成立 → 印「銀牌」</span></div>
+  </div>
+  <div class="trace">
+    <div class="trace-head">追蹤二：總點數 95</div>
+    <div class="tstep hit"><span>95 >= 90 ?</span><span class="verdict">成立 → 印「金牌」，不再檢查</span></div>
+  </div>
+  <div class="threshold"><strong>想一想：</strong>銀牌那一行只寫 <span class="fill">>= 60</span>，為什麼 95 不會印銀牌？因為 95 在第一關就成立了，根本走不到銀牌那一行。</div>
+  <div class="callout"><strong>記住：</strong>能走到銀牌那一行，代表「≥ 90」已經不成立。所以銀牌實際代表的是 60–89。</div>
+</section>
+
+<section class="slide" id="slide-6" data-title="完整程式：開啟、儲存、執行">
+  <p class="kicker">示範</p>
+  <h1>完整程式：開啟、儲存、執行</h1>
+  <ol>
+    <li>開啟上週已能執行的 Code::Blocks 專案。</li>
+    <li>先將 main.cpp 另存備份，再用下方程式完整取代內容，不要出現兩個 <code class="inline">main()</code>。</li>
+    <li>按 <span class="fill">F9</span>（Build and run）。</li>
+    <li>輸入 <code class="inline">30 30 30</code>，按 Enter；總點數 95，預期印出「金牌」。</li>
+  </ol>
+  <div class="code"><span class="code-lang">C++</span><button class="copy" type="button">複製</button><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int firstPoints, secondPoints, thirdPoints;
+    cin >> firstPoints >> secondPoints >> thirdPoints;
+
+    int taskPoints = firstPoints + secondPoints + thirdPoints;
+    int bonusPoints = 5;
+    int totalPoints = taskPoints + bonusPoints;
+
+    <span class="kw">if</span> (totalPoints <span class="hl">>=</span> 90) {
+        cout << <span class="st">"金牌"</span> << endl;
+    } <span class="kw">else if</span> (totalPoints <span class="hl">>=</span> 60) {
+        cout << <span class="st">"銀牌"</span> << endl;
+    } <span class="kw">else</span> {
+        cout << <span class="st">"未過關"</span> << endl;
+    }
+    return 0;
+}</code></pre></div>
+  <details><summary>畫面沒有反應？</summary><p>游標正在等待時，輸入三個整數，中間用空格分開，再按 Enter。若無法編譯，先看 Build messages 的第一個錯誤，不要只按 Run 執行舊程式。</p></details>
+</section>
+
+<section class="slide" id="slide-7" data-title="必做：換成三分級">
+  <p class="kicker">必做</p>
+  <h1>必做：換成三分級</h1>
+  <div class="card">
+    <p><strong>任務：</strong>沿用第四週的程式（三項任務＋固定 5 點獎勵），把整個 if / else 區塊換成三級分級：90 以上金牌、60–89 銀牌、未達 60 未過關。</p>
+    <div class="sample">輸入：<span class="io">30 30 30</span>　輸出：<span class="io">金牌</span><br>輸入：<span class="io">20 25 18</span>　輸出：<span class="io">銀牌</span>（總點數 68）<br>輸入：<span class="io">10 12 9</span>　輸出：<span class="io">未過關</span>（總點數 36）</div>
+  </div>
+  <details><summary>提示：要改哪裡？</summary><p>把第四週的 if / else 區塊<strong>整個刪掉</strong>，在同一個位置換成新的三級版本。計算部分完全不用改。</p></details>
+  <details><summary>完成後核對參考程式</summary>
+    <div class="code"><span class="code-lang">C++</span><button class="copy" type="button">複製</button><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int firstPoints, secondPoints, thirdPoints;
+    cin >> firstPoints >> secondPoints >> thirdPoints;
+
+    int taskPoints = firstPoints + secondPoints + thirdPoints;
+    int bonusPoints = 5;
+    int totalPoints = taskPoints + bonusPoints;
+
+    <span class="kw">if</span> (totalPoints <span class="hl">>=</span> 90) {
+        cout << <span class="st">"金牌"</span> << endl;
+    } <span class="kw">else if</span> (totalPoints <span class="hl">>=</span> 60) {
+        cout << <span class="st">"銀牌"</span> << endl;
+    } <span class="kw">else</span> {
+        cout << <span class="st">"未過關"</span> << endl;
+    }
+    return 0;
+}</code></pre></div>
+  </details>
+</section>
+
+<section class="slide" id="slide-8" data-title="用資料檢查結果">
+  <p class="kicker">測試</p>
+  <h1>用資料檢查：兩個門檻各驗三組</h1>
+  <p>每組都重新執行一次。先在紙上寫下預測，再輸入資料核對。</p>
+  <div class="table"><table>
+    <tr><th>輸入（三項點數）</th><th>總點數</th><th>畫面印出</th><th>測試目的</th></tr>
+    <tr><td class="num">18 18 18</td><td class="num">59</td><td><span class="tag f">未過關</span></td><td>60 門檻差一點</td></tr>
+    <tr><td class="num">18 18 19</td><td class="num">60</td><td><span class="tag p">銀牌</span></td><td>60 剛好達標</td></tr>
+    <tr><td class="num">18 18 20</td><td class="num">61</td><td><span class="tag p">銀牌</span></td><td>60 超過一點</td></tr>
+    <tr><td class="num">28 28 28</td><td class="num">89</td><td><span class="tag p">銀牌</span></td><td>90 門檻差一點</td></tr>
+    <tr><td class="num">28 28 29</td><td class="num">90</td><td><span class="tag g">金牌</span></td><td>90 剛好達標</td></tr>
+    <tr><td class="num">28 28 30</td><td class="num">91</td><td><span class="tag g">金牌</span></td><td>90 超過一點</td></tr>
+    <tr><td class="num">0 0 0</td><td class="num">5</td><td><span class="tag f">未過關</span></td><td>全部為零</td></tr>
+    <tr><td class="num">100 100 100</td><td class="num">305</td><td><span class="tag g">金牌</span></td><td>範圍上限</td></tr>
+  </table></div>
+  <div class="threshold"><strong>重點：</strong>59、60 和 89、90 只差一點，結果卻差一等。兩個門檻都要驗「差一點、剛好、超過一點」。</div>
+  <div class="sample">自己設計一組：輸入 <span class="fill">＿＿＿＿</span>　預測 <span class="fill">＿＿＿</span>　實際 <span class="fill">＿＿＿</span></div>
+</section>
+
+<section class="slide" id="slide-9" data-title="挑戰：四級新規則">
+  <p class="kicker">挑戰</p>
+  <h1>挑戰：四級新規則</h1>
+  <p>這是<strong>選做的新規則</strong>，和必做的三級不同：金牌 90 以上、銀牌 75–89、銅牌 60–74、未達 60 未過關。</p>
+  <div class="sample">輸入：<span class="io">30 30 30</span>　輸出：<span class="io">金牌</span>（總點數 95）<br>輸入：<span class="io">25 25 20</span>　輸出：<span class="io">銀牌</span>（總點數 75，剛好達標）<br>輸入：<span class="io">20 25 18</span>　輸出：<span class="io">銅牌</span>（總點數 68）</div>
+  <details><summary>提示</summary><p>銀牌門檻從 60 改成 75；新增一段 <code class="inline">else if (totalPoints >= 60)</code> 印銅牌。順序由嚴到鬆：90、75、60。</p></details>
+  <details><summary>核對參考程式</summary>
+    <div class="code"><span class="code-lang">C++</span><button class="copy" type="button">複製</button><pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int firstPoints, secondPoints, thirdPoints;
+    cin >> firstPoints >> secondPoints >> thirdPoints;
+
+    int taskPoints = firstPoints + secondPoints + thirdPoints;
+    int bonusPoints = 5;
+    int totalPoints = taskPoints + bonusPoints;
+
+    <span class="kw">if</span> (totalPoints <span class="hl">>=</span> 90) {
+        cout << <span class="st">"金牌"</span> << endl;
+    } <span class="kw">else if</span> (totalPoints <span class="hl">>=</span> 75) {
+        cout << <span class="st">"銀牌"</span> << endl;
+    } <span class="kw">else if</span> (totalPoints <span class="hl">>=</span> 60) {
+        cout << <span class="st">"銅牌"</span> << endl;
+    } <span class="kw">else</span> {
+        cout << <span class="st">"未過關"</span> << endl;
+    }
+    return 0;
+}</code></pre></div>
+  </details>
+</section>
+
+<section class="slide" id="slide-10" data-title="為什麼金牌印不出來？">
+  <p class="kicker">除錯</p>
+  <h1>為什麼金牌印不出來？</h1>
+  <div class="code"><span class="code-lang">C++</span><button class="copy" type="button">複製</button><pre><code><span class="kw">if</span> (totalPoints <span class="hl">>=</span> 60) {
+    cout << <span class="st">"銀牌"</span> << endl;
+} <span class="kw">else if</span> (totalPoints <span class="hl">>=</span> 90) {
+    cout << <span class="st">"金牌"</span> << endl;
+} <span class="kw">else</span> {
+    cout << <span class="st">"未過關"</span> << endl;
+}</code></pre></div>
+  <p>輸入 <code class="inline">28 28 30</code>，總點數 91，畫面卻印出「銀牌」。金牌那一行為什麼永遠印不出來？</p>
+  <details><summary>顯示修正與原因</summary><p>91 在第一關 <span class="fill">>= 60</span> 就成立了，印完銀牌就停止，後面的 <span class="fill">>= 90</span> 永遠檢查不到。把金牌的判斷移到最前面，再用 91 重新測一次。</p>
+    <div class="code"><span class="code-lang">C++</span><button class="copy" type="button">複製</button><pre><code><span class="kw">if</span> (totalPoints <span class="hl">>=</span> 90) {
+    cout << <span class="st">"金牌"</span> << endl;
+} <span class="kw">else if</span> (totalPoints <span class="hl">>=</span> 60) {</code></pre></div>
+  </details>
+  <div class="callout"><strong>這種錯最危險：</strong>程式能編譯、能執行，只是順序錯了。多級判斷的條件要<strong>由嚴到鬆</strong>：先 90，再 60。</div>
+</section>
+
+<section class="slide" id="slide-11" data-title="下課前，確認三件事">
+  <p class="kicker">離堂檢核</p>
+  <h1>下課前，確認三件事</h1>
+  <div class="quiz" id="quiz">
+    <fieldset>
+      <legend>1. 總點數 91，依序判斷 >= 90、>= 60，畫面印出什麼？</legend>
+      <label><input type="radio" name="q1" value="0">銀牌</label>
+      <label><input type="radio" name="q1" value="1">金牌</label>
+    </fieldset>
+    <fieldset>
+      <legend>2. 條件是照什麼順序檢查的？</legend>
+      <label><input type="radio" name="q2" value="1">由上往下，第一個成立的贏</label>
+      <label><input type="radio" name="q2" value="0">每個條件都檢查一次</label>
+      <label><input type="radio" name="q2" value="0">由下往上檢查</label>
+    </fieldset>
+    <fieldset>
+      <legend>3. 總點數 85，畫面印出什麼？</legend>
+      <label><input type="radio" name="q3" value="0">金牌</label>
+      <label><input type="radio" name="q3" value="1">銀牌</label>
+      <label><input type="radio" name="q3" value="0">未過關</label>
+    </fieldset>
+    <div class="quiz-actions">
+      <button class="btn" id="check" type="button">檢查答案</button>
+      <button class="btn ghost" id="reset" type="button">重新作答</button>
+      <span id="feedback" role="status"></span>
+    </div>
+  </div>
+  <div class="callout">請用一句話說明：銀牌那一行只寫 <span class="fill">>= 60</span>，為什麼 90 以上不會印銀牌？</div>
+</section>
+
+</main>
+
+<footer>
+  <div class="progress" aria-hidden="true"><div class="progress-fill" id="pfill"></div></div>
+  <div class="footer-bar">
+    <button id="prev" type="button">← 上一頁</button>
+    <label class="jump-wrap"><span class="sr-only">選擇頁面</span><select id="jump"></select></label>
+    <span id="count"></span>
+    <button id="next" type="button">下一頁 →</button>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var pages=[].slice.call(document.querySelectorAll('.slide')),
+      jump=document.getElementById('jump'),
+      count=document.getElementById('count'),
+      prev=document.getElementById('prev'),
+      next=document.getElementById('next'),
+      pfill=document.getElementById('pfill'),
+      n=0;
+
+  pages.forEach(function(p,i){
+    var o=document.createElement('option');
+    o.value=i;o.textContent=(i+1)+'. '+p.getAttribute('data-title');
+    jump.appendChild(o);
+  });
+
+  function go(i){
+    n=Math.max(0,Math.min(i,pages.length-1));
+    pages.forEach(function(p,k){
+      var on=k===n;
+      p.classList.toggle('active',on);
+      if(on){p.inert=false;}else{p.setAttribute('inert','');}
+    });
+    jump.value=String(n);
+    count.textContent=(n+1)+' / '+pages.length;
+    prev.disabled=n===0;
+    next.disabled=n===pages.length-1;
+    pfill.style.width=(((n+1)/pages.length)*100)+'%';
+    try{history.replaceState(null,'','#slide-'+(n+1));}catch(e){}
+    var m=document.getElementById('main');
+    if(m){m.scrollTop=0;}
+  }
+
+  function fromHash(){
+    var m=location.hash.match(/^#slide-(\d+)$/);
+    go(m?parseInt(m[1],10)-1:0);
+  }
+
+  jump.addEventListener('change',function(){go(parseInt(jump.value,10));});
+  prev.addEventListener('click',function(){go(n-1);});
+  next.addEventListener('click',function(){go(n+1);});
+  window.addEventListener('hashchange',fromHash);
+
+  document.addEventListener('keydown',function(e){
+    var t=e.target;
+    if(t&&(t.tagName==='INPUT'||t.tagName==='SELECT'||t.tagName==='TEXTAREA'||t.isContentEditable))return;
+    if(e.key==='ArrowLeft'){go(n-1);}
+    else if(e.key==='ArrowRight'){go(n+1);}
+    else if(e.key==='Home'){go(0);}
+    else if(e.key==='End'){go(pages.length-1);}
+  });
+
+  var sx=0,sy=0,st=0;
+  document.addEventListener('touchstart',function(e){
+    if(e.touches.length!==1){sx=null;return;}
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;st=Date.now();
+  },{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(sx===null)return;
+    var dx=e.changedTouches[0].clientX-sx,
+        dy=e.changedTouches[0].clientY-sy;
+    sx=null;
+    if(Date.now()-st>800)return;
+    if(Math.abs(dx)<55||Math.abs(dx)<Math.abs(dy)*1.3)return;
+    var src=e.target;
+    while(src&&src!==document.body){
+      if(src.tagName==='PRE'||src.tagName==='SELECT'||src.tagName==='INPUT')return;
+      src=src.parentNode;
+    }
+    go(n+(dx<0?1:-1));
+  },{passive:true});
+
+  [].slice.call(document.querySelectorAll('.copy')).forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var pre=btn.parentNode.querySelector('pre');
+      var txt=pre?pre.textContent:'';
+      function done(){btn.textContent='已複製';setTimeout(function(){btn.textContent='複製';},1600);}
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(txt).then(done,function(){fallback();});
+      }else{fallback();}
+      function fallback(){
+        try{
+          var ta=document.createElement('textarea');
+          ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+          document.body.appendChild(ta);ta.select();
+          document.execCommand('copy');document.body.removeChild(ta);done();
+        }catch(err){btn.textContent='複製失敗';}
+      }
+    });
+  });
+
+  var steps=[17,20,23,26],si=1;
+  function applyFont(){document.documentElement.style.fontSize=steps[si]+'px';}
+  document.getElementById('fminus').addEventListener('click',function(){if(si>0){si--;applyFont();}});
+  document.getElementById('fplus').addEventListener('click',function(){if(si<steps.length-1){si++;applyFont();}});
+
+  var fsBtn=document.getElementById('fs');
+  fsBtn.addEventListener('click',function(){
+    try{
+      if(document.fullscreenElement){document.exitFullscreen();}
+      else if(document.documentElement.requestFullscreen){document.documentElement.requestFullscreen();}
+      else{fsBtn.disabled=true;}
+    }catch(e){fsBtn.disabled=true;}
+  });
+
+  var check=document.getElementById('check'),
+      reset=document.getElementById('reset'),
+      fb=document.getElementById('feedback');
+  if(check){
+    check.addEventListener('click',function(){
+      var score=0,total=0;
+      ['q1','q2','q3'].forEach(function(name){
+        var opts=[].slice.call(document.querySelectorAll('input[name="'+name+'"]'));
+        if(!opts.length)return;total++;
+        opts.forEach(function(o){
+          o.parentNode.style.background='';
+          if(o.checked&&o.value==='1'){score++;}
+        });
+      });
+      fb.className='';
+      if(score===total){fb.textContent='全部答對，你可以下課了。';fb.className='ok';}
+      else{fb.textContent='答對 '+score+' / '+total+' 題，再核對一次頁面上的重點。';fb.className='no';}
+    });
+    reset.addEventListener('click',function(){
+      [].slice.call(document.querySelectorAll('#quiz input[type=radio]')).forEach(function(o){o.checked=false;});
+      fb.textContent='';fb.className='';
+    });
+  }
+
+  fromHash();
+})();
+</script>
+</body>
+</html>
